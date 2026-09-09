@@ -28,12 +28,16 @@ budget by that count and records the mode in `cost_cap_mode`.
 ## Alternatives rejected
 
 - **Report the two without gating.** A number that fails nothing gets read once.
-- **A fixed millisecond ceiling.** Needs retuning on every machine; a percentage
-  against a committed baseline moves with the hardware.
+- **A fixed millisecond ceiling.** Needs retuning on every machine. A percentage
+  against a committed baseline does not fix that by itself, since the committed
+  numbers were measured on a laptop and a CI runner is slower and noisier. CI
+  re-measures the baseline on merge to main, so a pull request compares against
+  numbers taken on the same hardware it runs on.
 - **20 percent everywhere.** At 5 ms it fails on noise; noisy gates get ignored.
 
 ## Consequences
 
-- The cost and latency baselines move only through `gate --update-baseline`.
+- The cost and latency baselines move only through `gate --update-baseline`,
+  which CI runs on main and on no other branch.
 - The offline suite uses in-process fakes, so its cost row sits at $0.00 and
   catches only a change that starts spending money. It earns its keep in Phase 2.

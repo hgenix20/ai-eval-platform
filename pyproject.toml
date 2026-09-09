@@ -18,7 +18,7 @@ dependencies = [
 dev = ["pytest>=8.0", "ruff==0.16.6", "pyright>=1.1.380", "bandit>=1.7", "types-PyYAML"]
 agent-platform = ["agent-platform @ git+https://github.com/hgenix20/enterprise-agent-platform@d6fee0e"]
 ifeval = [
-    "instruction_following_eval @ git+https://github.com/josejg/instruction_following_eval",
+    "instruction_following_eval @ git+https://github.com/josejg/instruction_following_eval@0c495b2f95155e8b10acb919ae283bfb4d5be6e2",
     "langdetect",
 ]
 

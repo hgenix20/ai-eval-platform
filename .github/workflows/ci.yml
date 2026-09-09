@@ -4,7 +4,7 @@ on:
   pull_request:
 
 permissions:
-  contents: read
+  contents: write
   pull-requests: write
 
 jobs:
@@ -15,7 +15,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install -e ".[dev,agent-platform,ifeval]"
+      # The ifeval extra is left out on purpose: the only test that needs it
+      # is network-marked, so the pytest line below deselects it, and the
+      # extra costs a git clone and a build on every push.
+      - run: pip install -e ".[dev,agent-platform]"
       # rung 1: static
       - run: ruff format --check .
       - run: ruff check .
@@ -24,8 +27,31 @@ jobs:
       - run: pytest -m "not network and not live"
       # rung 2: offline deterministic suite against the published agent platform, in process
       - run: evalplat run offline --suite-dir suites/offline_core --target agent-platform-local --results results
+      # Two paths through the gate, because the committed baseline was
+      # measured on a laptop and a runner is different hardware.
+      #
+      # On main, the baseline is re-measured from this run before the gate
+      # reads it, so main records the runner's own cost and latency numbers
+      # and every later pull request compares against hardware like its own.
+      # The absolute thresholds still apply on main (the pass-rate floor, a
+      # maximum), so a real regression fails here even against a refreshed
+      # baseline; only the relative rows move.
+      #
+      # On a pull request this step is skipped and the gate compares against
+      # the committed baseline, which is what makes a change in cost or
+      # latency visible in review.
+      - name: Re-measure the baseline on main
+        if: github.ref == 'refs/heads/main'
+        run: evalplat gate --update-baseline
       - run: evalplat gate --junit out/junit.xml --markdown out/gate.md
       - run: evalplat report --results results --out out/report.html --gate-markdown out/gate.md
+      - name: Commit the re-measured baseline
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git config user.name "ci"
+          git config user.email "ci@users.noreply.github.com"
+          git add baselines
+          git diff --cached --quiet || (git commit -m "Update baselines from CI run [skip ci]" && git push)
       - uses: actions/upload-artifact@v4
         if: always()
         with:

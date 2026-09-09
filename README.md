@@ -58,6 +58,9 @@ Four rungs, in the order a pull request meets them.
 
 Rungs 1 and 2 can fail a pull request today. `.github/workflows/ci.yml` runs
 both, uploads `out/` as an artifact, and posts the gate table as a PR comment.
+On merge to main it also re-measures the baselines from that run and commits
+them, so a pull request's cost and latency rows compare against numbers taken
+on a CI runner rather than on the laptop the first ones came from.
 
 ## Layout
 
