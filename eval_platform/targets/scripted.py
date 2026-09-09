@@ -24,14 +24,17 @@ class ScriptedTarget:
         `None` and empty. `cost_usd` and `wall_ms` on the trajectory are the
         sums of the per-step values.
 
-        Raises `ValueError` if `case.script` is empty or `None`: this
-        target has nothing to replay.
+        Raises `ValueError` if `case.script` is empty or `None`: this target
+        has nothing to replay. Raises `ValueError` if a script item is
+        missing `kind` or `name`: those are the only two required keys.
         """
         if not case.script:
             raise ValueError(f"case {case.name} has no script for the scripted target")
         steps: list[Step] = []
         status, answer, side_effects = "completed", None, []
-        for item in case.script:
+        for i, item in enumerate(case.script):
+            if "kind" not in item or "name" not in item:
+                raise ValueError(f"case {case.name}: script item {i} lacks 'kind' or 'name'")
             steps.append(
                 Step(
                     kind=item["kind"],
@@ -45,6 +48,9 @@ class ScriptedTarget:
                     error=item.get("error"),
                 )
             )
+            # Last-write-wins on purpose: a script sets status/answer/side_effects
+            # on whichever item they belong to (usually the last), without every
+            # earlier item having to repeat the prior value.
             status = item.get("status", status)
             answer = item.get("answer", answer)
             side_effects = item.get("side_effects", side_effects)

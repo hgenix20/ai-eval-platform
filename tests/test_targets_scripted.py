@@ -35,3 +35,9 @@ def test_scripted_target_replays_script_into_trajectory():
 def test_scripted_target_requires_a_script():
     with pytest.raises(ValueError, match="script"):
         ScriptedTarget().run(Case(name="s", goal="g", expect=Expect()))
+
+
+def test_scripted_target_rejects_item_missing_kind_or_name():
+    case = Case(name="s", goal="g", expect=Expect(), script=[{"name": "final"}])
+    with pytest.raises(ValueError, match="lacks 'kind' or 'name'"):
+        ScriptedTarget().run(case)
