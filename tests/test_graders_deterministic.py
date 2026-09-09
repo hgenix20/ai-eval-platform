@@ -1,0 +1,64 @@
+from typing import Any
+
+from eval_platform.graders import grade_expect
+from eval_platform.types import Case, Expect, Step, Trajectory
+
+
+def _traj(**kw: Any) -> Trajectory:
+    base: dict[str, Any] = dict(
+        target="t",
+        goal="g",
+        steps=(
+            Step("tool", "lookup", None, "v"),
+            Step("model", "proposed_answer", None, "the budget is 50k"),
+        ),
+        status="completed",
+        answer="the budget is 50k",
+        side_effects=(),
+        cost_usd=0,
+        wall_ms=1,
+        meta={"history_types": ["tool_result", "proposed_answer"], "steps_used": 2},
+    )
+    base.update(kw)
+    return Trajectory(**base)
+
+
+def _grades(expect, traj):
+    return {
+        g.dimension: g.passed for g in grade_expect(Case(name="c", goal="g", expect=expect), traj)
+    }
+
+
+def test_all_dimensions_pass_on_matching_trajectory():
+    e = Expect(
+        status="completed",
+        answer_contains="50k",
+        side_effects=0,
+        history_types=["tool_result", "proposed_answer"],
+        max_steps_used=2,
+        tools_used={"strict": ["lookup"]},
+    )
+    assert all(_grades(e, _traj()).values())
+
+
+def test_each_dimension_fails_independently():
+    assert _grades(Expect(status="failed"), _traj()) == {"status": False}
+    assert _grades(Expect(answer_contains="99k"), _traj()) == {"answer_contains": False}
+    assert _grades(Expect(side_effects=1), _traj()) == {"side_effects": False}
+    assert _grades(Expect(max_steps_used=1), _traj()) == {"max_steps_used": False}
+    assert _grades(Expect(history_types=["proposed_answer"]), _traj()) == {"history_types": False}
+
+
+def test_tools_used_modes():
+    t = _traj(steps=(Step("tool", "lookup", None, "v"), Step("tool", "recall", None, "v")))
+    assert _grades(Expect(tools_used={"strict": ["lookup", "recall"]}), t)["tools_used"]
+    assert not _grades(Expect(tools_used={"strict": ["recall", "lookup"]}), t)["tools_used"]
+    assert _grades(Expect(tools_used={"unordered": ["recall", "lookup"]}), t)["tools_used"]
+    assert _grades(Expect(tools_used={"subset_of": ["lookup", "recall", "send_email"]}), t)[
+        "tools_used"
+    ]
+    assert not _grades(Expect(tools_used={"subset_of": ["lookup"]}), t)["tools_used"]
+
+
+def test_empty_expect_yields_no_grades():
+    assert grade_expect(Case(name="c", goal="g", expect=Expect()), _traj()) == []

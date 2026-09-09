@@ -1,0 +1,85 @@
+"""Run a list of cases against one target under a budget."""
+
+from __future__ import annotations
+
+from collections.abc import Sequence
+from datetime import UTC, datetime
+
+from eval_platform.budget import Budget, BudgetExceeded
+from eval_platform.graders import grade_expect
+from eval_platform.targets.base import AgentTarget
+from eval_platform.types import Case, CaseResult, Grade, SuiteResult, compute_metrics
+
+
+def _now() -> str:
+    """Current UTC time as an ISO-8601 string, seconds precision."""
+    return datetime.now(UTC).isoformat(timespec="seconds")
+
+
+def run_case(case: Case, target: AgentTarget) -> CaseResult:
+    """Run one case on `target` and grade it.
+
+    Contract: never raises. A case whose `target_requirements` are not a
+    subset of `target.capabilities` is skipped (skipped_reason set,
+    grades empty, trajectory None) without calling the target. Otherwise
+    the target runs; any exception it raises (TargetUnavailable,
+    ValueError, or anything else a target implementation might throw)
+    becomes a failed CaseResult carrying a single Grade of dimension
+    "run" rather than crashing the suite, because one bad target call
+    must not abort every other case. A successful run is graded with
+    `grade_expect` and passes only if every emitted Grade passes.
+    """
+    missing = set(case.target_requirements) - set(target.capabilities)
+    if missing:
+        return CaseResult(
+            case.name, False, (), None, skipped_reason=f"target lacks {sorted(missing)}"
+        )
+    try:
+        trajectory = target.run(case)
+    except Exception as e:  # a target failure must become a failed case, never crash the suite
+        return CaseResult(case.name, False, (Grade("run", 0.0, False, repr(e)),), None)
+    grades = grade_expect(case, trajectory)
+    return CaseResult(case.name, all(g.passed for g in grades), tuple(grades), trajectory)
+
+
+def run_suite(
+    suite: str, cases: Sequence[Case], target: AgentTarget, *, budget: Budget
+) -> SuiteResult:
+    """Run every case in `cases` against `target`, stopping early on budget overrun.
+
+    Contract: `budget.check()` runs before each case and `budget.charge()`
+    runs after, on the trajectory's actual cost, for every case that
+    produced a trajectory (skipped cases and target-exception failures
+    have none, so nothing is charged for them). When either raises
+    BudgetExceeded, the case that triggered it is recorded as skipped
+    with the exception's text as `skipped_reason`, every remaining case
+    is recorded as skipped with reason "budget exceeded" (the target is
+    never called for them), and `meta["budget_exceeded"]` is set True.
+    Metrics come from `compute_metrics`, so skipped cases count toward
+    `cases_total`/`cases_skipped` but not `pass_rate`.
+    """
+    started = _now()
+    results: list[CaseResult] = []
+    exceeded = False
+    for case in cases:
+        if exceeded:
+            results.append(CaseResult(case.name, False, (), None, skipped_reason="budget exceeded"))
+            continue
+        try:
+            budget.check()
+            r = run_case(case, target)
+            if r.trajectory is not None:
+                budget.charge(r.trajectory.cost_usd)
+            results.append(r)
+        except BudgetExceeded as e:
+            exceeded = True
+            results.append(CaseResult(case.name, False, (), None, skipped_reason=str(e)))
+    return SuiteResult(
+        suite=suite,
+        target=target.name,
+        started_at=started,
+        finished_at=_now(),
+        cases=tuple(results),
+        metrics=compute_metrics(results),
+        meta={"budget_exceeded": exceeded, "spent_usd": budget.spent_usd},
+    )
