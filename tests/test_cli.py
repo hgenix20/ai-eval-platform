@@ -1,7 +1,10 @@
 import json
 from pathlib import Path
 
+import eval_platform.cli as cli_mod
+from eval_platform.budget import BudgetExceeded
 from eval_platform.cli import main
+from eval_platform.targets import TargetUnavailable
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -148,3 +151,117 @@ def test_gate_fails_on_threshold(tmp_path: Path):
         )
         == 1
     )
+
+
+def test_run_offline_unavailable_target_exits_2(tmp_path: Path, monkeypatch, capsys):
+    """An agent-platform-http target that cannot be reached makes `run
+    offline` exit 2 and print "target unavailable" to stderr, without
+    running any case. The constructor is stubbed rather than pointed at a
+    real closed port, so this test is not sensitive to how fast (or slow)
+    this machine's TCP stack refuses a connection.
+    """
+    suite = tmp_path / "suites" / "offline_core"
+    suite.mkdir(parents=True)
+    (suite / "a.yaml").write_text(CASE, encoding="utf-8")
+    results = tmp_path / "results"
+
+    class _UnreachableHttpTarget:
+        def __init__(self, base_url: str) -> None:
+            raise TargetUnavailable(f"agent platform not reachable at {base_url}")
+
+    monkeypatch.setattr(cli_mod, "AgentPlatformHttpTarget", _UnreachableHttpTarget)
+
+    rc = main(
+        [
+            "run",
+            "offline",
+            "--suite-dir",
+            str(suite),
+            "--target",
+            "agent-platform-http",
+            "--base-url",
+            "http://127.0.0.1:9",
+            "--results",
+            str(results),
+        ]
+    )
+    assert rc == 2
+    assert "target unavailable" in capsys.readouterr().err
+
+
+def test_run_public_unknown_entry_exits_2(tmp_path: Path, capsys):
+    """`run public` on an id absent from the catalog exits 2 and names the
+    problem on stderr, without attempting a benchmark run."""
+    results = tmp_path / "results"
+    rc = main(
+        [
+            "run",
+            "public",
+            "no-such-benchmark",
+            "--model",
+            "mockllm/model",
+            "--catalog",
+            str(ROOT / "catalog" / "entries"),
+            "--results",
+            str(results),
+        ]
+    )
+    assert rc == 2
+    assert "no catalog entry" in capsys.readouterr().err
+
+
+def test_run_public_budget_exceeded_exits_2(tmp_path: Path, monkeypatch, capsys):
+    """A BudgetExceeded raised mid-run makes `run public` exit 2, print the
+    reason to stderr, and write nothing to the ledger: a run that never
+    produced a SuiteResult has nothing to record."""
+    results = tmp_path / "results"
+
+    def _raise_budget_exceeded(*args, **kwargs):
+        raise BudgetExceeded("usd", "no budget remaining")
+
+    monkeypatch.setattr(cli_mod, "run_public", _raise_budget_exceeded)
+
+    rc = main(
+        [
+            "run",
+            "public",
+            "ifeval",
+            "--model",
+            "mockllm/model",
+            "--catalog",
+            str(ROOT / "catalog" / "entries"),
+            "--results",
+            str(results),
+        ]
+    )
+    assert rc == 2
+    assert "budget" in capsys.readouterr().err
+    assert not (results / "ledger.jsonl").exists()
+
+
+def test_run_public_value_error_exits_2(tmp_path: Path, monkeypatch, capsys):
+    """A ValueError raised for an unrunnable entry or an uncosted model
+    makes `run public` exit 2 and print the reason to stderr, not a
+    traceback."""
+    results = tmp_path / "results"
+
+    def _raise_value_error(*args, **kwargs):
+        raise ValueError("model x has no cost data")
+
+    monkeypatch.setattr(cli_mod, "run_public", _raise_value_error)
+
+    rc = main(
+        [
+            "run",
+            "public",
+            "ifeval",
+            "--model",
+            "mockllm/model",
+            "--catalog",
+            str(ROOT / "catalog" / "entries"),
+            "--results",
+            str(results),
+        ]
+    )
+    assert rc == 2
+    assert "no cost data" in capsys.readouterr().err
