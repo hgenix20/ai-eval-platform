@@ -4,9 +4,10 @@ from pathlib import Path
 import pytest
 from inspect_ai import Task
 from inspect_ai import eval as inspect_eval
+from inspect_ai._util.error import PrerequisiteError
 from inspect_ai.dataset import MemoryDataset, Sample
 from inspect_ai.log import EvalLog
-from inspect_ai.model import ModelOutput
+from inspect_ai.model import ModelCost, ModelOutput
 from inspect_ai.scorer import match
 from pydantic import HttpUrl
 
@@ -132,6 +133,50 @@ def test_run_public_divides_cost_limit_by_sample_limit(
     result = run_public(_entry(), model="mockllm/model", limit=4, budget=budget, log_dir=tmp_path)
     assert calls[0]["cost_limit"] == pytest.approx(1.0 / 4)
     assert result.meta["cost_cap_mode"] == "per_sample_divided"
+    assert calls[0]["model_cost_config"] == {
+        "mockllm/model": ModelCost(
+            input=0.0, output=0.0, input_cache_write=0.0, input_cache_read=0.0
+        )
+    }
+    assert result.meta["zero_cost_model"] is True
+
+
+def test_run_public_gives_zero_cost_only_to_mockllm_models(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    """A non-mockllm model gets no synthesized cost table: it presumably
+    has real cost data of its own, so Inspect should check it normally."""
+    log = _tiny_log(tmp_path)
+    calls: list[dict] = []
+
+    def fake_eval(*args: object, **kwargs: object) -> list[EvalLog]:
+        calls.append(kwargs)
+        return [log]
+
+    monkeypatch.setattr(public_mod, "inspect_eval", fake_eval)
+    budget = Budget(max_usd=1.0, max_wall_s=60)
+    result = run_public(
+        _entry(), model="openai/gpt-4o-mini", limit=4, budget=budget, log_dir=tmp_path
+    )
+    assert calls[0]["model_cost_config"] is None
+    assert "zero_cost_model" not in result.meta
+
+
+def test_run_public_wraps_missing_cost_data_error(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+    """PrerequisiteError about missing cost data (e.g. a model this
+    function did not anticipate as free) becomes a plain ValueError naming
+    the model, not the raw Inspect internal error."""
+
+    def fake_eval(*args: object, **kwargs: object) -> list[EvalLog]:
+        raise PrerequisiteError(
+            "cost_limit requires cost data for all models. Missing cost data for: "
+            "openai/gpt-4o-mini. Use set_model_cost() or --model-cost-config to configure pricing."
+        )
+
+    monkeypatch.setattr(public_mod, "inspect_eval", fake_eval)
+    budget = Budget(max_usd=1.0, max_wall_s=60)
+    with pytest.raises(ValueError, match="no cost data"):
+        run_public(_entry(), model="openai/gpt-4o-mini", limit=4, budget=budget, log_dir=tmp_path)
 
 
 def test_run_public_refuses_when_budget_exhausted(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):

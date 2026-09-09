@@ -11,7 +11,9 @@ from typing import Any
 
 import inspect_ai
 from inspect_ai import eval as inspect_eval
+from inspect_ai._util.error import PrerequisiteError
 from inspect_ai.log import EvalLog
+from inspect_ai.model import ModelCost
 
 from eval_platform.budget import Budget, BudgetExceeded
 from eval_platform.catalog import CatalogEntry
@@ -180,6 +182,16 @@ def run_public(
     passed. Charges `budget` with the run's actual dollar cost after
     Inspect returns; that charge can itself raise BudgetExceeded("usd") if
     the run's actual cost pushes total spend over the ceiling.
+
+    A non-None `cost_limit` makes Inspect require registered cost data for
+    every model in the run, which `mockllm/...` models never have (they are
+    free by design). So when `model` starts with `"mockllm/"`, this passes
+    `model_cost_config` naming that model at zero cost per token, and
+    records `meta["zero_cost_model"] = True`. If Inspect still raises
+    PrerequisiteError over missing cost data (a model this function did not
+    anticipate as free), that is re-raised as ValueError naming the model,
+    rather than the raw Inspect internal error; any other exception from
+    `inspect_eval` propagates unchanged.
     """
     if not entry.runnable or entry.runner.kind != "inspect_evals" or not entry.runner.ref:
         raise ValueError(
@@ -196,18 +208,37 @@ def run_public(
     else:
         per_sample_cap = remaining
         cost_cap_mode = "per_sample_uncapped_count"
-    [log] = inspect_eval(
-        entry.runner.ref,
-        model=model,
-        limit=limit,
-        log_dir=str(log_dir),
-        display="none",
-        cost_limit=per_sample_cap,
-        task_args=task_args or {},
-    )
+    # mockllm models are free by design and carry no cost data in Inspect;
+    # a non-None cost_limit otherwise makes Inspect require cost data for
+    # every model in the run, so give a mockllm model a zero-priced table.
+    zero_cost_model = model.startswith("mockllm/")
+    model_cost_config: dict[str, ModelCost] | None = None
+    if zero_cost_model:
+        model_cost_config = {
+            model: ModelCost(input=0.0, output=0.0, input_cache_write=0.0, input_cache_read=0.0)
+        }
+    try:
+        [log] = inspect_eval(
+            entry.runner.ref,
+            model=model,
+            limit=limit,
+            log_dir=str(log_dir),
+            display="none",
+            cost_limit=per_sample_cap,
+            model_cost_config=model_cost_config,
+            task_args=task_args or {},
+        )
+    except PrerequisiteError as exc:
+        if "cost data" in str(exc):
+            raise ValueError(
+                f"model {model} has no cost data in Inspect; cannot enforce a spend cap"
+            ) from exc
+        raise
     result = eval_log_to_suite_result(
         log, suite=f"public_{entry.id.replace('-', '_')}", target=model
     )
     result.meta["cost_cap_mode"] = cost_cap_mode
+    if zero_cost_model:
+        result.meta["zero_cost_model"] = True
     budget.charge(result.metrics["usd"])
     return result
