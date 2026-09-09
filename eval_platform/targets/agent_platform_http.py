@@ -68,7 +68,7 @@ class AgentPlatformHttpTarget:
     """
 
     name = "agent-platform-http"
-    # No "side_effects": the HTTP surface reports a run record, not the
+    # No "side_effects": the HTTP API returns a run record, not the
     # executor's side-effect log, so a case asserting on side effects would
     # pass here for the wrong reason. Such a case is skipped instead.
     capabilities = frozenset({"agent", "approval"})

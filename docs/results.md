@@ -19,10 +19,15 @@ Cost is $0.00. The target is the `enterprise-agent-platform` package running
 in process with scripted providers, so no tokens are bought and no network is
 touched. `usd_per_run_p50` in the JSON is `0.0` for the same reason.
 
-The twelve cases cover approval gating, denied tools, memory write and recall,
+The twelve cases cover approval gating, denied tools, the memory tool path,
 protocol-error recovery, validator rejection and retry, and the step cap. Each
-one asserts on the trajectory the platform produced: final status, step order,
-tools used, side effects, steps consumed, and the answer text.
+one asserts on the trajectory the platform produced: which tools ran and in what
+order, the final run status, the steps consumed, side effects on targets that
+can observe them, and that the answer the platform accepted is the one the case
+script supplied. The planner and validator lines are scripted, so what these
+cases measure is the platform's control flow and its governance behavior, not
+the quality of a model's answer. A case that binds a tool's real output to the
+graded answer, so that a recall failure changes the answer, is Phase 2 work.
 
 The gate compares this run against `baselines/offline_core.json`,
 `baselines/offline_core_cost.json`, and `baselines/offline_core_latency.json`:

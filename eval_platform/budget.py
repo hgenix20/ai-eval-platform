@@ -121,7 +121,7 @@ class Ledger:
         """Return the sum of all recorded usd amounts, or 0.0 if the ledger file does not exist.
 
         Failure mode: a malformed or truncated line is not skipped, since
-        skipping it would silently under-report spend. It raises
+        skipping it would under-report spend with no error. It raises
         ValueError naming the file and 1-based line number, chained from
         the original JSONDecodeError or KeyError.
         """

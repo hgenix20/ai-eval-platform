@@ -14,8 +14,8 @@ a run into a build verdict. Framework comparison:
 The gate is a module in this package. `eval_platform/gate/config.py` validates
 `gate.yaml`, `compare.py` reads a committed baseline against the current
 `SuiteResult` and decides per row, `junit.py` and `markdown.py` render the
-verdict, and `evalplat gate` exits non-zero on FAIL. About 300 lines, a size a
-person can hold in their head and defend at a whiteboard.
+verdict, and `evalplat gate` exits non-zero on FAIL. About 300 lines, short
+enough to read end to end before trusting a build verdict to it.
 
 ## Alternatives rejected
 

@@ -21,19 +21,32 @@ command that produces it is in [docs/results.md](docs/results.md).
 
 ## Bring-up
 
+Windows:
+
 ```
 python -m venv .venv
-.venv/Scripts/pip install -e ".[dev,agent-platform,ifeval]"    # bin/ on Linux and macOS
-.venv\Scripts\activate                                         # Windows
-source .venv/bin/activate                                      # Linux and macOS
+.venv\Scripts\activate
+python -m pip install -e ".[dev,agent-platform,ifeval]"
 pytest -m "not network and not live"
 evalplat run offline --suite-dir suites/offline_core --target agent-platform-local
 evalplat gate
 evalplat report
 ```
 
-Pick the one activation line your shell wants. Everything below it runs from
-the venv, so `pytest` and `evalplat` resolve without a path.
+Linux and macOS:
+
+```
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install -e ".[dev,agent-platform,ifeval]"
+pytest -m "not network and not live"
+evalplat run offline --suite-dir suites/offline_core --target agent-platform-local
+evalplat gate
+evalplat report
+```
+
+Activation comes first in both blocks, so `pip`, `pytest`, and `evalplat` all
+resolve inside the venv and no command needs a path.
 
 `gate` reads `gate.yaml`, the baselines in `baselines/`, and the newest run per
 suite under `results/`, then exits non-zero on FAIL. `report` writes a
@@ -89,7 +102,9 @@ providers (`anthropic/`, `openai-api/`) for model-level benchmarks.
 ## Catalog
 
 77 entries, each carrying a `verified` date and at least one source URL.
-Reproduce the counts with `evalplat catalog list`.
+`verified` is the date that entry was last checked against the sources it
+lists, and a headline score in its `notes` is what those sources reported on
+that date. Reproduce the counts with `evalplat catalog list`.
 
 By category: capability 14, coding 12, agent 11, safety 7, tool-use 7,
 hallucination 6, long-context 6, retrieval 6, injection 4, judge 4.
@@ -126,7 +141,9 @@ Design spec: `docs/superpowers/specs/2026-09-07-ai-eval-platform-design.md`.
 - **Phase 2, gap suites.** Five suites of at least 10 cases each (trajectory,
   faults, cost and latency, memory, prompt injection) run against the agent
   platform, with recovery rate, attack success rate, and step efficiency
-  published alongside red-team findings.
+  published alongside red-team findings. The OpenTelemetry spans per sample and
+  per grader call from spec section 4.9 arrive here as well; Phase 1 emits
+  none.
 - **Phase 3, judges.** Judge graders with a cache keyed on model version, a
   calibration set of at least 50 labeled items, per-judge kappa from
   `evalplat calibrate`, a swap-stability check against a second judge model,
