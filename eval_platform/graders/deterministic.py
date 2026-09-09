@@ -56,7 +56,7 @@ def grade_expect(case: Case, t: Trajectory) -> list[Grade]:
             )
         )
     if e.history_types is not None:
-        actual = t.meta.get("history_types") or [s.name for s in t.steps]
+        actual = t.meta["history_types"] if "history_types" in t.meta else [s.name for s in t.steps]
         out.append(
             _g(
                 "history_types",

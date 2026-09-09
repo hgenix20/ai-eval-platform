@@ -62,3 +62,9 @@ def test_tools_used_modes():
 
 def test_empty_expect_yields_no_grades():
     assert grade_expect(Case(name="c", goal="g", expect=Expect()), _traj()) == []
+
+
+def test_history_types_explicit_empty_list_is_graded_as_empty():
+    t = _traj(steps=(Step("tool", "lookup", None, "v"),), meta={"history_types": []})
+    assert _grades(Expect(history_types=[]), t) == {"history_types": True}
+    assert _grades(Expect(history_types=["lookup"]), t) == {"history_types": False}
