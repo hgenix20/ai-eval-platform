@@ -114,17 +114,18 @@ class Step:
     cost_usd: float = 0.0
     error: str | None = None
 
+
 @dataclass(frozen=True)
 class Trajectory:
     target: str
     goal: str
     steps: tuple[Step, ...]
-    status: str                    # completed | failed | waiting_approval | budget_exceeded
+    status: str  # completed | failed | waiting_approval | budget_exceeded
     answer: str | None
     side_effects: tuple[dict, ...]
     cost_usd: float
     wall_ms: float
-    meta: dict                     # model ids and versions, git sha, run id, seed
+    meta: dict  # model ids and versions, git sha, run id, seed
 ```
 
 Built suites are data. A case is a YAML file:

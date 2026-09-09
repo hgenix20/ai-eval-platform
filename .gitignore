@@ -10,3 +10,4 @@ monitor.sqlite
 *.eval
 logs/
 .superpowers/
+*.egg-info/
