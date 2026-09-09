@@ -1,0 +1,13 @@
+{
+  "suite": "offline_core_cost",
+  "metrics": {
+    "cases_total": 12.0,
+    "cases_passed": 12.0,
+    "cases_skipped": 0.0,
+    "pass_rate": 1.0,
+    "usd_per_run_p50": 0.0,
+    "wall_ms_p50": 3.7939499597996473,
+    "wall_ms_p95": 5.318634968716649
+  },
+  "from": "2026-09-09T05:18:02+00:00"
+}

@@ -12,8 +12,27 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -e ".[dev,agent-platform,ifeval]"
+      # rung 1: static
       - run: ruff format --check .
       - run: ruff check .
       - run: pyright
       - run: bandit -q -r eval_platform
-      - run: pytest
+      - run: pytest -m "not network and not live"
+      # rung 2: offline deterministic suite against the published agent platform, in process
+      - run: evalplat run offline --suite-dir suites/offline_core --target agent-platform-local --results results
+      - run: evalplat gate --junit out/junit.xml --markdown out/gate.md
+      - run: evalplat report --results results --out out/report.html --gate-markdown out/gate.md
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: eval-report
+          path: out/
+      - name: Post gate table on the pull request
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const body = fs.existsSync('out/gate.md') ? fs.readFileSync('out/gate.md', 'utf8') : 'gate.md missing';
+            await github.rest.issues.createComment({ ...context.repo, issue_number: context.issue.number, body });
+      # rung 3 (judge-sampled) and rung 4 (nightly public) are added by later phases
