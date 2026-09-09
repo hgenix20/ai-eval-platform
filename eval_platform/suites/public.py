@@ -155,7 +155,10 @@ def run_public(
     Contract: raises ValueError before running anything when `entry` is not
     runnable through Inspect, i.e. `entry.runnable` is False or the runner
     kind is not `"inspect_evals"` (covers `non-commercial` license status,
-    `external`/`builtin`/`none` runner kinds, and a missing ref).
+    `external`/`builtin`/`none` runner kinds, and a missing ref). Running
+    the `ifeval` catalog entry needs the `ifeval` extra installed
+    (`pip install -e ".[ifeval]"`), since `inspect_evals`'s IFEval task
+    imports that dependency at task-construction time, not at import time.
 
     Inspect's `cost_limit` bounds spend PER SAMPLE, not for the run as a
     whole; `--limit`, the sample count, is what actually bounds total
