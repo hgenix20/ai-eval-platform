@@ -51,6 +51,17 @@ def test_rejects_duplicate_url(tmp_path):
         load_catalog(tmp_path)
 
 
+def test_rejects_duplicate_id(tmp_path):
+    _write(tmp_path, "a.yaml", GOOD)
+    _write(
+        tmp_path,
+        "b.yaml",
+        GOOD.replace("url: https://github.com/idavidrein/gpqa", "url: https://example.org/other"),
+    )
+    with pytest.raises(CatalogError, match="duplicate id"):
+        load_catalog(tmp_path)
+
+
 def test_runner_ref_required_unless_none(tmp_path):
     _write(
         tmp_path,
@@ -61,6 +72,25 @@ def test_runner_ref_required_unless_none(tmp_path):
         ),
     )
     with pytest.raises(CatalogError):
+        load_catalog(tmp_path)
+
+
+def test_runner_none_needs_no_ref(tmp_path):
+    _write(
+        tmp_path,
+        "x.yaml",
+        GOOD.replace(
+            "runner: {kind: inspect_evals, ref: inspect_evals/gpqa_diamond}",
+            "runner: {kind: none}",
+        ),
+    )
+    [e] = load_catalog(tmp_path)
+    assert e.runner.ref is None and not e.runnable
+
+
+def test_rejects_unknown_top_level_key(tmp_path):
+    _write(tmp_path, "bad.yaml", GOOD + "unknown_field: nope\n")
+    with pytest.raises(CatalogError, match=r"bad\.yaml"):
         load_catalog(tmp_path)
 
 

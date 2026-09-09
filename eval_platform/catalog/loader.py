@@ -47,6 +47,11 @@ def load_catalog(directory: Path) -> list[CatalogEntry]:
             raise CatalogError(
                 f"{path.name}: duplicate id {entry.id} (also {seen_ids[entry.id].name})"
             )
+        # Pydantic's HttpUrl normalizes a bare host to a trailing slash
+        # (https://x.org -> https://x.org/) but leaves an explicit path's
+        # trailing slash exactly as written, so https://x.org/b and
+        # https://x.org/b/ are distinct keys by design. Catalog authors must
+        # copy the canonical URL rather than typing one that "looks the same."
         url = str(entry.url)
         if url in seen_urls:
             raise CatalogError(f"{path.name}: duplicate url {url} (also {seen_urls[url].name})")
