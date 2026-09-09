@@ -1,3 +1,5 @@
+import re
+
 from eval_platform.reports import render_html
 
 
@@ -46,3 +48,46 @@ def test_render_contains_suites_cases_and_scatter():
 def test_render_with_no_summaries_is_valid():
     html = render_html([])
     assert "<html" in html and "No results" in html
+
+
+def test_scatter_clamps_out_of_range_accuracy():
+    # accuracy=87.0 is a percentage recorded by mistake where a 0-1 fraction
+    # is expected; it must clamp to the same y as accuracy=1.0, not plot
+    # off-canvas, and its label must say so.
+    html_mistake = render_html([_summary("public_x", "target", accuracy=87.0, usd=0.1)])
+    html_correct = render_html([_summary("public_x", "target", accuracy=1.0, usd=0.1)])
+    cy_mistake = re.search(r'cy="([\d.]+)"', html_mistake)
+    cy_correct = re.search(r'cy="([\d.]+)"', html_correct)
+    assert cy_mistake is not None and cy_correct is not None
+    assert cy_mistake.group(1) == cy_correct.group(1)
+    assert "(clamped)" in html_mistake
+    assert "(clamped)" not in html_correct
+
+
+def test_render_escapes_hostile_strings():
+    payload = "<script>alert(1)</script>"
+    summary = {
+        "suite": payload,
+        "target": payload,
+        "started_at": "2026-09-08T10:00:00Z",
+        "finished_at": "2026-09-08T10:00:01Z",
+        "metrics": {"pass_rate": 0.5},
+        "meta": {},
+        "cases": [
+            {
+                "name": payload,
+                "passed": False,
+                "grades": [{"dimension": "d", "passed": False, "value": 0, "explanation": payload}],
+                "skipped_reason": None,
+            },
+            {"name": "other", "passed": False, "grades": [], "skipped_reason": payload},
+        ],
+    }
+    html = render_html([summary], gate_markdown=payload)
+    assert "<script>" not in html
+    assert html.count("&lt;script&gt;") >= 6
+
+
+def test_metrics_table_renders_non_numeric_value_without_crashing():
+    html = render_html([_summary("offline_core", "scripted", pass_rate=None)])
+    assert "not numeric" in html

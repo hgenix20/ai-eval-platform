@@ -32,17 +32,33 @@ def _y(m: dict[str, Any]) -> float:
 
 def _scatter(summaries: Sequence[dict[str, Any]]) -> str:
     """Render an inline SVG scatter of cost (x) against quality (y), one
-    circle per summary. Scales x by the largest cost seen (falling back to
-    1.0 when every cost is 0) so a single point still lands on the axis
-    instead of dividing by zero."""
+    circle per summary. `summaries` must be non-empty; `render_html` only
+    calls this from its non-empty branch, so there is no empty-list case to
+    guard here.
+
+    Cost is clamped to >= 0.0 and quality is clamped to [0.0, 1.0] before
+    plotting: a metric outside those bounds (for example an accuracy of
+    87.0 recorded as a percentage instead of a fraction) would otherwise
+    place its point off the canvas with no indication of the problem. A
+    clamped point gets " (clamped)" appended to its label so the mistake is
+    visible in the rendered page instead of just being invisible off-canvas.
+
+    Scales x by the largest clamped cost seen, falling back to 1.0 when
+    every cost is 0, so a single point still lands on the axis instead of
+    dividing by zero.
+    """
     w, h, pad = 520, 300, 40
-    xs = [_x(s["metrics"]) for s in summaries] or [0.0]
+    xs = [max(_x(s["metrics"]), 0.0) for s in summaries]
     xmax = max(xs) or 1.0
     pts = []
     for s in summaries:
-        px = pad + (_x(s["metrics"]) / xmax) * (w - 2 * pad)
-        py = h - pad - _y(s["metrics"]) * (h - 2 * pad)
-        label = escape(f"{s['suite']} / {s['target']}")
+        raw_x, raw_y = _x(s["metrics"]), _y(s["metrics"])
+        x, y = max(raw_x, 0.0), min(max(raw_y, 0.0), 1.0)
+        clamped = x != raw_x or y != raw_y
+        px = pad + (x / xmax) * (w - 2 * pad)
+        py = h - pad - y * (h - 2 * pad)
+        text = f"{s['suite']} / {s['target']}" + (" (clamped)" if clamped else "")
+        label = escape(text)
         pts.append(
             f'<circle cx="{px:.1f}" cy="{py:.1f}" r="5" fill="#2a6"><title>{label}</title></circle>'
             f'<text x="{px + 8:.1f}" y="{py + 4:.1f}" font-size="11">{label}</text>'
@@ -61,10 +77,19 @@ def _scatter(summaries: Sequence[dict[str, Any]]) -> str:
 
 def _metrics_table(m: dict[str, Any]) -> str:
     """Render a summary's `metrics` dict as a two-column HTML table. Metric
-    names are escaped; values are formatted as floats, so a non-numeric
-    metric value raises ValueError from the caller's data, not from here."""
-    rows = "".join(f"<tr><td>{escape(k)}</td><td>{float(v):.4f}</td></tr>" for k, v in m.items())
-    return f"<table><tr><th>metric</th><th>value</th></tr>{rows}</table>"
+    names are escaped. A value that converts to float is formatted to 4
+    decimal places; a value that does not (for example `None`, which raises
+    TypeError, or a non-numeric string, which raises ValueError) is
+    rendered instead as its escaped `repr` with a "not numeric" note, so one
+    malformed metric does not crash the whole report."""
+    cells = []
+    for k, v in m.items():
+        try:
+            value_cell = f"{float(v):.4f}"
+        except (TypeError, ValueError):
+            value_cell = f"{escape(repr(v))} (not numeric)"
+        cells.append(f"<tr><td>{escape(k)}</td><td>{value_cell}</td></tr>")
+    return f"<table><tr><th>metric</th><th>value</th></tr>{''.join(cells)}</table>"
 
 
 def _cases_table(cases: Sequence[dict[str, Any]]) -> str:
@@ -113,9 +138,12 @@ def render_html(
 
     An empty `summaries` list is not an error: the report renders with a
     "No results." notice and no scatter or tables. Missing metrics fall
-    back to 0.0 (see `_x`/`_y`); a metric value that cannot convert to
-    float raises ValueError, since that means the summary itself is
-    malformed.
+    back to 0.0 for the scatter (see `_x`/`_y`); a metric value that cannot
+    convert to float is rendered as "not numeric" instead of raising (see
+    `_metrics_table`), so one malformed summary does not take down the
+    whole report. A scatter point whose cost or quality metric falls
+    outside its expected range is clamped onto the canvas and labeled
+    "(clamped)" (see `_scatter`).
     """
     parts = [
         "<!doctype html><html><head><meta charset='utf-8'><title>Eval report</title>"
