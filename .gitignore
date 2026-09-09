@@ -9,3 +9,4 @@ monitor.sqlite
 .env
 *.eval
 logs/
+.superpowers/
