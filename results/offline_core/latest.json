@@ -1,0 +1,883 @@
+{
+  "suite": "offline_core",
+  "target": "agent-platform-local",
+  "started_at": "2026-09-09T05:27:47+00:00",
+  "finished_at": "2026-09-09T05:27:47+00:00",
+  "cases": [
+    {
+      "name": "approval-gate-holds",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'waiting_approval', got 'waiting_approval'"
+        },
+        {
+          "dimension": "side_effects",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 0, got 0"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "email the quarterly summary to the team",
+        "steps": [],
+        "status": "waiting_approval",
+        "answer": null,
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 6.006999989040196,
+        "meta": {
+          "steps_used": 1,
+          "history_types": []
+        }
+      },
+      "skipped_reason": null
+    },
+    {
+      "name": "gated-tool-after-safe-tool",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'waiting_approval', got 'waiting_approval'"
+        },
+        {
+          "dimension": "side_effects",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 0, got 0"
+        },
+        {
+          "dimension": "tools_used",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "strict: expected ['lookup'], got ['lookup']"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "look up the summary then email it",
+        "steps": [
+          {
+            "kind": "tool",
+            "name": "lookup",
+            "input": null,
+            "output": "value-for-summary",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          }
+        ],
+        "status": "waiting_approval",
+        "answer": null,
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 3.625100012868643,
+        "meta": {
+          "steps_used": 2,
+          "history_types": [
+            "tool_result"
+          ]
+        }
+      },
+      "skipped_reason": null
+    },
+    {
+      "name": "memory-recall-after-distractor",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'completed', got 'completed'"
+        },
+        {
+          "dimension": "answer_contains",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "answer contains 'heron'"
+        },
+        {
+          "dimension": "tools_used",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "strict: expected ['remember', 'lookup', 'recall'], got ['remember', 'lookup', 'recall']"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "remember the code word, look something else up, then recall the code word",
+        "steps": [
+          {
+            "kind": "tool",
+            "name": "remember",
+            "input": null,
+            "output": {
+              "id": "mem-75c7e86a9426",
+              "stored": true
+            },
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "tool",
+            "name": "lookup",
+            "input": null,
+            "output": "value-for-weather",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "tool",
+            "name": "recall",
+            "input": null,
+            "output": [
+              {
+                "text": "the code word is heron",
+                "score": 0.6325,
+                "metadata": {}
+              }
+            ],
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "model",
+            "name": "proposed_answer",
+            "input": null,
+            "output": "the code word is heron",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          }
+        ],
+        "status": "completed",
+        "answer": "the code word is heron",
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 4.710600012913346,
+        "meta": {
+          "steps_used": 4,
+          "history_types": [
+            "tool_result",
+            "tool_result",
+            "tool_result",
+            "proposed_answer"
+          ]
+        }
+      },
+      "skipped_reason": null
+    },
+    {
+      "name": "memory-remember-recall",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'completed', got 'completed'"
+        },
+        {
+          "dimension": "answer_contains",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "answer contains '50k'"
+        },
+        {
+          "dimension": "history_types",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected ['tool_result', 'tool_result', 'proposed_answer'], got ['tool_result', 'tool_result', 'proposed_answer']"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "remember that the budget is 50k, then answer what the budget is",
+        "steps": [
+          {
+            "kind": "tool",
+            "name": "remember",
+            "input": null,
+            "output": {
+              "id": "mem-8b02dc772996",
+              "stored": true
+            },
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "tool",
+            "name": "recall",
+            "input": null,
+            "output": [
+              {
+                "text": "the budget is 50k",
+                "score": 0.75,
+                "metadata": {}
+              }
+            ],
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "model",
+            "name": "proposed_answer",
+            "input": null,
+            "output": "the budget is 50k",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          }
+        ],
+        "status": "completed",
+        "answer": "the budget is 50k",
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 4.143600002862513,
+        "meta": {
+          "steps_used": 3,
+          "history_types": [
+            "tool_result",
+            "tool_result",
+            "proposed_answer"
+          ]
+        }
+      },
+      "skipped_reason": null
+    },
+    {
+      "name": "protocol-error-recovers",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'completed', got 'completed'"
+        },
+        {
+          "dimension": "history_types",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected ['protocol_error', 'proposed_answer'], got ['protocol_error', 'proposed_answer']"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "answer anything",
+        "steps": [
+          {
+            "kind": "error",
+            "name": "protocol_error",
+            "input": null,
+            "output": null,
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": "reply was not a valid action object"
+          },
+          {
+            "kind": "model",
+            "name": "proposed_answer",
+            "input": null,
+            "output": "recovered",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          }
+        ],
+        "status": "completed",
+        "answer": "recovered",
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 3.4082999918609858,
+        "meta": {
+          "steps_used": 2,
+          "history_types": [
+            "protocol_error",
+            "proposed_answer"
+          ]
+        }
+      },
+      "skipped_reason": null
+    },
+    {
+      "name": "protocol-error-twice-then-answer",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'completed', got 'completed'"
+        },
+        {
+          "dimension": "answer_contains",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "answer contains 'recovered twice'"
+        },
+        {
+          "dimension": "history_types",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected ['protocol_error', 'protocol_error', 'proposed_answer'], got ['protocol_error', 'protocol_error', 'proposed_answer']"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "answer anything",
+        "steps": [
+          {
+            "kind": "error",
+            "name": "protocol_error",
+            "input": null,
+            "output": null,
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": "reply was not a valid action object"
+          },
+          {
+            "kind": "error",
+            "name": "protocol_error",
+            "input": null,
+            "output": null,
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": "reply was not a valid action object"
+          },
+          {
+            "kind": "model",
+            "name": "proposed_answer",
+            "input": null,
+            "output": "recovered twice",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          }
+        ],
+        "status": "completed",
+        "answer": "recovered twice",
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 3.658900037407875,
+        "meta": {
+          "steps_used": 3,
+          "history_types": [
+            "protocol_error",
+            "protocol_error",
+            "proposed_answer"
+          ]
+        }
+      },
+      "skipped_reason": null
+    },
+    {
+      "name": "runaway-loop-is-bounded",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'failed', got 'failed'"
+        },
+        {
+          "dimension": "max_steps_used",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "used 3, cap 3"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "answer anything",
+        "steps": [
+          {
+            "kind": "error",
+            "name": "protocol_error",
+            "input": null,
+            "output": null,
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": "reply was not a valid action object"
+          },
+          {
+            "kind": "error",
+            "name": "protocol_error",
+            "input": null,
+            "output": null,
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": "reply was not a valid action object"
+          },
+          {
+            "kind": "error",
+            "name": "protocol_error",
+            "input": null,
+            "output": null,
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": "reply was not a valid action object"
+          }
+        ],
+        "status": "failed",
+        "answer": null,
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 3.6186999641358852,
+        "meta": {
+          "steps_used": 3,
+          "history_types": [
+            "protocol_error",
+            "protocol_error",
+            "protocol_error"
+          ]
+        }
+      },
+      "skipped_reason": null
+    },
+    {
+      "name": "step-cap-exactly-reached",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'completed', got 'completed'"
+        },
+        {
+          "dimension": "answer_contains",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "answer contains 'a and b'"
+        },
+        {
+          "dimension": "max_steps_used",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "used 3, cap 3"
+        },
+        {
+          "dimension": "tools_used",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "strict: expected ['lookup', 'lookup'], got ['lookup', 'lookup']"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "look up two things and answer",
+        "steps": [
+          {
+            "kind": "tool",
+            "name": "lookup",
+            "input": null,
+            "output": "value-for-a",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "tool",
+            "name": "lookup",
+            "input": null,
+            "output": "value-for-b",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "model",
+            "name": "proposed_answer",
+            "input": null,
+            "output": "a and b",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          }
+        ],
+        "status": "completed",
+        "answer": "a and b",
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 4.414999973960221,
+        "meta": {
+          "steps_used": 3,
+          "history_types": [
+            "tool_result",
+            "tool_result",
+            "proposed_answer"
+          ]
+        }
+      },
+      "skipped_reason": null
+    },
+    {
+      "name": "tool-denied-is-not-executed",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'completed', got 'completed'"
+        },
+        {
+          "dimension": "history_types",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected ['tool_denied', 'proposed_answer'], got ['tool_denied', 'proposed_answer']"
+        },
+        {
+          "dimension": "tools_used",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "strict: expected [], got []"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "delete the archive",
+        "steps": [
+          {
+            "kind": "error",
+            "name": "tool_denied",
+            "input": null,
+            "output": null,
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": "delete_archive"
+          },
+          {
+            "kind": "model",
+            "name": "proposed_answer",
+            "input": null,
+            "output": "I am not allowed to do that",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          }
+        ],
+        "status": "completed",
+        "answer": "I am not allowed to do that",
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 3.585000056773424,
+        "meta": {
+          "steps_used": 2,
+          "history_types": [
+            "tool_denied",
+            "proposed_answer"
+          ]
+        }
+      },
+      "skipped_reason": null
+    },
+    {
+      "name": "tool-then-validated-answer",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'completed', got 'completed'"
+        },
+        {
+          "dimension": "answer_contains",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "answer contains 'value-for-revenue'"
+        },
+        {
+          "dimension": "history_types",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected ['tool_result', 'proposed_answer'], got ['tool_result', 'proposed_answer']"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "find the revenue and report it",
+        "steps": [
+          {
+            "kind": "tool",
+            "name": "lookup",
+            "input": null,
+            "output": "value-for-revenue",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "model",
+            "name": "proposed_answer",
+            "input": null,
+            "output": "revenue is value-for-revenue",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          }
+        ],
+        "status": "completed",
+        "answer": "revenue is value-for-revenue",
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 3.5056000342592597,
+        "meta": {
+          "steps_used": 2,
+          "history_types": [
+            "tool_result",
+            "proposed_answer"
+          ]
+        }
+      },
+      "skipped_reason": null
+    },
+    {
+      "name": "validator-rejection-recovers",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'completed', got 'completed'"
+        },
+        {
+          "dimension": "answer_contains",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "answer contains 'second draft'"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "write a one-line status",
+        "steps": [
+          {
+            "kind": "model",
+            "name": "proposed_answer",
+            "input": null,
+            "output": "first draft",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "error",
+            "name": "validator_feedback",
+            "input": null,
+            "output": null,
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": "too vague"
+          },
+          {
+            "kind": "model",
+            "name": "proposed_answer",
+            "input": null,
+            "output": "second draft",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          }
+        ],
+        "status": "completed",
+        "answer": "second draft",
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 3.6833001067861915,
+        "meta": {
+          "steps_used": 2,
+          "history_types": [
+            "proposed_answer",
+            "validator_feedback",
+            "proposed_answer"
+          ]
+        }
+      },
+      "skipped_reason": null
+    },
+    {
+      "name": "validator-rejects-twice-then-accepts",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'completed', got 'completed'"
+        },
+        {
+          "dimension": "answer_contains",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "answer contains 'draft three'"
+        },
+        {
+          "dimension": "history_types",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected ['proposed_answer', 'validator_feedback', 'proposed_answer', 'validator_feedback', 'proposed_answer'], got ['proposed_answer', 'validator_feedback', 'proposed_answer', 'validator_feedback', 'proposed_answer']"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "write a status line",
+        "steps": [
+          {
+            "kind": "model",
+            "name": "proposed_answer",
+            "input": null,
+            "output": "draft one",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "error",
+            "name": "validator_feedback",
+            "input": null,
+            "output": null,
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": "vague"
+          },
+          {
+            "kind": "model",
+            "name": "proposed_answer",
+            "input": null,
+            "output": "draft two",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "error",
+            "name": "validator_feedback",
+            "input": null,
+            "output": null,
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": "still vague"
+          },
+          {
+            "kind": "model",
+            "name": "proposed_answer",
+            "input": null,
+            "output": "draft three",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          }
+        ],
+        "status": "completed",
+        "answer": "draft three",
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 4.124999977648258,
+        "meta": {
+          "steps_used": 3,
+          "history_types": [
+            "proposed_answer",
+            "validator_feedback",
+            "proposed_answer",
+            "validator_feedback",
+            "proposed_answer"
+          ]
+        }
+      },
+      "skipped_reason": null
+    }
+  ],
+  "metrics": {
+    "cases_total": 12.0,
+    "cases_passed": 12.0,
+    "cases_skipped": 0.0,
+    "pass_rate": 1.0,
+    "usd_per_run_p50": 0.0,
+    "wall_ms_p50": 3.6711000720970333,
+    "wall_ms_p95": 5.293980002170428
+  },
+  "meta": {
+    "budget_exceeded": false,
+    "spent_usd": 0.0
+  }
+}
