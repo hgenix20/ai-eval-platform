@@ -96,9 +96,13 @@ def cmd_run_offline(a: argparse.Namespace) -> int:
 
 
 def cmd_run_public(a: argparse.Namespace) -> int:
-    """Run one catalog entry's public benchmark against `--model`, write
-    the summary to `--results`, and append a spend record to
-    `--results`/ledger.jsonl.
+    """Run one catalog entry's public benchmark against `--model`, append a
+    spend record to `--results`/ledger.jsonl, and write the summary to
+    `--results`.
+
+    The ledger line is written before the summary, and its `run_id` is the
+    suite name and the run's `started_at` rather than the summary filename,
+    so a live run's spend is recorded even if writing the summary fails.
 
     Returns 2 if `entry` is not in the catalog, if it is not runnable
     through Inspect, if `--model` has no cost data Inspect can use, or if
@@ -117,14 +121,16 @@ def cmd_run_public(a: argparse.Namespace) -> int:
     except (BudgetExceeded, ValueError) as e:
         print(str(e), file=sys.stderr)
         return 2
-    path = write_summary(result, Path(a.results))
+    # Ledger first: the money is already spent by the time run_public returns,
+    # so the spend record must not depend on the summary write succeeding.
     Ledger(Path(a.results) / "ledger.jsonl").record(
-        run_id=path.stem,
+        run_id=f"{result.suite}-{result.started_at}",
         suite=result.suite,
         target=a.model,
         usd=result.metrics["usd"],
         note=f"limit={a.limit}",
     )
+    path = write_summary(result, Path(a.results))
     accuracy = result.metrics["accuracy"]
     samples = int(result.metrics["samples_total"])
     usd = result.metrics["usd"]
@@ -174,7 +180,8 @@ def cmd_gate(a: argparse.Namespace) -> int:
                 "metrics": summary["metrics"],
                 "from": summary.get("started_at"),
             }
-            (baselines / f"{name}.json").write_text(json.dumps(payload, indent=2), encoding="utf-8")
+            text = json.dumps(payload, indent=2) + "\n"
+            (baselines / f"{name}.json").write_text(text, encoding="utf-8")
         print(f"updated {len(current)} baselines in {baselines}")
         return 0
     baseline = {

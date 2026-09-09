@@ -1,9 +1,16 @@
 import json
 from pathlib import Path
 
+from inspect_ai import Task
+from inspect_ai import eval as inspect_eval
+from inspect_ai.dataset import MemoryDataset, Sample
+from inspect_ai.model import ModelOutput
+from inspect_ai.scorer import match
+
 import eval_platform.cli as cli_mod
 from eval_platform.budget import BudgetExceeded
 from eval_platform.cli import main
+from eval_platform.suites import eval_log_to_suite_result
 from eval_platform.targets import TargetUnavailable
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -265,3 +272,56 @@ def test_run_public_value_error_exits_2(tmp_path: Path, monkeypatch, capsys):
     )
     assert rc == 2
     assert "no cost data" in capsys.readouterr().err
+
+
+def test_run_public_happy_path_with_mock_model(tmp_path: Path, monkeypatch, capsys):
+    """A completed public run writes latest.json under the suite directory
+    and exactly one ledger line. `run_public` is monkeypatched to return a
+    real SuiteResult built from a mockllm EvalLog, so no network is touched
+    and no money is spent, while the CLI's own write path runs for real
+    against a target id that carries a provider slash.
+    """
+    logs, results = tmp_path / "logs", tmp_path / "results"
+    [log] = inspect_eval(
+        Task(
+            dataset=MemoryDataset(
+                [Sample(input="2+2?", target="4"), Sample(input="3+3?", target="6")]
+            ),
+            scorer=match(),
+        ),
+        model="mockllm/model",
+        model_args={
+            "custom_outputs": [
+                ModelOutput.from_content(model="mockllm", content="4"),
+                ModelOutput.from_content(model="mockllm", content="6"),
+            ]
+        },
+        log_dir=str(logs),
+        display="none",
+    )
+    result = eval_log_to_suite_result(log, suite="public_ifeval", target="mockllm/model")
+    monkeypatch.setattr(cli_mod, "run_public", lambda *a, **kw: result)
+
+    rc = main(
+        [
+            "run",
+            "public",
+            "ifeval",
+            "--model",
+            "mockllm/model",
+            "--limit",
+            "2",
+            "--catalog",
+            str(ROOT / "catalog" / "entries"),
+            "--results",
+            str(results),
+            "--log-dir",
+            str(logs),
+        ]
+    )
+    assert rc == 0
+    assert (results / "public_ifeval" / "latest.json").exists()
+    ledger = (results / "ledger.jsonl").read_text(encoding="utf-8").strip().splitlines()
+    assert len(ledger) == 1
+    assert json.loads(ledger[0])["suite"] == "public_ifeval"
+    assert "public_ifeval on mockllm/model" in capsys.readouterr().out

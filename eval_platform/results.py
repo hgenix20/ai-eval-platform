@@ -4,11 +4,22 @@ and latest.json always points at the newest run for that suite."""
 from __future__ import annotations
 
 import json
+import re
 import shutil
 from pathlib import Path
 from typing import Any
 
 from eval_platform.types import SuiteResult
+
+
+def _safe(component: str) -> str:
+    """Reduce one path component to characters that are legal in a filename
+    on every supported platform. Inspect model ids carry a provider prefix
+    ("anthropic/claude-haiku-4-5-20251001", "mockllm/model"), and the slash
+    would otherwise be read as a directory separator pointing at a directory
+    that does not exist.
+    """
+    return re.sub(r"[^A-Za-z0-9._-]", "_", component)
 
 
 def _free_path(suite_dir: Path, stem: str) -> Path:
@@ -26,18 +37,25 @@ def _free_path(suite_dir: Path, stem: str) -> Path:
 
 
 def write_summary(result: SuiteResult, results_dir: Path) -> Path:
-    """Write `result` as JSON under `results_dir/<suite>/<started_at-safe>-<target>.json`
+    """Write `result` as JSON under `results_dir/<suite>/<started_at-safe>-<target-safe>.json`
     and copy it to `results_dir/<suite>/latest.json`. Creates the suite directory
     if it does not exist. If that filename is already taken (two runs in the
     same second), a `-2`, `-3`, ... suffix is added before `.json` until a
     free name is found. Returns the path of the timestamped file (not
     latest.json).
+
+    Both the timestamp and the target are reduced to filename-legal
+    characters first, so a target named after an Inspect model id
+    ("anthropic/claude-haiku-4-5-20251001") writes one file inside the suite
+    directory instead of failing on a directory that was never created. The
+    file ends with a newline.
     """
     suite_dir = results_dir / result.suite
     suite_dir.mkdir(parents=True, exist_ok=True)
     stamp = result.started_at.replace(":", "").replace("+0000", "Z").replace("+00:00", "Z")
-    path = _free_path(suite_dir, f"{stamp}-{result.target}")
-    path.write_text(json.dumps(result.to_dict(), indent=2, default=str), encoding="utf-8")
+    path = _free_path(suite_dir, f"{_safe(stamp)}-{_safe(result.target)}")
+    payload = json.dumps(result.to_dict(), indent=2, default=str) + "\n"
+    path.write_text(payload, encoding="utf-8")
     shutil.copyfile(path, suite_dir / "latest.json")
     return path
 
