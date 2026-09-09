@@ -40,6 +40,64 @@ else:
         _IMPORT_ERROR = None
 
 
+def build_world(
+    case: Case,
+) -> tuple[Orchestrator, ApprovalQueue, ToolExecutor, list[dict[str, Any]]]:
+    """Build one tool registry, approval queue, executor, gateway, and
+    orchestrator for `case`.
+
+    Module-level (not a method) so it has two callers that must stay in
+    sync: `AgentPlatformLocalTarget._world`, and tests that need this same
+    world wired into a real FastAPI app via `agent_platform.service.create_app`
+    to exercise `AgentPlatformHttpTarget`'s approval flow end to end. A fresh
+    world per case keeps runs isolated: no shared memory, approval, or cost
+    state leaks between cases in the same suite.
+    """
+    side_effects: list[dict[str, Any]] = []
+    registry = ToolRegistry()
+    registry.register(
+        ToolSpec(
+            name="lookup",
+            description="Look up a fact by key",
+            input_schema={"type": "object", "properties": {"key": {"type": "string"}}},
+            handler=lambda args: f"value-for-{args.get('key', '')}",
+        )
+    )
+    registry.register(
+        ToolSpec(
+            name="send_email",
+            description="Send an outbound email",
+            input_schema={"type": "object", "properties": {"to": {"type": "string"}}},
+            handler=lambda args: side_effects.append(args) or "sent",
+            requires_approval=True,
+        )
+    )
+    store = InMemoryMemoryStore(DeterministicEmbedder())
+    for spec in memory_tools(store, "eval-agent"):
+        registry.register(spec)
+    approvals = ApprovalQueue()
+    executor = ToolExecutor(registry, approvals)
+    gateway = Gateway(
+        providers={
+            "planner": FakeProvider(name="planner", responses=list(case.planner), text="{}"),
+            "validator": FakeProvider(name="validator", responses=list(case.validator), text="{}"),
+        },
+        routes={
+            "reason": Route((RouteStep("planner", "planner-model"),)),
+            "draft": Route((RouteStep("validator", "validator-model"),)),
+        },
+        meter=CostMeter(prices={}),
+    )
+    orchestrator = Orchestrator(
+        gateway=gateway,
+        executor=executor,
+        registry=registry,
+        grant=AgentGrant.of("eval-agent", "lookup", "send_email", "remember", "recall"),
+        max_steps=case.max_steps,
+    )
+    return orchestrator, approvals, executor, side_effects
+
+
 class AgentPlatformLocalTarget:
     """Runs a `Case` through the real agent platform orchestrator in process.
 
@@ -63,52 +121,12 @@ class AgentPlatformLocalTarget:
     def _world(self, case: Case) -> tuple[Orchestrator, list[dict[str, Any]]]:
         """Build one orchestrator plus its side-effect sink for `case`.
 
-        A fresh world per case keeps runs isolated: no shared memory,
-        approval, or cost state leaks between cases in the same suite.
+        Thin wrapper over the module-level `build_world`: this target has no
+        use for the approval queue or executor it also builds (those are
+        only needed to wire an HTTP service around the same world), so it
+        drops them here.
         """
-        side_effects: list[dict[str, Any]] = []
-        registry = ToolRegistry()
-        registry.register(
-            ToolSpec(
-                name="lookup",
-                description="Look up a fact by key",
-                input_schema={"type": "object", "properties": {"key": {"type": "string"}}},
-                handler=lambda args: f"value-for-{args.get('key', '')}",
-            )
-        )
-        registry.register(
-            ToolSpec(
-                name="send_email",
-                description="Send an outbound email",
-                input_schema={"type": "object", "properties": {"to": {"type": "string"}}},
-                handler=lambda args: side_effects.append(args) or "sent",
-                requires_approval=True,
-            )
-        )
-        store = InMemoryMemoryStore(DeterministicEmbedder())
-        for spec in memory_tools(store, "eval-agent"):
-            registry.register(spec)
-        executor = ToolExecutor(registry, ApprovalQueue())
-        gateway = Gateway(
-            providers={
-                "planner": FakeProvider(name="planner", responses=list(case.planner), text="{}"),
-                "validator": FakeProvider(
-                    name="validator", responses=list(case.validator), text="{}"
-                ),
-            },
-            routes={
-                "reason": Route((RouteStep("planner", "planner-model"),)),
-                "draft": Route((RouteStep("validator", "validator-model"),)),
-            },
-            meter=CostMeter(prices={}),
-        )
-        orchestrator = Orchestrator(
-            gateway=gateway,
-            executor=executor,
-            registry=registry,
-            grant=AgentGrant.of("eval-agent", "lookup", "send_email", "remember", "recall"),
-            max_steps=case.max_steps,
-        )
+        orchestrator, _approvals, _executor, side_effects = build_world(case)
         return orchestrator, side_effects
 
     def run(self, case: Case) -> Trajectory:
