@@ -10,7 +10,7 @@ class ScriptedTarget:
     gate and report tests use so they never depend on the agent platform."""
 
     name = "scripted"
-    capabilities = frozenset({"agent", "scripted"})
+    capabilities = frozenset({"agent", "scripted", "side_effects"})
 
     def run(self, case: Case) -> Trajectory:
         """Turn `case.script` into a `Trajectory`, step for step.

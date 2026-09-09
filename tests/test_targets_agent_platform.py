@@ -12,6 +12,7 @@ from fastapi.testclient import TestClient
 from eval_platform.targets import (
     AgentPlatformHttpTarget,
     AgentPlatformLocalTarget,
+    ScriptedTarget,
     TargetUnavailable,
 )
 from eval_platform.targets.agent_platform_local import build_world
@@ -196,3 +197,38 @@ def test_http_target_approve_flow_resumes_run():
     unapproved = unapproved_target.run(case)
     assert unapproved.status == "waiting_approval"
     assert unapproved.meta["approved"] is False
+
+
+class _EmptyRunsClient:
+    """Stub client whose `POST /runs` answers 200 with an empty body, the
+    shape the HTTP contract forbids and the target used to index into."""
+
+    def get(self, url: str, **kw: Any) -> _StubResponse:
+        if url == "/costs":
+            return _StubResponse(json_data={"total_usd": 0.0})
+        raise AssertionError(f"unexpected GET {url}")
+
+    def post(self, url: str, **kw: Any) -> _StubResponse:
+        if url == "/runs":
+            return _StubResponse(json_data={})
+        raise AssertionError(f"unexpected POST {url}")
+
+
+def test_only_targets_that_watch_the_executor_claim_side_effects():
+    assert "side_effects" in ScriptedTarget.capabilities
+    assert "side_effects" in AgentPlatformLocalTarget.capabilities
+    assert "side_effects" not in AgentPlatformHttpTarget.capabilities
+
+
+def test_http_target_marks_side_effects_unobservable():
+    target = AgentPlatformHttpTarget.from_client(TestClient(build_app()))
+    t = target.run(Case(name="h", goal="say hi", expect=Expect()))
+    assert t.meta["side_effects_unavailable"] is True
+
+
+def test_http_target_names_the_missing_field_on_an_unexpected_body():
+    """A 200 whose body does not match the documented run-record shape is a
+    ValueError naming the response, not a bare KeyError."""
+    target = AgentPlatformHttpTarget.from_client(_EmptyRunsClient())
+    with pytest.raises(ValueError, match=r"POST /runs response lacks 'run_id'"):
+        target.run(Case(name="empty", goal="x", expect=Expect()))

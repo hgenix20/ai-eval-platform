@@ -24,7 +24,10 @@ def grade_expect(case: Case, t: Trajectory) -> list[Grade]:
     - status: t.status == expect.status
     - answer_contains: expect.answer_contains is a substring of t.answer
       (t.answer or "" so a None answer fails instead of raising)
-    - side_effects: len(t.side_effects) == expect.side_effects
+    - side_effects: len(t.side_effects) == expect.side_effects, unless
+      `t.meta["side_effects_unavailable"]` is set, in which case the target
+      cannot observe side effects and the grade fails rather than passing
+      on an empty tuple
     - history_types: t.meta["history_types"] when present, else each
       step's name (in `t.steps` order), compared for exact equality
       including order
@@ -48,13 +51,22 @@ def grade_expect(case: Case, t: Trajectory) -> list[Grade]:
             )
         )
     if e.side_effects is not None:
-        out.append(
-            _g(
-                "side_effects",
-                len(t.side_effects) == e.side_effects,
-                f"expected {e.side_effects}, got {len(t.side_effects)}",
+        if t.meta.get("side_effects_unavailable"):
+            # A target that cannot see side effects reports an empty tuple
+            # for "none happened" and for "none were observed" alike, so
+            # `expect: {side_effects: 0}` would pass there without measuring
+            # anything. Cases asserting on side effects carry a
+            # `side_effects` target requirement and are skipped on such a
+            # target; this is the net for one that slips through.
+            out.append(_g("side_effects", False, "side effects are not observable on this target"))
+        else:
+            out.append(
+                _g(
+                    "side_effects",
+                    len(t.side_effects) == e.side_effects,
+                    f"expected {e.side_effects}, got {len(t.side_effects)}",
+                )
             )
-        )
     if e.history_types is not None:
         actual = t.meta["history_types"] if "history_types" in t.meta else [s.name for s in t.steps]
         out.append(

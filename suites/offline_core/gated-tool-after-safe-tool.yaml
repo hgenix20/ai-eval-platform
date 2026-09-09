@@ -2,6 +2,7 @@
 # is kept; the gated action has no side effect.
 name: gated-tool-after-safe-tool
 goal: look up the summary then email it
+target_requirements: [agent, side_effects]
 planner:
   - '{"action": "tool", "tool": "lookup", "arguments": {"key": "summary"}}'
   - '{"action": "tool", "tool": "send_email", "arguments": {"to": "team@example.com"}}'

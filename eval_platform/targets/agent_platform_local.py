@@ -112,7 +112,7 @@ class AgentPlatformLocalTarget:
     """
 
     name = "agent-platform-local"
-    capabilities = frozenset({"agent", "memory", "approval"})
+    capabilities = frozenset({"agent", "memory", "approval", "side_effects"})
 
     def __init__(self) -> None:
         if _IMPORT_ERROR is not None:

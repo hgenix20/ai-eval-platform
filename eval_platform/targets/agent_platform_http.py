@@ -16,6 +16,25 @@ from eval_platform.targets.convert import run_dict_to_trajectory
 from eval_platform.types import Case, Trajectory
 
 
+def _field(obj: Any, name: str, context: str) -> Any:
+    """Read `name` out of a decoded JSON response, or say which response
+    lacked it.
+
+    The agent platform's HTTP contract fixes the shape of every body this
+    target reads. A 200 whose body does not match that shape is a service
+    fault, and it must cross the `AgentTarget` boundary as `ValueError`
+    (the one exception type a caller is contracted to expect for a rejected
+    or malformed exchange) naming the response, rather than as a `KeyError`
+    naming a bare string.
+
+    Raises:
+        ValueError: `obj` is not a mapping, or has no `name` key.
+    """
+    if not isinstance(obj, dict) or name not in obj:
+        raise ValueError(f"agent platform {context} response lacks {name!r}")
+    return obj[name]
+
+
 class _Client(Protocol):
     """The subset of an HTTP client this target needs: enough to be
     satisfied by either `httpx.Client` or `fastapi.testclient.TestClient`.
@@ -49,6 +68,9 @@ class AgentPlatformHttpTarget:
     """
 
     name = "agent-platform-http"
+    # No "side_effects": the HTTP surface reports a run record, not the
+    # executor's side-effect log, so a case asserting on side effects would
+    # pass here for the wrong reason. Such a case is skipped instead.
     capabilities = frozenset({"agent", "approval"})
 
     def __init__(self, base_url: str, *, approve: bool = False, timeout_s: float = 30.0) -> None:
@@ -170,23 +192,34 @@ class AgentPlatformHttpTarget:
         `meta["run_id"]`, `meta["approved"]`, and `meta["approval_id"]`
         (`None` when no approval happened) are always set so callers can
         trace the run and tell whether, and through which approval, it
-        resumed.
+        resumed. `meta["side_effects_unavailable"]` is always `True`: the
+        run record carries no executor side-effect log, so an empty
+        `side_effects` on the trajectory means nothing was observed, not
+        that nothing happened. `grade_expect` reads that flag and fails a
+        `side_effects` expectation rather than passing it on an empty tuple.
+
+        Raises:
+            ValueError: the service rejected a request, could not be reached,
+                or answered 200 with a body missing a field the HTTP contract
+                fixes (`status` or `run_id` on a run record, `id` or
+                `created_at` on a pending approval).
         """
         cost_before = self._cost_total()
         start = time.perf_counter()
         record = self._request("POST", "/runs", json={"goal": case.goal}).json()
         approved = False
         approval_id: str | None = None
-        if self.approve and record["status"] == "waiting_approval":
+        if self.approve and _field(record, "status", "POST /runs") == "waiting_approval":
             pending = self._request("GET", "/approvals").json()
             if pending:
-                newest = max(pending, key=lambda p: p["created_at"])
-                approval = self._request("POST", f"/approvals/{newest['id']}/approve")
+                newest = max(pending, key=lambda p: _field(p, "created_at", "GET /approvals"))
+                newest_id = _field(newest, "id", "GET /approvals")
+                approval = self._request("POST", f"/approvals/{newest_id}/approve")
                 resumed = approval.json().get("resumed_run")
                 if resumed:
                     record = resumed
                     approved = True
-                    approval_id = newest["id"]
+                    approval_id = newest_id
         wall_ms = (time.perf_counter() - start) * 1000.0
         cost_after = self._cost_total()
         if cost_before is None or cost_after is None:
@@ -206,9 +239,10 @@ class AgentPlatformHttpTarget:
             t,
             meta={
                 **t.meta,
-                "run_id": record["run_id"],
+                "run_id": _field(record, "run_id", "POST /runs"),
                 "approved": approved,
                 "approval_id": approval_id,
                 "cost_unavailable": cost_unavailable,
+                "side_effects_unavailable": True,
             },
         )

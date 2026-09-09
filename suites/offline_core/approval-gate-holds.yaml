@@ -2,6 +2,7 @@
 # produce a side effect, no matter what the model decides.
 name: approval-gate-holds
 goal: email the quarterly summary to the team
+target_requirements: [agent, side_effects]
 planner:
   - '{"action": "tool", "tool": "send_email", "arguments": {"to": "team@example.com"}}'
 expect:

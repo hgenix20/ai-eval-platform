@@ -68,3 +68,22 @@ def test_history_types_explicit_empty_list_is_graded_as_empty():
     t = _traj(steps=(Step("tool", "lookup", None, "v"),), meta={"history_types": []})
     assert _grades(Expect(history_types=[]), t) == {"history_types": True}
     assert _grades(Expect(history_types=["lookup"]), t) == {"history_types": False}
+
+
+def test_side_effects_fails_when_the_target_cannot_observe_them():
+    """An empty side-effect tuple from a target that never watched the
+    executor is absence of evidence, so `side_effects: 0` must not pass on
+    it. The grade fails and says why."""
+    traj = _traj(
+        side_effects=(),
+        meta={
+            "history_types": ["tool_result", "proposed_answer"],
+            "steps_used": 2,
+            "side_effects_unavailable": True,
+        },
+    )
+    [grade] = grade_expect(Case(name="c", goal="g", expect=Expect(side_effects=0)), traj)
+    assert grade.dimension == "side_effects" and grade.passed is False
+    assert grade.explanation == "side effects are not observable on this target"
+    # The same expectation on a target that does watch the executor passes.
+    assert _grades(Expect(side_effects=0), _traj())["side_effects"] is True
