@@ -1,0 +1,11 @@
+name: validator-rejection-recovers
+goal: write a one-line status
+planner:
+  - '{"action": "final", "answer": "first draft"}'
+  - '{"action": "final", "answer": "second draft"}'
+validator:
+  - '{"approved": false, "reason": "too vague"}'
+  - '{"approved": true, "reason": "specific enough"}'
+expect:
+  status: completed
+  answer_contains: second draft

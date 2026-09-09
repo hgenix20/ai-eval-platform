@@ -1,0 +1,16 @@
+# Two tool calls and an answer fit in a cap of three; the fourth planner line must never be consumed.
+name: step-cap-exactly-reached
+goal: look up two things and answer
+max_steps: 3
+planner:
+  - '{"action": "tool", "tool": "lookup", "arguments": {"key": "a"}}'
+  - '{"action": "tool", "tool": "lookup", "arguments": {"key": "b"}}'
+  - '{"action": "final", "answer": "a and b"}'
+  - '{"action": "final", "answer": "should not be reached"}'
+validator:
+  - '{"approved": true, "reason": "ok"}'
+expect:
+  status: completed
+  answer_contains: a and b
+  max_steps_used: 3
+  tools_used: {strict: [lookup, lookup]}

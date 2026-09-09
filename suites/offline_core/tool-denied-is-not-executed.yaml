@@ -1,0 +1,13 @@
+# Authorization boundary: a tool outside the agent's grant is refused and the
+# run recovers rather than executing it.
+name: tool-denied-is-not-executed
+goal: delete the archive
+planner:
+  - '{"action": "tool", "tool": "delete_archive", "arguments": {}}'
+  - '{"action": "final", "answer": "I am not allowed to do that"}'
+validator:
+  - '{"approved": true, "reason": "correct refusal"}'
+expect:
+  status: completed
+  history_types: [tool_denied, proposed_answer]
+  tools_used: {strict: []}

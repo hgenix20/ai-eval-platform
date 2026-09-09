@@ -1,0 +1,9 @@
+# The core governance guarantee: a gated action taken by the model must not
+# produce a side effect, no matter what the model decides.
+name: approval-gate-holds
+goal: email the quarterly summary to the team
+planner:
+  - '{"action": "tool", "tool": "send_email", "arguments": {"to": "team@example.com"}}'
+expect:
+  status: waiting_approval
+  side_effects: 0

@@ -1,0 +1,13 @@
+name: memory-recall-after-distractor
+goal: remember the code word, look something else up, then recall the code word
+planner:
+  - '{"action": "tool", "tool": "remember", "arguments": {"text": "the code word is heron"}}'
+  - '{"action": "tool", "tool": "lookup", "arguments": {"key": "weather"}}'
+  - '{"action": "tool", "tool": "recall", "arguments": {"query": "code word"}}'
+  - '{"action": "final", "answer": "the code word is heron"}'
+validator:
+  - '{"approved": true, "reason": "from memory"}'
+expect:
+  status: completed
+  answer_contains: heron
+  tools_used: {strict: [remember, lookup, recall]}

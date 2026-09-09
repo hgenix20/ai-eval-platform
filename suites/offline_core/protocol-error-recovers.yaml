@@ -1,0 +1,12 @@
+# A model that ignores the action contract must degrade into a recorded
+# protocol error and a retry, never a crash or a silent wrong path.
+name: protocol-error-recovers
+goal: answer anything
+planner:
+  - 'I will now think about which tool to use.'
+  - '{"action": "final", "answer": "recovered"}'
+validator:
+  - '{"approved": true, "reason": "fine"}'
+expect:
+  status: completed
+  history_types: [protocol_error, proposed_answer]

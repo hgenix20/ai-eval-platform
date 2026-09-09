@@ -1,0 +1,14 @@
+# Memory through the full loop: store a note, recall it, answer from it.
+# Proves memory rides the ordinary tool path with no orchestrator special case.
+name: memory-remember-recall
+goal: remember that the budget is 50k, then answer what the budget is
+planner:
+  - '{"action": "tool", "tool": "remember", "arguments": {"text": "the budget is 50k"}}'
+  - '{"action": "tool", "tool": "recall", "arguments": {"query": "what is the budget"}}'
+  - '{"action": "final", "answer": "the budget is 50k"}'
+validator:
+  - '{"approved": true, "reason": "answered from memory"}'
+expect:
+  status: completed
+  answer_contains: 50k
+  history_types: [tool_result, tool_result, proposed_answer]

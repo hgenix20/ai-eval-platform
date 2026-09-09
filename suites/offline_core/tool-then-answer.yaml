@@ -1,0 +1,11 @@
+name: tool-then-validated-answer
+goal: find the revenue and report it
+planner:
+  - '{"action": "tool", "tool": "lookup", "arguments": {"key": "revenue"}}'
+  - '{"action": "final", "answer": "revenue is value-for-revenue"}'
+validator:
+  - '{"approved": true, "reason": "answers the goal"}'
+expect:
+  status: completed
+  answer_contains: value-for-revenue
+  history_types: [tool_result, proposed_answer]

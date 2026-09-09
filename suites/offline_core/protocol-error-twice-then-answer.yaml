@@ -1,0 +1,12 @@
+name: protocol-error-twice-then-answer
+goal: answer anything
+planner:
+  - 'thinking out loud'
+  - '{"action": "nonsense"}'
+  - '{"action": "final", "answer": "recovered twice"}'
+validator:
+  - '{"approved": true, "reason": "fine"}'
+expect:
+  status: completed
+  answer_contains: recovered twice
+  history_types: [protocol_error, protocol_error, proposed_answer]

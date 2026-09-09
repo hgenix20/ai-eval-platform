@@ -1,0 +1,12 @@
+name: runaway-loop-is-bounded
+goal: answer anything
+max_steps: 3
+planner:
+  - 'garbage'
+  - 'garbage'
+  - 'garbage'
+  - 'garbage'
+  - 'garbage'
+expect:
+  status: failed
+  max_steps_used: 3

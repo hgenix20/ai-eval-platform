@@ -1,0 +1,14 @@
+name: validator-rejects-twice-then-accepts
+goal: write a status line
+planner:
+  - '{"action": "final", "answer": "draft one"}'
+  - '{"action": "final", "answer": "draft two"}'
+  - '{"action": "final", "answer": "draft three"}'
+validator:
+  - '{"approved": false, "reason": "vague"}'
+  - '{"approved": false, "reason": "still vague"}'
+  - '{"approved": true, "reason": "good"}'
+expect:
+  status: completed
+  answer_contains: draft three
+  history_types: [proposed_answer, validator_feedback, proposed_answer, validator_feedback, proposed_answer]
