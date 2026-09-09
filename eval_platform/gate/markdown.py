@@ -11,10 +11,20 @@ def _fmt(x: float | None) -> str:
     return "n/a" if x is None else f"{x:.4f}"
 
 
+def _cell(text: str) -> str:
+    """Escape a table cell for markdown: a literal `|` would otherwise be
+    read as a column separator and corrupt the table's shape, so it is
+    escaped to `\\|`."""
+    return text.replace("|", "\\|")
+
+
 def to_markdown(report: GateReport) -> str:
     """Render `report` as a markdown heading (PASS or FAIL) followed by a
     table with one row per verdict: suite, metric, baseline, current,
-    threshold, verdict, detail."""
+    threshold, verdict, detail. Every text cell is escaped with _cell so a
+    `|` in a suite name, threshold description, or detail message cannot
+    split the row into extra columns.
+    """
     head = "PASS" if report.passed else "FAIL"
     rows = [
         f"## Eval gate: {head}",
@@ -24,13 +34,13 @@ def to_markdown(report: GateReport) -> str:
     ]
     for v in report.verdicts:
         cells = [
-            v.suite,
-            v.metric,
+            _cell(v.suite),
+            _cell(v.metric),
             _fmt(v.baseline),
             _fmt(v.current),
-            v.threshold,
-            v.verdict,
-            v.detail,
+            _cell(v.threshold),
+            _cell(v.verdict),
+            _cell(v.detail),
         ]
         rows.append("| " + " | ".join(cells) + " |")
     return "\n".join(rows) + "\n"

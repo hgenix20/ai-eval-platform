@@ -20,3 +20,15 @@ def test_write_then_read_and_latest(tmp_path):
     latest = latest_summary(tmp_path, "offline_core")
     assert latest is not None and latest["target"] == "scripted"
     assert latest_summary(tmp_path, "nope") is None
+
+
+def test_two_writes_in_the_same_second_do_not_collide(tmp_path):
+    # Same suite, target, and started_at: the two calls would compute the
+    # same filename stem, so the second must not overwrite the first.
+    first = write_summary(_res(target="scripted"), tmp_path)
+    second = write_summary(_res(target="scripted"), tmp_path)
+    assert first != second
+    assert first.exists() and second.exists()
+    latest = latest_summary(tmp_path, "offline_core")
+    assert latest is not None
+    assert read_summary(second) == latest

@@ -47,13 +47,23 @@ def _describe(t: Threshold) -> str:
     return ", ".join(parts) or "none"
 
 
-def _metric(summary: dict[str, Any] | None, name: str) -> float | None:
+def _metric(summary: dict[str, Any] | None, suite: str, name: str) -> float | None:
     """Pull one named metric out of a summary dict's "metrics" mapping.
-    Returns None if the summary is missing, or the metric is absent."""
+    Returns None if the summary is missing, or the metric is absent.
+
+    Raises ValueError if the metric is present but cannot be read as a
+    float (for example a string), naming the suite and metric so the
+    caller can find the bad value.
+    """
     if not summary:
         return None
     value = summary.get("metrics", {}).get(name)
-    return float(value) if value is not None else None
+    if value is None:
+        return None
+    try:
+        return float(value)
+    except (TypeError, ValueError) as e:
+        raise ValueError(f"{suite}.{name}: metric value {value!r} is not numeric") from e
 
 
 def _judge(t: Threshold, base: float | None, cur: float) -> tuple[Verdict, str]:
@@ -64,8 +74,15 @@ def _judge(t: Threshold, base: float | None, cur: float) -> tuple[Verdict, str]:
     bound, the verdict rests on that bound alone (pass or fail); if the
     threshold has only relative bounds, the verdict is not_measured, since
     nothing about it could be evaluated.
+
+    max_increase_pct against a zero baseline is a special case: a percentage
+    increase from zero is mathematically undefined. If the current value is
+    also zero (no change), the check passes; if the current value is above
+    zero, the check cannot be evaluated and contributes not_measured, unless
+    an absolute check already failed, in which case the failure wins.
     """
     failures: list[str] = []
+    undefined_pct_detail: str | None = None
     has_absolute = t.min is not None or t.max is not None
     has_relative = (
         t.max_drop is not None or t.max_rise is not None or t.max_increase_pct is not None
@@ -79,16 +96,20 @@ def _judge(t: Threshold, base: float | None, cur: float) -> tuple[Verdict, str]:
             failures.append(f"dropped {base - cur:.4f} > max_drop {t.max_drop}")
         if t.max_rise is not None and cur > base + t.max_rise:
             failures.append(f"rose {cur - base:.4f} > max_rise {t.max_rise}")
-        if (
-            t.max_increase_pct is not None
-            and base > 0
-            and cur > base * (1 + t.max_increase_pct / 100)
-        ):
-            failures.append(
-                f"+{(cur / base - 1) * 100:.1f}% > max_increase_pct {t.max_increase_pct}"
-            )
+        if t.max_increase_pct is not None:
+            if base > 0:
+                if cur > base * (1 + t.max_increase_pct / 100):
+                    failures.append(
+                        f"+{(cur / base - 1) * 100:.1f}% > max_increase_pct {t.max_increase_pct}"
+                    )
+            elif cur > 0:
+                undefined_pct_detail = "baseline is zero; percentage increase undefined"
+            # base == 0 and cur == 0: no change from a zero baseline; this
+            # check passes.
     if failures:
         return "fail", "; ".join(failures)
+    if undefined_pct_detail is not None:
+        return "not_measured", undefined_pct_detail
     if base is None and has_relative and not has_absolute:
         return "not_measured", "no baseline for relative check"
     return "pass", "within thresholds"
@@ -105,18 +126,25 @@ def compare(
     `baseline` and `current` map suite name to a summary dict shaped like
     `{"metrics": {...}}` (a SuiteResult.to_dict(), or just its metrics
     wrapper). A suite present in `config.suites` but absent from `current`
-    (or whose threshold metric is missing) yields a not_measured verdict
-    rather than raising: an unrun suite is not a gate failure by itself.
+    yields a not_measured verdict with detail "suite not run"; a suite that
+    is present but whose summary lacks the threshold metric yields
+    not_measured with detail "metric absent from summary". Neither raises:
+    an unrun suite, or one missing this particular metric, is not a gate
+    failure by itself.
+
+    Failure mode: raises ValueError if a metric value in `baseline` or
+    `current` is present but not numeric (see `_metric`).
     """
     out: list[MetricVerdict] = []
     for suite, t in config.suites.items():
-        base = _metric(baseline.get(suite), t.metric)
-        cur = _metric(current.get(suite), t.metric)
+        base_summary = baseline.get(suite)
+        cur_summary = current.get(suite)
+        base = _metric(base_summary, suite, t.metric)
+        cur = _metric(cur_summary, suite, t.metric)
         if cur is None:
+            detail = "suite not run" if cur_summary is None else "metric absent from summary"
             out.append(
-                MetricVerdict(
-                    suite, t.metric, base, None, _describe(t), "not_measured", "suite not run"
-                )
+                MetricVerdict(suite, t.metric, base, None, _describe(t), "not_measured", detail)
             )
             continue
         verdict, detail = _judge(t, base, cur)

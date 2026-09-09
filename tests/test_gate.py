@@ -1,9 +1,13 @@
+import re
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 import pytest
 
 from eval_platform.gate import (
     GateConfig,
+    GateReport,
+    MetricVerdict,
     Threshold,
     compare,
     load_gate_config,
@@ -66,3 +70,81 @@ def test_load_gate_config_rejects_unknown_keys(tmp_path: Path):
     p.write_text("suites:\n  a: {metric: pass_rate, min: 1, bogus: 2}\n", encoding="utf-8")
     with pytest.raises(ValueError):
         load_gate_config(p)
+
+
+def test_junit_escapes_attribute_values_as_well_formed_xml():
+    # A detail with a quote and an angle bracket would break naive f-string
+    # interpolation into an attribute; quoteattr must handle both.
+    report = GateReport(
+        verdicts=(
+            MetricVerdict(
+                suite="offline_core",
+                metric="pass_rate",
+                baseline=None,
+                current=0.5,
+                threshold="min=1.0",
+                verdict="fail",
+                detail='cur 0.5 < min 1.0, saw "bad" <output>',
+            ),
+        )
+    )
+    xml_text = to_junit(report)
+    root = ET.fromstring(xml_text)
+    failure = root.find("testcase/failure")
+    assert failure is not None
+    assert failure.get("message") == 'cur 0.5 < min 1.0, saw "bad" <output>'
+
+
+def test_markdown_escapes_pipes_and_keeps_seven_cells():
+    report = GateReport(
+        verdicts=(
+            MetricVerdict(
+                suite="offline_core",
+                metric="pass_rate",
+                baseline=None,
+                current=0.5,
+                threshold="min=1.0",
+                verdict="fail",
+                detail="a|b",
+            ),
+        )
+    )
+    md = to_markdown(report)
+    row = next(line for line in md.splitlines() if line.startswith("| offline_core"))
+    assert "a\\|b" in row
+    # Split on "|" that is not escaped by a preceding backslash, the way a
+    # markdown table parser would; a bare "|" in a cell would otherwise
+    # split it into extra columns.
+    segments = re.split(r"(?<!\\)\|", row)
+    cells = [c.strip() for c in segments if c.strip() != ""]
+    assert len(cells) == 7
+    assert cells[-1] == "a\\|b"
+
+
+def test_max_increase_pct_against_zero_baseline_is_not_measured_when_current_rises():
+    cfg = GateConfig(suites={"cost": Threshold(metric="usd_per_run_p50", max_increase_pct=10)})
+    base = _cur(cost={"usd_per_run_p50": 0.0})
+    r = compare(cfg, base, _cur(cost={"usd_per_run_p50": 0.01}))
+    v = r.verdicts[0]
+    assert v.verdict == "not_measured"
+    assert v.detail == "baseline is zero; percentage increase undefined"
+
+
+def test_max_increase_pct_against_zero_baseline_passes_when_current_is_also_zero():
+    cfg = GateConfig(suites={"cost": Threshold(metric="usd_per_run_p50", max_increase_pct=10)})
+    base = _cur(cost={"usd_per_run_p50": 0.0})
+    r = compare(cfg, base, _cur(cost={"usd_per_run_p50": 0.0}))
+    assert r.verdicts[0].verdict == "pass"
+
+
+def test_non_numeric_metric_value_raises_value_error():
+    cfg = GateConfig(suites={"offline_core": Threshold(metric="pass_rate", min=1.0)})
+    with pytest.raises(ValueError, match=re.escape("offline_core.pass_rate")):
+        compare(cfg, {}, _cur(offline_core={"pass_rate": "not-a-number"}))
+
+
+def test_not_measured_detail_distinguishes_unrun_suite_from_missing_metric():
+    r = compare(CFG, {}, _cur(offline_core={"pass_rate": 1.0}, trajectory={"other_metric": 1.0}))
+    v = {x.suite: x for x in r.verdicts}
+    assert v["cost"].detail == "suite not run"  # absent from current entirely
+    assert v["trajectory"].detail == "metric absent from summary"  # present, wrong metric
