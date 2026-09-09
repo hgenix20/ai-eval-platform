@@ -1,0 +1,55 @@
+[project]
+name = "eval-platform"
+version = "0.1.0"
+description = "Evaluation and reliability platform for AI systems: benchmark catalog on an Inspect AI substrate, built suites for the gaps, and a CI regression gate."
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+authors = [{ name = "Kameron M. Green" }]
+dependencies = [
+    "inspect-ai==0.3.263",
+    "inspect-evals==0.19.0",
+    "pydantic>=2.7,<3",
+    "pyyaml>=6.0",
+    "httpx>=0.27",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "ruff>=0.6", "pyright>=1.1.380", "bandit>=1.7", "types-PyYAML"]
+agent-platform = ["agent-platform @ git+https://github.com/hgenix20/enterprise-agent-platform@d6fee0e"]
+
+[project.scripts]
+evalplat = "eval_platform.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["eval_platform*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "N", "S", "RUF", "ASYNC", "ARG", "PL"]
+ignore = ["PLR0913", "PLR2004", "S101"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S", "PLR", "ARG"]
+
+[tool.pyright]
+include = ["eval_platform", "tests"]
+pythonVersion = "3.12"
+typeCheckingMode = "standard"
+# No venvPath/venv here: pyright is always run from the active environment
+# (.venv/Scripts/pyright locally, the runner's pip environment in CI).
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+markers = ["network: needs internet", "live: needs an API key and spends money", "agent_platform: needs the agent-platform extra"]
+
+[tool.bandit]
+exclude_dirs = ["tests", ".venv"]
