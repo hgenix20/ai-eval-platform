@@ -47,10 +47,25 @@ class Trajectory:
         return [s.name for s in self.steps if s.kind == "tool"]
 
     def to_dict(self) -> dict[str, Any]:
+        """Plain-dict form of this trajectory: nested dataclasses become dicts and
+        tuples become lists (dataclasses.asdict), so the result is JSON-serializable."""
         return asdict(self)
 
 
 class Expect(BaseModel):
+    """A case's pass/fail assertions, checked against the run's Trajectory.
+
+    Each field is an independent, optional assertion; unset fields are not
+    checked. `status` and `answer_contains` compare against the trajectory's
+    `status` and `answer`. `side_effects` is the expected count of recorded
+    side effects. `history_types` is the expected sequence of step kinds.
+    `max_steps_used` is the maximum number of steps the run may have taken.
+    `tools_used` asserts on `Trajectory.tools_used()` and must carry exactly
+    one of three modes: `{"strict": [...]}` (must equal exactly, in order),
+    `{"subset_of": [...]}` (every tool used must be in this list), or
+    `{"unordered": [...]}` (must use exactly these tools, any order).
+    """
+
     model_config = ConfigDict(extra="forbid")
     status: str | None = None
     answer_contains: str | None = None
@@ -71,6 +86,18 @@ class Expect(BaseModel):
 
 
 class Case(BaseModel):
+    """One test case: a goal to pursue plus the expectations to grade it against.
+
+    `planner` and `validator` are scripted model replies, consumed in order by
+    the agent platform's fake providers, so a case can force a specific path
+    through the agent loop without calling a real model. `target_requirements`
+    gates which targets the case may run on: it runs only on a target whose
+    declared capabilities include every entry in this list. `script` is the
+    step list a `ScriptedTarget` replays instead of running an agent; it is
+    only used when the target is scripted. `max_steps` caps the agent loop,
+    the maximum number of steps a target may take before it is forced to stop.
+    """
+
     model_config = ConfigDict(extra="forbid")
     name: str
     goal: str
@@ -84,6 +111,9 @@ class Case(BaseModel):
 
 @dataclass(frozen=True)
 class Grade:
+    """One dimension's score for a case: a named metric, its value in [0, 1],
+    whether that value clears the dimension's pass threshold, and why."""
+
     dimension: str
     value: float
     passed: bool
@@ -97,6 +127,11 @@ class Grade:
 
 @dataclass(frozen=True)
 class CaseResult:
+    """The outcome of running one Case: its grades and the trajectory they were
+    computed from, or, when `skipped_reason` is set, that the case was not
+    scored at all (no matching target, missing dependency, etc.) and `grades`
+    and `trajectory` carry no result."""
+
     name: str
     passed: bool
     grades: tuple[Grade, ...]
@@ -106,6 +141,10 @@ class CaseResult:
 
 @dataclass(frozen=True)
 class SuiteResult:
+    """The outcome of running a full suite against one target: every case's
+    result, the run window, aggregate metrics (see compute_metrics), and any
+    extra metadata."""
+
     suite: str
     target: str
     started_at: str
@@ -115,6 +154,8 @@ class SuiteResult:
     meta: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        """Plain-dict form of this result: nested dataclasses become dicts and
+        tuples become lists (dataclasses.asdict), so the result is JSON-serializable."""
         return asdict(self)
 
 
@@ -137,11 +178,12 @@ def compute_metrics(cases: Sequence[CaseResult]) -> dict[str, float]:
     trajs = [c.trajectory for c in scored if c.trajectory is not None]
     costs = [t.cost_usd for t in trajs]
     walls = [t.wall_ms for t in trajs]
+    passed = sum(c.passed for c in scored)
     return {
         "cases_total": float(len(cases)),
-        "cases_passed": float(sum(c.passed for c in scored)),
+        "cases_passed": float(passed),
         "cases_skipped": float(len(cases) - len(scored)),
-        "pass_rate": (sum(c.passed for c in scored) / len(scored)) if scored else 0.0,
+        "pass_rate": (passed / len(scored)) if scored else 0.0,
         "usd_per_run_p50": _percentile(costs, 0.5),
         "wall_ms_p50": _percentile(walls, 0.5),
         "wall_ms_p95": _percentile(walls, 0.95),
