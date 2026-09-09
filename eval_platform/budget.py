@@ -28,7 +28,7 @@ class BudgetExceeded(Exception):  # noqa: N818 -- name is a fixed interface (see
 
     def __init__(self, reason: str, detail: str) -> None:
         super().__init__(f"budget exceeded ({reason}): {detail}")
-        self.reason = reason
+        self.reason: str = reason
 
 
 @dataclass
@@ -86,10 +86,13 @@ class Ledger:
     """Append-only JSON-lines record of spend across runs.
 
     Each `record` call appends one JSON object as a line; the file is
-    never rewritten, so concurrent writers from separate processes each
-    append complete lines without needing to coordinate a shared lock.
-    `total_usd` re-reads the file each time, so it always reflects spend
-    recorded by any process, not just this instance.
+    never rewritten. `total_usd` re-reads the file each time, so it always
+    reflects spend recorded by any process, not just this instance.
+
+    Designed for one writer at a time: it does not lock the file or
+    guarantee atomic appends across concurrent writers. A torn or
+    otherwise malformed line is not skipped; `total_usd()` reports it as
+    a ValueError naming the file and line number.
     """
 
     def __init__(self, path: Path) -> None:
@@ -115,11 +118,23 @@ class Ledger:
             f.write(json.dumps(line) + "\n")
 
     def total_usd(self) -> float:
-        """Return the sum of all recorded usd amounts, or 0.0 if the ledger file does not exist."""
+        """Return the sum of all recorded usd amounts, or 0.0 if the ledger file does not exist.
+
+        Failure mode: a malformed or truncated line is not skipped, since
+        skipping it would silently under-report spend. It raises
+        ValueError naming the file and 1-based line number, chained from
+        the original JSONDecodeError or KeyError.
+        """
         if not self.path.exists():
             return 0.0
         total = 0.0
-        for raw in self.path.read_text(encoding="utf-8").splitlines():
-            if raw.strip():
+        for lineno, raw in enumerate(self.path.read_text(encoding="utf-8").splitlines(), start=1):
+            if not raw.strip():
+                continue
+            try:
                 total += float(json.loads(raw)["usd"])
+            except (json.JSONDecodeError, KeyError, ValueError) as exc:
+                raise ValueError(
+                    f"{self.path}:{lineno}: unreadable ledger line: {raw[:80]!r}"
+                ) from exc
         return total

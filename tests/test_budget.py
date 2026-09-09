@@ -42,3 +42,11 @@ def test_ledger_appends_lines_and_totals(tmp_path):
 
 def test_ledger_total_is_zero_when_missing(tmp_path):
     assert Ledger(tmp_path / "none.jsonl").total_usd() == 0.0
+
+
+def test_ledger_total_raises_on_malformed_line_with_location(tmp_path):
+    path = tmp_path / "ledger.jsonl"
+    path.write_text('{"usd": 0.5}\nnot json\n')
+    with pytest.raises(ValueError) as e:
+        Ledger(path).total_usd()
+    assert ":2:" in str(e.value)
