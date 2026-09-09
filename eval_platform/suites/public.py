@@ -5,7 +5,7 @@ built suites produce, so the gate and report treat both alike."""
 
 from __future__ import annotations
 
-from datetime import UTC, datetime
+import math
 from pathlib import Path
 from typing import Any
 
@@ -13,7 +13,7 @@ import inspect_ai
 from inspect_ai import eval as inspect_eval
 from inspect_ai.log import EvalLog
 
-from eval_platform.budget import Budget
+from eval_platform.budget import Budget, BudgetExceeded
 from eval_platform.catalog import CatalogEntry
 from eval_platform.types import CaseResult, Grade, SuiteResult
 
@@ -21,8 +21,21 @@ from eval_platform.types import CaseResult, Grade, SuiteResult
 def _passed(value: Any) -> bool:
     """A score value counts as a pass when it is match()'s "C", or a truthy
     numeric/boolean 1. Anything else (e.g. "I", 0, False, other scorer
-    vocabularies) counts as a fail."""
+    vocabularies) counts as a fail. Phase 1 keeps pass/fail binary: a
+    partial-credit float (e.g. 0.5) or a dict-valued score (per-dimension
+    breakdowns) flattens to fail here by design, not by omission."""
     return value in ("C", 1, 1.0, True)
+
+
+def _unscored(scores: dict[str, Any]) -> bool:
+    """True when a sample carries no scores at all, or any scorer left a
+    NaN value (Inspect's unscored sentinel, e.g. a grader that could not
+    parse a judge's reply). A NaN is never `== ` anything including itself,
+    so `_passed` alone would silently mark it a fail; this catches it
+    explicitly so the sample is skipped instead of counted as a failure."""
+    if not scores:
+        return True
+    return any(isinstance(sc.value, float) and math.isnan(sc.value) for sc in scores.values())
 
 
 def _headline(log: EvalLog) -> float:
@@ -41,9 +54,10 @@ def _headline(log: EvalLog) -> float:
 
 def _usage(log: EvalLog) -> tuple[int, int, float]:
     """Sum input tokens, output tokens, and dollar cost across every model
-    Inspect recorded usage for. Returns zeros when the log carries no stats
-    (e.g. a run that failed before any sample completed)."""
-    usage = log.stats.model_usage if log.stats else {}
+    Inspect recorded usage for. `log.stats` is always present (Inspect
+    default-constructs it), so an empty `model_usage` dict is the only
+    degenerate case, and it sums to zeros."""
+    usage = log.stats.model_usage
     tin = sum(u.input_tokens for u in usage.values())
     tout = sum(u.output_tokens for u in usage.values())
     usd = sum(float(u.total_cost or 0.0) for u in usage.values())
@@ -54,17 +68,32 @@ def eval_log_to_suite_result(log: EvalLog, *, suite: str, target: str) -> SuiteR
     """Convert an Inspect EvalLog into this platform's SuiteResult shape.
 
     Contract: one CaseResult per EvalSample in `log.samples`, in order. A
-    case passes when every scorer's value on that sample counts as a pass
-    (see `_passed`); a sample with no scores at all does not pass. Grades
-    carry one entry per scorer, named by the scorer's key in `sample.scores`.
-    `metrics["accuracy"]` is the suite's headline number (see `_headline`);
-    `usd` is 0.0 when Inspect recorded no cost. Missing `log.results` or
-    `log.stats` (an incomplete or errored run) degrades to sample counts
-    from `log.samples` and zeroed usage rather than raising.
+    sample with no scores at all, or with a NaN score from any scorer
+    (Inspect's unscored sentinel), becomes a skipped case: `passed=False`,
+    `grades=()`, `skipped_reason="unscored"`. Otherwise, a case passes when
+    every scorer's value on that sample counts as a pass (see `_passed`);
+    grades carry one entry per scorer, named by the scorer's key in
+    `sample.scores`. `metrics["accuracy"]` is the suite's headline number
+    (see `_headline`); `metrics["samples_unscored"]` is the count of
+    skipped cases; `usd` is 0.0 when Inspect recorded no cost. Missing
+    `log.results` (an incomplete or errored run) degrades `samples_total`/
+    `samples_completed` to the sample count from `log.samples` rather than
+    raising.
     """
     cases: list[CaseResult] = []
     for s in log.samples or []:
         scores = s.scores or {}
+        if _unscored(scores):
+            cases.append(
+                CaseResult(
+                    name=str(s.id),
+                    passed=False,
+                    grades=(),
+                    trajectory=None,
+                    skipped_reason="unscored",
+                )
+            )
+            continue
         grades = tuple(
             Grade(
                 dimension=name,
@@ -83,13 +112,12 @@ def eval_log_to_suite_result(log: EvalLog, *, suite: str, target: str) -> SuiteR
             )
         )
     tin, tout, usd = _usage(log)
-    started = log.stats.started_at if log.stats else datetime.now(UTC).isoformat()
-    finished = log.stats.completed_at if log.stats else started
+    samples_unscored = sum(1 for c in cases if c.skipped_reason == "unscored")
     return SuiteResult(
         suite=suite,
         target=target,
-        started_at=started,
-        finished_at=finished,
+        started_at=log.stats.started_at,
+        finished_at=log.stats.completed_at,
         cases=tuple(cases),
         metrics={
             "accuracy": _headline(log),
@@ -100,6 +128,7 @@ def eval_log_to_suite_result(log: EvalLog, *, suite: str, target: str) -> SuiteR
             "input_tokens": float(tin),
             "output_tokens": float(tout),
             "usd": usd,
+            "samples_unscored": float(samples_unscored),
         },
         meta={
             "inspect_version": inspect_ai.__version__,
@@ -126,11 +155,28 @@ def run_public(
     Contract: raises ValueError before running anything when `entry` is not
     runnable through Inspect, i.e. `entry.runnable` is False or the runner
     kind is not `"inspect_evals"` (covers `non-commercial` license status,
-    `external`/`builtin`/`none` runner kinds, and a missing ref). Charges
-    `budget` with the run's actual dollar cost after Inspect returns; a
-    prior overrun raises BudgetExceeded from `budget.check()` before the run
-    starts, and the post-run charge can itself raise BudgetExceeded if the
-    run's actual cost pushes spend over the ceiling.
+    `external`/`builtin`/`none` runner kinds, and a missing ref).
+
+    Inspect's `cost_limit` bounds spend PER SAMPLE, not for the run as a
+    whole; `--limit`, the sample count, is what actually bounds total
+    spend. So when `limit` is a positive int, the per-sample cap is
+    `budget.remaining_usd() / limit` (`meta["cost_cap_mode"]` records
+    `"per_sample_divided"`); when `limit` is None (or not a positive int)
+    there is no sample count to divide by, so the cap is the full
+    remaining budget per sample and `meta["cost_cap_mode"]` records
+    `"per_sample_uncapped_count"`. That still caps any one sample, but not
+    the run's total, since Inspect does not expose a run-level ceiling.
+
+    Raises BudgetExceeded("usd") immediately after `budget.check()` if the
+    budget is already exhausted (`remaining_usd() <= 0`): passing a zero or
+    negative remaining amount as `cost_limit` would otherwise be read by
+    Inspect as `0.0`, and passing None (as an exhausted-budget sentinel)
+    would remove the cap entirely, so this is checked explicitly rather
+    than folded into the cost_limit expression. `budget.check()` itself
+    raises BudgetExceeded("wall") if the wall-clock ceiling has already
+    passed. Charges `budget` with the run's actual dollar cost after
+    Inspect returns; that charge can itself raise BudgetExceeded("usd") if
+    the run's actual cost pushes total spend over the ceiling.
     """
     if not entry.runnable or entry.runner.kind != "inspect_evals" or not entry.runner.ref:
         raise ValueError(
@@ -138,17 +184,27 @@ def run_public(
             f"(kind={entry.runner.kind}, license={entry.license.status})"
         )
     budget.check()
+    remaining = budget.remaining_usd()
+    if remaining <= 0:
+        raise BudgetExceeded("usd", "no budget remaining for a public run")
+    if limit is not None and limit > 0:
+        per_sample_cap = remaining / limit
+        cost_cap_mode = "per_sample_divided"
+    else:
+        per_sample_cap = remaining
+        cost_cap_mode = "per_sample_uncapped_count"
     [log] = inspect_eval(
         entry.runner.ref,
         model=model,
         limit=limit,
         log_dir=str(log_dir),
         display="none",
-        cost_limit=budget.remaining_usd() or None,
+        cost_limit=per_sample_cap,
         task_args=task_args or {},
     )
     result = eval_log_to_suite_result(
         log, suite=f"public_{entry.id.replace('-', '_')}", target=model
     )
+    result.meta["cost_cap_mode"] = cost_cap_mode
     budget.charge(result.metrics["usd"])
     return result
