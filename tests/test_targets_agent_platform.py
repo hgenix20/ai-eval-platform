@@ -57,6 +57,32 @@ class _FailingRunsClient:
         raise AssertionError(f"unexpected POST {url}")
 
 
+class _FailingCostsClient:
+    """Stub client whose `/costs` answers with an HTTP 500 on every call,
+    while `/runs` succeeds normally."""
+
+    def get(self, url: str, **kw: Any) -> _StubResponse:
+        if url == "/costs":
+            return _StubResponse(
+                status_code=500, json_data={"detail": "meter down"}, text="meter down"
+            )
+        raise AssertionError(f"unexpected GET {url}")
+
+    def post(self, url: str, **kw: Any) -> _StubResponse:
+        if url == "/runs":
+            return _StubResponse(
+                json_data={
+                    "run_id": "r2",
+                    "goal": "x",
+                    "status": "completed",
+                    "outcome": {"status": "completed", "answer": "ok"},
+                    "history": [],
+                    "steps_used": 0,
+                }
+            )
+        raise AssertionError(f"unexpected POST {url}")
+
+
 class _CostTrackingClient:
     """Stub client whose `/costs` reports 0.10 before the run and 0.35
     after, so the target's cost accounting can be checked as a delta."""
@@ -132,6 +158,15 @@ def test_http_target_computes_cost_as_the_run_window_delta():
     target = AgentPlatformHttpTarget.from_client(_CostTrackingClient())
     t = target.run(Case(name="c", goal="x", expect=Expect()))
     assert t.cost_usd == pytest.approx(0.25)
+    assert t.meta.get("cost_unavailable", False) is False
+
+
+def test_http_target_returns_trajectory_when_costs_endpoint_fails():
+    target = AgentPlatformHttpTarget.from_client(_FailingCostsClient())
+    t = target.run(Case(name="nocost", goal="x", expect=Expect()))
+    assert t.status == "completed"
+    assert t.cost_usd == 0.0
+    assert t.meta["cost_unavailable"] is True
 
 
 def test_http_target_approve_flow_resumes_run():

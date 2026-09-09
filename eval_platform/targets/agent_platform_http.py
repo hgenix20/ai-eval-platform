@@ -123,6 +123,22 @@ class AgentPlatformHttpTarget:
             raise ValueError(f"agent platform {method} {path} failed: {e}") from e
         return r
 
+    def _cost_total(self) -> float | None:
+        """Read the service's cumulative `/costs` `total_usd`, or `None` if
+        that read fails.
+
+        Best-effort on purpose: cost accounting must never be the reason a
+        `run()` that actually happened, and may already have taken real
+        side effects (a sent email, a resumed approval), gets discarded.
+        `_request` already turns the underlying HTTP failure into
+        `ValueError`; this just catches that one case and reports absence
+        instead of raising.
+        """
+        try:
+            return float(self._request("GET", "/costs").json().get("total_usd", 0.0))
+        except ValueError:
+            return None
+
     def run(self, case: Case) -> Trajectory:
         """Start a run for `case.goal`, optionally approve a pending gated
         action, and convert the resulting run record into a `Trajectory`.
@@ -143,14 +159,20 @@ class AgentPlatformHttpTarget:
         between just before `POST /runs` and just after the run (and any
         approval) finishes, clamped at 0.0, since `/costs` is a process-wide
         cumulative meter and other activity on the same server between two
-        calls must not be charged to this run.
+        calls must not be charged to this run. Both `/costs` reads are
+        best-effort: the run itself, and the approval flow, still raise
+        `ValueError` on failure (a case or a gated action that did not go
+        through is a real failure), but a `/costs` outage must not discard a
+        trajectory whose run (and any approval) already happened. When
+        either read fails, `cost_usd` is `0.0` and `meta["cost_unavailable"]`
+        is `True`; when both succeed, `meta["cost_unavailable"]` is `False`.
 
         `meta["run_id"]`, `meta["approved"]`, and `meta["approval_id"]`
         (`None` when no approval happened) are always set so callers can
         trace the run and tell whether, and through which approval, it
         resumed.
         """
-        cost_before = float(self._request("GET", "/costs").json().get("total_usd", 0.0))
+        cost_before = self._cost_total()
         start = time.perf_counter()
         record = self._request("POST", "/runs", json={"goal": case.goal}).json()
         approved = False
@@ -166,13 +188,19 @@ class AgentPlatformHttpTarget:
                     approved = True
                     approval_id = newest["id"]
         wall_ms = (time.perf_counter() - start) * 1000.0
-        cost_after = float(self._request("GET", "/costs").json().get("total_usd", 0.0))
+        cost_after = self._cost_total()
+        if cost_before is None or cost_after is None:
+            cost_usd = 0.0
+            cost_unavailable = True
+        else:
+            cost_usd = max(0.0, cost_after - cost_before)
+            cost_unavailable = False
         t = run_dict_to_trajectory(
             record,
             target=self.name,
             goal=case.goal,
             wall_ms=wall_ms,
-            cost_usd=max(0.0, cost_after - cost_before),
+            cost_usd=cost_usd,
         )
         return dataclasses.replace(
             t,
@@ -181,5 +209,6 @@ class AgentPlatformHttpTarget:
                 "run_id": record["run_id"],
                 "approved": approved,
                 "approval_id": approval_id,
+                "cost_unavailable": cost_unavailable,
             },
         )
