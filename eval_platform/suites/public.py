@@ -13,7 +13,6 @@ import inspect_ai
 from inspect_ai import eval as inspect_eval
 from inspect_ai._util.error import PrerequisiteError
 from inspect_ai.log import EvalLog
-from inspect_ai.model import ModelCost
 
 from eval_platform.budget import Budget, BudgetExceeded
 from eval_platform.catalog import CatalogEntry
@@ -33,8 +32,9 @@ def _unscored(scores: dict[str, Any]) -> bool:
     """True when a sample carries no scores at all, or any scorer left a
     NaN value (Inspect's unscored sentinel, e.g. a grader that could not
     parse a judge's reply). A NaN is never `== ` anything including itself,
-    so `_passed` alone would silently mark it a fail; this catches it
-    explicitly so the sample is skipped instead of counted as a failure."""
+    so `_passed` alone would mark it a fail with no indication why; this
+    catches it explicitly so the sample is skipped instead of counted as a
+    failure."""
     if not scores:
         return True
     return any(isinstance(sc.value, float) and math.isnan(sc.value) for sc in scores.values())
@@ -164,13 +164,14 @@ def run_public(
 
     Inspect's `cost_limit` bounds spend PER SAMPLE, not for the run as a
     whole; `--limit`, the sample count, is what actually bounds total
-    spend. So when `limit` is a positive int, the per-sample cap is
-    `budget.remaining_usd() / limit` (`meta["cost_cap_mode"]` records
-    `"per_sample_divided"`); when `limit` is None (or not a positive int)
-    there is no sample count to divide by, so the cap is the full
-    remaining budget per sample and `meta["cost_cap_mode"]` records
-    `"per_sample_uncapped_count"`. That still caps any one sample, but not
-    the run's total, since Inspect does not expose a run-level ceiling.
+    spend. So for a priced model, when `limit` is a positive int the
+    per-sample cap is `budget.remaining_usd() / limit`
+    (`meta["cost_cap_mode"]` records `"per_sample_divided"`); when `limit`
+    is None (or not a positive int) there is no sample count to divide by,
+    so the cap is the full remaining budget per sample and
+    `meta["cost_cap_mode"]` records `"per_sample_uncapped_count"`. That
+    still caps any one sample, but not the run's total, since Inspect does
+    not expose a run-level ceiling.
 
     Raises BudgetExceeded("usd") immediately after `budget.check()` if the
     budget is already exhausted (`remaining_usd() <= 0`): passing a zero or
@@ -183,15 +184,21 @@ def run_public(
     Inspect returns; that charge can itself raise BudgetExceeded("usd") if
     the run's actual cost pushes total spend over the ceiling.
 
-    A non-None `cost_limit` makes Inspect require registered cost data for
-    every model in the run, which `mockllm/...` models never have (they are
-    free by design). So when `model` starts with `"mockllm/"`, this passes
-    `model_cost_config` naming that model at zero cost per token, and
-    records `meta["zero_cost_model"] = True`. If Inspect still raises
-    PrerequisiteError over missing cost data (a model this function did not
-    anticipate as free), that is re-raised as ValueError naming the model,
-    rather than the raw Inspect internal error; any other exception from
-    `inspect_eval` propagates unchanged.
+    A model whose name starts with `"mockllm/"` is free by construction: it
+    generates canned output without calling any provider, so it spends
+    nothing and no cap applies. Such a run gets neither `cost_limit` nor
+    `model_cost_config`, and `meta["cost_cap_mode"]` records
+    `"none_free_model"`. Passing either one would fail: a non-None
+    `cost_limit` makes Inspect require registered cost data for every model
+    in the run, and `mockllm` has no entry in Inspect's model registry at
+    all, so `model_cost_config` cannot supply that data either (Inspect's
+    `set_model_cost` raises ValueError for a model it does not already
+    know).
+
+    If Inspect raises PrerequisiteError over missing cost data for a priced
+    model, that is re-raised as ValueError naming the model, rather than the
+    raw Inspect internal error; any other exception from `inspect_eval`
+    propagates unchanged.
     """
     if not entry.runnable or entry.runner.kind != "inspect_evals" or not entry.runner.ref:
         raise ValueError(
@@ -202,21 +209,18 @@ def run_public(
     remaining = budget.remaining_usd()
     if remaining <= 0:
         raise BudgetExceeded("usd", "no budget remaining for a public run")
-    if limit is not None and limit > 0:
-        per_sample_cap = remaining / limit
+    # A mockllm model spends nothing and has no entry in Inspect's model
+    # registry, so neither a cost cap nor a cost table can be attached to
+    # it; every other model gets a per-sample cap cut from the budget.
+    cost_kwargs: dict[str, Any] = {}
+    if model.startswith("mockllm/"):
+        cost_cap_mode = "none_free_model"
+    elif limit is not None and limit > 0:
+        cost_kwargs["cost_limit"] = remaining / limit
         cost_cap_mode = "per_sample_divided"
     else:
-        per_sample_cap = remaining
+        cost_kwargs["cost_limit"] = remaining
         cost_cap_mode = "per_sample_uncapped_count"
-    # mockllm models are free by design and carry no cost data in Inspect;
-    # a non-None cost_limit otherwise makes Inspect require cost data for
-    # every model in the run, so give a mockllm model a zero-priced table.
-    zero_cost_model = model.startswith("mockllm/")
-    model_cost_config: dict[str, ModelCost] | None = None
-    if zero_cost_model:
-        model_cost_config = {
-            model: ModelCost(input=0.0, output=0.0, input_cache_write=0.0, input_cache_read=0.0)
-        }
     try:
         [log] = inspect_eval(
             entry.runner.ref,
@@ -224,9 +228,8 @@ def run_public(
             limit=limit,
             log_dir=str(log_dir),
             display="none",
-            cost_limit=per_sample_cap,
-            model_cost_config=model_cost_config,
             task_args=task_args or {},
+            **cost_kwargs,
         )
     except PrerequisiteError as exc:
         if "cost data" in str(exc):
@@ -238,7 +241,5 @@ def run_public(
         log, suite=f"public_{entry.id.replace('-', '_')}", target=model
     )
     result.meta["cost_cap_mode"] = cost_cap_mode
-    if zero_cost_model:
-        result.meta["zero_cost_model"] = True
     budget.charge(result.metrics["usd"])
     return result

@@ -7,7 +7,7 @@ from inspect_ai import eval as inspect_eval
 from inspect_ai._util.error import PrerequisiteError
 from inspect_ai.dataset import MemoryDataset, Sample
 from inspect_ai.log import EvalLog
-from inspect_ai.model import ModelCost, ModelOutput
+from inspect_ai.model import ModelOutput
 from inspect_ai.scorer import match
 from pydantic import HttpUrl
 
@@ -130,22 +130,18 @@ def test_run_public_divides_cost_limit_by_sample_limit(
 
     monkeypatch.setattr(public_mod, "inspect_eval", fake_eval)
     budget = Budget(max_usd=1.0, max_wall_s=60)
-    result = run_public(_entry(), model="mockllm/model", limit=4, budget=budget, log_dir=tmp_path)
+    result = run_public(
+        _entry(), model="openai/gpt-4o-mini", limit=4, budget=budget, log_dir=tmp_path
+    )
     assert calls[0]["cost_limit"] == pytest.approx(1.0 / 4)
     assert result.meta["cost_cap_mode"] == "per_sample_divided"
-    assert calls[0]["model_cost_config"] == {
-        "mockllm/model": ModelCost(
-            input=0.0, output=0.0, input_cache_write=0.0, input_cache_read=0.0
-        )
-    }
-    assert result.meta["zero_cost_model"] is True
 
 
-def test_run_public_gives_zero_cost_only_to_mockllm_models(
+def test_run_public_caps_at_full_remaining_without_a_sample_limit(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ):
-    """A non-mockllm model gets no synthesized cost table: it presumably
-    has real cost data of its own, so Inspect should check it normally."""
+    """With no sample limit there is no count to divide by, so the
+    per-sample cap is the whole remaining budget."""
     log = _tiny_log(tmp_path)
     calls: list[dict] = []
 
@@ -156,9 +152,30 @@ def test_run_public_gives_zero_cost_only_to_mockllm_models(
     monkeypatch.setattr(public_mod, "inspect_eval", fake_eval)
     budget = Budget(max_usd=1.0, max_wall_s=60)
     result = run_public(
-        _entry(), model="openai/gpt-4o-mini", limit=4, budget=budget, log_dir=tmp_path
+        _entry(), model="openai/gpt-4o-mini", limit=None, budget=budget, log_dir=tmp_path
     )
-    assert calls[0]["model_cost_config"] is None
+    assert calls[0]["cost_limit"] == pytest.approx(1.0)
+    assert result.meta["cost_cap_mode"] == "per_sample_uncapped_count"
+
+
+def test_run_public_passes_no_cost_arguments_for_mock_models(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    """A mockllm model spends nothing and is absent from Inspect's model
+    registry, so it gets neither a cost cap nor a cost table."""
+    log = _tiny_log(tmp_path)
+    calls: list[dict] = []
+
+    def fake_eval(*args: object, **kwargs: object) -> list[EvalLog]:
+        calls.append(kwargs)
+        return [log]
+
+    monkeypatch.setattr(public_mod, "inspect_eval", fake_eval)
+    budget = Budget(max_usd=1.0, max_wall_s=60)
+    result = run_public(_entry(), model="mockllm/model", limit=4, budget=budget, log_dir=tmp_path)
+    assert calls[0].get("cost_limit") is None
+    assert calls[0].get("model_cost_config") is None
+    assert result.meta["cost_cap_mode"] == "none_free_model"
     assert "zero_cost_model" not in result.meta
 
 
