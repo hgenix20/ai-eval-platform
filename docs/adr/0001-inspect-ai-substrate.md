@@ -25,8 +25,7 @@ alike.
 - **OpenAI Evals**: hosted product deprecated 2026-06-03, read-only 2026-10-31,
   shutdown 2026-11-30. OpenAI's own notice points users at promptfoo.
 - **HELM**: the research records maintenance mode since 2026-06-01 and marks
-  that UNVERIFIED, so treat it as a soft signal. Either way, no agent model and
-  no CI path.
+  that UNVERIFIED, so treat it as a soft signal.
 - **A custom runner**: rewriting dataset loaders and scorers reimplements the
   field, and every benchmark after that becomes our maintenance burden.
 

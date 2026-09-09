@@ -9,6 +9,7 @@ results/**
 !results/*/
 !results/**/latest.json
 !results/ledger.jsonl
+out/
 monitor.sqlite
 .env
 *.eval

@@ -21,7 +21,8 @@ touched. `usd_per_run_p50` in the JSON is `0.0` for the same reason.
 
 The twelve cases cover approval gating, denied tools, memory write and recall,
 protocol-error recovery, validator rejection and retry, and the step cap. Each
-one asserts on a trajectory, not on a string of model output.
+one asserts on the trajectory the platform produced: final status, step order,
+tools used, side effects, steps consumed, and the answer text.
 
 The gate compares this run against `baselines/offline_core.json`,
 `baselines/offline_core_cost.json`, and `baselines/offline_core_latency.json`:
@@ -34,6 +35,11 @@ The gate compares this run against `baselines/offline_core.json`,
 | public_ifeval | accuracy | n/a | n/a | min=0.7, max_drop=0.03 | not_measured |
 
 Overall verdict: PASS. Reproduce it with `evalplat gate --markdown out/gate.md`.
+
+All three baselines carry `"from": "2026-09-09T05:18:02+00:00"`, an earlier run
+of this same suite on this same target. The numbers published above come from
+the later run in `latest.json`, timestamped 2026-09-09T05:27:47Z, which is what
+the gate read as `current`.
 
 The latency threshold is 50 percent, against the spec's 20 percent. p95 here is
 about 5 ms, and CI scheduling noise is larger than any regression at that
@@ -57,9 +63,11 @@ it.
 
 The runner is Inspect AI 0.3.263 against the `inspect_evals/ifeval` task from
 inspect-evals 0.19.0, which is the `runner.ref` recorded in
-`catalog/entries/ifeval.yaml`. Its path through the platform is verified end to
-end in `tests/test_public.py` against Inspect's mock model, which exercises the
-same conversion code a priced model goes through.
+`catalog/entries/ifeval.yaml`. `tests/test_public.py` exercises that path
+against Inspect's mock model two ways: a two-sample synthetic task, answered
+right once and wrong once, whose `EvalLog` is converted and checked at
+accuracy 0.5, and a network-marked IFEval smoke run at `limit=2` that loads
+the real task and returns a `SuiteResult` named `public_ifeval`.
 
 Until the run happens, `gate.yaml`'s `public_ifeval` row reports
 `not_measured`, which does not fail the gate. Its floor of 0.70 is a first

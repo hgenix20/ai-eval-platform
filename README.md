@@ -24,11 +24,16 @@ command that produces it is in [docs/results.md](docs/results.md).
 ```
 python -m venv .venv
 .venv/Scripts/pip install -e ".[dev,agent-platform,ifeval]"    # bin/ on Linux and macOS
+.venv\Scripts\activate                                         # Windows
+source .venv/bin/activate                                      # Linux and macOS
 pytest -m "not network and not live"
 evalplat run offline --suite-dir suites/offline_core --target agent-platform-local
 evalplat gate
 evalplat report
 ```
+
+Pick the one activation line your shell wants. Everything below it runs from
+the venv, so `pytest` and `evalplat` resolve without a path.
 
 `gate` reads `gate.yaml`, the baselines in `baselines/`, and the newest run per
 suite under `results/`, then exits non-zero on FAIL. `report` writes a
