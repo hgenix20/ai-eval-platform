@@ -45,10 +45,25 @@ def test_run_suite_passes_skips_and_fails(tmp_path: Path):
 
 
 def test_run_suite_stops_on_budget(tmp_path: Path):
+    """Each case costs $0.01 against a $0.015 ceiling, so the second one's
+    charge trips it. That case ran and was graded before the charge, so its
+    result is kept in full; only the cases after it are skipped."""
     for i in range(3):
         (tmp_path / f"{i}.yaml").write_text(CASE.replace("scripted-ok", f"c{i}"), encoding="utf-8")
     result = run_suite(
         "s", load_cases(tmp_path), ScriptedTarget(), budget=Budget(max_usd=0.015, max_wall_s=60)
     )
     assert result.meta["budget_exceeded"] is True
-    assert result.metrics["cases_total"] == 3 and len([c for c in result.cases if c.trajectory]) < 3
+    assert result.metrics["cases_total"] == 3
+    by = {c.name: c for c in result.cases}
+
+    assert by["c0"].passed and by["c0"].trajectory is not None
+
+    tripping = by["c1"]
+    assert tripping.trajectory is not None, "the case that trips the budget keeps its trajectory"
+    assert tripping.passed and tripping.skipped_reason is None
+    assert tripping.trajectory.tools_used() == ["lookup"]
+
+    assert by["c2"].trajectory is None and by["c2"].skipped_reason == "budget exceeded"
+    assert result.metrics["cases_skipped"] == 1
+    assert result.meta["spent_usd"] == pytest.approx(0.02)

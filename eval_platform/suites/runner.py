@@ -50,12 +50,20 @@ def run_suite(
     Contract: `budget.check()` runs before each case and `budget.charge()`
     runs after, on the trajectory's actual cost, for every case that
     produced a trajectory (skipped cases and target-exception failures
-    have none, so nothing is charged for them). When either raises
-    BudgetExceeded, the case that triggered it is recorded as skipped
-    with the exception's text as `skipped_reason`, every remaining case
-    is recorded as skipped with reason "budget exceeded" (the target is
-    never called for them), and `meta["budget_exceeded"]` is set True.
-    Metrics come from `compute_metrics`, so skipped cases count toward
+    have none, so nothing is charged for them). Either can raise
+    BudgetExceeded, and the two are not the same event:
+
+    - `check()` raising means the case never ran. It is recorded as
+      skipped, with the exception's text as `skipped_reason`.
+    - `charge()` raising means the case ran and was graded, and paying for
+      it reached the ceiling. Its full result, trajectory included, is
+      kept, because the spec requires partial results to survive an
+      overrun (design spec 4.7).
+
+    Either way every remaining case is recorded as skipped with reason
+    "budget exceeded" (the target is never called for them) and
+    `meta["budget_exceeded"]` is set True. Metrics come from
+    `compute_metrics`, so skipped cases count toward
     `cases_total`/`cases_skipped` but not `pass_rate`.
     """
     started = _now()
@@ -67,13 +75,21 @@ def run_suite(
             continue
         try:
             budget.check()
-            r = run_case(case, target)
-            if r.trajectory is not None:
-                budget.charge(r.trajectory.cost_usd)
-            results.append(r)
         except BudgetExceeded as e:
+            # The ceiling was already reached, so this case never ran.
             exceeded = True
             results.append(CaseResult(case.name, False, (), None, skipped_reason=str(e)))
+            continue
+        r = run_case(case, target)
+        # Record the result before charging for it. The work is done and
+        # graded by this point; the charge that trips the ceiling stops the
+        # cases after this one, and must not discard this one's evidence.
+        results.append(r)
+        if r.trajectory is not None:
+            try:
+                budget.charge(r.trajectory.cost_usd)
+            except BudgetExceeded:
+                exceeded = True
     return SuiteResult(
         suite=suite,
         target=target.name,
