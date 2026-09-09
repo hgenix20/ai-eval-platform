@@ -1,0 +1,23 @@
+id: helmet
+name: HELMET
+url: https://github.com/princeton-nlp/HELMET
+category: long-context
+maintainer: Princeton
+size: 7 task categories
+license:
+  code: MIT
+  data: MIT
+  status: verified
+scoring: llm-judge
+runner:
+  kind: external
+  ref: own-harness
+status: current
+cost_class: high
+requires:
+- api:judge
+verified: '2026-09-07'
+sources:
+- https://github.com/princeton-nlp/HELMET
+notes: Adopted by Phi-4 and Jamba 1.6. Scored with exact match, F1, ROUGE, and a GPT-4o
+  judge.

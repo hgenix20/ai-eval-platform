@@ -1,0 +1,22 @@
+id: osworld
+name: OSWorld-Verified
+url: https://github.com/xlang-ai/OSWorld
+category: agent
+maintainer: XLang
+size: 369 tasks
+license:
+  code: Apache-2.0
+  data: Apache-2.0
+  status: verified
+scoring: execution
+runner:
+  kind: inspect_evals
+  ref: inspect_evals/osworld
+status: current
+cost_class: high
+requires:
+- vm
+verified: '2026-09-07'
+sources:
+- https://github.com/xlang-ai/OSWorld
+notes: Use the Verified variant. OSWorld 2.0 shipped 2026-06-26.

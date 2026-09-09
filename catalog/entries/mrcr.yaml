@@ -1,0 +1,22 @@
+id: mrcr
+name: MRCR
+url: https://huggingface.co/datasets/openai/mrcr
+category: long-context
+maintainer: OpenAI
+size: 2,400 rows, scaling to 1 million tokens
+license:
+  code: MIT
+  data: MIT
+  status: verified
+scoring: exact-match
+runner:
+  kind: external
+  ref: own-scripts
+status: current
+cost_class: high
+requires: []
+verified: '2026-09-07'
+sources:
+- https://huggingface.co/datasets/openai/mrcr
+notes: Not saturated; the 1M-token setting is the discriminator. Scored with difflib
+  ratio plus an anti-cheat hash.

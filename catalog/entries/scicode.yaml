@@ -1,0 +1,22 @@
+id: scicode
+name: SciCode
+url: https://github.com/scicode-bench/SciCode
+category: coding
+maintainer: SciCode team
+size: 80 main problems, 338 subproblems
+license:
+  code: Apache-2.0
+  data: Apache-2.0
+  status: verified
+scoring: execution
+runner:
+  kind: inspect_evals
+  ref: inspect_evals/scicode
+status: current
+cost_class: medium
+requires:
+- docker
+verified: '2026-09-07'
+sources:
+- https://github.com/scicode-bench/SciCode
+notes: Not saturated; around 10.8 percent on the main set.

@@ -1,0 +1,22 @@
+id: swe-rebench
+name: SWE-rebench
+url: https://swe-rebench.com
+category: coding
+maintainer: Nebius
+size: Rolling window of about 111 instances drawn from 6,542 total
+license:
+  code: CC-BY-4.0
+  data: CC-BY-4.0
+  status: verified
+scoring: execution
+runner:
+  kind: external
+  ref: own-harness
+status: current
+cost_class: high
+requires:
+- docker
+verified: '2026-09-07'
+sources:
+- https://swe-rebench.com
+notes: Not saturated; scores run 62 to 65 percent.

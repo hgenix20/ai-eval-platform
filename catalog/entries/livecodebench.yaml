@@ -1,0 +1,21 @@
+id: livecodebench
+name: LiveCodeBench
+url: https://github.com/LiveCodeBench/LiveCodeBench
+category: coding
+maintainer: LiveCodeBench project
+size: v6, 1,055 rolling problems
+license:
+  code: MIT
+  data: MIT
+  status: verified
+scoring: execution
+runner:
+  kind: external
+  ref: lcb-runner
+status: approaching-saturation
+cost_class: medium
+requires: []
+verified: '2026-09-07'
+sources:
+- https://github.com/LiveCodeBench/LiveCodeBench
+notes: Approaching saturation at 90 to 92 percent.

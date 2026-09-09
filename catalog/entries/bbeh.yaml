@@ -1,0 +1,22 @@
+id: bbeh
+name: BIG-Bench Extra Hard
+url: https://arxiv.org/abs/2502.19187
+category: capability
+maintainer: Google
+size: Replaces 23 BIG-Bench Hard tasks
+license:
+  code: unknown
+  data: unknown
+  status: unverified
+scoring: exact-match
+runner:
+  kind: inspect_evals
+  ref: inspect_evals/bbeh
+status: current
+cost_class: medium
+requires: []
+verified: '2026-09-07'
+sources:
+- https://arxiv.org/abs/2502.19187
+notes: Not saturated, since the original BBH is over 90 percent. License is unverified
+  in source research.

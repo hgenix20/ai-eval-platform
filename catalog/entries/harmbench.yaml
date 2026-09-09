@@ -1,0 +1,24 @@
+id: harmbench
+name: HarmBench
+url: https://github.com/centerforaisafety/HarmBench
+category: safety
+maintainer: CAIS
+size: 510 behaviors (400 text, 110 multimodal)
+license:
+  code: MIT
+  data: MIT
+  status: verified
+scoring: classifier
+runner:
+  kind: external
+  ref: own-harness
+status: current
+cost_class: medium
+requires:
+- gpu
+verified: '2026-09-07'
+sources:
+- https://github.com/centerforaisafety/HarmBench
+notes: Scored by the cais/HarmBench-Llama-2-13b-cls classifier. The controller confirmed
+  harmbench is not callable in the installed inspect_evals 0.19.0 registry, so this
+  entry uses an external own-harness runner rather than inspect_evals.

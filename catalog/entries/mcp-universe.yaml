@@ -1,0 +1,21 @@
+id: mcp-universe
+name: MCP-Universe
+url: https://arxiv.org/abs/2508.14704
+category: tool-use
+maintainer: MCP-Universe project (arXiv:2508.14704)
+size: 11 MCP servers across 6 domains
+license:
+  code: unknown
+  data: unknown
+  status: unverified
+scoring: state
+runner:
+  kind: external
+  ref: own-harness
+status: current
+cost_class: high
+requires: []
+verified: '2026-09-07'
+sources:
+- https://arxiv.org/abs/2508.14704
+notes: Not saturated; GPT-5 scores 43.7 percent. License is unverified.

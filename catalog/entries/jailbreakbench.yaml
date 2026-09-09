@@ -1,0 +1,22 @@
+id: jailbreakbench
+name: JailbreakBench
+url: https://github.com/JailbreakBench/jailbreakbench
+category: safety
+maintainer: JailbreakBench (JBB)
+size: 200 prompts (100 harmful, 100 benign)
+license:
+  code: MIT
+  data: MIT
+  status: verified
+scoring: llm-judge
+runner:
+  kind: external
+  ref: own-harness
+status: current
+cost_class: medium
+requires:
+- api:judge
+verified: '2026-09-07'
+sources:
+- https://github.com/JailbreakBench/jailbreakbench
+notes: Scored with a Llama3-70B judge plus an 8B refusal judge. Absent from inspect_evals.

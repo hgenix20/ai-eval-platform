@@ -1,0 +1,21 @@
+id: mcpmark
+name: MCPMark
+url: https://mcpmark.ai
+category: tool-use
+maintainer: MCPMark project
+size: 127 tasks across 5 servers
+license:
+  code: unknown
+  data: unknown
+  status: unverified
+scoring: state
+runner:
+  kind: external
+  ref: own-harness
+status: current
+cost_class: high
+requires: []
+verified: '2026-09-07'
+sources:
+- https://mcpmark.ai
+notes: Not saturated; best pass@1 is 52.6 percent. License is unverified.

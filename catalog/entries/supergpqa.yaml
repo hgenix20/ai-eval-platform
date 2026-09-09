@@ -1,0 +1,22 @@
+id: supergpqa
+name: SuperGPQA
+url: https://huggingface.co/datasets/m-a-p/SuperGPQA
+category: capability
+maintainer: ByteDance Seed
+size: 26,529 questions across 285 disciplines
+license:
+  code: unknown
+  data: unknown
+  status: unverified
+scoring: exact-match
+runner:
+  kind: external
+  ref: own-repo
+status: current
+cost_class: high
+requires: []
+verified: '2026-09-07'
+sources:
+- https://huggingface.co/datasets/m-a-p/SuperGPQA
+notes: Not saturated; frontier models score 60 to 65 percent. License is unverified.
+  No inspect_evals task; runs from the maintainer's own repo.

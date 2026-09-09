@@ -1,0 +1,23 @@
+id: agentbench
+name: AgentBench
+url: https://github.com/THUDM/AgentBench
+category: agent
+maintainer: THUDM
+size: 8 environments
+license:
+  code: Apache-2.0
+  data: Apache-2.0
+  status: verified
+scoring: state
+runner:
+  kind: inspect_evals
+  ref: inspect_evals/agent_bench_os
+status: legacy
+cost_class: medium
+requires:
+- docker
+verified: '2026-09-07'
+sources:
+- https://github.com/THUDM/AgentBench
+notes: Maintained but legacy. The runner here (agent_bench_os) covers only the 151-task
+  OS subset, not the full 8-environment suite.

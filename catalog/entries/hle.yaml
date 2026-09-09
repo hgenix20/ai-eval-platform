@@ -1,0 +1,23 @@
+id: hle
+name: Humanity's Last Exam
+url: https://huggingface.co/datasets/cais/hle
+category: capability
+maintainer: CAIS and Scale AI
+size: 2,500 questions (2,158 text-only)
+license:
+  code: MIT
+  data: MIT
+  status: verified
+scoring: llm-judge
+runner:
+  kind: inspect_evals
+  ref: inspect_evals/hle
+status: current
+cost_class: high
+requires:
+- api:judge
+verified: '2026-09-07'
+sources:
+- https://huggingface.co/datasets/cais/hle
+notes: Not saturated at 37 to 44 percent, but FutureHouse disputes roughly 30 percent
+  of the chemistry and biology answers. Prefer the hle-rolling variant.

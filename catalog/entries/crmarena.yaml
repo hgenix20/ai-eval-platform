@@ -1,0 +1,21 @@
+id: crmarena
+name: CRMArena
+url: https://huggingface.co/datasets/Salesforce/CRMArena
+category: agent
+maintainer: Salesforce
+size: Size is unverified
+license:
+  code: CC-BY-NC-4.0
+  data: CC-BY-NC-4.0
+  status: non-commercial
+scoring: state
+runner:
+  kind: none
+status: current
+cost_class: high
+requires: []
+verified: '2026-09-07'
+sources:
+- https://huggingface.co/datasets/Salesforce/CRMArena
+notes: CRMArena Pro was accepted at TMLR. License is CC-BY-NC-4.0, non-commercial,
+  so this entry has no runner and is not runnable.

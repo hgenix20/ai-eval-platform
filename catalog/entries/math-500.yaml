@@ -1,0 +1,21 @@
+id: math-500
+name: MATH-500
+url: https://huggingface.co/datasets/HuggingFaceH4/MATH-500
+category: capability
+maintainer: OpenAI / Hendrycks
+size: 500 problems
+license:
+  code: MIT
+  data: unknown
+  status: unverified
+scoring: exact-match
+runner:
+  kind: inspect_evals
+  ref: inspect_evals/math
+status: saturated
+cost_class: low
+requires: []
+verified: '2026-09-07'
+sources:
+- https://huggingface.co/datasets/HuggingFaceH4/MATH-500
+notes: Saturated at 95 to 98 percent. License is unverified in source research.

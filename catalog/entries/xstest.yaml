@@ -1,0 +1,22 @@
+id: xstest
+name: XSTest
+url: https://github.com/paul-rottger/xstest
+category: safety
+maintainer: Rottger
+size: 450 prompts (250 safe, 200 unsafe)
+license:
+  code: CC-BY-4.0
+  data: CC-BY-4.0
+  status: verified
+scoring: llm-judge
+runner:
+  kind: inspect_evals
+  ref: inspect_evals/xstest
+status: legacy
+cost_class: low
+requires:
+- api:judge
+verified: '2026-09-07'
+sources:
+- https://github.com/paul-rottger/xstest
+notes: Legacy; OR-Bench is its scaled successor.

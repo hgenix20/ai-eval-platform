@@ -1,0 +1,22 @@
+id: asb
+name: Agent Security Bench
+url: https://github.com/agiresearch/ASB
+category: injection
+maintainer: Rutgers
+size: 10 scenarios, 400+ tools, roughly 90,000 cases
+license:
+  code: MIT
+  data: MIT
+  status: verified
+scoring: state
+runner:
+  kind: external
+  ref: own-harness
+status: current
+cost_class: high
+requires: []
+verified: '2026-09-07'
+sources:
+- https://github.com/agiresearch/ASB
+notes: Covers attacks and defenses across prompt, tool, memory, and plan surfaces
+  on the AIOS runtime, scored by attack success rate and rejection rate.

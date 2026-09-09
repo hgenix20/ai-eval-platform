@@ -1,0 +1,22 @@
+id: mmlu-redux
+name: MMLU-Redux 2.0
+url: https://huggingface.co/datasets/edinburgh-dawg/mmlu-redux-2.0
+category: capability
+maintainer: Edinburgh DAWG
+size: 5,700 relabeled items
+license:
+  code: CC-BY-4.0
+  data: CC-BY-4.0
+  status: verified
+scoring: exact-match
+runner:
+  kind: external
+  ref: own-repo
+status: approaching-saturation
+cost_class: low
+requires: []
+verified: '2026-09-07'
+sources:
+- https://huggingface.co/datasets/edinburgh-dawg/mmlu-redux-2.0
+notes: Approaching saturation. No inspect_evals task; runs from the maintainer's own
+  repo.

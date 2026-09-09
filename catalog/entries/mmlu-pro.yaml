@@ -1,0 +1,21 @@
+id: mmlu-pro
+name: MMLU-Pro
+url: https://github.com/TIGER-AI-Lab/MMLU-Pro
+category: capability
+maintainer: TIGER-Lab
+size: 12,032 items, 10-option MC
+license:
+  code: MIT
+  data: MIT
+  status: verified
+scoring: exact-match
+runner:
+  kind: inspect_evals
+  ref: inspect_evals/mmlu_pro
+status: approaching-saturation
+cost_class: medium
+requires: []
+verified: '2026-09-07'
+sources:
+- https://github.com/TIGER-AI-Lab/MMLU-Pro
+notes: Approaching saturation. Top models score around 88 percent.

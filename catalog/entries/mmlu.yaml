@@ -1,0 +1,22 @@
+id: mmlu
+name: MMLU
+url: https://huggingface.co/datasets/cais/mmlu
+category: capability
+maintainer: Hendrycks et al.
+size: 14,042 test
+license:
+  code: MIT
+  data: MIT
+  status: verified
+scoring: exact-match
+runner:
+  kind: inspect_evals
+  ref: inspect_evals/mmlu_0_shot
+status: saturated
+cost_class: low
+requires: []
+verified: '2026-09-07'
+sources:
+- https://huggingface.co/datasets/cais/mmlu
+notes: Saturated at roughly a 91 to 92 percent ceiling. Dropped from most 2026 model
+  cards.

@@ -1,0 +1,23 @@
+id: facts-grounding
+name: FACTS Grounding
+url: https://www.kaggle.com/benchmarks/google/facts-grounding
+category: hallucination
+maintainer: DeepMind
+size: 860 public plus a held-out set
+license:
+  code: CC-BY-4.0
+  data: CC-BY-4.0
+  status: verified
+scoring: llm-judge
+runner:
+  kind: external
+  ref: own-scripts
+status: current
+cost_class: high
+requires:
+- api:judge
+verified: '2026-09-07'
+sources:
+- https://www.kaggle.com/benchmarks/google/facts-grounding
+notes: Grounded long-document faithfulness, scored by an ensemble of frontier judges.
+  The public 860 is a dev set.

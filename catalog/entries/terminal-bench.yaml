@@ -1,0 +1,23 @@
+id: terminal-bench
+name: Terminal-Bench 4.0
+url: https://www.tbench.ai/
+category: coding
+maintainer: Stanford / Harbor / Laude
+size: v4.0 has 66 tasks; v2.1 has 89
+license:
+  code: Apache-2.0
+  data: Apache-2.0
+  status: verified
+scoring: execution
+runner:
+  kind: external
+  ref: tb-cli
+status: current
+cost_class: high
+requires:
+- docker
+verified: '2026-09-07'
+sources:
+- https://www.tbench.ai/
+notes: Not saturated; SOTA is around 58 percent on v4.0. Maintainers drop tasks once
+  they saturate.

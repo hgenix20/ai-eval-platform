@@ -1,0 +1,22 @@
+id: metr-time-horizon
+name: METR time horizon / RE-Bench
+url: https://github.com/METR/ai-rd-tasks
+category: agent
+maintainer: METR
+size: 'RE-Bench: 8 task families; HCAST: 189 tasks'
+license:
+  code: MIT
+  data: MIT
+  status: verified
+scoring: execution
+runner:
+  kind: external
+  ref: own-harness
+status: current
+cost_class: high
+requires:
+- gpu
+verified: '2026-09-07'
+sources:
+- https://github.com/METR/ai-rd-tasks
+notes: 'Non-saturating by construction: scored as a logistic fit to human task duration.'

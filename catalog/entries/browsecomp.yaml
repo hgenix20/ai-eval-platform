@@ -1,0 +1,23 @@
+id: browsecomp
+name: BrowseComp
+url: https://github.com/openai/simple-evals/blob/main/browsecomp_eval.py
+category: agent
+maintainer: OpenAI
+size: 1,266 questions
+license:
+  code: MIT
+  data: MIT
+  status: verified
+scoring: llm-judge
+runner:
+  kind: inspect_evals
+  ref: inspect_evals/browse_comp
+status: current
+cost_class: high
+requires:
+- live-web
+- api:judge
+verified: '2026-09-07'
+sources:
+- https://github.com/openai/simple-evals/blob/main/browsecomp_eval.py
+notes: Not saturated overall; o3 reaches 89.8 percent on the English set.

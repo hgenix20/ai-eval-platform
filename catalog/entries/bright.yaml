@@ -1,0 +1,23 @@
+id: bright
+name: BRIGHT
+url: https://github.com/xlang-ai/BRIGHT
+category: retrieval
+maintainer: XLang
+size: 1,384 queries across 12 domains
+license:
+  code: CC-BY-4.0
+  data: CC-BY-4.0
+  status: verified
+scoring: exact-match
+runner:
+  kind: external
+  ref: mteb-pip
+status: current
+cost_class: medium
+requires:
+- gpu
+verified: '2026-09-07'
+sources:
+- https://github.com/xlang-ai/BRIGHT
+notes: 'Reasoning-intensive retrieval: the top MTEB model drops from nDCG@10 59.0
+  to 18.3 here.'

@@ -1,0 +1,22 @@
+id: swe-bench-live
+name: SWE-bench Live
+url: https://github.com/microsoft/SWE-bench-Live
+category: coding
+maintainer: Microsoft
+size: 1,888 instances, growing about 50 per month
+license:
+  code: MIT
+  data: MIT
+  status: verified
+scoring: execution
+runner:
+  kind: external
+  ref: own-harness
+status: current
+cost_class: high
+requires:
+- docker
+verified: '2026-09-07'
+sources:
+- https://github.com/microsoft/SWE-bench-Live
+notes: Not saturated by design; contamination-resistant via continuous refresh.

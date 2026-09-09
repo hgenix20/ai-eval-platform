@@ -1,0 +1,21 @@
+id: gdpval
+name: GDPval
+url: https://huggingface.co/datasets/openai/gdpval
+category: agent
+maintainer: OpenAI
+size: 1,320 full tasks, 220 public gold across 44 occupations
+license:
+  code: CC-BY-4.0
+  data: CC-BY-4.0
+  status: verified
+scoring: human
+runner:
+  kind: inspect_evals
+  ref: inspect_evals/gdpval
+status: current
+cost_class: high
+requires: []
+verified: '2026-09-07'
+sources:
+- https://huggingface.co/datasets/openai/gdpval
+notes: Not saturated. Scored by human-expert rubric.

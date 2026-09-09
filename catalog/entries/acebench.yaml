@@ -1,0 +1,21 @@
+id: acebench
+name: ACEBench
+url: https://github.com/chenchen0103/ACEBench
+category: tool-use
+maintainer: USTC and Huawei
+size: 2,000 cases, 4,538 APIs
+license:
+  code: MIT
+  data: MIT
+  status: verified
+scoring: exact-match
+runner:
+  kind: external
+  ref: own-scripts
+status: current
+cost_class: medium
+requires: []
+verified: '2026-09-07'
+sources:
+- https://github.com/chenchen0103/ACEBench
+notes: 'Not saturated. Scoring is LLM-free: AST match, binary match, and process checks.'

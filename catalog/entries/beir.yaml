@@ -1,0 +1,23 @@
+id: beir
+name: BEIR
+url: https://github.com/beir-cellar/beir
+category: retrieval
+maintainer: UKP
+size: 18 datasets
+license:
+  code: Apache-2.0
+  data: per-dataset
+  status: ambiguous
+scoring: exact-match
+runner:
+  kind: external
+  ref: beir-pip
+status: current
+cost_class: medium
+requires:
+- gpu
+verified: '2026-09-07'
+sources:
+- https://github.com/beir-cellar/beir
+notes: Free on CPU; GPU helps for embedding. Data licenses are per-dataset, hence
+  ambiguous overall.

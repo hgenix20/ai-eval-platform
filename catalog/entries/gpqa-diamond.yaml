@@ -1,0 +1,25 @@
+id: gpqa-diamond
+name: GPQA Diamond
+url: https://github.com/idavidrein/gpqa
+category: capability
+maintainer: Rein et al.
+size: 198 (Main 448, Extended 546)
+license:
+  code: MIT
+  data: CC-BY-4.0
+  status: ambiguous
+scoring: exact-match
+runner:
+  kind: inspect_evals
+  ref: inspect_evals/gpqa_diamond
+status: approaching-saturation
+cost_class: low
+requires:
+- hf-gated
+verified: '2026-09-07'
+sources:
+- https://github.com/idavidrein/gpqa
+notes: 'Near saturation at 91 to 94 percent against a 65 percent PhD baseline. Still
+  cited in every system card. License is ambiguous: code is MIT but the dataset card
+  cites CC-BY-4.0; research flags this as an unresolved conflict. Dataset is gated
+  on Hugging Face.'

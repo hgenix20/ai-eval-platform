@@ -1,0 +1,23 @@
+id: swe-bench-pro
+name: SWE-bench Pro
+url: https://huggingface.co/datasets/ScaleAI/SWE-bench_Pro
+category: coding
+maintainer: Scale AI
+size: 731 public, 858 held-out, 276 commercial instances
+license:
+  code: unknown
+  data: unknown
+  status: unverified
+scoring: execution
+runner:
+  kind: external
+  ref: own-harness
+status: current
+cost_class: high
+requires:
+- docker
+verified: '2026-09-07'
+sources:
+- https://huggingface.co/datasets/ScaleAI/SWE-bench_Pro
+notes: Not saturated; top score is 61.5 percent. License is unverified; sources reportedly
+  include GPL-licensed repos.

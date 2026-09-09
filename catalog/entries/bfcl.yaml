@@ -1,0 +1,23 @@
+id: bfcl
+name: Berkeley Function Calling Leaderboard V4
+url: https://gorilla.cs.berkeley.edu/leaderboard.html
+category: tool-use
+maintainer: UC Berkeley Gorilla
+size: V1 about 1,660 plus V2-Live about 2,251 plus V3 multi-turn 1,000 plus V4 web-search
+  100
+license:
+  code: Apache-2.0
+  data: Apache-2.0
+  status: verified
+scoring: state
+runner:
+  kind: inspect_evals
+  ref: inspect_evals/bfcl
+status: current
+cost_class: medium
+requires: []
+verified: '2026-09-07'
+sources:
+- https://gorilla.cs.berkeley.edu/leaderboard.html
+notes: V1 and V2 are saturated. V4's agentic memory-management slice is not, at around
+  12 percent.

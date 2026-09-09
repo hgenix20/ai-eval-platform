@@ -1,0 +1,24 @@
+id: gaia
+name: GAIA
+url: https://huggingface.co/datasets/gaia-benchmark/GAIA
+category: agent
+maintainer: Meta FAIR and Hugging Face
+size: 466 tasks (test split private)
+license:
+  code: unknown
+  data: unknown
+  status: unverified
+scoring: exact-match
+runner:
+  kind: inspect_evals
+  ref: inspect_evals/gaia
+status: current
+cost_class: medium
+requires:
+- hf-gated
+- live-web
+verified: '2026-09-07'
+sources:
+- https://huggingface.co/datasets/gaia-benchmark/GAIA
+notes: Saturation is unverified; no GAIA-2 exists. Dataset is gated and tasks require
+  live web access.

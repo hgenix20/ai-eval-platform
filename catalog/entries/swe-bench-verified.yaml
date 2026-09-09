@@ -1,0 +1,27 @@
+id: swe-bench-verified
+name: SWE-bench Verified
+url: https://www.swebench.com/
+category: coding
+maintainer: SWE-bench project
+size: 500 verified instances
+license:
+  code: MIT
+  data: MIT
+  status: verified
+scoring: execution
+runner:
+  kind: inspect_evals
+  ref: inspect_evals/swe_bench
+status: saturated
+cost_class: high
+requires:
+- docker
+verified: '2026-09-07'
+sources:
+- https://www.swebench.com/
+notes: Saturated on the open leaderboard, which plateaued at 79.2 percent as of December
+  2025, though labs self-report scores up to 95 percent on private harnesses. OpenAI
+  has published that SWE-bench Verified no longer measures frontier coding capability.
+  The controller confirmed swe_bench (not swe_bench_verified_mini) resolves in the
+  installed inspect_evals 0.19.0 registry; this entry resolves but is not run in this
+  platform because of the Docker requirement and high cost class.

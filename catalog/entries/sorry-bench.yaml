@@ -1,0 +1,23 @@
+id: sorry-bench
+name: SORRY-Bench
+url: https://github.com/sorry-bench/sorry-bench
+category: safety
+maintainer: Xie and Qi
+size: 440 base prompts times 44 categories times 20 mutations
+license:
+  code: MIT
+  data: MIT
+  status: verified
+scoring: classifier
+runner:
+  kind: external
+  ref: own-harness
+status: current
+cost_class: medium
+requires:
+- gpu
+verified: '2026-09-07'
+sources:
+- https://github.com/sorry-bench/sorry-bench
+notes: Scored by a fine-tuned Mistral-7B classifier. Absent from inspect_evals and
+  requires a GPU.

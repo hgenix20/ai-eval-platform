@@ -1,0 +1,22 @@
+id: tau-bench
+name: tau-bench
+url: https://github.com/sierra-research/tau-bench
+category: tool-use
+maintainer: Sierra
+size: 165 tasks (115 retail, 50 airline)
+license:
+  code: MIT
+  data: MIT
+  status: verified
+scoring: state
+runner:
+  kind: external
+  ref: own-harness
+status: current
+cost_class: medium
+requires:
+- api:user-sim
+verified: '2026-09-07'
+sources:
+- https://github.com/sierra-research/tau-bench
+notes: Not saturated. Requires a user-simulator LLM to run.

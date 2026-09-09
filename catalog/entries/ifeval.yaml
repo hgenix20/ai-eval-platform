@@ -1,0 +1,21 @@
+id: ifeval
+name: IFEval
+url: https://github.com/google-research/google-research/tree/master/instruction_following_eval
+category: capability
+maintainer: Google Research
+size: 541 instructions
+license:
+  code: Apache-2.0
+  data: Apache-2.0
+  status: verified
+scoring: exact-match
+runner:
+  kind: inspect_evals
+  ref: inspect_evals/ifeval
+status: current
+cost_class: low
+requires: []
+verified: '2026-09-07'
+sources:
+- https://github.com/google-research/google-research/tree/master/instruction_following_eval
+notes: Deterministic checkers, still actively used in 2026 model cards.

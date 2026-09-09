@@ -1,0 +1,22 @@
+id: judgebench
+name: JudgeBench
+url: https://github.com/ScalerLab/JudgeBench
+category: judge
+maintainer: ScalerLab (ICLR'25)
+size: 620 pairs
+license:
+  code: unknown
+  data: unknown
+  status: unverified
+scoring: exact-match
+runner:
+  kind: external
+  ref: own-scripts
+status: current
+cost_class: low
+requires:
+- api:judge
+verified: '2026-09-07'
+sources:
+- https://github.com/ScalerLab/JudgeBench
+notes: Evaluates the judge itself on objective hard pairs. License is unverified.

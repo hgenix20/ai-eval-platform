@@ -1,0 +1,22 @@
+id: crag
+name: CRAG
+url: https://github.com/facebookresearch/CRAG/
+category: retrieval
+maintainer: Meta
+size: 4,409 questions
+license:
+  code: CC-BY-NC-4.0
+  data: CC-BY-NC-4.0
+  status: non-commercial
+scoring: llm-judge
+runner:
+  kind: none
+status: current
+cost_class: medium
+requires: []
+verified: '2026-09-07'
+sources:
+- https://github.com/facebookresearch/CRAG/
+notes: License is CC-BY-NC-4.0, non-commercial, so this entry has no runner and is
+  not runnable. Scoring is rule-based plus an LLM judge returning +1, 0, or -1, using
+  mock web and knowledge-graph APIs.

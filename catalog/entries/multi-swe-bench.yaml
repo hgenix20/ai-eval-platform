@@ -1,0 +1,22 @@
+id: multi-swe-bench
+name: Multi-SWE-bench
+url: https://github.com/multi-swe-bench/multi-swe-bench
+category: coding
+maintainer: ByteDance
+size: 1,632 instances across 7 languages
+license:
+  code: Apache-2.0
+  data: CC0
+  status: verified
+scoring: execution
+runner:
+  kind: external
+  ref: own-harness
+status: current
+cost_class: high
+requires:
+- docker
+verified: '2026-09-07'
+sources:
+- https://github.com/multi-swe-bench/multi-swe-bench
+notes: Saturation is unverified.

@@ -1,0 +1,21 @@
+id: niah
+name: Needle in a Haystack
+url: https://github.com/gkamradt/LLMTest_NeedleInAHaystack
+category: long-context
+maintainer: Kamradt (gkamradt)
+size: Synthetic generator, no fixed item count
+license:
+  code: MIT
+  data: MIT
+  status: verified
+scoring: exact-match
+runner:
+  kind: inspect_evals
+  ref: inspect_evals/niah
+status: saturated
+cost_class: low
+requires: []
+verified: '2026-09-07'
+sources:
+- https://github.com/gkamradt/LLMTest_NeedleInAHaystack
+notes: Trivially solved; effectively saturated.

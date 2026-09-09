@@ -1,0 +1,22 @@
+id: nolima
+name: NoLiMa
+url: https://github.com/adobe-research/NoLiMa
+category: long-context
+maintainer: Adobe Research
+size: Size is unverified
+license:
+  code: Adobe-Research
+  data: Adobe-Research
+  status: non-commercial
+scoring: exact-match
+runner:
+  kind: none
+status: current
+cost_class: medium
+requires: []
+verified: '2026-09-07'
+sources:
+- https://github.com/adobe-research/NoLiMa
+notes: 'Not saturated: GPT-4o drops from 99.3 percent to 69.7 percent once literal
+  keyword overlap is removed. License is the Adobe Research License, non-commercial,
+  so this entry has no runner and is not runnable.'

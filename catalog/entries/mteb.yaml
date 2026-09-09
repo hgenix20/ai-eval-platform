@@ -1,0 +1,23 @@
+id: mteb
+name: MTEB v2
+url: https://github.com/embeddings-benchmark/mteb
+category: retrieval
+maintainer: MTEB project (embeddings-benchmark)
+size: MTEB(eng, v2) has 41 datasets; MMTEB has 500+
+license:
+  code: Apache-2.0
+  data: mixed
+  status: ambiguous
+scoring: exact-match
+runner:
+  kind: external
+  ref: mteb-pip
+status: current
+cost_class: high
+requires:
+- gpu
+verified: '2026-09-07'
+sources:
+- https://github.com/embeddings-benchmark/mteb
+notes: Cost ranges from free to many GPU-hours. Data licenses are mixed, hence ambiguous
+  overall.

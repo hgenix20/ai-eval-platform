@@ -1,0 +1,22 @@
+id: arc-agi-2
+name: ARC-AGI-2
+url: https://github.com/arcprize/ARC-AGI-2
+category: capability
+maintainer: ARC Prize
+size: 1,000 train plus 120 times 3 eval
+license:
+  code: Apache-2.0
+  data: Apache-2.0
+  status: verified
+scoring: exact-match
+runner:
+  kind: external
+  ref: arcprize-harness
+status: current
+cost_class: high
+requires: []
+verified: '2026-09-07'
+sources:
+- https://github.com/arcprize/ARC-AGI-2
+notes: Not yet saturated and climbing fast. No inspect_evals task exists; ARC Prize
+  runs its own Kaggle harness.

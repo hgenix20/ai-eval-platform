@@ -1,0 +1,22 @@
+id: aider-polyglot
+name: Aider Polyglot
+url: https://aider.chat/docs/leaderboards/
+category: coding
+maintainer: Aider project
+size: 225 Exercism exercises across 6 languages
+license:
+  code: unknown
+  data: unknown
+  status: unverified
+scoring: execution
+runner:
+  kind: external
+  ref: aider-repo
+status: current
+cost_class: medium
+requires: []
+verified: '2026-09-07'
+sources:
+- https://aider.chat/docs/leaderboards/
+notes: 'Not saturated; top score is 88 percent. Publishes cost: $29.08 for 5.3 million
+  tokens per full run. License is unverified per track.'

@@ -1,0 +1,22 @@
+id: ragbench
+name: RAGBench
+url: https://huggingface.co/datasets/galileo-ai/ragbench
+category: retrieval
+maintainer: Galileo
+size: About 100,000 examples across 12 subsets
+license:
+  code: CC-BY-4.0
+  data: CC-BY-4.0
+  status: verified
+scoring: llm-judge
+runner:
+  kind: external
+  ref: own-scripts
+status: current
+cost_class: medium
+requires:
+- api:judge
+verified: '2026-09-07'
+sources:
+- https://huggingface.co/datasets/galileo-ai/ragbench
+notes: 'Scored with the TRACe metrics: adherence, relevance, utilization, completeness.'

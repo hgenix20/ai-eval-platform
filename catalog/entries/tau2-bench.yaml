@@ -1,0 +1,24 @@
+id: tau2-bench
+name: tau2-bench / tau3-bench
+url: https://github.com/sierra-research/tau2-bench
+category: tool-use
+maintainer: Sierra
+size: Per-domain size is unverified
+license:
+  code: MIT
+  data: MIT
+  status: verified
+scoring: state
+runner:
+  kind: inspect_evals
+  ref: inspect_evals/tau2_airline
+status: current
+cost_class: medium
+requires:
+- api:user-sim
+verified: '2026-09-07'
+sources:
+- https://github.com/sierra-research/tau2-bench
+notes: The repo also ships tau3-bench v1.0.1 (telecom, banking_knowledge, full-duplex
+  voice). The runner here is the tau2_airline task in inspect_evals, which covers
+  only the airline domain, not the full tau2 or tau3 suite.

@@ -1,0 +1,22 @@
+id: livebench
+name: LiveBench
+url: https://github.com/livebench/livebench
+category: capability
+maintainer: Abacus.AI / NYU
+size: 18 to 23 tasks, refreshed monthly
+license:
+  code: unknown
+  data: unknown
+  status: unverified
+scoring: exact-match
+runner:
+  kind: inspect_evals
+  ref: inspect_evals/livebench
+status: current
+cost_class: medium
+requires: []
+verified: '2026-09-07'
+sources:
+- https://github.com/livebench/livebench
+notes: 'Not saturated by design: contamination-resistant via monthly refresh. License
+  is unverified in source research.'

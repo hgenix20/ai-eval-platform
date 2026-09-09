@@ -1,0 +1,23 @@
+id: mind2web-2
+name: Mind2Web 2
+url: https://arxiv.org/abs/2506.21506
+category: agent
+maintainer: Ohio State and Amazon (arXiv:2506.21506)
+size: 130 tasks
+license:
+  code: MIT
+  data: MIT
+  status: verified
+scoring: llm-judge
+runner:
+  kind: external
+  ref: own-harness
+status: current
+cost_class: high
+requires:
+- live-web
+verified: '2026-09-07'
+sources:
+- https://arxiv.org/abs/2506.21506
+notes: Agents reach 50 to 70 percent of human performance under an Agent-as-a-Judge
+  rubric. No inspect_evals task; needs live web access.

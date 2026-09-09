@@ -1,0 +1,22 @@
+id: hal
+name: Holistic Agent Leaderboard
+url: https://hal.cs.princeton.edu/
+category: agent
+maintainer: Princeton
+size: Meta-leaderboard over 9 benchmarks
+license:
+  code: unknown
+  data: unknown
+  status: unverified
+scoring: execution
+runner:
+  kind: external
+  ref: hal-harness
+status: current
+cost_class: high
+requires: []
+verified: '2026-09-07'
+sources:
+- https://hal.cs.princeton.edu/
+notes: Frames results as a cost-accuracy Pareto front. princeton-pli/hal-harness is
+  a reference architecture, not a single runnable task. License is unverified.

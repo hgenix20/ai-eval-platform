@@ -1,0 +1,22 @@
+id: frames
+name: FRAMES
+url: https://huggingface.co/datasets/google/frames-benchmark
+category: retrieval
+maintainer: Google
+size: 824 questions
+license:
+  code: Apache-2.0
+  data: Apache-2.0
+  status: verified
+scoring: exact-match
+runner:
+  kind: external
+  ref: own-scripts
+status: current
+cost_class: low
+requires: []
+verified: '2026-09-07'
+sources:
+- https://huggingface.co/datasets/google/frames-benchmark
+notes: Multi-hop retrieval plus reasoning. Scoring method is unverified in source
+  research.

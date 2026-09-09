@@ -1,0 +1,21 @@
+id: humaneval
+name: HumanEval
+url: https://github.com/openai/human-eval
+category: coding
+maintainer: OpenAI
+size: 164 problems
+license:
+  code: MIT
+  data: MIT
+  status: verified
+scoring: execution
+runner:
+  kind: inspect_evals
+  ref: inspect_evals/humaneval
+status: saturated
+cost_class: low
+requires: []
+verified: '2026-09-07'
+sources:
+- https://github.com/openai/human-eval
+notes: Saturated and deprecated, at 95 to 97 percent.

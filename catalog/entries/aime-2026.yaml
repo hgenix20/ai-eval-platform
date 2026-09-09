@@ -1,0 +1,23 @@
+id: aime-2026
+name: AIME 2026
+url: https://huggingface.co/datasets/MathArena/aime_2026
+category: capability
+maintainer: MAA / MathArena
+size: 30 problems per year
+license:
+  code: CC-BY-NC-SA-4.0
+  data: CC-BY-NC-SA-4.0
+  status: non-commercial
+scoring: exact-match
+runner:
+  kind: inspect_evals
+  ref: inspect_evals/aime2026
+status: current
+cost_class: low
+requires: []
+verified: '2026-09-07'
+sources:
+- https://huggingface.co/datasets/MathArena/aime_2026
+notes: 2024 and 2025 sets are saturated at 100 percent reported; 2026 is fresh. License
+  is CC-BY-NC-SA-4.0, so this entry is flagged non-commercial and is not runnable
+  regardless of the runner.

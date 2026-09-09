@@ -1,0 +1,23 @@
+id: hhem-vectara
+name: HHEM-2.1-Open / Vectara leaderboard
+url: https://github.com/vectara/hallucination-leaderboard
+category: hallucination
+maintainer: Vectara
+size: Leaderboard corpus of 7,700+ items, private
+license:
+  code: Apache-2.0
+  data: private-corpus
+  status: ambiguous
+scoring: classifier
+runner:
+  kind: builtin
+  ref: graders.hhem
+status: current
+cost_class: free
+requires: []
+verified: '2026-09-07'
+sources:
+- https://github.com/vectara/hallucination-leaderboard
+notes: A trained FLAN-T5-Base classifier, deterministic and CPU-runnable under 600MB.
+  The public leaderboard itself runs a closed HHEM-2.3 model. The training corpus
+  is not released, so data licensing is ambiguous even though the model code is Apache-2.0.

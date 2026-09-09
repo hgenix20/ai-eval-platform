@@ -1,0 +1,23 @@
+id: agentharm
+name: AgentHarm
+url: https://huggingface.co/datasets/ai-safety-institute/AgentHarm
+category: safety
+maintainer: UK AISI and Gray Swan
+size: 110 base behaviors, 440 with augmentation
+license:
+  code: MIT-with-safety-clause
+  data: MIT-with-safety-clause
+  status: verified
+scoring: llm-judge
+runner:
+  kind: inspect_evals
+  ref: inspect_evals/agentharm
+status: approaching-saturation
+cost_class: medium
+requires:
+- api:judge
+verified: '2026-09-07'
+sources:
+- https://huggingface.co/datasets/ai-safety-institute/AgentHarm
+notes: 'Approaching saturation: without augmentation the attack success rate is only
+  1.5 to 1.9 percent. License is MIT plus a safety-use restriction.'

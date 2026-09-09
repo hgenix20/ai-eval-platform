@@ -1,0 +1,21 @@
+id: halueval
+name: HaluEval
+url: https://github.com/RUCAIBox/HaluEval
+category: hallucination
+maintainer: RUCAIBox
+size: 35,000 examples
+license:
+  code: MIT
+  data: MIT
+  status: verified
+scoring: exact-match
+runner:
+  kind: external
+  ref: own-scripts
+status: legacy
+cost_class: low
+requires: []
+verified: '2026-09-07'
+sources:
+- https://github.com/RUCAIBox/HaluEval
+notes: Legacy; its 2023-era hallucinations are easy for 2026 models.

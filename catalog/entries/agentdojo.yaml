@@ -1,0 +1,21 @@
+id: agentdojo
+name: AgentDojo
+url: https://github.com/ethz-spylab/agentdojo
+category: injection
+maintainer: ETH Zurich
+size: 97 tasks, 629 security cases across 4 suites
+license:
+  code: MIT
+  data: MIT
+  status: verified
+scoring: state
+runner:
+  kind: inspect_evals
+  ref: inspect_evals/agentdojo
+status: current
+cost_class: medium
+requires: []
+verified: '2026-09-07'
+sources:
+- https://github.com/ethz-spylab/agentdojo
+notes: Scores utility and attack success jointly using deterministic per-task checkers.

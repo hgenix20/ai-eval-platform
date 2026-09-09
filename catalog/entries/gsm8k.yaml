@@ -1,0 +1,21 @@
+id: gsm8k
+name: GSM8K
+url: https://huggingface.co/datasets/openai/gsm8k
+category: capability
+maintainer: OpenAI
+size: 1,319 test problems
+license:
+  code: MIT
+  data: MIT
+  status: verified
+scoring: exact-match
+runner:
+  kind: inspect_evals
+  ref: inspect_evals/gsm8k
+status: saturated
+cost_class: low
+requires: []
+verified: '2026-09-07'
+sources:
+- https://huggingface.co/datasets/openai/gsm8k
+notes: Fully saturated and deprecated for frontier comparison.

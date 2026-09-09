@@ -1,0 +1,23 @@
+id: rewardbench-2
+name: RewardBench 2
+url: https://github.com/allenai/reward-bench
+category: judge
+maintainer: Ai2 (ICLR'26)
+size: 1,865 prompts
+license:
+  code: Apache-2.0
+  data: ODC-BY
+  status: verified
+scoring: exact-match
+runner:
+  kind: external
+  ref: rewardbench-pip
+status: current
+cost_class: medium
+requires:
+- gpu
+verified: '2026-09-07'
+sources:
+- https://github.com/allenai/reward-bench
+notes: Scores reward models on best-of-4 selection. v1 was saturated; v2 correlates
+  at r=0.87 with best-of-N.

@@ -1,0 +1,23 @@
+id: theagentcompany
+name: TheAgentCompany
+url: https://github.com/TheAgentCompany/TheAgentCompany
+category: agent
+maintainer: CMU / OpenHands
+size: 175 tasks
+license:
+  code: MIT
+  data: MIT
+  status: verified
+scoring: execution
+runner:
+  kind: inspect_evals
+  ref: inspect_evals/theagentcompany
+status: current
+cost_class: high
+requires:
+- docker
+verified: '2026-09-07'
+sources:
+- https://github.com/TheAgentCompany/TheAgentCompany
+notes: Saturation is unverified. Scored on final result plus subcheckpoint partial
+  credit.

@@ -1,0 +1,23 @@
+id: livecodebench-pro
+name: LiveCodeBench Pro
+url: https://livecodebenchpro.com
+category: coding
+maintainer: LiveCodeBench Pro project
+size: 584 Olympiad and ICPC problems
+license:
+  code: unknown
+  data: unknown
+  status: unverified
+scoring: execution
+runner:
+  kind: inspect_evals
+  ref: inspect_evals/livecodebench_pro
+status: current
+cost_class: high
+requires:
+- docker
+verified: '2026-09-07'
+sources:
+- https://livecodebenchpro.com
+notes: 'Not saturated: 53 percent on medium problems and 0 percent on hard problems.
+  License is unverified.'

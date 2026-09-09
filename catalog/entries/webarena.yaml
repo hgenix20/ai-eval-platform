@@ -1,0 +1,22 @@
+id: webarena
+name: WebArena
+url: https://github.com/web-arena-x/webarena
+category: agent
+maintainer: web-arena-x
+size: 812 tasks
+license:
+  code: Apache-2.0
+  data: Apache-2.0
+  status: verified
+scoring: state
+runner:
+  kind: external
+  ref: own-harness
+status: legacy
+cost_class: high
+requires:
+- docker
+verified: '2026-09-07'
+sources:
+- https://github.com/web-arena-x/webarena
+notes: Superseded in practice; last updated December 2024.

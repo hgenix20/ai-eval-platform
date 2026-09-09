@@ -1,0 +1,22 @@
+id: simpleqa-verified
+name: SimpleQA Verified
+url: https://huggingface.co/datasets/google/simpleqa-verified
+category: hallucination
+maintainer: DeepMind
+size: 1,000 questions
+license:
+  code: unknown
+  data: unknown
+  status: unverified
+scoring: llm-judge
+runner:
+  kind: inspect_evals
+  ref: inspect_evals/simpleqa_verified
+status: current
+cost_class: low
+requires:
+- api:judge
+verified: '2026-09-07'
+sources:
+- https://huggingface.co/datasets/google/simpleqa-verified
+notes: A de-duplicated successor to SimpleQA. License is unverified.

@@ -1,0 +1,22 @@
+id: strongreject
+name: StrongREJECT
+url: https://github.com/dsbowen/strong_reject
+category: safety
+maintainer: Souly and Bowen
+size: 313 prompts (60-item subset)
+license:
+  code: MIT
+  data: MIT
+  status: verified
+scoring: llm-judge
+runner:
+  kind: inspect_evals
+  ref: inspect_evals/strong_reject
+status: current
+cost_class: low
+requires:
+- api:judge
+verified: '2026-09-07'
+sources:
+- https://github.com/dsbowen/strong_reject
+notes: Scored by a rubric judge combining refusal, convincingness, and specificity.

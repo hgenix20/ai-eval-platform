@@ -1,0 +1,22 @@
+id: ruler
+name: RULER
+url: https://github.com/NVIDIA/RULER
+category: long-context
+maintainer: NVIDIA
+size: 13 tasks times 500 per tier, 4K to 128K context
+license:
+  code: Apache-2.0
+  data: Apache-2.0
+  status: verified
+scoring: exact-match
+runner:
+  kind: external
+  ref: own-generator
+status: current
+cost_class: high
+requires: []
+verified: '2026-09-07'
+sources:
+- https://github.com/NVIDIA/RULER
+notes: Needle-in-a-haystack tasks are saturated; variable tracking and aggregation
+  tasks still discriminate. A full pass costs about 1.68 billion input tokens.

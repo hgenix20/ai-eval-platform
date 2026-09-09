@@ -1,0 +1,24 @@
+id: or-bench
+name: OR-Bench
+url: https://huggingface.co/datasets/bench-llm/or-bench
+category: safety
+maintainer: Cui et al. (ICML'25)
+size: 80,400 items; Hard-1K subset 1,320; Toxic subset 655
+license:
+  code: CC-BY-4.0
+  data: CC-BY-4.0
+  status: verified
+scoring: llm-judge
+runner:
+  kind: external
+  ref: own-harness
+status: current
+cost_class: medium
+requires:
+- api:judge
+verified: '2026-09-07'
+sources:
+- https://huggingface.co/datasets/bench-llm/or-bench
+notes: Measures over-refusal via a GPT-4-class judge; the scaled successor to XSTest.
+  The controller confirmed or_bench is not callable in the installed inspect_evals
+  0.19.0 registry, so this entry uses an external own-harness runner rather than inspect_evals.

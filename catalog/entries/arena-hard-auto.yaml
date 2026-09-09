@@ -1,0 +1,23 @@
+id: arena-hard-auto
+name: Arena-Hard-Auto v2
+url: https://github.com/lmarena/arena-hard-auto
+category: judge
+maintainer: LMArena
+size: 500 hard prompts plus 250 creative prompts
+license:
+  code: Apache-2.0
+  data: Apache-2.0
+  status: verified
+scoring: llm-judge
+runner:
+  kind: external
+  ref: own-scripts
+status: current
+cost_class: medium
+requires:
+- api:judge
+verified: '2026-09-07'
+sources:
+- https://github.com/lmarena/arena-hard-auto
+notes: Judged primarily by Gemini-2.5 with GPT-4.1 as an alternate. v0.1 cost about
+  $25 per run.

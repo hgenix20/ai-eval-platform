@@ -1,0 +1,21 @@
+id: longbench-v2
+name: LongBench v2
+url: https://github.com/THUDM/LongBench
+category: long-context
+maintainer: THUDM
+size: 503 multiple-choice questions
+license:
+  code: MIT
+  data: MIT
+  status: verified
+scoring: exact-match
+runner:
+  kind: external
+  ref: own-harness
+status: current
+cost_class: high
+requires: []
+verified: '2026-09-07'
+sources:
+- https://github.com/THUDM/LongBench
+notes: 'Not saturated: humans score 53.7 percent, the best model 50.1 percent.'

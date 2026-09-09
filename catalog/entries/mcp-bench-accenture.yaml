@@ -1,0 +1,22 @@
+id: mcp-bench-accenture
+name: MCP-Bench (Accenture)
+url: https://github.com/Accenture/mcp-bench
+category: tool-use
+maintainer: Accenture
+size: 28 MCP servers
+license:
+  code: Apache-2.0
+  data: Apache-2.0
+  status: verified
+scoring: llm-judge
+runner:
+  kind: external
+  ref: own-harness
+status: current
+cost_class: high
+requires:
+- api:judge
+verified: '2026-09-07'
+sources:
+- https://github.com/Accenture/mcp-bench
+notes: GPT-5 scores 0.749 under combined rule and LLM-judge (o4-mini) scoring.

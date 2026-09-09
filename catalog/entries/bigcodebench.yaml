@@ -1,0 +1,22 @@
+id: bigcodebench
+name: BigCodeBench
+url: https://github.com/bigcode-project/bigcodebench
+category: coding
+maintainer: BigCode project
+size: 1,140 tasks (148 Hard subset)
+license:
+  code: Apache-2.0
+  data: Apache-2.0
+  status: verified
+scoring: execution
+runner:
+  kind: inspect_evals
+  ref: inspect_evals/bigcodebench
+status: current
+cost_class: medium
+requires:
+- docker
+verified: '2026-09-07'
+sources:
+- https://github.com/bigcode-project/bigcodebench
+notes: Saturation is unverified.

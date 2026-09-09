@@ -1,0 +1,22 @@
+id: injecagent
+name: InjecAgent
+url: https://github.com/uiuc-kang-lab/InjecAgent
+category: injection
+maintainer: UIUC
+size: 1,054 cases
+license:
+  code: MIT
+  data: MIT
+  status: verified
+scoring: exact-match
+runner:
+  kind: external
+  ref: own-scripts
+status: current
+cost_class: medium
+requires: []
+verified: '2026-09-07'
+sources:
+- https://github.com/uiuc-kang-lab/InjecAgent
+notes: Indirect prompt injection leading to tool misuse, scored by rule-based attack
+  success rate.

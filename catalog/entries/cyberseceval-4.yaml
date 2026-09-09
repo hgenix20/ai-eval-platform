@@ -1,0 +1,25 @@
+id: cyberseceval-4
+name: CyberSecEval 4
+url: https://github.com/meta-llama/PurpleLlama/blob/main/CybersecurityBenchmarks/README.md
+category: injection
+maintainer: Meta
+size: 9 sub-benchmarks; MITRE about 100 per category; AutoPatchBench 142/120/20
+license:
+  code: MIT
+  data: unknown
+  status: unverified
+scoring: llm-judge
+runner:
+  kind: inspect_evals
+  ref: inspect_evals/cyse4_multilingual_prompt_injection
+status: current
+cost_class: medium
+requires:
+- api:judge
+verified: '2026-09-07'
+sources:
+- https://github.com/meta-llama/PurpleLlama/blob/main/CybersecurityBenchmarks/README.md
+notes: License is unverified. The brief's original ref (cyse3_visual_prompt_injection)
+  is a CyberSecEval 3 task, not 4. The controller ruled this entry to inspect_evals/cyse4_multilingual_prompt_injection,
+  the CyberSecEval 4 prompt-injection sub-task confirmed present in the installed
+  inspect_evals 0.19.0 registry.

@@ -1,0 +1,22 @@
+id: truthfulqa
+name: TruthfulQA
+url: https://github.com/sylinrl/TruthfulQA
+category: hallucination
+maintainer: Lin et al. (sylinrl)
+size: 817 questions
+license:
+  code: Apache-2.0
+  data: Apache-2.0
+  status: verified
+scoring: exact-match
+runner:
+  kind: inspect_evals
+  ref: inspect_evals/truthfulqa
+status: legacy
+cost_class: low
+requires: []
+verified: '2026-09-07'
+sources:
+- https://github.com/sylinrl/TruthfulQA
+notes: Legacy and aging; a January 2025 update deleted a category. Prefer SimpleQA
+  Verified for new work.

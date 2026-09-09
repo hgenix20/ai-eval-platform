@@ -1,0 +1,22 @@
+id: simpleqa
+name: SimpleQA
+url: https://github.com/openai/simple-evals/blob/main/simpleqa_eval.py
+category: hallucination
+maintainer: OpenAI
+size: 4,326 questions
+license:
+  code: MIT
+  data: MIT
+  status: verified
+scoring: llm-judge
+runner:
+  kind: inspect_evals
+  ref: inspect_evals/simpleqa
+status: legacy
+cost_class: medium
+requires:
+- api:judge
+verified: '2026-09-07'
+sources:
+- https://github.com/openai/simple-evals/blob/main/simpleqa_eval.py
+notes: Legacy; the upstream repo has been unmaintained since July 2025.

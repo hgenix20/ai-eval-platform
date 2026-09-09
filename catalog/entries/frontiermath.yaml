@@ -1,0 +1,21 @@
+id: frontiermath
+name: FrontierMath
+url: https://epoch.ai/frontiermath/tiers-1-4/about
+category: capability
+maintainer: Epoch AI
+size: 338 problems, only 12 public
+license:
+  code: unknown
+  data: unknown
+  status: unverified
+scoring: execution
+runner:
+  kind: none
+status: held-out
+cost_class: high
+requires: []
+verified: '2026-09-07'
+sources:
+- https://epoch.ai/frontiermath/tiers-1-4/about
+notes: Held out by design; SOTA is around 40 percent. Scoring runs on Epoch's private
+  infrastructure only, so there is no runner here. License is unverified.

@@ -1,0 +1,23 @@
+id: mt-bench
+name: MT-Bench
+url: https://github.com/lm-sys/FastChat
+category: judge
+maintainer: LMSYS
+size: 80 prompts
+license:
+  code: Apache-2.0
+  data: Apache-2.0
+  status: verified
+scoring: llm-judge
+runner:
+  kind: external
+  ref: fastchat
+status: saturated
+cost_class: low
+requires:
+- api:judge
+verified: '2026-09-07'
+sources:
+- https://github.com/lm-sys/FastChat
+notes: 'Saturated: agreement with Chatbot Arena is only 26.1 percent, separability
+  22.6 percent.'
