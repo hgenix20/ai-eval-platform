@@ -1,0 +1,10 @@
+# Regression gate thresholds (spec 4.6). Phase 1 suites only; later phases
+# add rows here as their suites come online.
+pr_sample: 20
+suites:
+  offline_core: { metric: pass_rate, min: 1.0 }
+  offline_core_cost: { metric: usd_per_run_p50, max_increase_pct: 10 }
+  # 50% not the spec's 20%: latency on a laptop under CI load is noisy.
+  # The spec figure applies to live-model suites in Phase 2.
+  offline_core_latency: { metric: wall_ms_p95, max_increase_pct: 50 }
+  public_ifeval: { metric: accuracy, min: 0.70, max_drop: 0.03 }
