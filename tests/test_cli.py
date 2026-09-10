@@ -274,6 +274,133 @@ def test_run_public_value_error_exits_2(tmp_path: Path, monkeypatch, capsys):
     assert "no cost data" in capsys.readouterr().err
 
 
+def test_run_public_passes_no_cost_cap_and_generate_options(tmp_path: Path, monkeypatch, capsys):
+    """--no-cost-cap, --temperature, --max-tokens, and --extra-body reach
+    run_public as no_cost_cap=True and a generate dict built only from the
+    options given."""
+    results = tmp_path / "results"
+    received: dict = {}
+
+    def fake_run_public(entry, **kwargs):
+        received.update(kwargs)
+        return eval_log_to_suite_result(
+            _mock_log(tmp_path), suite="public_ifeval", target=kwargs["model"]
+        )
+
+    monkeypatch.setattr(cli_mod, "run_public", fake_run_public)
+
+    rc = main(
+        [
+            "run",
+            "public",
+            "ifeval",
+            "--model",
+            "hf-inference-providers/meta-llama/Llama-3.1-8B-Instruct:deepinfra",
+            "--no-cost-cap",
+            "--limit",
+            "5",
+            "--temperature",
+            "0",
+            "--max-tokens",
+            "1024",
+            "--extra-body",
+            '{"chat_template_kwargs": {"enable_thinking": false}}',
+            "--catalog",
+            str(ROOT / "catalog" / "entries"),
+            "--results",
+            str(results),
+        ]
+    )
+    assert rc == 0
+    assert received["no_cost_cap"] is True
+    assert received["limit"] == 5
+    assert received["generate"] == {
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "extra_body": {"chat_template_kwargs": {"enable_thinking": False}},
+    }
+
+
+def test_run_public_bad_extra_body_json_exits_2(tmp_path: Path, monkeypatch, capsys):
+    """A malformed --extra-body value exits 2 with a message on stderr,
+    before run_public (and any spend) is attempted."""
+    results = tmp_path / "results"
+
+    def fake_run_public(*args, **kwargs):
+        raise AssertionError("run_public must not be called on bad JSON")
+
+    monkeypatch.setattr(cli_mod, "run_public", fake_run_public)
+
+    rc = main(
+        [
+            "run",
+            "public",
+            "ifeval",
+            "--model",
+            "mockllm/model",
+            "--extra-body",
+            "{not json",
+            "--catalog",
+            str(ROOT / "catalog" / "entries"),
+            "--results",
+            str(results),
+        ]
+    )
+    assert rc == 2
+    assert capsys.readouterr().err.strip() != ""
+
+
+def test_run_public_prints_strict_and_loose_metrics(tmp_path: Path, monkeypatch, capsys):
+    """The success line is followed by every metrics key containing
+    "strict" or "loose", one per line, four decimals."""
+    results = tmp_path / "results"
+    log = _mock_log(tmp_path)
+    result = eval_log_to_suite_result(log, suite="public_ifeval", target="mockllm/model")
+    result.metrics["prompt_level_strict_accuracy"] = 0.83
+    result.metrics["instruction_level_loose_accuracy"] = 0.912345
+
+    monkeypatch.setattr(cli_mod, "run_public", lambda *a, **kw: result)
+
+    rc = main(
+        [
+            "run",
+            "public",
+            "ifeval",
+            "--model",
+            "mockllm/model",
+            "--catalog",
+            str(ROOT / "catalog" / "entries"),
+            "--results",
+            str(results),
+        ]
+    )
+    assert rc == 0
+    out = capsys.readouterr().out
+    assert "prompt_level_strict_accuracy: 0.8300" in out
+    assert "instruction_level_loose_accuracy: 0.9123" in out
+
+
+def _mock_log(tmp_path: Path):
+    [log] = inspect_eval(
+        Task(
+            dataset=MemoryDataset(
+                [Sample(input="2+2?", target="4"), Sample(input="3+3?", target="6")]
+            ),
+            scorer=match(),
+        ),
+        model="mockllm/model",
+        model_args={
+            "custom_outputs": [
+                ModelOutput.from_content(model="mockllm", content="4"),
+                ModelOutput.from_content(model="mockllm", content="6"),
+            ]
+        },
+        log_dir=str(tmp_path / "logs"),
+        display="none",
+    )
+    return log
+
+
 def test_run_public_happy_path_with_mock_model(tmp_path: Path, monkeypatch, capsys):
     """A completed public run writes latest.json under the suite directory
     and exactly one ledger line. `run_public` is monkeypatched to return a

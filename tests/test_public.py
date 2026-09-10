@@ -72,7 +72,20 @@ def test_eval_log_skips_unscored_samples(tmp_path: Path):
         "output_tokens",
         "usd",
         "samples_unscored",
+        "match.accuracy",
+        "match.stderr",
     }
+
+
+def test_eval_log_copies_every_scorer_metric(tmp_path: Path):
+    """Every scorer's metrics land in `metrics` as `f"{score.name}.{metric_name}"`,
+    on top of the headline `accuracy` (which stays the first scorer's
+    accuracy/mean, unaffected by this)."""
+    log = _tiny_log(tmp_path)
+    r = eval_log_to_suite_result(log, suite="public_tiny", target="mockllm/model")
+    assert r.metrics["match.accuracy"] == pytest.approx(0.5)
+    assert r.metrics["match.stderr"] == pytest.approx(0.5)
+    assert r.metrics["accuracy"] == pytest.approx(0.5)
 
 
 def _entry(
@@ -211,6 +224,118 @@ def test_run_public_refuses_when_budget_exhausted(tmp_path: Path, monkeypatch: p
     with pytest.raises(BudgetExceeded, match="no budget remaining"):
         run_public(_entry(), model="mockllm/model", limit=4, budget=budget, log_dir=tmp_path)
     assert calls == []
+
+
+def test_run_public_no_cost_cap_passes_no_cost_arguments(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    """no_cost_cap=True skips both cost_limit and model_cost_config, no
+    matter what the model is, and records the mode that says the external
+    provider's credits are the real spend cap."""
+    log = _tiny_log(tmp_path)
+    calls: list[dict] = []
+
+    def fake_eval(*args: object, **kwargs: object) -> list[EvalLog]:
+        calls.append(kwargs)
+        return [log]
+
+    monkeypatch.setattr(public_mod, "inspect_eval", fake_eval)
+    budget = Budget(max_usd=1.0, max_wall_s=60)
+    result = run_public(
+        _entry(),
+        model="hf-inference-providers/meta-llama/Llama-3.1-8B-Instruct:deepinfra",
+        limit=5,
+        budget=budget,
+        log_dir=tmp_path,
+        no_cost_cap=True,
+    )
+    assert calls[0].get("cost_limit") is None
+    assert calls[0].get("model_cost_config") is None
+    assert result.meta["cost_cap_mode"] == "none_external_budget"
+
+
+def test_run_public_no_cost_cap_without_limit_raises(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    """no_cost_cap with no sample limit and no full=True would run an
+    unbounded, uncapped benchmark; this is refused before inspect_eval is
+    called at all."""
+
+    def fake_eval(*args: object, **kwargs: object) -> list[EvalLog]:
+        raise AssertionError("inspect_eval must not be called")
+
+    monkeypatch.setattr(public_mod, "inspect_eval", fake_eval)
+    budget = Budget(max_usd=1.0, max_wall_s=60)
+    with pytest.raises(ValueError, match="no_cost_cap requires a sample limit"):
+        run_public(
+            _entry(),
+            model="hf-inference-providers/x:deepinfra",
+            limit=None,
+            budget=budget,
+            log_dir=tmp_path,
+            no_cost_cap=True,
+        )
+
+
+def test_run_public_no_cost_cap_full_allows_no_limit(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    """full=True is the explicit escape valve for an intentional unlimited
+    run: no ValueError, limit=None reaches inspect_eval, and the result
+    records both that it ran the full dataset and how the cost cap was
+    handled."""
+    log = _tiny_log(tmp_path)
+    calls: list[dict] = []
+
+    def fake_eval(*args: object, **kwargs: object) -> list[EvalLog]:
+        calls.append(kwargs)
+        return [log]
+
+    monkeypatch.setattr(public_mod, "inspect_eval", fake_eval)
+    budget = Budget(max_usd=1.0, max_wall_s=60)
+    result = run_public(
+        _entry(),
+        model="hf-inference-providers/x:deepinfra",
+        limit=None,
+        budget=budget,
+        log_dir=tmp_path,
+        no_cost_cap=True,
+        full=True,
+    )
+    assert calls[0]["limit"] is None
+    assert result.meta["full_run"] is True
+    assert result.meta["cost_cap_mode"] == "none_external_budget"
+
+
+def test_run_public_forwards_generate_kwargs(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+    """A `generate` dict is forwarded to inspect_eval as keyword arguments
+    and recorded verbatim in the result's meta for later comparison."""
+    log = _tiny_log(tmp_path)
+    calls: list[dict] = []
+
+    def fake_eval(*args: object, **kwargs: object) -> list[EvalLog]:
+        calls.append(kwargs)
+        return [log]
+
+    monkeypatch.setattr(public_mod, "inspect_eval", fake_eval)
+    budget = Budget(max_usd=1.0, max_wall_s=60)
+    generate = {
+        "temperature": 0.0,
+        "max_tokens": 1024,
+        "extra_body": {"chat_template_kwargs": {"enable_thinking": False}},
+    }
+    result = run_public(
+        _entry(),
+        model="mockllm/model",
+        limit=2,
+        budget=budget,
+        log_dir=tmp_path,
+        generate=generate,
+    )
+    assert calls[0]["temperature"] == 0.0
+    assert calls[0]["max_tokens"] == 1024
+    assert calls[0]["extra_body"] == generate["extra_body"]
+    assert result.meta["generate"] == generate
 
 
 @pytest.mark.network
