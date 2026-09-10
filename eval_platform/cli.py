@@ -112,6 +112,24 @@ def _generate_config(a: argparse.Namespace) -> dict[str, Any] | None:
     return generate or None
 
 
+def _model_args(a: argparse.Namespace) -> dict[str, Any] | None:
+    """Parse `--model-args` (a JSON object of Inspect model constructor
+    keyword arguments, e.g. `device`, `torch_dtype` for the `hf/` provider)
+    into a dict, or None if the option was not given.
+
+    Raises `json.JSONDecodeError` on malformed JSON and `ValueError` when
+    the parsed JSON is not an object (e.g. a list or a scalar); the caller
+    must catch both and turn them into exit code 2 rather than let them
+    propagate as a traceback.
+    """
+    if a.model_args is None:
+        return None
+    parsed = json.loads(a.model_args)
+    if not isinstance(parsed, dict):
+        raise ValueError(f"--model-args must be a JSON object, got {type(parsed).__name__}")
+    return parsed
+
+
 def cmd_run_public(a: argparse.Namespace) -> int:
     """Run one catalog entry's public benchmark against `--model`, append a
     spend record to `--results`/ledger.jsonl, and write the summary to
@@ -125,17 +143,20 @@ def cmd_run_public(a: argparse.Namespace) -> int:
     (see its docstring for the ValueError this combination can raise).
     `--temperature`, `--max-tokens`, and `--extra-body` (parsed as JSON)
     build the `generate` dict passed to `run_public`; only the options
-    actually given are included. After the success line, every metric
-    whose name contains "strict" or "loose" (IFEval's per-dimension
-    accuracy metrics) prints on its own line, four decimals, so a
-    calibration run's full metric set is visible without opening the
-    summary file.
+    actually given are included. `--model-args` (parsed as a JSON object,
+    e.g. `{"device": "cuda:0", "torch_dtype": "bfloat16"}` for Inspect's
+    `hf/` provider) passes through to `run_public` as `model_args`. After
+    the success line, every metric whose name contains "strict" or "loose"
+    (IFEval's per-dimension accuracy metrics) prints on its own line, four
+    decimals, so a calibration run's full metric set is visible without
+    opening the summary file.
 
     Returns 2 if `entry` is not in the catalog, if `--extra-body` is not
-    valid JSON, if the entry is not runnable through Inspect, if `--model`
-    has no cost data Inspect can use, or if the run exceeds
-    `--budget-usd`/`--max-wall-s`; the message goes to stderr in each
-    case, with no traceback. Returns 0 on a completed run.
+    valid JSON, if `--model-args` is not a JSON object, if the entry is not
+    runnable through Inspect, if `--model` has no cost data Inspect can
+    use, or if the run exceeds `--budget-usd`/`--max-wall-s`; the message
+    goes to stderr in each case, with no traceback. Returns 0 on a
+    completed run.
 
     An Inspect run that comes back with `result.meta["status"] != "success"`
     (e.g. a provider ran out of credits mid-run) is a record, not a
@@ -157,6 +178,11 @@ def cmd_run_public(a: argparse.Namespace) -> int:
     except json.JSONDecodeError as e:
         print(f"invalid --extra-body JSON: {e}", file=sys.stderr)
         return 2
+    try:
+        model_args = _model_args(a)
+    except (json.JSONDecodeError, ValueError) as e:
+        print(f"invalid --model-args JSON: {e}", file=sys.stderr)
+        return 2
     budget = Budget(max_usd=a.budget_usd, max_wall_s=a.max_wall_s)
     try:
         result = run_public(
@@ -168,6 +194,7 @@ def cmd_run_public(a: argparse.Namespace) -> int:
             no_cost_cap=a.no_cost_cap,
             full=a.full,
             generate=generate,
+            model_args=model_args,
         )
     except (BudgetExceeded, ValueError) as e:
         print(str(e), file=sys.stderr)
@@ -341,6 +368,11 @@ def build_parser() -> argparse.ArgumentParser:
     pub.add_argument("--temperature", type=float)
     pub.add_argument("--max-tokens", type=int)
     pub.add_argument("--extra-body", help="JSON object forwarded as Inspect's extra_body.")
+    pub.add_argument(
+        "--model-args",
+        help="JSON object of Inspect model constructor kwargs (e.g. device, "
+        "torch_dtype for the hf/ provider).",
+    )
     pub.set_defaults(fn=cmd_run_public)
 
     gate = sub.add_parser("gate")

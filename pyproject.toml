@@ -21,6 +21,12 @@ ifeval = [
     "instruction_following_eval @ git+https://github.com/josejg/instruction_following_eval@0c495b2f95155e8b10acb919ae283bfb4d5be6e2",
     "langdetect",
 ]
+# CUDA builds of torch come from the PyTorch index, not PyPI: install torch
+# first with `pip install --index-url https://download.pytorch.org/whl/cu124
+# torch==2.6.0`, then `pip install -e ".[local]"` for the rest. torch is
+# deliberately not a core dependency: most of this platform's suites never
+# load a model in process.
+local = ["torch>=2.6", "transformers>=4.45,<5", "accelerate>=1.0"]
 
 [project.scripts]
 evalplat = "eval_platform.cli:main"

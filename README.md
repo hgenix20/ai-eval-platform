@@ -58,6 +58,24 @@ under test. The `ifeval` extra installs what `inspect_evals`'s IFEval task
 imports while it builds; without it, `evalplat run public ifeval` fails at task
 construction.
 
+### Local models
+
+Inspect's `hf/` provider loads a Hugging Face model in process instead of
+calling a hosted API. Install a CUDA build of torch from the PyTorch index
+first, then the `local` extra:
+
+```
+pip install --index-url https://download.pytorch.org/whl/cu124 torch==2.6.0
+pip install -e ".[local]"
+```
+
+`--model-args` passes constructor keyword arguments straight through to the
+provider, for example:
+
+```
+evalplat run public ifeval --model hf/Qwen/Qwen2.5-3B-Instruct --model-args '{"device": "cuda:0", "torch_dtype": "bfloat16"}' --no-cost-cap --full --temperature 0 --max-tokens 1024
+```
+
 ## The ladder
 
 Four rungs, in the order a pull request meets them.

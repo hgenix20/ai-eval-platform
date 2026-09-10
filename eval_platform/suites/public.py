@@ -198,6 +198,7 @@ def run_public(
     no_cost_cap: bool = False,
     full: bool = False,
     generate: dict[str, Any] | None = None,
+    model_args: dict[str, Any] | None = None,
 ) -> SuiteResult:
     """Run one catalog entry's public benchmark through Inspect AI and
     return it as a SuiteResult named `public_<id with - as _>`.
@@ -269,6 +270,15 @@ def run_public(
     `inspect_eval(...)` as-is, and copied into `meta["generate"]` verbatim
     (including None when not given) so a report can show exactly what
     generation settings produced a given run's numbers.
+
+    `model_args` is an optional dict of Inspect model constructor keyword
+    arguments (e.g. `device`, `torch_dtype` for the `hf/` provider, which
+    loads a Hugging Face model locally instead of calling a hosted API).
+    `inspect_eval(...)` always receives `model_args=model_args or {}` (never
+    None, which Inspect's `hf/` provider does not accept in place of an
+    empty mapping), while `meta["model_args"]` records the argument exactly
+    as given, including None when not given, so a report can show whether a
+    run used a specific local-model configuration.
     """
     if not entry.runnable or entry.runner.kind != "inspect_evals" or not entry.runner.ref:
         raise ValueError(
@@ -307,6 +317,7 @@ def run_public(
             log_dir=str(log_dir),
             display="none",
             task_args=task_args or {},
+            model_args=model_args or {},
             **eval_kwargs,
         )
     except PrerequisiteError as exc:
@@ -320,6 +331,7 @@ def run_public(
     )
     result.meta["cost_cap_mode"] = cost_cap_mode
     result.meta["generate"] = generate
+    result.meta["model_args"] = model_args
     if full:
         result.meta["full_run"] = True
     budget.charge(result.metrics["usd"])

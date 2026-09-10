@@ -382,6 +382,69 @@ def test_run_public_passes_no_cost_cap_and_generate_options(tmp_path: Path, monk
     }
 
 
+def test_run_public_passes_model_args(tmp_path: Path, monkeypatch, capsys):
+    """--model-args reaches run_public as a parsed dict, for Inspect's `hf/`
+    provider (e.g. `device`, `torch_dtype` for a locally loaded model)."""
+    results = tmp_path / "results"
+    received: dict = {}
+
+    def fake_run_public(entry, **kwargs):
+        received.update(kwargs)
+        return eval_log_to_suite_result(
+            _mock_log(tmp_path), suite="public_ifeval", target=kwargs["model"]
+        )
+
+    monkeypatch.setattr(cli_mod, "run_public", fake_run_public)
+
+    rc = main(
+        [
+            "run",
+            "public",
+            "ifeval",
+            "--model",
+            "hf/Qwen/Qwen2.5-3B-Instruct",
+            "--model-args",
+            '{"device": "cuda:0", "torch_dtype": "bfloat16"}',
+            "--catalog",
+            str(ROOT / "catalog" / "entries"),
+            "--results",
+            str(results),
+        ]
+    )
+    assert rc == 0
+    assert received["model_args"] == {"device": "cuda:0", "torch_dtype": "bfloat16"}
+
+
+def test_run_public_bad_model_args_json_exits_2(tmp_path: Path, monkeypatch, capsys):
+    """A --model-args value that parses as JSON but is not a JSON object
+    (e.g. a list) exits 2 with a message on stderr, before run_public (and
+    any spend) is attempted."""
+    results = tmp_path / "results"
+
+    def fake_run_public(*args, **kwargs):
+        raise AssertionError("run_public must not be called on non-object --model-args")
+
+    monkeypatch.setattr(cli_mod, "run_public", fake_run_public)
+
+    rc = main(
+        [
+            "run",
+            "public",
+            "ifeval",
+            "--model",
+            "hf/Qwen/Qwen2.5-3B-Instruct",
+            "--model-args",
+            "[1]",
+            "--catalog",
+            str(ROOT / "catalog" / "entries"),
+            "--results",
+            str(results),
+        ]
+    )
+    assert rc == 2
+    assert capsys.readouterr().err.strip() != ""
+
+
 def test_run_public_bad_extra_body_json_exits_2(tmp_path: Path, monkeypatch, capsys):
     """A malformed --extra-body value exits 2 with a message on stderr,
     before run_public (and any spend) is attempted."""

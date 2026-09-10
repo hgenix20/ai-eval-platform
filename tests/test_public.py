@@ -394,6 +394,50 @@ def test_run_public_forwards_generate_kwargs(tmp_path: Path, monkeypatch: pytest
     assert result.meta["generate"] == generate
 
 
+def test_run_public_forwards_model_args(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+    """A `model_args` dict (e.g. `device`, `torch_dtype` for Inspect's `hf/`
+    provider) is forwarded to inspect_eval as the `model_args` keyword and
+    recorded verbatim in the result's meta for later comparison."""
+    log = _tiny_log(tmp_path)
+    calls: list[dict] = []
+
+    def fake_eval(*args: object, **kwargs: object) -> list[EvalLog]:
+        calls.append(kwargs)
+        return [log]
+
+    monkeypatch.setattr(public_mod, "inspect_eval", fake_eval)
+    budget = Budget(max_usd=1.0, max_wall_s=60)
+    model_args = {"device": "cuda:0", "torch_dtype": "bfloat16"}
+    result = run_public(
+        _entry(),
+        model="mockllm/model",
+        limit=2,
+        budget=budget,
+        log_dir=tmp_path,
+        model_args=model_args,
+    )
+    assert calls[0]["model_args"] == model_args
+    assert result.meta["model_args"] == model_args
+
+
+def test_run_public_model_args_defaults_to_none(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+    """When `model_args` is not given, `inspect_eval` still receives an empty
+    dict (never None, which Inspect would reject), and `meta["model_args"]`
+    records None rather than the empty dict actually passed through."""
+    log = _tiny_log(tmp_path)
+    calls: list[dict] = []
+
+    def fake_eval(*args: object, **kwargs: object) -> list[EvalLog]:
+        calls.append(kwargs)
+        return [log]
+
+    monkeypatch.setattr(public_mod, "inspect_eval", fake_eval)
+    budget = Budget(max_usd=1.0, max_wall_s=60)
+    result = run_public(_entry(), model="mockllm/model", limit=2, budget=budget, log_dir=tmp_path)
+    assert calls[0]["model_args"] == {}
+    assert result.meta["model_args"] is None
+
+
 @pytest.mark.network
 def test_run_public_ifeval_two_samples_with_mock_model(tmp_path: Path):
     r = run_public(
