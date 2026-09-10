@@ -95,6 +95,23 @@ def cmd_run_offline(a: argparse.Namespace) -> int:
     return 0
 
 
+def _generate_config(a: argparse.Namespace) -> dict[str, Any] | None:
+    """Build the `generate` dict for `run_public` from whichever of
+    `--temperature`, `--max-tokens`, `--extra-body` were given on `a`, or
+    None if none were. `--extra-body` is parsed as JSON; the caller must
+    catch `json.JSONDecodeError` and turn it into exit code 2 rather than
+    let it propagate as a traceback.
+    """
+    generate: dict[str, Any] = {}
+    if a.temperature is not None:
+        generate["temperature"] = a.temperature
+    if a.max_tokens is not None:
+        generate["max_tokens"] = a.max_tokens
+    if a.extra_body is not None:
+        generate["extra_body"] = json.loads(a.extra_body)
+    return generate or None
+
+
 def cmd_run_public(a: argparse.Namespace) -> int:
     """Run one catalog entry's public benchmark against `--model`, append a
     spend record to `--results`/ledger.jsonl, and write the summary to
@@ -104,19 +121,42 @@ def cmd_run_public(a: argparse.Namespace) -> int:
     suite name and the run's `started_at` rather than the summary filename,
     so a live run's spend is recorded even if writing the summary fails.
 
-    Returns 2 if `entry` is not in the catalog, if it is not runnable
-    through Inspect, if `--model` has no cost data Inspect can use, or if
-    the run exceeds `--budget-usd`/`--max-wall-s`; the message goes to
-    stderr in each case, with no traceback. Returns 0 on a completed run.
+    `--no-cost-cap` and `--full` pass through to `run_public` unchanged
+    (see its docstring for the ValueError this combination can raise).
+    `--temperature`, `--max-tokens`, and `--extra-body` (parsed as JSON)
+    build the `generate` dict passed to `run_public`; only the options
+    actually given are included. After the success line, every metric
+    whose name contains "strict" or "loose" (IFEval's per-dimension
+    accuracy metrics) prints on its own line, four decimals, so a
+    calibration run's full metric set is visible without opening the
+    summary file.
+
+    Returns 2 if `entry` is not in the catalog, if `--extra-body` is not
+    valid JSON, if the entry is not runnable through Inspect, if `--model`
+    has no cost data Inspect can use, or if the run exceeds
+    `--budget-usd`/`--max-wall-s`; the message goes to stderr in each
+    case, with no traceback. Returns 0 on a completed run.
     """
     entries = {e.id: e for e in load_catalog(Path(a.catalog))}
     if a.entry not in entries:
         print(f"no catalog entry {a.entry}", file=sys.stderr)
         return 2
+    try:
+        generate = _generate_config(a)
+    except json.JSONDecodeError as e:
+        print(f"invalid --extra-body JSON: {e}", file=sys.stderr)
+        return 2
     budget = Budget(max_usd=a.budget_usd, max_wall_s=a.max_wall_s)
     try:
         result = run_public(
-            entries[a.entry], model=a.model, limit=a.limit, budget=budget, log_dir=Path(a.log_dir)
+            entries[a.entry],
+            model=a.model,
+            limit=a.limit,
+            budget=budget,
+            log_dir=Path(a.log_dir),
+            no_cost_cap=a.no_cost_cap,
+            full=a.full,
+            generate=generate,
         )
     except (BudgetExceeded, ValueError) as e:
         print(str(e), file=sys.stderr)
@@ -136,6 +176,9 @@ def cmd_run_public(a: argparse.Namespace) -> int:
     usd = result.metrics["usd"]
     summary = f"{result.suite} on {a.model}: accuracy {accuracy:.4f} over {samples} samples"
     print(f"{summary}, ${usd:.4f} -> {path}")
+    for name, value in sorted(result.metrics.items()):
+        if "strict" in name or "loose" in name:
+            print(f"  {name}: {value:.4f}")
     return 0
 
 
@@ -259,6 +302,20 @@ def build_parser() -> argparse.ArgumentParser:
     pub.add_argument("--results", default="results")
     pub.add_argument("--log-dir", default="logs")
     pub.add_argument("--catalog", default="catalog/entries")
+    pub.add_argument(
+        "--no-cost-cap",
+        action="store_true",
+        help="Do not pass a cost cap to Inspect (for models it cannot price, "
+        "e.g. HF Inference Providers); requires --limit or --full.",
+    )
+    pub.add_argument(
+        "--full",
+        action="store_true",
+        help="Allow --no-cost-cap with no --limit: run the full dataset.",
+    )
+    pub.add_argument("--temperature", type=float)
+    pub.add_argument("--max-tokens", type=int)
+    pub.add_argument("--extra-body", help="JSON object forwarded as Inspect's extra_body.")
     pub.set_defaults(fn=cmd_run_public)
 
     gate = sub.add_parser("gate")

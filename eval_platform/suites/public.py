@@ -81,6 +81,16 @@ def eval_log_to_suite_result(log: EvalLog, *, suite: str, target: str) -> SuiteR
     `log.results` (an incomplete or errored run) degrades `samples_total`/
     `samples_completed` to the sample count from `log.samples` rather than
     raising.
+
+    On top of those six-plus-one metrics, every scorer's own metric is
+    copied in as `f"{score.name}.{metric_name}"` (e.g. `match.accuracy`,
+    `match.stderr`), for each score in `log.results.scores`, so a Phase-4
+    IFEval-style task with several named scorers (prompt/instruction level,
+    strict/loose) publishes every one of them, not just the headline
+    number. A metric whose value is not a plain number (e.g. a per-category
+    breakdown dict) is skipped rather than raising, since this function
+    reports what it can convert instead of rejecting the whole log over a
+    metric shape it does not know how to flatten.
     """
     cases: list[CaseResult] = []
     for s in log.samples or []:
@@ -115,23 +125,27 @@ def eval_log_to_suite_result(log: EvalLog, *, suite: str, target: str) -> SuiteR
         )
     tin, tout, usd = _usage(log)
     samples_unscored = sum(1 for c in cases if c.skipped_reason == "unscored")
+    metrics: dict[str, float] = {
+        "accuracy": _headline(log),
+        "samples_total": float(log.results.total_samples if log.results else len(cases)),
+        "samples_completed": float(log.results.completed_samples if log.results else len(cases)),
+        "input_tokens": float(tin),
+        "output_tokens": float(tout),
+        "usd": usd,
+        "samples_unscored": float(samples_unscored),
+    }
+    for score in log.results.scores if log.results else ():
+        for metric_name, metric in score.metrics.items():
+            value = metric.value
+            if isinstance(value, (int, float)) and not isinstance(value, bool):
+                metrics[f"{score.name}.{metric_name}"] = float(value)
     return SuiteResult(
         suite=suite,
         target=target,
         started_at=log.stats.started_at,
         finished_at=log.stats.completed_at,
         cases=tuple(cases),
-        metrics={
-            "accuracy": _headline(log),
-            "samples_total": float(log.results.total_samples if log.results else len(cases)),
-            "samples_completed": float(
-                log.results.completed_samples if log.results else len(cases)
-            ),
-            "input_tokens": float(tin),
-            "output_tokens": float(tout),
-            "usd": usd,
-            "samples_unscored": float(samples_unscored),
-        },
+        metrics=metrics,
         meta={
             "inspect_version": inspect_ai.__version__,
             "task": log.eval.task,
@@ -150,6 +164,9 @@ def run_public(
     budget: Budget,
     log_dir: Path,
     task_args: dict[str, Any] | None = None,
+    no_cost_cap: bool = False,
+    full: bool = False,
+    generate: dict[str, Any] | None = None,
 ) -> SuiteResult:
     """Run one catalog entry's public benchmark through Inspect AI and
     return it as a SuiteResult named `public_<id with - as _>`.
@@ -199,12 +216,36 @@ def run_public(
     model, that is re-raised as ValueError naming the model, rather than the
     raw Inspect internal error; any other exception from `inspect_eval`
     propagates unchanged.
+
+    `no_cost_cap=True` is for a model Inspect cannot price at all (e.g. a
+    Hugging Face Inference Providers id like
+    `hf-inference-providers/meta-llama/Llama-3.1-8B-Instruct:deepinfra`):
+    neither `cost_limit` nor `model_cost_config` is passed to Inspect, and
+    `meta["cost_cap_mode"]` records `"none_external_budget"`, since the real
+    spend cap in that case is the provider's own account credits, not
+    anything this function can enforce. Because that mode enforces no
+    per-sample or per-run cost ceiling of its own, it raises
+    `ValueError("no_cost_cap requires a sample limit; pass limit or
+    full=True")` when `limit is None` and `full` is not also True, before
+    calling `inspect_eval` at all; `full=True` is the explicit override for
+    an intentional unlimited run, and sets `meta["full_run"] = True` on the
+    result. `budget.check()` and the post-run `budget.charge(usd)` still
+    run in this mode: `usd` will be 0.0 since Inspect has no cost data to
+    report, which is expected, not an error.
+
+    `generate` is an optional dict of Inspect generate-config keyword
+    arguments (e.g. `temperature`, `max_tokens`, `extra_body`) forwarded to
+    `inspect_eval(...)` as-is, and copied into `meta["generate"]` verbatim
+    (including None when not given) so a report can show exactly what
+    generation settings produced a given run's numbers.
     """
     if not entry.runnable or entry.runner.kind != "inspect_evals" or not entry.runner.ref:
         raise ValueError(
             f"catalog entry {entry.id} is not runnable through Inspect "
             f"(kind={entry.runner.kind}, license={entry.license.status})"
         )
+    if no_cost_cap and limit is None and not full:
+        raise ValueError("no_cost_cap requires a sample limit; pass limit or full=True")
     budget.check()
     remaining = budget.remaining_usd()
     if remaining <= 0:
@@ -212,8 +253,13 @@ def run_public(
     # A mockllm model spends nothing and has no entry in Inspect's model
     # registry, so neither a cost cap nor a cost table can be attached to
     # it; every other model gets a per-sample cap cut from the budget.
+    # no_cost_cap takes priority over both: it means Inspect has no price
+    # for the model at all, so the external provider's own credits are the
+    # real cap, not anything computed here.
     cost_kwargs: dict[str, Any] = {}
-    if model.startswith("mockllm/"):
+    if no_cost_cap:
+        cost_cap_mode = "none_external_budget"
+    elif model.startswith("mockllm/"):
         cost_cap_mode = "none_free_model"
     elif limit is not None and limit > 0:
         cost_kwargs["cost_limit"] = remaining / limit
@@ -221,6 +267,7 @@ def run_public(
     else:
         cost_kwargs["cost_limit"] = remaining
         cost_cap_mode = "per_sample_uncapped_count"
+    eval_kwargs: dict[str, Any] = {**cost_kwargs, **(generate or {})}
     try:
         [log] = inspect_eval(
             entry.runner.ref,
@@ -229,7 +276,7 @@ def run_public(
             log_dir=str(log_dir),
             display="none",
             task_args=task_args or {},
-            **cost_kwargs,
+            **eval_kwargs,
         )
     except PrerequisiteError as exc:
         if "cost data" in str(exc):
@@ -241,5 +288,8 @@ def run_public(
         log, suite=f"public_{entry.id.replace('-', '_')}", target=model
     )
     result.meta["cost_cap_mode"] = cost_cap_mode
+    result.meta["generate"] = generate
+    if full:
+        result.meta["full_run"] = True
     budget.charge(result.metrics["usd"])
     return result
