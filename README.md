@@ -70,10 +70,10 @@ pip install -e ".[local]"
 ```
 
 `--model-args` passes constructor keyword arguments straight through to the
-provider, for example:
+provider, for example (transformers rejects a temperature of 0, so greedy decoding is `do_sample: false`; `batch_size` sets how many prompts share one forward pass):
 
 ```
-evalplat run public ifeval --model hf/Qwen/Qwen2.5-3B-Instruct --model-args '{"device": "cuda:0", "dtype": "bfloat16"}' --no-cost-cap --full --temperature 0 --max-tokens 1024
+evalplat run public ifeval --model hf/Qwen/Qwen2.5-3B-Instruct --model-args '{"device": "cuda:0", "dtype": "bfloat16", "do_sample": false, "batch_size": 8}' --no-cost-cap --full --max-tokens 1024
 ```
 
 ## The ladder
