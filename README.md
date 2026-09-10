@@ -73,7 +73,7 @@ pip install -e ".[local]"
 provider, for example:
 
 ```
-evalplat run public ifeval --model hf/Qwen/Qwen2.5-3B-Instruct --model-args '{"device": "cuda:0", "torch_dtype": "bfloat16"}' --no-cost-cap --full --temperature 0 --max-tokens 1024
+evalplat run public ifeval --model hf/Qwen/Qwen2.5-3B-Instruct --model-args '{"device": "cuda:0", "dtype": "bfloat16"}' --no-cost-cap --full --temperature 0 --max-tokens 1024
 ```
 
 ## The ladder

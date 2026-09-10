@@ -26,7 +26,7 @@ ifeval = [
 # torch==2.6.0`, then `pip install -e ".[local]"` for the rest. torch is
 # deliberately not a core dependency: most of this platform's suites never
 # load a model in process.
-local = ["torch>=2.6", "transformers>=4.45,<5", "accelerate>=1.0"]
+local = ["torch>=2.6", "transformers>=4.45", "accelerate>=1.0"]
 
 [project.scripts]
 evalplat = "eval_platform.cli:main"
