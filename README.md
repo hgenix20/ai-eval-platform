@@ -52,6 +52,8 @@ resolve inside the venv and no command needs a path.
 suite under `results/`, then exits non-zero on FAIL. `report` writes a
 self-contained `out/report.html` with no external assets. Add
 `--junit out/junit.xml --markdown out/gate.md` to `gate` for the CI artifacts.
+A baseline is tied to the target it was measured on; comparing it against a
+run on a different target reports not measured instead of a false regression.
 
 The `agent-platform` extra installs `enterprise-agent-platform`, the system
 under test. The `ifeval` extra installs what `inspect_evals`'s IFEval task

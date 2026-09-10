@@ -1,6 +1,12 @@
 """Decide whether a set of suite results may merge. Absolute thresholds apply
 always; relative ones need a baseline and are reported not_measured without
-one. A single fail or unstable verdict blocks."""
+one. A single fail or unstable verdict blocks.
+
+A baseline and a current summary can each carry a `target` (the model or
+target name the run measured). When both are present and differ, the
+relative comparison is meaningless, since it would be measuring a model
+change rather than a regression; see `compare` for how that case is
+handled."""
 
 from __future__ import annotations
 
@@ -66,14 +72,50 @@ def _metric(summary: dict[str, Any] | None, suite: str, name: str) -> float | No
         raise ValueError(f"{suite}.{name}: metric value {value!r} is not numeric") from e
 
 
-def _judge(t: Threshold, base: float | None, cur: float) -> tuple[Verdict, str]:
+def _relative_failures(t: Threshold, base: float, cur: float) -> tuple[list[str], str | None]:
+    """Check `cur` against `base` under `t`'s relative bounds (max_drop,
+    max_rise, max_increase_pct). Returns the list of failure messages (empty
+    if none) and, separately, a not_measured detail for the one case a
+    failure list cannot express: max_increase_pct against a zero baseline,
+    which is mathematically undefined for any positive current value.
+    """
+    failures: list[str] = []
+    undefined_pct_detail: str | None = None
+    if t.max_drop is not None and cur < base - t.max_drop:
+        failures.append(f"dropped {base - cur:.4f} > max_drop {t.max_drop}")
+    if t.max_rise is not None and cur > base + t.max_rise:
+        failures.append(f"rose {cur - base:.4f} > max_rise {t.max_rise}")
+    if t.max_increase_pct is not None:
+        if base > 0:
+            if cur > base * (1 + t.max_increase_pct / 100):
+                failures.append(
+                    f"+{(cur / base - 1) * 100:.1f}% > max_increase_pct {t.max_increase_pct}"
+                )
+        elif cur > 0:
+            undefined_pct_detail = "baseline is zero; percentage increase undefined"
+        # base == 0 and cur == 0: no change from a zero baseline; this
+        # check passes.
+    return failures, undefined_pct_detail
+
+
+def _judge(
+    t: Threshold, base: float | None, cur: float, *, target_mismatch: str | None = None
+) -> tuple[Verdict, str]:
     """Apply one threshold's checks to a current value, given an optional
-    baseline. Absolute checks (min/max) always apply, baseline or not.
-    Relative checks (max_drop/max_rise/max_increase_pct) apply only when a
-    baseline is present. With no baseline: if the threshold has an absolute
-    bound, the verdict rests on that bound alone (pass or fail); if the
-    threshold has only relative bounds, the verdict is not_measured, since
-    nothing about it could be evaluated.
+    baseline. Absolute checks (min/max) always apply, baseline or not, and
+    are evaluated first: a failed absolute check fails the verdict outright,
+    before anything relative is considered. With no baseline: if the
+    threshold has an absolute bound, the verdict rests on that bound alone
+    (pass or fail); if the threshold has only relative bounds, the verdict
+    is not_measured, since nothing about it could be evaluated.
+
+    `target_mismatch`, when not None, is a detail string set by the caller
+    because the baseline and current summary were measured on different
+    targets. Once the absolute checks have passed, a set `target_mismatch`
+    short-circuits straight to a not_measured verdict carrying that detail:
+    a relative comparison (max_drop, max_rise, max_increase_pct) between two
+    different targets would be measuring a model change, not a regression,
+    so it is skipped rather than evaluated.
 
     max_increase_pct against a zero baseline is a special case: a percentage
     increase from zero is mathematically undefined. If the current value is
@@ -81,31 +123,26 @@ def _judge(t: Threshold, base: float | None, cur: float) -> tuple[Verdict, str]:
     zero, the check cannot be evaluated and contributes not_measured, unless
     an absolute check already failed, in which case the failure wins.
     """
-    failures: list[str] = []
-    undefined_pct_detail: str | None = None
     has_absolute = t.min is not None or t.max is not None
     has_relative = (
         t.max_drop is not None or t.max_rise is not None or t.max_increase_pct is not None
     )
+
+    absolute_failures: list[str] = []
     if t.min is not None and cur < t.min:
-        failures.append(f"{cur:.4f} < min {t.min}")
+        absolute_failures.append(f"{cur:.4f} < min {t.min}")
     if t.max is not None and cur > t.max:
-        failures.append(f"{cur:.4f} > max {t.max}")
+        absolute_failures.append(f"{cur:.4f} > max {t.max}")
+    if absolute_failures:
+        return "fail", "; ".join(absolute_failures)
+
+    if target_mismatch is not None:
+        return "not_measured", target_mismatch
+
+    failures: list[str] = []
+    undefined_pct_detail: str | None = None
     if base is not None and has_relative:
-        if t.max_drop is not None and cur < base - t.max_drop:
-            failures.append(f"dropped {base - cur:.4f} > max_drop {t.max_drop}")
-        if t.max_rise is not None and cur > base + t.max_rise:
-            failures.append(f"rose {cur - base:.4f} > max_rise {t.max_rise}")
-        if t.max_increase_pct is not None:
-            if base > 0:
-                if cur > base * (1 + t.max_increase_pct / 100):
-                    failures.append(
-                        f"+{(cur / base - 1) * 100:.1f}% > max_increase_pct {t.max_increase_pct}"
-                    )
-            elif cur > 0:
-                undefined_pct_detail = "baseline is zero; percentage increase undefined"
-            # base == 0 and cur == 0: no change from a zero baseline; this
-            # check passes.
+        failures, undefined_pct_detail = _relative_failures(t, base, cur)
     if failures:
         return "fail", "; ".join(failures)
     if undefined_pct_detail is not None:
@@ -113,6 +150,28 @@ def _judge(t: Threshold, base: float | None, cur: float) -> tuple[Verdict, str]:
     if base is None and has_relative and not has_absolute:
         return "not_measured", "no baseline for relative check"
     return "pass", "within thresholds"
+
+
+def _target_mismatch(
+    base_summary: dict[str, Any] | None, cur_summary: dict[str, Any] | None
+) -> str | None:
+    """Detail string for a target mismatch between `base_summary` and
+    `cur_summary`, or None when the check does not apply.
+
+    Applies only when both summaries are present and both carry a
+    non-None top-level `target` and those targets differ; a baseline
+    with no `target` key (written before this field existed) or a
+    current summary missing one never triggers this check.
+    """
+    if base_summary is None or cur_summary is None:
+        return None
+    baseline_target = base_summary.get("target")
+    current_target = cur_summary.get("target")
+    if baseline_target is None or current_target is None:
+        return None
+    if baseline_target == current_target:
+        return None
+    return f"target differs from baseline ({baseline_target} vs {current_target})"
 
 
 def compare(
@@ -142,6 +201,19 @@ def compare(
     status must never be read as a pass or a fail if one reaches this
     function some other way (a stale file, a hand-copied summary).
 
+    When both the baseline and the current summary carry a top-level
+    `target` field and the two differ, the run was measured against a
+    different model than the baseline was: a relative check (max_drop,
+    max_rise, max_increase_pct) between them would be reporting a model
+    change as a regression. Absolute checks (min/max) still apply in that
+    case, since a suite may carry a floor or ceiling that has to hold
+    regardless of target; if an absolute check fails, the verdict is
+    fail. Otherwise the verdict is not_measured, with detail
+    `f"target differs from baseline ({baseline_target} vs
+    {current_target})"`. A baseline file written before this field
+    existed has no `target` key and is unaffected: the check only fires
+    when both sides state a target and they disagree.
+
     Failure mode: raises ValueError if a metric value in `baseline` or
     `current` is present but not numeric (see `_metric`).
     """
@@ -165,6 +237,7 @@ def compare(
                 MetricVerdict(suite, t.metric, base, None, _describe(t), "not_measured", detail)
             )
             continue
-        verdict, detail = _judge(t, base, cur)
+        target_mismatch = _target_mismatch(base_summary, cur_summary)
+        verdict, detail = _judge(t, base, cur, target_mismatch=target_mismatch)
         out.append(MetricVerdict(suite, t.metric, base, cur, _describe(t), verdict, detail))
     return GateReport(tuple(out))

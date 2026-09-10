@@ -168,3 +168,35 @@ def test_not_measured_detail_distinguishes_unrun_suite_from_missing_metric():
     v = {x.suite: x for x in r.verdicts}
     assert v["cost"].detail == "suite not run"  # absent from current entirely
     assert v["trajectory"].detail == "metric absent from summary"  # present, wrong metric
+
+
+def test_target_mismatch_is_not_measured_for_relative_only_threshold():
+    cfg = GateConfig(suites={"trajectory": Threshold(metric="pass_rate", max_drop=0.02)})
+    base = {"trajectory": {"metrics": {"pass_rate": 1.0}, "target": "model-a"}}
+    current = {"trajectory": {"metrics": {"pass_rate": 0.5}, "target": "model-b"}}
+    r = compare(cfg, base, current)
+    v = r.verdicts[0]
+    assert v.verdict == "not_measured"
+    assert v.detail == "target differs from baseline (model-a vs model-b)"
+    assert r.passed
+
+
+def test_target_mismatch_still_fails_a_failed_absolute_check():
+    cfg = GateConfig(suites={"trajectory": Threshold(metric="pass_rate", min=0.95, max_drop=0.02)})
+    base = {"trajectory": {"metrics": {"pass_rate": 1.0}, "target": "model-a"}}
+    current = {"trajectory": {"metrics": {"pass_rate": 0.5}, "target": "model-b"}}
+    r = compare(cfg, base, current)
+    v = r.verdicts[0]
+    assert v.verdict == "fail"
+    assert "min" in v.detail
+    assert not r.passed
+
+
+def test_same_target_is_unaffected_by_the_target_check():
+    cfg = GateConfig(suites={"trajectory": Threshold(metric="pass_rate", max_drop=0.02)})
+    base = {"trajectory": {"metrics": {"pass_rate": 1.0}, "target": "model-a"}}
+    current = {"trajectory": {"metrics": {"pass_rate": 0.99}, "target": "model-a"}}
+    r = compare(cfg, base, current)
+    v = r.verdicts[0]
+    assert v.verdict == "pass"
+    assert v.detail == "within thresholds"

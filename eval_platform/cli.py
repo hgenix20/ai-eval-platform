@@ -261,6 +261,11 @@ def cmd_gate(a: argparse.Namespace) -> int:
     each current summary's metrics into `--baseline` instead of judging
     anything.
 
+    A written baseline also carries the summary's `target` (the model or
+    target name the run measured), so a later gate run can tell whether
+    the current run was measured on the same target as the baseline; see
+    `gate.compare.compare`.
+
     Returns 0 when every threshold passes (or after updating baselines);
     returns 1 when any threshold fails or is unstable.
     """
@@ -272,6 +277,7 @@ def cmd_gate(a: argparse.Namespace) -> int:
         for name, summary in current.items():
             payload = {
                 "suite": name,
+                "target": summary.get("target"),
                 "metrics": summary["metrics"],
                 "from": summary.get("started_at"),
             }

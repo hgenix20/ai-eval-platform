@@ -112,7 +112,9 @@ def test_run_offline_then_gate_then_report(tmp_path: Path):
         )
         == 0
     )
-    assert json.loads((baselines / "offline_core.json").read_text())["metrics"]["pass_rate"] == 1.0
+    baseline_payload = json.loads((baselines / "offline_core.json").read_text())
+    assert baseline_payload["metrics"]["pass_rate"] == 1.0
+    assert baseline_payload["target"] == "scripted"
 
     out = tmp_path / "report.html"
     assert (
