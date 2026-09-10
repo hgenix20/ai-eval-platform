@@ -114,7 +114,7 @@ def _generate_config(a: argparse.Namespace) -> dict[str, Any] | None:
 
 def _model_args(a: argparse.Namespace) -> dict[str, Any] | None:
     """Parse `--model-args` (a JSON object of Inspect model constructor
-    keyword arguments, e.g. `device`, `torch_dtype` for the `hf/` provider)
+    keyword arguments, e.g. `device`, `dtype` for the `hf/` provider)
     into a dict, or None if the option was not given.
 
     Raises `json.JSONDecodeError` on malformed JSON and `ValueError` when
@@ -144,7 +144,7 @@ def cmd_run_public(a: argparse.Namespace) -> int:
     `--temperature`, `--max-tokens`, and `--extra-body` (parsed as JSON)
     build the `generate` dict passed to `run_public`; only the options
     actually given are included. `--model-args` (parsed as a JSON object,
-    e.g. `{"device": "cuda:0", "torch_dtype": "bfloat16"}` for Inspect's
+    e.g. `{"device": "cuda:0", "dtype": "bfloat16"}` for Inspect's
     `hf/` provider) passes through to `run_public` as `model_args`. After
     the success line, every metric whose name contains "strict" or "loose"
     (IFEval's per-dimension accuracy metrics) prints on its own line, four
@@ -371,7 +371,7 @@ def build_parser() -> argparse.ArgumentParser:
     pub.add_argument(
         "--model-args",
         help="JSON object of Inspect model constructor kwargs (e.g. device, "
-        "torch_dtype for the hf/ provider).",
+        "dtype for the hf/ provider).",
     )
     pub.set_defaults(fn=cmd_run_public)
 
