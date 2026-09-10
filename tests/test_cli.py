@@ -12,6 +12,7 @@ from eval_platform.budget import BudgetExceeded
 from eval_platform.cli import main
 from eval_platform.suites import eval_log_to_suite_result
 from eval_platform.targets import TargetUnavailable
+from eval_platform.types import SuiteResult
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -272,6 +273,66 @@ def test_run_public_value_error_exits_2(tmp_path: Path, monkeypatch, capsys):
     )
     assert rc == 2
     assert "no cost data" in capsys.readouterr().err
+
+
+def _errored_public_result(suite="public_ifeval", target="mockllm/model"):
+    """A SuiteResult shaped like `run_public`'s output for a run Inspect
+    stopped with a provider error: no scored samples, meta status "error"."""
+    return SuiteResult(
+        suite=suite,
+        target=target,
+        started_at="2026-09-10T00:00:00+00:00",
+        finished_at="2026-09-10T00:00:05+00:00",
+        cases=(),
+        metrics={
+            "accuracy": 0.0,
+            "samples_total": 25.0,
+            "samples_completed": 0.0,
+            "input_tokens": 0.0,
+            "output_tokens": 0.0,
+            "usd": 0.0,
+            "samples_unscored": 0.0,
+            "samples_errored": 25.0,
+        },
+        meta={"status": "error", "error": "Error code: 402 - credits depleted"},
+    )
+
+
+def test_run_public_errored_run_exits_2_and_does_not_promote_latest(
+    tmp_path: Path, monkeypatch, capsys
+):
+    """When `run_public` returns a SuiteResult whose meta status is not
+    "success" (Inspect stopped the run on a provider error), `run public`
+    must exit 2, print "run failed" with the error message to stderr,
+    leave latest.json untouched (absent here, since none existed yet),
+    and still record a ledger line noting the error so the spend is not
+    lost."""
+    results = tmp_path / "results"
+    monkeypatch.setattr(cli_mod, "run_public", lambda *a, **kw: _errored_public_result())
+
+    rc = main(
+        [
+            "run",
+            "public",
+            "ifeval",
+            "--model",
+            "mockllm/model",
+            "--catalog",
+            str(ROOT / "catalog" / "entries"),
+            "--results",
+            str(results),
+        ]
+    )
+    assert rc == 2
+    err = capsys.readouterr().err
+    assert "run failed: public_ifeval on mockllm/model" in err
+    assert "Error code: 402 - credits depleted" in err
+    assert not (results / "public_ifeval" / "latest.json").exists()
+    ledger_lines = (results / "ledger.jsonl").read_text(encoding="utf-8").strip().splitlines()
+    assert len(ledger_lines) == 1
+    ledger_entry = json.loads(ledger_lines[0])
+    assert ledger_entry["suite"] == "public_ifeval"
+    assert "error" in ledger_entry["note"]
 
 
 def test_run_public_passes_no_cost_cap_and_generate_options(tmp_path: Path, monkeypatch, capsys):

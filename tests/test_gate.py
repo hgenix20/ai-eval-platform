@@ -143,6 +143,26 @@ def test_non_numeric_metric_value_raises_value_error():
         compare(cfg, {}, _cur(offline_core={"pass_rate": "not-a-number"}))
 
 
+def test_errored_run_status_is_not_measured_regardless_of_metric_value():
+    """A summary whose meta["status"] is present and not "success" (an
+    errored Inspect run) must never pass or fail its row: it is treated
+    as not measured even though the metric value itself would otherwise
+    read as a clean failure."""
+    cfg = GateConfig(suites={"public_ifeval": Threshold(metric="accuracy", min=0.70)})
+    current = {"public_ifeval": {"metrics": {"accuracy": 0.0}, "meta": {"status": "error"}}}
+    r = compare(cfg, {}, current)
+    v = r.verdicts[0]
+    assert v.verdict == "not_measured"
+    assert v.detail == "latest run errored"
+
+
+def test_success_status_does_not_trigger_the_errored_run_check():
+    cfg = GateConfig(suites={"public_ifeval": Threshold(metric="accuracy", min=0.70)})
+    current = {"public_ifeval": {"metrics": {"accuracy": 0.9}, "meta": {"status": "success"}}}
+    r = compare(cfg, {}, current)
+    assert r.verdicts[0].verdict == "pass"
+
+
 def test_not_measured_detail_distinguishes_unrun_suite_from_missing_metric():
     r = compare(CFG, {}, _cur(offline_core={"pass_rate": 1.0}, trajectory={"other_metric": 1.0}))
     v = {x.suite: x for x in r.verdicts}

@@ -6,7 +6,7 @@ from inspect_ai import Task
 from inspect_ai import eval as inspect_eval
 from inspect_ai._util.error import PrerequisiteError
 from inspect_ai.dataset import MemoryDataset, Sample
-from inspect_ai.log import EvalLog
+from inspect_ai.log import EvalError, EvalLog
 from inspect_ai.model import ModelOutput
 from inspect_ai.scorer import match
 from pydantic import HttpUrl
@@ -72,9 +72,65 @@ def test_eval_log_skips_unscored_samples(tmp_path: Path):
         "output_tokens",
         "usd",
         "samples_unscored",
+        "samples_errored",
         "match.accuracy",
         "match.stderr",
     }
+
+
+def test_eval_log_records_error_status_and_sample_errors(tmp_path: Path):
+    """An Inspect run stopped by a provider error (status != "success")
+    must not be read as a measurement: the failing sample is skipped with
+    its error message, `samples_errored` counts it, and `meta["error"]`
+    carries the run-level error text."""
+    log = _tiny_log(tmp_path)
+    log.status = "error"
+    log.error = EvalError(
+        message="Error code: 402 - credits depleted", traceback="", traceback_ansi=""
+    )
+    assert log.samples is not None
+    log.samples[0].error = EvalError(
+        message="sample 402: credits depleted", traceback="", traceback_ansi=""
+    )
+    r = eval_log_to_suite_result(log, suite="public_ifeval", target="mockllm/model")
+    assert r.meta["status"] == "error"
+    assert r.meta["error"] == "Error code: 402 - credits depleted"
+    assert r.metrics["samples_errored"] == 1.0
+    assert r.cases[0].passed is False
+    assert r.cases[0].grades == ()
+    assert r.cases[0].skipped_reason == "error: sample 402: credits depleted"
+    # The other sample carries no error and is scored normally.
+    assert r.cases[1].skipped_reason is None
+
+
+def test_eval_log_truncates_long_error_messages_in_skipped_reason(tmp_path: Path):
+    """A sample error message longer than 120 characters is truncated in
+    `skipped_reason`, so one runaway provider message cannot blow up the
+    report."""
+    log = _tiny_log(tmp_path)
+    assert log.samples is not None
+    long_message = "x" * 500
+    log.samples[0].error = EvalError(message=long_message, traceback="", traceback_ansi="")
+    r = eval_log_to_suite_result(log, suite="public_ifeval", target="mockllm/model")
+    assert r.cases[0].skipped_reason == f"error: {long_message[:120]}"
+
+
+def test_eval_log_meta_error_falls_back_to_status_with_no_log_error(tmp_path: Path):
+    """When Inspect sets a non-success status but leaves `log.error` unset
+    (e.g. "cancelled"), `meta["error"]` falls back to the status string
+    rather than being absent."""
+    log = _tiny_log(tmp_path)
+    log.status = "cancelled"
+    log.error = None
+    r = eval_log_to_suite_result(log, suite="public_ifeval", target="mockllm/model")
+    assert r.meta["error"] == "cancelled"
+
+
+def test_eval_log_samples_errored_is_zero_with_no_errors(tmp_path: Path):
+    log = _tiny_log(tmp_path)
+    r = eval_log_to_suite_result(log, suite="public_ifeval", target="mockllm/model")
+    assert r.metrics["samples_errored"] == 0.0
+    assert "error" not in r.meta
 
 
 def test_eval_log_copies_every_scorer_metric(tmp_path: Path):

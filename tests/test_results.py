@@ -2,14 +2,14 @@ from eval_platform.results import latest_summary, read_summary, write_summary
 from eval_platform.types import SuiteResult
 
 
-def _res(suite="offline_core", target="scripted"):
+def _res(suite="offline_core", target="scripted", pass_rate=1.0):
     return SuiteResult(
         suite=suite,
         target=target,
         started_at="2026-09-08T10:00:00+00:00",
         finished_at="2026-09-08T10:00:01+00:00",
         cases=(),
-        metrics={"pass_rate": 1.0},
+        metrics={"pass_rate": pass_rate},
         meta={},
     )
 
@@ -32,6 +32,25 @@ def test_two_writes_in_the_same_second_do_not_collide(tmp_path):
     latest = latest_summary(tmp_path, "offline_core")
     assert latest is not None
     assert read_summary(second) == latest
+
+
+def test_promote_latest_false_writes_per_run_file_but_not_latest(tmp_path):
+    """A caller recording an errored run's per-run file must not let it
+    become the published latest.json: with promote_latest=False, the
+    timestamped file exists but latest.json is left exactly as it was."""
+    write_summary(_res(pass_rate=1.0), tmp_path)
+    before = read_summary(tmp_path / "offline_core" / "latest.json")
+
+    errored = write_summary(_res(pass_rate=0.0), tmp_path, promote_latest=False)
+    assert errored.exists()
+    assert read_summary(errored)["metrics"]["pass_rate"] == 0.0
+    assert read_summary(tmp_path / "offline_core" / "latest.json") == before
+
+
+def test_promote_latest_false_with_no_existing_latest_leaves_it_absent(tmp_path):
+    path = write_summary(_res(suite="public_ifeval"), tmp_path, promote_latest=False)
+    assert path.exists()
+    assert not (tmp_path / "public_ifeval" / "latest.json").exists()
 
 
 def test_target_with_a_slash_writes_inside_the_suite_directory(tmp_path):

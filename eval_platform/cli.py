@@ -136,6 +136,17 @@ def cmd_run_public(a: argparse.Namespace) -> int:
     has no cost data Inspect can use, or if the run exceeds
     `--budget-usd`/`--max-wall-s`; the message goes to stderr in each
     case, with no traceback. Returns 0 on a completed run.
+
+    An Inspect run that comes back with `result.meta["status"] != "success"`
+    (e.g. a provider ran out of credits mid-run) is a record, not a
+    measurement, and is handled on its own path: the ledger still gets a
+    line (the run may have spent money before it failed), and the per-run
+    summary is still written for the record, but `latest.json` is
+    deliberately left alone (`write_summary(..., promote_latest=False)`),
+    since promoting it would let an errored run pass or fail the gate in
+    place of the last real measurement. This prints "run failed: ..." and
+    the per-run file's path to stderr and returns 2, without reaching the
+    success-path printout below.
     """
     entries = {e.id: e for e in load_catalog(Path(a.catalog))}
     if a.entry not in entries:
@@ -161,16 +172,30 @@ def cmd_run_public(a: argparse.Namespace) -> int:
     except (BudgetExceeded, ValueError) as e:
         print(str(e), file=sys.stderr)
         return 2
+    results_dir = Path(a.results)
+    if result.meta.get("status") != "success":
+        message = str(result.meta.get("error", result.meta.get("status", "unknown")))
+        Ledger(results_dir / "ledger.jsonl").record(
+            run_id=f"{result.suite}-{result.started_at}",
+            suite=result.suite,
+            target=a.model,
+            usd=result.metrics["usd"],
+            note=f"error: {message[:80]}",
+        )
+        path = write_summary(result, results_dir, promote_latest=False)
+        print(f"run failed: {result.suite} on {a.model}: {message}", file=sys.stderr)
+        print(f"per-run file: {path}", file=sys.stderr)
+        return 2
     # Ledger first: the money is already spent by the time run_public returns,
     # so the spend record must not depend on the summary write succeeding.
-    Ledger(Path(a.results) / "ledger.jsonl").record(
+    Ledger(results_dir / "ledger.jsonl").record(
         run_id=f"{result.suite}-{result.started_at}",
         suite=result.suite,
         target=a.model,
         usd=result.metrics["usd"],
         note=f"limit={a.limit}",
     )
-    path = write_summary(result, Path(a.results))
+    path = write_summary(result, results_dir)
     accuracy = result.metrics["accuracy"]
     samples = int(result.metrics["samples_total"])
     usd = result.metrics["usd"]

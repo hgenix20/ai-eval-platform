@@ -132,6 +132,16 @@ def compare(
     an unrun suite, or one missing this particular metric, is not a gate
     failure by itself.
 
+    A current summary carrying `meta["status"]` set to anything other than
+    "success" (an errored or cancelled Inspect run, see
+    `eval_log_to_suite_result`) is likewise treated as not measured, with
+    detail "latest run errored", regardless of what its metric value
+    happens to be. This is a defensive check: `write_summary(...,
+    promote_latest=False)` already keeps an errored run out of
+    `latest.json` in the normal flow, but a summary carrying an error
+    status must never be read as a pass or a fail if one reaches this
+    function some other way (a stale file, a hand-copied summary).
+
     Failure mode: raises ValueError if a metric value in `baseline` or
     `current` is present but not numeric (see `_metric`).
     """
@@ -140,6 +150,14 @@ def compare(
         base_summary = baseline.get(suite)
         cur_summary = current.get(suite)
         base = _metric(base_summary, suite, t.metric)
+        cur_status = (cur_summary or {}).get("meta", {}).get("status")
+        if cur_status is not None and cur_status != "success":
+            out.append(
+                MetricVerdict(
+                    suite, t.metric, base, None, _describe(t), "not_measured", "latest run errored"
+                )
+            )
+            continue
         cur = _metric(cur_summary, suite, t.metric)
         if cur is None:
             detail = "suite not run" if cur_summary is None else "metric absent from summary"

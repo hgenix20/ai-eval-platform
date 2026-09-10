@@ -36,19 +36,26 @@ def _free_path(suite_dir: Path, stem: str) -> Path:
     return candidate
 
 
-def write_summary(result: SuiteResult, results_dir: Path) -> Path:
+def write_summary(result: SuiteResult, results_dir: Path, *, promote_latest: bool = True) -> Path:
     """Write `result` as JSON under `results_dir/<suite>/<started_at-safe>-<target-safe>.json`
-    and copy it to `results_dir/<suite>/latest.json`. Creates the suite directory
-    if it does not exist. If that filename is already taken (two runs in the
-    same second), a `-2`, `-3`, ... suffix is added before `.json` until a
-    free name is found. Returns the path of the timestamped file (not
-    latest.json).
+    and, when `promote_latest` is True, copy it to `results_dir/<suite>/latest.json`.
+    Creates the suite directory if it does not exist. If that filename is
+    already taken (two runs in the same second), a `-2`, `-3`, ... suffix
+    is added before `.json` until a free name is found. Returns the path
+    of the timestamped file (not latest.json).
 
     Both the timestamp and the target are reduced to filename-legal
     characters first, so a target named after an Inspect model id
     ("anthropic/claude-haiku-4-5-20251001") writes one file inside the suite
     directory instead of failing on a directory that was never created. The
     file ends with a newline.
+
+    `promote_latest=False` writes the per-run file only and leaves
+    `latest.json` exactly as it was (untouched if present, still absent if
+    not). This is for a run that must be kept as a record without becoming
+    the number the gate and report read: an errored Inspect run must not
+    overwrite a prior successful measurement, or invent a fresh one, just
+    because it happened to run most recently.
     """
     suite_dir = results_dir / result.suite
     suite_dir.mkdir(parents=True, exist_ok=True)
@@ -56,7 +63,8 @@ def write_summary(result: SuiteResult, results_dir: Path) -> Path:
     path = _free_path(suite_dir, f"{_safe(stamp)}-{_safe(result.target)}")
     payload = json.dumps(result.to_dict(), indent=2, default=str) + "\n"
     path.write_text(payload, encoding="utf-8")
-    shutil.copyfile(path, suite_dir / "latest.json")
+    if promote_latest:
+        shutil.copyfile(path, suite_dir / "latest.json")
     return path
 
 

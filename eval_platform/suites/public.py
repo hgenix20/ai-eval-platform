@@ -70,19 +70,33 @@ def eval_log_to_suite_result(log: EvalLog, *, suite: str, target: str) -> SuiteR
     """Convert an Inspect EvalLog into this platform's SuiteResult shape.
 
     Contract: one CaseResult per EvalSample in `log.samples`, in order. A
-    sample with no scores at all, or with a NaN score from any scorer
-    (Inspect's unscored sentinel), becomes a skipped case: `passed=False`,
-    `grades=()`, `skipped_reason="unscored"`. Otherwise, a case passes when
-    every scorer's value on that sample counts as a pass (see `_passed`);
-    grades carry one entry per scorer, named by the scorer's key in
-    `sample.scores`. `metrics["accuracy"]` is the suite's headline number
-    (see `_headline`); `metrics["samples_unscored"]` is the count of
-    skipped cases; `usd` is 0.0 when Inspect recorded no cost. Missing
-    `log.results` (an incomplete or errored run) degrades `samples_total`/
-    `samples_completed` to the sample count from `log.samples` rather than
-    raising.
+    sample whose own `error` is set (the provider or scorer failed on that
+    sample specifically) becomes a skipped case: `passed=False`,
+    `grades=()`, `skipped_reason=f"error: {message[:120]}"`; it is never
+    also counted as unscored. A sample with no error but no scores at all,
+    or with a NaN score from any scorer (Inspect's unscored sentinel),
+    becomes a skipped case with `skipped_reason="unscored"` instead.
+    Otherwise, a case passes when every scorer's value on that sample
+    counts as a pass (see `_passed`); grades carry one entry per scorer,
+    named by the scorer's key in `sample.scores`. `metrics["accuracy"]` is
+    the suite's headline number (see `_headline`); `metrics["samples_unscored"]`
+    is the count of skipped-as-unscored cases; `metrics["samples_errored"]`
+    is the count of samples that carried their own `error` (this key is
+    always present, 0.0 when none); `usd` is 0.0 when Inspect recorded no
+    cost. Missing `log.results` (an incomplete or errored run) degrades
+    `samples_total`/`samples_completed` to the sample count from
+    `log.samples` rather than raising.
 
-    On top of those six-plus-one metrics, every scorer's own metric is
+    An errored Inspect run (`log.status != "success"`, e.g. a provider ran
+    out of credits mid-run) is a record of what happened, not a completed
+    measurement: this function still converts it rather than raising, but
+    marks it so a caller can refuse to publish it as the current number.
+    `meta["error"]` is set to `str(log.error.message)` when `log.error` is
+    present, else to `log.status` itself (e.g. `"cancelled"`), whenever
+    `log.status != "success"`; the key is absent from `meta` on a
+    successful run.
+
+    On top of those six-plus-two metrics, every scorer's own metric is
     copied in as `f"{score.name}.{metric_name}"` (e.g. `match.accuracy`,
     `match.stderr`), for each score in `log.results.scores`, so a Phase-4
     IFEval-style task with several named scorers (prompt/instruction level,
@@ -94,6 +108,18 @@ def eval_log_to_suite_result(log: EvalLog, *, suite: str, target: str) -> SuiteR
     """
     cases: list[CaseResult] = []
     for s in log.samples or []:
+        if s.error is not None:
+            message = str(s.error.message)
+            cases.append(
+                CaseResult(
+                    name=str(s.id),
+                    passed=False,
+                    grades=(),
+                    trajectory=None,
+                    skipped_reason=f"error: {message[:120]}",
+                )
+            )
+            continue
         scores = s.scores or {}
         if _unscored(scores):
             cases.append(
@@ -125,6 +151,7 @@ def eval_log_to_suite_result(log: EvalLog, *, suite: str, target: str) -> SuiteR
         )
     tin, tout, usd = _usage(log)
     samples_unscored = sum(1 for c in cases if c.skipped_reason == "unscored")
+    samples_errored = sum(1 for s in log.samples or () if s.error is not None)
     metrics: dict[str, float] = {
         "accuracy": _headline(log),
         "samples_total": float(log.results.total_samples if log.results else len(cases)),
@@ -133,12 +160,22 @@ def eval_log_to_suite_result(log: EvalLog, *, suite: str, target: str) -> SuiteR
         "output_tokens": float(tout),
         "usd": usd,
         "samples_unscored": float(samples_unscored),
+        "samples_errored": float(samples_errored),
     }
     for score in log.results.scores if log.results else ():
         for metric_name, metric in score.metrics.items():
             value = metric.value
             if isinstance(value, (int, float)) and not isinstance(value, bool):
                 metrics[f"{score.name}.{metric_name}"] = float(value)
+    meta: dict[str, Any] = {
+        "inspect_version": inspect_ai.__version__,
+        "task": log.eval.task,
+        "model": log.eval.model,
+        "log_location": log.location,
+        "status": log.status,
+    }
+    if log.status != "success":
+        meta["error"] = str(log.error.message) if log.error else log.status
     return SuiteResult(
         suite=suite,
         target=target,
@@ -146,13 +183,7 @@ def eval_log_to_suite_result(log: EvalLog, *, suite: str, target: str) -> SuiteR
         finished_at=log.stats.completed_at,
         cases=tuple(cases),
         metrics=metrics,
-        meta={
-            "inspect_version": inspect_ai.__version__,
-            "task": log.eval.task,
-            "model": log.eval.model,
-            "log_location": log.location,
-            "status": log.status,
-        },
+        meta=meta,
     )
 
 
