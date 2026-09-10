@@ -1,5 +1,6 @@
 {
   "suite": "public_ifeval",
+  "target": "hf/Qwen/Qwen2.5-3B-Instruct",
   "metrics": {
     "accuracy": 0.5933456561922366,
     "samples_total": 541.0,

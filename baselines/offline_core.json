@@ -1,5 +1,6 @@
 {
   "suite": "offline_core",
+  "target": "agent-platform-local",
   "metrics": {
     "cases_total": 12.0,
     "cases_passed": 12.0,
