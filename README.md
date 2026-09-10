@@ -14,10 +14,16 @@ platform in process, p50 3.671 ms and p95 5.294 ms wall time, $0.00 spent
 (`results/offline_core/latest.json`, run 2026-09-09). `evalplat gate` reports
 PASS. The catalog holds 77 entries. Rungs 1 and 2 of the ladder run in CI.
 
-The first public-benchmark number is pending. IFEval needs an
-`ANTHROPIC_API_KEY` and no live run has happened yet, so the gate's
-`public_ifeval` row reads `not_measured` and the ledger has no lines. The
-command that produces it is in [docs/results.md](docs/results.md).
+The first public-benchmark numbers are in. Google's IFEval ran in full, all 541
+prompts, against two open instruct models on a local GPU. Qwen2.5-3B-Instruct
+scored 59.3 percent prompt-strict against a published 58.2, and
+Qwen2.5-1.5B-Instruct scored 41.0 against a published 42.5. Both gaps are
+smaller than the 2.1-point standard error on the measurement, which is how the
+platform's own accuracy gets checked
+([ADR-0005](docs/adr/0005-published-scores-as-the-accuracy-check.md)). The two
+runs cost $0.00, and `results/ledger.jsonl` puts program spend at $0.00 across
+all three of the day's run attempts. Commands, settings, and sources are in
+[docs/results.md](docs/results.md).
 
 ## Bring-up
 
@@ -87,13 +93,19 @@ Four rungs, in the order a pull request meets them.
 | 1. static | catalog, case, and gate-config validation; ruff, pyright, bandit, pytest | free | every push | live |
 | 2. offline deterministic | built suites against scripted providers and the agent platform in process | free | every push | live |
 | 3. judge-graded, sampled | first `pr_sample` cases per suite on a PR, the full set on merge | cached | on a PR | Phase 3 |
-| 4. public benchmarks | catalog entries through Inspect AI against a live model, under a per-run cap | budgeted | nightly or manual | Phase 2 |
+| 4. public benchmarks | catalog entries through Inspect AI against a hosted or local model, under a per-run cap | budgeted | nightly or manual | manual |
 
 Rungs 1 and 2 can fail a pull request today. `.github/workflows/ci.yml` runs
 both, uploads `out/` as an artifact, and posts the gate table as a PR comment.
 On merge to main it also re-measures the baselines from that run and commits
 them, so a pull request's cost and latency rows compare against numbers taken
-on a CI runner rather than on the laptop the first ones came from.
+on the same class of machine the pull request runs on.
+
+Rung 4 runs by hand so far. IFEval has gone the full 541 prompts against two
+local models, and its gate row compares prompt-strict accuracy against a
+baseline stamped with the model it was measured on, so a run against a
+different model reports not measured. Putting that rung on a nightly schedule
+is Phase 2 work.
 
 ## Layout
 
@@ -153,6 +165,9 @@ The published numbers, each with the command that reproduces it:
   is the primary URL.
 - [ADR-0004](docs/adr/0004-cost-and-latency-are-gate-metrics.md): cost and
   latency fail a build, the same as accuracy.
+- [ADR-0005](docs/adr/0005-published-scores-as-the-accuracy-check.md):
+  reproducing vendor-published scores is how the platform's accuracy is
+  checked.
 
 Design spec: `docs/superpowers/specs/2026-09-07-ai-eval-platform-design.md`.
 
