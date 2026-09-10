@@ -1,0 +1,24 @@
+{
+  "suite": "public_ifeval",
+  "metrics": {
+    "accuracy": 0.5933456561922366,
+    "samples_total": 541.0,
+    "samples_completed": 541.0,
+    "input_tokens": 78277.0,
+    "output_tokens": 511309.0,
+    "usd": 0.0,
+    "samples_unscored": 0.0,
+    "samples_errored": 0.0,
+    "instruction_following.prompt_strict_acc": 0.5933456561922366,
+    "instruction_following.prompt_strict_stderr": 0.021138283177336344,
+    "instruction_following.prompt_loose_acc": 0.6210720887245841,
+    "instruction_following.prompt_loose_stderr": 0.020876246883669028,
+    "instruction_following.inst_strict_acc": 0.6906474820143885,
+    "instruction_following.inst_strict_stderr": 0.015980752065388883,
+    "instruction_following.inst_loose_acc": 0.7134292565947242,
+    "instruction_following.inst_loose_stderr": 0.0158006215391263,
+    "instruction_following.final_acc": 0.6546236208814834,
+    "instruction_following.final_stderr": 0.01989276391239178
+  },
+  "from": "2026-09-10T06:58:40+00:00"
+}

@@ -1,0 +1,7620 @@
+{
+  "suite": "public_ifeval",
+  "target": "hf/Qwen/Qwen2.5-3B-Instruct",
+  "started_at": "2026-09-10T06:58:40+00:00",
+  "finished_at": "2026-09-10T08:26:49+00:00",
+  "cases": [
+    {
+      "name": "13",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:json_format"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "16",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:title combination:repeat_prompt"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "19",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_words length_constraints:number_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "24",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_capital"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "30",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:quotation length_constraints:number_words startend:quotation"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "32",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "102",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_bullet_lists"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "122",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:quotation"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "127",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:forbidden_words keywords:frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "136",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_bullet_lists length_constraints:number_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "142",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:quotation keywords:frequency keywords:existence"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "143",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_paragraphs detectable_content:postscript"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "152",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_lowercase length_constraints:number_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "163",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:quotation keywords:letter_frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "164",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "167",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_highlighted_sections"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "168",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_highlighted_sections"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "179",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_sentences"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "181",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:nth_paragraph_first_word"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "201",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:letter_frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "202",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_lowercase"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "209",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "218",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_content:number_placeholders change_case:english_lowercase"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "219",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:quotation"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "227",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:constrained_response"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "240",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "language:response_language"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "247",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:two_responses"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "251",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:letter_frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "260",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:existence length_constraints:number_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "279",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_lowercase keywords:letter_frequency detectable_format:title"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "281",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:quotation"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "286",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:end_checker length_constraints:number_sentences"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "288",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:repeat_prompt"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "292",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_sentences"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "295",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:title"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "296",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:frequency change_case:english_lowercase length_constraints:number_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "301",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:forbidden_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "321",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:json_format"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "322",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:two_responses"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "331",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:capital_word_frequency punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "332",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:repeat_prompt length_constraints:number_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "334",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:quotation detectable_format:number_bullet_lists"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "337",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_words detectable_format:title"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "340",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_highlighted_sections length_constraints:number_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "343",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "349",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_highlighted_sections length_constraints:number_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "357",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:multiple_sections"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "371",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:json_format keywords:forbidden_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "374",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:repeat_prompt keywords:forbidden_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1000",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "punctuation:no_comma detectable_format:number_highlighted_sections length_constraints:number_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1001",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1005",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_content:number_placeholders"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1012",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:repeat_prompt detectable_format:title"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1019",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_lowercase"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1021",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_capital detectable_format:multiple_sections"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1040",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:capital_word_frequency change_case:capital_word_frequency startend:quotation"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1051",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_lowercase"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1069",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:existence length_constraints:number_words punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1072",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1075",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:json_format"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1082",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_paragraphs"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1087",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_lowercase"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1092",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1094",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:json_format"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1098",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:two_responses"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1107",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "punctuation:no_comma combination:two_responses"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1108",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "language:response_language"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1122",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_lowercase keywords:letter_frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1127",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:multiple_sections startend:end_checker"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1128",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:end_checker"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1129",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:letter_frequency combination:repeat_prompt"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1130",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:letter_frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1131",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:multiple_sections"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1132",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_capital keywords:forbidden_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1137",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:json_format keywords:forbidden_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1139",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:repeat_prompt keywords:existence"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1147",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:forbidden_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1148",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:json_format"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1153",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_lowercase keywords:frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1154",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "language:response_language"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1162",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1174",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:letter_frequency length_constraints:number_sentences detectable_format:number_highlighted_sections"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1180",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:two_responses detectable_format:title"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1187",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1203",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:frequency keywords:frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1216",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:quotation length_constraints:number_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1217",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1219",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_capital detectable_content:postscript keywords:frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1220",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:end_checker"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1233",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:end_checker keywords:frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1236",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_paragraphs"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1237",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_highlighted_sections keywords:existence"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1242",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:json_format keywords:forbidden_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1246",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_content:postscript"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1248",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_paragraphs"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1251",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1258",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1259",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "language:response_language"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1262",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:title length_constraints:number_sentences"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1265",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:existence length_constraints:number_sentences"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1268",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_sentences"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1281",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:repeat_prompt keywords:existence"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1286",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_bullet_lists"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1287",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_bullet_lists change_case:english_lowercase"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1300",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "punctuation:no_comma keywords:letter_frequency length_constraints:number_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1305",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_content:postscript detectable_format:number_bullet_lists"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1307",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_highlighted_sections"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1314",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:capital_word_frequency change_case:capital_word_frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1322",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:title"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1325",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:quotation detectable_format:number_bullet_lists"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1332",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:two_responses"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1342",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:frequency detectable_format:number_highlighted_sections length_constraints:number_paragraphs"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1348",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "punctuation:no_comma detectable_format:number_highlighted_sections keywords:existence"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1361",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_lowercase"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1367",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_content:postscript"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1372",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_content:number_placeholders"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1375",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_paragraphs keywords:existence"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1377",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_paragraphs"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1379",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_highlighted_sections keywords:frequency keywords:existence"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1381",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_sentences"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1389",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_capital keywords:letter_frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1392",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:title length_constraints:number_sentences length_constraints:number_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1393",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1402",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:letter_frequency keywords:forbidden_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1418",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "punctuation:no_comma length_constraints:number_sentences length_constraints:number_sentences"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1436",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_lowercase keywords:forbidden_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1446",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:end_checker"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1466",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:quotation keywords:forbidden_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1476",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:forbidden_words length_constraints:number_sentences"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1477",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "language:response_language"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1480",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:repeat_prompt"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1481",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:multiple_sections detectable_format:number_bullet_lists"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1498",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1508",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:existence punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1512",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_content:number_placeholders punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1516",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_lowercase keywords:existence"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1518",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:repeat_prompt"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1531",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:existence"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1535",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_lowercase length_constraints:number_sentences"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1537",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_content:postscript"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1546",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:repeat_prompt punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1548",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:multiple_sections"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1551",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:title"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1561",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:repeat_prompt detectable_format:title"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1566",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_capital"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1571",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:frequency change_case:english_lowercase keywords:existence"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1580",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:forbidden_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1582",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:two_responses language:response_language punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1591",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:two_responses"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1592",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:capital_word_frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1593",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_lowercase"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1601",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_highlighted_sections length_constraints:number_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1609",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:nth_paragraph_first_word startend:quotation"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1619",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_content:postscript detectable_content:number_placeholders"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1620",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_content:postscript"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1627",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:repeat_prompt detectable_format:title punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1629",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:forbidden_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1634",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_bullet_lists"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1643",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "punctuation:no_comma length_constraints:number_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1644",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_highlighted_sections"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1645",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_capital"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1646",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_highlighted_sections"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1653",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:capital_word_frequency length_constraints:number_sentences"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1656",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:repeat_prompt"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1658",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:quotation keywords:existence"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1659",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:end_checker"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1667",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_lowercase"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1670",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:quotation length_constraints:number_paragraphs change_case:capital_word_frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1675",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:forbidden_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1686",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:repeat_prompt"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1691",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:json_format keywords:forbidden_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1705",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_content:postscript startend:end_checker"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1713",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:frequency detectable_format:number_highlighted_sections"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1730",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:quotation detectable_format:multiple_sections"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1733",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1738",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1739",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "punctuation:no_comma language:response_language"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1746",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:two_responses"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1759",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_content:postscript"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1773",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_highlighted_sections"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1776",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:quotation"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1779",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_capital keywords:existence"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1781",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_words change_case:english_lowercase"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1793",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:two_responses length_constraints:number_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1800",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_content:postscript"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1802",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:title"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1813",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_capital length_constraints:number_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1823",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_highlighted_sections length_constraints:number_sentences"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1825",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "punctuation:no_comma detectable_content:postscript keywords:existence"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1834",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_sentences change_case:capital_word_frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1837",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_sentences length_constraints:number_sentences"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1843",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_lowercase startend:quotation"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1845",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:existence length_constraints:number_paragraphs"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1857",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1858",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_paragraphs"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1879",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_sentences length_constraints:number_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1880",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:letter_frequency length_constraints:number_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1883",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:letter_frequency length_constraints:number_paragraphs"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1886",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_highlighted_sections"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1893",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:end_checker"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1897",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_highlighted_sections punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1902",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:end_checker"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1906",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:repeat_prompt"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1908",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_sentences detectable_format:number_bullet_lists detectable_content:number_placeholders"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1922",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:repeat_prompt"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1927",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_content:number_placeholders"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1928",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:title punctuation:no_comma keywords:frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1934",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_bullet_lists"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1936",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:forbidden_words detectable_format:number_bullet_lists"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1939",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:end_checker"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1943",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_paragraphs startend:end_checker"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1944",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "punctuation:no_comma combination:repeat_prompt"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1954",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:nth_paragraph_first_word"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1964",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:letter_frequency length_constraints:number_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1967",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_lowercase length_constraints:number_sentences"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1980",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_words detectable_format:number_bullet_lists detectable_content:postscript"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1996",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:capital_word_frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "1999",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_capital"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2010",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:quotation"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2015",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:quotation"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2023",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:multiple_sections"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2028",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:forbidden_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2034",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:forbidden_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2035",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_highlighted_sections startend:quotation length_constraints:number_sentences"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2041",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_sentences keywords:forbidden_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2063",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:repeat_prompt punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2069",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_words length_constraints:number_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2070",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_content:postscript"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2071",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:repeat_prompt"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2078",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_bullet_lists"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2084",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:frequency keywords:forbidden_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2097",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:title"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2100",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_bullet_lists change_case:english_lowercase"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2107",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:letter_frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2118",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_paragraphs detectable_format:number_bullet_lists"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2136",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_content:number_placeholders"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2139",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_sentences keywords:existence"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2142",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2143",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:forbidden_words length_constraints:number_sentences"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2162",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_sentences detectable_content:number_placeholders"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2164",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_content:number_placeholders"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2169",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:letter_frequency keywords:existence"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2180",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:capital_word_frequency length_constraints:number_paragraphs"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2192",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:repeat_prompt"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2195",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_bullet_lists"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2207",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:forbidden_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2209",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:quotation"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2215",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:nth_paragraph_first_word"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2216",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_lowercase punctuation:no_comma detectable_content:postscript"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2225",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "language:response_language"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2229",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:title"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2230",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "punctuation:no_comma detectable_format:number_highlighted_sections"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2239",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:quotation"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2243",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2245",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2246",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_words keywords:frequency detectable_content:number_placeholders"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2247",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_capital"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2250",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:nth_paragraph_first_word"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2253",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_highlighted_sections"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2265",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:letter_frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2266",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_sentences"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2268",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:end_checker"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2273",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_content:postscript"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2275",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:capital_word_frequency punctuation:no_comma keywords:frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2284",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_words detectable_content:number_placeholders detectable_format:number_bullet_lists"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2292",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2299",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "language:response_language"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2303",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:quotation length_constraints:number_sentences"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2304",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_content:number_placeholders"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2305",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:repeat_prompt detectable_format:title"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2309",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "language:response_language"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2311",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2314",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_bullet_lists"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2323",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2324",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2328",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:forbidden_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2337",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:repeat_prompt punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2341",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_capital"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2350",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:letter_frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2355",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:repeat_prompt"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2357",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_paragraphs"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2359",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:repeat_prompt"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2362",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_content:postscript"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2372",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_highlighted_sections change_case:english_lowercase"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2374",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2380",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_bullet_lists punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2381",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_highlighted_sections"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2383",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:two_responses"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2386",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_paragraphs keywords:frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2391",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_words change_case:english_lowercase"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2392",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2395",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:json_format keywords:forbidden_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2396",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_content:postscript"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2398",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:end_checker"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2404",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:json_format"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2416",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_words keywords:letter_frequency change_case:english_capital"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2417",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2422",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_capital detectable_format:title"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2432",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:forbidden_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2436",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:two_responses punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2439",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "punctuation:no_comma length_constraints:nth_paragraph_first_word detectable_content:number_placeholders"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2441",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:quotation"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2447",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:letter_frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2449",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "punctuation:no_comma keywords:letter_frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2457",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_bullet_lists"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2464",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "language:response_language"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2465",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:repeat_prompt"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2467",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_paragraphs"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2471",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:forbidden_words detectable_content:number_placeholders"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2475",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:end_checker"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2482",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:repeat_prompt"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2485",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:existence"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2497",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_highlighted_sections startend:quotation"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2505",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:end_checker"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2515",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_highlighted_sections"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2517",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_lowercase"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2531",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_lowercase"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2532",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:quotation"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2534",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:forbidden_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2549",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:nth_paragraph_first_word keywords:existence detectable_content:postscript"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2563",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_capital"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2567",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:existence"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2571",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_capital punctuation:no_comma length_constraints:number_sentences"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2577",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:two_responses keywords:forbidden_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2583",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:frequency punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2585",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:repeat_prompt"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2589",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_sentences"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2590",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:nth_paragraph_first_word"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2591",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:json_format keywords:existence"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2596",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:two_responses language:response_language punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2602",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:existence"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2605",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:quotation keywords:letter_frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2616",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_highlighted_sections keywords:frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2617",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_sentences"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2622",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_content:postscript"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2628",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_content:postscript"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2637",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:multiple_sections length_constraints:number_sentences"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2649",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:json_format keywords:forbidden_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2653",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:letter_frequency detectable_format:number_bullet_lists"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2662",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:existence"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2667",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_bullet_lists"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2674",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_sentences"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2677",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:end_checker"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2683",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:two_responses detectable_format:title keywords:existence"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2685",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "language:response_language"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2691",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:quotation"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2704",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:two_responses detectable_format:title punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2713",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:repeat_prompt punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2716",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2724",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "language:response_language startend:quotation"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2728",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_lowercase"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2736",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_capital startend:end_checker"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2739",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:repeat_prompt punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2749",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_sentences"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2751",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_words startend:quotation"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2752",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_highlighted_sections"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2759",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_highlighted_sections"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2765",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_lowercase detectable_content:number_placeholders"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2768",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:letter_frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2779",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:letter_frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2780",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_sentences"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2785",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_highlighted_sections detectable_content:number_placeholders"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2787",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:letter_frequency length_constraints:number_sentences"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2790",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_highlighted_sections"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2798",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2801",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_bullet_lists"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2807",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:title"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2811",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:forbidden_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2817",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_lowercase"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2820",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:capital_word_frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2825",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2828",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:forbidden_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2829",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:quotation"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2832",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_bullet_lists"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2844",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_highlighted_sections length_constraints:number_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2849",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:capital_word_frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2853",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:capital_word_frequency detectable_format:title"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2857",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:json_format"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2859",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_sentences"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2870",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:capital_word_frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2871",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2880",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:nth_paragraph_first_word"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2887",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:title keywords:letter_frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2889",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:quotation detectable_format:multiple_sections"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2904",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:repeat_prompt"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2905",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_highlighted_sections"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2908",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_content:postscript change_case:english_capital"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2909",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_highlighted_sections length_constraints:number_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2912",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:two_responses keywords:letter_frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2918",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:two_responses"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2921",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_paragraphs"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2925",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:multiple_sections"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2929",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_content:postscript"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2941",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_paragraphs"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2943",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:frequency change_case:english_lowercase length_constraints:number_paragraphs"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2957",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:forbidden_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2969",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:title"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2977",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_paragraphs"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2985",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:quotation"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "2997",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3001",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:end_checker"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3025",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_bullet_lists"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3035",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_content:number_placeholders change_case:english_lowercase"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3041",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_sentences detectable_format:number_bullet_lists"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3048",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:end_checker"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3057",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:title"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3063",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_paragraphs language:response_language"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3069",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_bullet_lists change_case:english_lowercase detectable_content:postscript"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3071",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_highlighted_sections"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3073",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:nth_paragraph_first_word"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3079",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:end_checker"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3081",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:forbidden_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3084",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "punctuation:no_comma startend:end_checker"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3089",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_highlighted_sections length_constraints:number_sentences length_constraints:number_sentences"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3091",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3098",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_bullet_lists length_constraints:number_paragraphs change_case:capital_word_frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3109",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3112",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "language:response_language"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3114",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_words keywords:forbidden_words startend:end_checker"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3126",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_content:number_placeholders"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3130",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "language:response_language"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3131",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:title detectable_content:postscript"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3150",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_lowercase"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3156",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:existence"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3166",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:forbidden_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3186",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_capital"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3188",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:capital_word_frequency change_case:capital_word_frequency keywords:frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3191",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "language:response_language"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3195",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:letter_frequency punctuation:no_comma language:response_language"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3198",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:end_checker"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3203",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:end_checker"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3204",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "punctuation:no_comma change_case:english_capital"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3221",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_content:number_placeholders"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3223",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:json_format"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3224",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:repeat_prompt"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3241",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "language:response_language"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3243",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_highlighted_sections length_constraints:number_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3245",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "punctuation:no_comma detectable_content:number_placeholders"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3256",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_sentences detectable_format:title punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3263",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:two_responses"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3272",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:repeat_prompt detectable_format:title keywords:frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3276",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_capital length_constraints:number_sentences length_constraints:number_sentences"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3280",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_content:number_placeholders"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3281",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:two_responses punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3287",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:two_responses length_constraints:number_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3294",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_paragraphs startend:quotation"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3305",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "language:response_language combination:repeat_prompt keywords:existence"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3311",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "language:response_language detectable_format:title keywords:existence"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3315",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_paragraphs keywords:forbidden_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3323",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3324",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:two_responses detectable_format:multiple_sections"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3326",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:letter_frequency keywords:forbidden_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3327",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:existence keywords:frequency keywords:frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3329",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_sentences"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3335",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:two_responses language:response_language punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3345",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:frequency detectable_format:number_bullet_lists keywords:forbidden_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3350",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "punctuation:no_comma detectable_content:number_placeholders"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3351",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_paragraphs detectable_format:number_highlighted_sections"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3362",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_sentences keywords:forbidden_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3367",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:quotation detectable_format:multiple_sections"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3369",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:repeat_prompt keywords:frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3371",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:repeat_prompt keywords:existence keywords:forbidden_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3376",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:existence punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3380",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_lowercase keywords:existence"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3386",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:forbidden_words keywords:existence"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3401",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:forbidden_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3407",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:capital_word_frequency change_case:capital_word_frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3409",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:quotation detectable_format:number_highlighted_sections"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3414",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:capital_word_frequency change_case:capital_word_frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3415",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_words keywords:frequency keywords:frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3424",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_capital"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3425",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3428",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:letter_frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3429",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:multiple_sections length_constraints:number_sentences"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3434",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_lowercase length_constraints:nth_paragraph_first_word"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3439",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:existence"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3442",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_words detectable_format:title"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3445",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:forbidden_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3453",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_highlighted_sections"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3455",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:capital_word_frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3456",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_highlighted_sections change_case:english_capital"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3478",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:letter_frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3479",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:forbidden_words punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3484",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:repeat_prompt"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3494",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_content:number_placeholders language:response_language"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3502",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "language:response_language detectable_format:title"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3505",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "punctuation:no_comma combination:repeat_prompt"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3506",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:json_format keywords:forbidden_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3513",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:capital_word_frequency"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3518",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:json_format keywords:existence"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3534",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_lowercase length_constraints:number_sentences length_constraints:number_sentences"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3536",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:quotation"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3538",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:frequency length_constraints:number_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3540",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3549",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_highlighted_sections"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3557",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_bullet_lists"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3563",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:repeat_prompt"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3565",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:forbidden_words length_constraints:number_paragraphs"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3567",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "language:response_language"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3569",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_highlighted_sections length_constraints:number_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3572",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_capital"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3595",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:forbidden_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3606",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:title"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3608",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:letter_frequency change_case:english_lowercase"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3615",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3617",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_capital"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3619",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_content:number_placeholders punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3623",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:quotation language:response_language"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3624",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:nth_paragraph_first_word"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3629",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_highlighted_sections"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3631",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3633",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:repeat_prompt punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3644",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_highlighted_sections"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3653",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "language:response_language"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3669",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "punctuation:no_comma language:response_language"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3672",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:quotation length_constraints:number_sentences length_constraints:number_sentences"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3680",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:frequency detectable_format:number_highlighted_sections"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3682",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "language:response_language"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3690",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:title"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3691",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_sentences punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3697",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:title"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3703",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "change_case:english_lowercase"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3709",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "startend:quotation keywords:forbidden_words"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3710",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_highlighted_sections detectable_format:title detectable_content:postscript"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3718",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:title combination:repeat_prompt punctuation:no_comma"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3719",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:title"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3724",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:number_highlighted_sections punctuation:no_comma startend:end_checker"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3732",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "keywords:existence"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3739",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "length_constraints:number_sentences"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3743",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_content:number_placeholders"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3744",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_content:number_placeholders language:response_language"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3748",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "combination:two_responses keywords:existence"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3749",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:constrained_response"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3750",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:constrained_response"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3751",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:constrained_response"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3752",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:constrained_response"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3753",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:constrained_response"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3754",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:constrained_response"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3755",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:constrained_response"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3756",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:constrained_response"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    },
+    {
+      "name": "3757",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "instruction_following",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "detectable_format:constrained_response"
+        }
+      ],
+      "trajectory": null,
+      "skipped_reason": null
+    }
+  ],
+  "metrics": {
+    "accuracy": 0.5933456561922366,
+    "samples_total": 541.0,
+    "samples_completed": 541.0,
+    "input_tokens": 78277.0,
+    "output_tokens": 511309.0,
+    "usd": 0.0,
+    "samples_unscored": 0.0,
+    "samples_errored": 0.0,
+    "instruction_following.prompt_strict_acc": 0.5933456561922366,
+    "instruction_following.prompt_strict_stderr": 0.021138283177336344,
+    "instruction_following.prompt_loose_acc": 0.6210720887245841,
+    "instruction_following.prompt_loose_stderr": 0.020876246883669028,
+    "instruction_following.inst_strict_acc": 0.6906474820143885,
+    "instruction_following.inst_strict_stderr": 0.015980752065388883,
+    "instruction_following.inst_loose_acc": 0.7134292565947242,
+    "instruction_following.inst_loose_stderr": 0.0158006215391263,
+    "instruction_following.final_acc": 0.6546236208814834,
+    "instruction_following.final_stderr": 0.01989276391239178
+  },
+  "meta": {
+    "inspect_version": "0.3.263",
+    "task": "inspect_evals/ifeval",
+    "model": "hf/Qwen/Qwen2.5-3B-Instruct",
+    "log_location": "C:/Users/Sagac/ai-eval-platform/logs/2026-09-10T06-58-40-00-00_ifeval_DF75wJvR59upX7cmJ5pXTA.eval",
+    "status": "success",
+    "cost_cap_mode": "none_external_budget",
+    "generate": {
+      "max_tokens": 1024
+    },
+    "model_args": {
+      "device": "cuda:0",
+      "dtype": "bfloat16",
+      "do_sample": false,
+      "batch_size": 8
+    },
+    "full_run": true
+  }
+}
