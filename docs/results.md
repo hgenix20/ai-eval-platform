@@ -107,9 +107,11 @@ two coincide, since a case whose run came back also meets its other
 assertions.
 
 Two of those four aborts are predicted and pass. A fatal provider error is
-re-raised with no fallback attempt, and a validator fault has no fallback
-route at all, since the fallback this suite installs applies only to the
-planner route. Both are the platform behaving as designed.
+re-raised with no fallback attempt, and a validator fault has no fallback route
+at all, since the fallback this suite installs applies only to the planner
+route and leaves the validator's route at depth one. Both are the platform
+behaving as designed; the depth-one route is this harness's own configuration,
+and F5 in the write-up splits the two.
 
 The other two aborts are the finding, and both are tool-raise cases.
 `ToolExecutor.execute` in the agent platform does not catch an exception from
@@ -253,6 +255,16 @@ Qwen2.5-3B-Instruct run described below, `"from": "2026-09-10T06:58:40+00:00"`,
 with a `"target"` of `hf/Qwen/Qwen2.5-3B-Instruct`. A run of the same suite
 against a different target reports not measured in that row, so swapping
 models does not read as a regression.
+
+The `public_ifeval_speed` baseline was computed from that 3B run's own
+`started_at` and `completed_at` after `ms_per_sample` was added as a metric,
+which is why both `wall_ms_total` and `ms_per_sample` now appear in the
+committed per-run file as well as in `latest.json`.
+
+The spec's sixth Phase 2 suite, `cost_latency`, shipped as metrics and gate
+rows on every suite instead of as a suite of its own: `usd_per_run_p50` and
+`wall_ms_p95` are computed for every run, and five of the rows above gate
+them. That leaves `offline_core` standing as the fifth suite CI runs.
 
 The latency threshold is 50 percent, against the spec's 20 percent. p95 on
 four of these suites is a few milliseconds, and CI scheduling noise is larger

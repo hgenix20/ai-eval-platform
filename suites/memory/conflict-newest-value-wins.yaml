@@ -2,8 +2,11 @@
 # session recalls it.
 #
 # Recency finding: the store's recall ranks purely by embedding cosine
-# similarity, with no time weighting, so a later write does not outrank an
-# earlier one. Run against the real store, both "the budget is 50k" and
+# similarity, so a later write does not outrank an earlier one. The
+# timestamp is there and goes unread: the store stamps created_at on every
+# write, the ranking never looks at it, and the recall payload drops it
+# (text, score, and metadata only), so a caller cannot break the tie
+# either. Run against the real store, both "the budget is 50k" and
 # "the budget is 75k" score identically (0.5) against the query "budget",
 # because the two texts differ only in a token the query never mentions.
 # The tie is broken by insertion order, so the actual recall output lists

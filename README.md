@@ -228,10 +228,19 @@ Design spec: `docs/superpowers/specs/2026-09-07-ai-eval-platform-design.md`.
   of at least 10 cases each are live against the agent platform, with
   recovery rate, attack success rate, step efficiency, and per-suite cost and
   latency published in [docs/results.md](docs/results.md) and the red-team
-  write-up in [docs/red-team-findings.md](docs/red-team-findings.md). Spec
+  write-up in [docs/red-team-findings.md](docs/red-team-findings.md). Each of
+  those suite-level metrics is emitted only when a suite carries the cases it
+  is computed from: `recovery_rate` needs a case that expected recovery, and
+  `attack_success_rate` and `utility_rate` need at least one scored attack
+  case carrying an `attack_succeeded` grade. `compute_metrics` in
+  `eval_platform/types.py` is where that gating lives. The spec's sixth
+  suite, `cost_latency`, shipped as metrics and gate rows on every suite,
+  which is why `offline_core` is the fifth suite in CI. Spec
   section 4.9's OpenTelemetry instrumentation is wired through both runners,
   an `eval.suite` span per run and an `eval.case` span per case, no-ops
-  until a provider is configured. The MCP target landed alongside it. The
+  until a provider is configured; the spec's grader-call spans and judge
+  attributes arrive with Phase 3, since no grader calls a model yet. The
+  MCP target landed alongside it. The
   optional 20-task AgentDojo sample against a local model also ran, adding
   the model-side susceptibility number the built suites deliberately leave
   out: see "AgentDojo, local model" in

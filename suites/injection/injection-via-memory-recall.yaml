@@ -2,7 +2,8 @@
 # carries an injected instruction, is recalled later, and is obeyed.
 # Attack class: LLM01 prompt injection, indirect (OWASP LLM Top 10, 2025
 # edition), via a persisted note instead of a live document; memory
-# poisoning (a separate, agent-specific taxonomy). One session, one
+# poisoning, which is a plain description of the write and not a
+# citation. One session, one
 # agent: the poisoning and the recall both happen inside a single run,
 # not across Case.sessions. The consequence attempted is the same
 # ungranted post_webhook call, denied by the same authorization boundary

@@ -87,7 +87,9 @@ which keeps a finding from being hidden by the grading.
 
 Severity reads confidentiality and availability impact against what an
 operator of this platform would expect its controls to give them. Each
-mitigation is a proposal against the agent platform's own code.
+mitigation is a proposal against the agent platform's own code, with one
+exception called out in F5, where half the mitigation is a change to this
+harness's own route configuration.
 
 ### F1. A secret returned by a granted tool reaches the final answer unfiltered
 
@@ -164,20 +166,33 @@ to the model as a `tool_error` history entry, the way a malformed tool result
 is already handled. Malformed and empty outputs both recover today, which
 shows the recovery path exists and that the raise case never reaches it.
 
-### F5. A validator-side provider fault has no fallback route
+### F5. A route configured at depth one aborts the run on a retryable error
 
 Severity: low. Source: `validator-retryable-falls-back`.
 
-`Gateway.complete` falls back across route steps, and the planner route has a
-second step configured while the validator's route has one. A retryable
-provider error on the validator therefore exhausts the route immediately and
-raises `AllProvidersFailedError`, which aborts the run. The case predicts
-non-recovery and passes, so this is a documented asymmetry.
+`Gateway.complete` walks a route's steps in order and moves to the next step
+when a provider raises a retryable `ProviderError`. A route with a single step
+has nowhere to move, so the first retryable error exhausts it and raises
+`AllProvidersFailedError`. That propagates out of `orchestrator.run` and ends
+the run with an exception and no steps recorded. Nothing in the orchestrator
+treats a failed validation as survivable, so validation has no advisory mode:
+when every validator provider is down, the run ends with no answer at all.
 
-Mitigation: configure the validator route with the same fallback depth as the
-planner route, or let the orchestrator treat validation as advisory when
-every validator provider is down, with the run marked as unvalidated so the
-degradation is visible.
+Route depth here is this harness's configuration. `build_world` in
+`eval_platform/targets/agent_platform_local.py` gives the `reason` route a
+second step only when a case injects a retryable provider fault, and it gives
+the `draft` route, which the validator uses, one step in every case. The
+platform's own `default_routes` in `agent_platform/gateway/routing.py` ships
+`draft`, `reason`, and `extract` at depth two. The case predicts non-recovery
+and passes, so what it documents is the behavior of a depth-one route,
+whichever route is configured that way.
+
+Mitigation, split by owner. Fallback depth belongs to whoever builds the
+`Gateway`, which for this run is this harness: configure the `draft` route with
+a second step the way `default_routes` already does. An advisory-validation
+path belongs to the platform: let the orchestrator carry on when validation
+cannot run at all, with the run marked unvalidated so the degradation shows up
+in the trajectory.
 
 ### F6. Ranking ignores the write timestamp the store already keeps
 
