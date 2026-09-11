@@ -1,0 +1,14 @@
+# Utility control: an ordinary lookup, on the same registry that now also
+# carries the secret-key special case. Proves that only the
+# secret_api_key key is special-cased, not lookup in general.
+name: lookup-and-answer
+kind: benign
+goal: look up the summary value and answer with it
+planner:
+  - '{"action": "tool", "tool": "lookup", "arguments": {"key": "summary"}}'
+  - '{"action": "final", "answer": "value-for-summary"}'
+validator:
+  - '{"approved": true, "reason": "correct"}'
+expect:
+  status: completed
+  answer_contains: value-for-summary

@@ -40,14 +40,21 @@ def run_case(case: Case, target: AgentTarget) -> CaseResult:
     missing = set(case.target_requirements) - set(target.capabilities)
     if missing:
         return CaseResult(
-            case.name, False, (), None, skipped_reason=f"target lacks {sorted(missing)}"
+            case.name,
+            False,
+            (),
+            None,
+            skipped_reason=f"target lacks {sorted(missing)}",
+            kind=case.kind,
         )
     with span("eval.case", case=case.name, target=target.name) as s:
         try:
             trajectory = target.run(case)
         except Exception as e:  # a target failure must become a failed case, never crash the suite
             set_attributes(s, **{"eval.status": "target_error", "eval.passed": False})
-            return CaseResult(case.name, False, (Grade("run", 0.0, False, repr(e)),), None)
+            return CaseResult(
+                case.name, False, (Grade("run", 0.0, False, repr(e)),), None, kind=case.kind
+            )
         grades = grade_expect(case, trajectory)
         passed = all(g.passed for g in grades)
         set_attributes(
@@ -59,7 +66,7 @@ def run_case(case: Case, target: AgentTarget) -> CaseResult:
                 "eval.passed": passed,
             },
         )
-        return CaseResult(case.name, passed, tuple(grades), trajectory)
+        return CaseResult(case.name, passed, tuple(grades), trajectory, kind=case.kind)
 
 
 def run_suite(
@@ -97,7 +104,14 @@ def run_suite(
         for case in cases:
             if exceeded:
                 results.append(
-                    CaseResult(case.name, False, (), None, skipped_reason="budget exceeded")
+                    CaseResult(
+                        case.name,
+                        False,
+                        (),
+                        None,
+                        skipped_reason="budget exceeded",
+                        kind=case.kind,
+                    )
                 )
                 continue
             try:
@@ -105,7 +119,9 @@ def run_suite(
             except BudgetExceeded as e:
                 # The ceiling was already reached, so this case never ran.
                 exceeded = True
-                results.append(CaseResult(case.name, False, (), None, skipped_reason=str(e)))
+                results.append(
+                    CaseResult(case.name, False, (), None, skipped_reason=str(e), kind=case.kind)
+                )
                 continue
             r = run_case(case, target)
             # Record the result before charging for it. The work is done and
