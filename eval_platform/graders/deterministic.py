@@ -4,6 +4,7 @@ Grade with the field name as its dimension.
 
 from __future__ import annotations
 
+from eval_platform.graders.trajectory import redundant_calls, step_efficiency
 from eval_platform.types import Case, Grade, Trajectory
 
 
@@ -36,6 +37,15 @@ def grade_expect(case: Case, t: Trajectory) -> list[Grade]:
     - tools_used: t.tools_used() checked against expect.tools_used's one
       mode ("strict": equal in order, "unordered": equal as sets/multisets
       by sorted order, "subset_of": every used tool is in the allowed list)
+    - forbidden_tools: fails if any of these tool names appears in
+      t.tools_used()
+    - max_redundant_calls: redundant_calls(t.steps) is at most this cap
+    - step_efficiency: emitted whenever reference_steps is set, value is
+      step_efficiency(reference_steps, len(t.tools_used())); passed when
+      that value is at least min_step_efficiency (default 0.0, so with no
+      floor the dimension records the value but always passes)
+    - tool_output_contains: some Step(kind="tool", name=tool_output_contains
+      ["tool"]).output contains tool_output_contains["text"] as a substring
     """
     e = case.expect
     out: list[Grade] = []
@@ -91,4 +101,55 @@ def grade_expect(case: Case, t: Trajectory) -> list[Grade]:
         else:
             ok = set(got) <= set(want)
         out.append(_g("tools_used", ok, f"{mode}: expected {want}, got {got}"))
+    out.extend(_trajectory_grades(case, t))
+    return out
+
+
+def _trajectory_grades(case: Case, t: Trajectory) -> list[Grade]:
+    """The forbidden_tools, max_redundant_calls, step_efficiency, and
+    tool_output_contains dimensions, split out of grade_expect to keep its
+    branch count down. Same contract: one Grade per set Expect field."""
+    e = case.expect
+    out: list[Grade] = []
+    if e.forbidden_tools is not None:
+        hit = [n for n in t.tools_used() if n in e.forbidden_tools]
+        out.append(
+            _g(
+                "forbidden_tools",
+                not hit,
+                f"forbidden tools called: {hit}" if hit else "no forbidden tool called",
+            )
+        )
+    if e.max_redundant_calls is not None:
+        n = redundant_calls(t.steps)
+        out.append(
+            _g(
+                "max_redundant_calls",
+                n <= e.max_redundant_calls,
+                f"{n} redundant calls, cap {e.max_redundant_calls}",
+            )
+        )
+    if e.reference_steps is not None:
+        eff = step_efficiency(e.reference_steps, len(t.tools_used()))
+        floor = e.min_step_efficiency if e.min_step_efficiency is not None else 0.0
+        out.append(
+            Grade(
+                "step_efficiency",
+                eff,
+                eff >= floor,
+                f"efficiency {eff:.2f} (reference {e.reference_steps}, "
+                f"used {len(t.tools_used())}, floor {floor})",
+            )
+        )
+    if e.tool_output_contains is not None:
+        tool, text = e.tool_output_contains["tool"], e.tool_output_contains["text"]
+        outs = [str(s.output) for s in t.steps if s.kind == "tool" and s.name == tool]
+        ok = any(text in o for o in outs)
+        out.append(
+            _g(
+                "tool_output_contains",
+                ok,
+                f"{tool} output {'contains' if ok else 'lacks'} {text!r} ({len(outs)} calls)",
+            )
+        )
     return out

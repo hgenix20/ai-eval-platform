@@ -64,6 +64,13 @@ class Expect(BaseModel):
     one of three modes: `{"strict": [...]}` (must equal exactly, in order),
     `{"subset_of": [...]}` (every tool used must be in this list), or
     `{"unordered": [...]}` (must use exactly these tools, any order).
+    `forbidden_tools` fails the dimension if any of these tool names was
+    called. `max_redundant_calls` caps the count of (tool, arguments) pairs
+    called more than once. `reference_steps` is the ideal number of tool
+    calls for the goal, used to compute step efficiency. `min_step_efficiency`
+    is the minimum `reference_steps / max(tools_used, reference_steps)` the
+    run must reach. `tool_output_contains` asserts that some tool step named
+    `tool` produced output containing `text`.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -73,6 +80,11 @@ class Expect(BaseModel):
     history_types: list[str] | None = None
     max_steps_used: int | None = None
     tools_used: dict[str, list[str]] | None = None
+    forbidden_tools: list[str] | None = None
+    max_redundant_calls: int | None = None
+    reference_steps: int | None = None
+    min_step_efficiency: float | None = None
+    tool_output_contains: dict[str, str] | None = None
 
     @field_validator("tools_used")
     @classmethod
@@ -173,13 +185,18 @@ def _percentile(values: list[float], pct: float) -> float:
 
 def compute_metrics(cases: Sequence[CaseResult]) -> dict[str, float]:
     """Suite-level metrics. Skipped cases count in cases_total and cases_skipped
-    and are excluded from pass_rate, cost, and latency."""
+    and are excluded from pass_rate, cost, and latency. `step_efficiency_mean`
+    is the mean of the `step_efficiency` grade value over scored cases that
+    carry that dimension; it is omitted when no case carries one."""
     scored = [c for c in cases if c.skipped_reason is None]
     trajs = [c.trajectory for c in scored if c.trajectory is not None]
     costs = [t.cost_usd for t in trajs]
     walls = [t.wall_ms for t in trajs]
     passed = sum(c.passed for c in scored)
-    return {
+    step_efficiencies = [
+        g.value for c in scored for g in c.grades if g.dimension == "step_efficiency"
+    ]
+    metrics = {
         "cases_total": float(len(cases)),
         "cases_passed": float(passed),
         "cases_skipped": float(len(cases) - len(scored)),
@@ -188,3 +205,6 @@ def compute_metrics(cases: Sequence[CaseResult]) -> dict[str, float]:
         "wall_ms_p50": _percentile(walls, 0.5),
         "wall_ms_p95": _percentile(walls, 0.95),
     }
+    if step_efficiencies:
+        metrics["step_efficiency_mean"] = sum(step_efficiencies) / len(step_efficiencies)
+    return metrics
