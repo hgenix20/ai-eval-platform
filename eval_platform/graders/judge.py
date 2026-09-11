@@ -1,3 +1,7 @@
+# pyright: reportMissingImports=false
+# The `local` extra (torch, transformers, safetensors) is optional and CI
+# type-checks without it; the imports below are lazy and resolve only on a
+# machine that runs models.
 """Judge graders: a pinned model, a rubric, an explicit unknown outcome,
 and a content-addressed cache (design spec 4.5).
 
@@ -118,8 +122,7 @@ class JudgeGrader:
         self._handle = None
         if "torch" not in sys.modules:
             return
-        # CI type-checks without the `local` extra, hence the pyright ignore.
-        import torch  # noqa: PLC0415  # pyright: ignore[reportMissingImports]
+        import torch  # noqa: PLC0415
 
         if torch.cuda.is_available():
             torch.cuda.empty_cache()

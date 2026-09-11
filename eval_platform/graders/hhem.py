@@ -1,3 +1,7 @@
+# pyright: reportMissingImports=false
+# The `local` extra (torch, transformers, safetensors) is optional and CI
+# type-checks without it; the imports below are lazy and resolve only on a
+# machine that runs models.
 """HHEM-2.1-Open as a semantic grader (design spec 4.4, groundedness row).
 
 The published checkpoint ships a `trust_remote_code` wrapper written for
@@ -80,14 +84,10 @@ class HHEMScorer:
         # Imports stay local so this module (and eval_platform.graders) is
         # importable without the `local` extra installed; only a grade()
         # call that actually needs the model pays for torch/transformers.
-        # The pyright ignores exist because CI type-checks without that
-        # extra, so these names resolve only on a machine that runs models.
-        import torch  # noqa: PLC0415  # pyright: ignore[reportMissingImports]
+        import torch  # noqa: PLC0415
         from huggingface_hub import hf_hub_download  # noqa: PLC0415
-        from safetensors.torch import (
-            load_file,  # pyright: ignore[reportMissingImports]
-        )
-        from transformers import (  # noqa: PLC0415  # pyright: ignore[reportMissingImports]
+        from safetensors.torch import load_file  # noqa: PLC0415
+        from transformers import (  # noqa: PLC0415
             AutoConfig,
             AutoTokenizer,
             T5Config,
