@@ -2,3 +2,6 @@
 {"at": "2026-09-10T08:26:49+00:00", "run_id": "public_ifeval-2026-09-10T06:58:40+00:00", "suite": "public_ifeval", "target": "hf/Qwen/Qwen2.5-3B-Instruct", "usd": 0.0, "note": "limit=None"}
 {"at": "2026-09-10T08:38:08+00:00", "run_id": "public_ifeval-2026-09-10T08:27:32+00:00", "suite": "public_ifeval", "target": "hf/Qwen/Qwen2.5-1.5B-Instruct", "usd": 0.0, "note": "limit=None"}
 {"at": "2026-09-11T07:43:39+00:00", "run_id": "public_agentdojo-2026-09-11T07:41:45+00:00", "suite": "public_agentdojo", "target": "hf/Qwen/Qwen2.5-3B-Instruct", "usd": 0.0, "note": "limit=20"}
+{"at": "2026-09-11T15:10:03+00:00", "run_id": "groundedness-2026-09-11T14:54:25+00:00", "suite": "groundedness", "target": "hf/Qwen/Qwen2.5-3B-Instruct", "usd": 0.0, "note": "run mcp over mcp:edgar-fixture on RTX 4080 Laptop, local"}
+{"at": "2026-09-11T15:18:32+00:00", "run_id": "groundedness-2026-09-11T14:54:25+00:00", "suite": "groundedness", "target": "hf/Qwen/Qwen2.5-3B-Instruct+hf/Qwen/Qwen2.5-1.5B-Instruct+hhem@2.1-open", "usd": 0.0, "note": "evalplat judge second pass on RTX 4080 Laptop, local"}
+{"at": "2026-09-11T15:41:52+00:00", "run_id": "calibration-2026-09-11T15:18:41+00:00", "suite": "calibration", "target": "hf/Qwen/Qwen2.5-3B-Instruct+hf/Qwen/Qwen2.5-1.5B-Instruct+hhem@2.1-open", "usd": 0.0, "note": "evalplat calibrate over 120 faithfulness items on RTX 4080 Laptop, local"}

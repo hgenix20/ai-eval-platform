@@ -1,0 +1,64 @@
+{
+  "started_at": "2026-09-11T15:18:41+00:00",
+  "finished_at": "2026-09-11T15:41:19+00:00",
+  "items": 120,
+  "judges": [
+    {
+      "judge": "faithfulness@1:hf/Qwen/Qwen2.5-3B-Instruct",
+      "version": "aa8e72537993ba99e69dfaafa59ed015b17504d1",
+      "items": 120,
+      "unknown": 2,
+      "kappa": 0.07628807287218903,
+      "accuracy": 0.5338983050847458,
+      "tp": 16,
+      "fp": 11,
+      "tn": 47,
+      "fn": 44
+    },
+    {
+      "judge": "faithfulness@1:hf/Qwen/Qwen2.5-1.5B-Instruct",
+      "version": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+      "items": 120,
+      "unknown": 0,
+      "kappa": 0.016666666666666607,
+      "accuracy": 0.5083333333333333,
+      "tp": 3,
+      "fp": 2,
+      "tn": 58,
+      "fn": 57
+    },
+    {
+      "judge": "hhem@2.1-open",
+      "version": "8e4a2e6e96c708cc76c2344f7e4757df2515292c",
+      "items": 120,
+      "unknown": 0,
+      "kappa": 0.5166666666666666,
+      "accuracy": 0.7583333333333333,
+      "tp": 51,
+      "fp": 20,
+      "tn": 40,
+      "fn": 9
+    }
+  ],
+  "swap_agreement": 0.7457627118644068,
+  "swap_pair": [
+    "faithfulness@1:hf/Qwen/Qwen2.5-3B-Instruct",
+    "faithfulness@1:hf/Qwen/Qwen2.5-1.5B-Instruct"
+  ],
+  "kappa_floor": 0.7,
+  "min_swap_agreement": 0.9,
+  "calibrated": {
+    "faithfulness@1:hf/Qwen/Qwen2.5-3B-Instruct": [
+      false,
+      "kappa 0.08 < 0.70"
+    ],
+    "faithfulness@1:hf/Qwen/Qwen2.5-1.5B-Instruct": [
+      false,
+      "kappa 0.02 < 0.70"
+    ],
+    "hhem@2.1-open": [
+      false,
+      "kappa 0.52 < 0.70"
+    ]
+  }
+}

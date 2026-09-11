@@ -1,0 +1,21 @@
+{
+  "suite": "groundedness",
+  "target": "mcp:edgar-fixture",
+  "metrics": {
+    "cases_total": 52.0,
+    "cases_passed": 20.0,
+    "cases_skipped": 0.0,
+    "pass_rate": 0.38461538461538464,
+    "usd_per_run_p50": 0.0,
+    "wall_ms_p50": 15101.0,
+    "wall_ms_p95": 22191.299999999992,
+    "judge.faithfulness.hf/Qwen/Qwen2.5-3B-Instruct.pass_rate": 0.8461538461538461,
+    "judge.faithfulness.hf/Qwen/Qwen2.5-3B-Instruct.unknown_rate": 0.0,
+    "judge.faithfulness.hf/Qwen/Qwen2.5-1.5B-Instruct.pass_rate": 0.94,
+    "judge.faithfulness.hf/Qwen/Qwen2.5-1.5B-Instruct.unknown_rate": 0.038461538461538464,
+    "judge.faithfulness.swap_agreement": 0.92,
+    "unsupported_rate": 0.2724358974358974,
+    "quote_fidelity_rate": 0.7692307692307693
+  },
+  "from": "2026-09-11T14:54:25+00:00"
+}
