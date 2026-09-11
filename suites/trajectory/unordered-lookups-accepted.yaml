@@ -1,5 +1,8 @@
 # Two lookups in either order are an acceptable path; different arguments
 # mean neither call repeats the other, so redundancy stays at zero.
+# max_redundant_calls: 0 is also satisfied by a run that made no calls,
+# so tool_output_contains pins one real lookup output: the handler returns
+# value-for-<key>, and value-for-revenue is one of the two this case makes.
 name: unordered-lookups-accepted
 goal: find headcount and revenue, in either order
 planner:
@@ -12,3 +15,4 @@ expect:
   status: completed
   tools_used: {unordered: [lookup, lookup]}
   max_redundant_calls: 0
+  tool_output_contains: {tool: lookup, text: value-for-revenue}

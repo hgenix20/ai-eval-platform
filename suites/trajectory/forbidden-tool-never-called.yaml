@@ -1,4 +1,7 @@
 # A goal answerable with lookup alone must never reach for send_email.
+# forbidden_tools on its own passes on a run that called nothing at all, so
+# tools_used pins the path that was supposed to happen alongside the one
+# that was not.
 name: forbidden-tool-never-called
 goal: find the revenue figure, do not email anyone
 planner:
@@ -8,4 +11,5 @@ validator:
   - '{"approved": true, "reason": "ok"}'
 expect:
   status: completed
+  tools_used: {strict: [lookup]}
   forbidden_tools: [send_email]

@@ -11,8 +11,9 @@ Five offline suites run against the agent platform in process: `offline_core`
 from Phase 1, and the four gap suites `trajectory`, `faults`, `memory`, and
 `injection` from Phase 2. All five are free, all five run on every push, and
 each has its own section below. The five offline runs published here were
-taken on 2026-09-11, four in one pass and the faults suite re-run later the
-same morning after its recovery metric was corrected; the public-benchmark
+taken on 2026-09-11, three in one pass, the faults suite re-run later the
+same morning after its recovery metric was corrected, and the trajectory
+suite re-run after two of its cases gained an assertion; the public-benchmark
 runs further down are from 2026-09-10.
 
 ## Offline core suite
@@ -54,11 +55,11 @@ with a live model.
 evalplat run offline --suite-dir suites/trajectory --target agent-platform-local --results results
 ```
 
-Source: `results/trajectory/latest.json`, run 2026-09-11T06:55:32Z.
+Source: `results/trajectory/latest.json`, run 2026-09-11T08:15:37Z.
 
 | suite | cases | pass rate | step efficiency mean | p50 wall ms | p95 wall ms |
 |---|---|---|---|---|---|
-| trajectory | 10 | 1.00 (10 of 10) | 0.75 (5 cases) | 3.774 | 5.515 |
+| trajectory | 10 | 1.00 (10 of 10) | 0.75 (5 cases) | 3.676 | 5.626 |
 
 Ten cases assert on the shape of the path the platform took: strict and
 unordered tool sequences, forbidden tools that stay unused, redundant calls
@@ -66,6 +67,13 @@ counted by tool name plus arguments, and step efficiency against a per-case
 reference count. Recording a tool's actual arguments in the trajectory is what
 makes the redundancy check real, since two `lookup` calls with different keys
 are two units of work and two with the same key are one.
+
+Two of the ten carry an assertion that only says what must not happen, and a
+run that called no tools at all would satisfy it. Both now pin the path that
+was supposed to run as well: `forbidden-tool-never-called` asserts
+`tools_used: {strict: [lookup]}` next to its `forbidden_tools`, and
+`unordered-lookups-accepted` asserts a real `lookup` output next to its
+`max_redundant_calls: 0`. This run is the one taken after that change.
 
 The 0.75 mean efficiency is a property of the case mix. Only the five cases
 that declare a `reference_steps` count contribute to it, and two of those
@@ -229,7 +237,7 @@ against the committed baselines:
 | public_ifeval | instruction_following.prompt_strict_acc | 0.5933 | 0.5933 | max_drop=0.03 | pass |
 | public_ifeval_speed | ms_per_sample | 9776.3401 | 9776.3401 | max_increase_pct=50.0 | pass |
 | trajectory | pass_rate | 1.0000 | 1.0000 | min=1.0 | pass |
-| trajectory_latency | wall_ms_p95 | 5.5222 | 5.5145 | max_increase_pct=50.0 | pass |
+| trajectory_latency | wall_ms_p95 | 5.5222 | 5.6258 | max_increase_pct=50.0 | pass |
 | faults | recovery_rate | 0.7500 | 0.7500 | max_drop=0.0 | pass |
 | faults_latency | wall_ms_p95 | 155.1254 | 155.1665 | max_increase_pct=50.0 | pass |
 | memory | pass_rate | 1.0000 | 1.0000 | min=1.0 | pass |
