@@ -184,6 +184,16 @@ class Case(BaseModel):
     to every session that runs after it. See `AgentPlatformLocalTarget` for
     how the returned Trajectory and its `meta["sessions"]` /
     `meta["all_tools_used"]` are built.
+
+    With `sessions` set, `max_steps` is a per-session cap, not a case-wide
+    one: the agent loop's step count resets to zero on every
+    `orchestrator.run` call, one per session, so the same `max_steps` value
+    applies separately to each session. It must be sized to the most
+    step-hungry session (tool calls plus one for the final answer); an
+    under-sized cap ends that session as `failed` before its final-answer
+    script line is consumed, and that unconsumed line, and any scripted
+    replies after it meant for that session, are read by the next session
+    as its own first actions instead.
     """
 
     model_config = ConfigDict(extra="forbid")

@@ -7,7 +7,7 @@ pytest.importorskip("agent_platform")
 from eval_platform.budget import Budget
 from eval_platform.suites import load_cases, run_suite
 from eval_platform.targets import AgentPlatformLocalTarget
-from eval_platform.types import Case, Expect, Session
+from eval_platform.types import Case, Expect, Fault, Session
 
 SUITE = Path(__file__).resolve().parents[1] / "suites" / "memory"
 pytestmark = pytest.mark.agent_platform
@@ -45,6 +45,39 @@ def test_sessions_share_one_memory_store():
     assert len(t.meta["sessions"]) == 2 and t.answer == "heron"
     recall = [s for s in t.steps if s.kind == "tool" and s.name == "recall"]
     assert recall and "heron" in str(recall[0].output)
+
+
+def test_session_exception_records_completed_sessions():
+    case = Case(
+        name="s",
+        goal="ignored",
+        target_requirements=["agent", "memory"],
+        expect=Expect(),
+        faults=[Fault(at="tool", name="lookup", kind="raise")],
+        sessions=[
+            Session(
+                goal="remember the code word",
+                planner=[
+                    '{"action": "tool", "tool": "remember", '
+                    '"arguments": {"text": "the code word is heron"}}',
+                    '{"action": "final", "answer": "stored"}',
+                ],
+                validator=[OK],
+            ),
+            Session(
+                goal="look something up",
+                planner=[
+                    '{"action": "tool", "tool": "lookup", "arguments": {"key": "weather"}}',
+                ],
+                validator=[],
+            ),
+        ],
+    )
+    t = AgentPlatformLocalTarget().run(case)
+    assert t.status == "target_error"
+    assert len(t.meta["sessions"]) == 1
+    assert t.meta["sessions"][0]["status"] == "completed"
+    assert t.meta["faults_fired"]
 
 
 def test_memory_suite_runs_all_cases():

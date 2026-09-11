@@ -333,10 +333,12 @@ class AgentPlatformLocalTarget:
                 },
             )
         wall_ms = (time.perf_counter() - start) * 1000.0
-        # Type narrowing only: `run` calls this method exclusively when
-        # `case.sessions` is non-empty, so the loop above always executes at
-        # least once and sets `last_result`. Not a runtime validation bypass.
-        assert last_result is not None  # nosec B101
+        if last_result is None:
+            # `run` calls this method exclusively when `case.sessions` is
+            # non-empty, so the loop above should always execute at least
+            # once and set `last_result`; this guards that invariant
+            # explicitly instead of assuming it holds.
+            raise RuntimeError("no session ran; sessions must be non-empty")
         trajectory = run_dict_to_trajectory(
             last_result,
             target=self.name,
