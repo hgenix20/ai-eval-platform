@@ -166,6 +166,15 @@ def test_load_report_rejects_a_judge_with_no_verdict(tmp_path: Path):
         load_report(bad)
 
 
+def test_load_report_rejects_a_swap_pair_naming_an_unscored_judge(tmp_path: Path):
+    d = json.loads(COMMITTED_REPORT.read_text(encoding="utf-8"))
+    d["swap_pair"] = [d["judges"][0]["judge"], "faithfulness@1:hf/never-ran"]
+    bad = tmp_path / "stray-pair.json"
+    bad.write_text(json.dumps(d), encoding="utf-8")
+    with pytest.raises(ValueError, match="swap_pair names a judge with no row"):
+        load_report(bad)
+
+
 def test_load_report_rejects_a_missing_field(tmp_path: Path):
     d = json.loads(COMMITTED_REPORT.read_text(encoding="utf-8"))
     del d["kappa_floor"]

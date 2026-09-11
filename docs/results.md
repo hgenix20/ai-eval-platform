@@ -238,8 +238,8 @@ evalplat judge --suite-dir suites/groundedness --results results --judge hf/Qwen
 ```
 
 Source: `results/groundedness/latest.json`, run 2026-09-11T14:54:25Z, with the
-judge pass applied at 2026-09-11T15:18:02Z. The run as it stood before the
-judge pass is kept at
+judge pass applied at 2026-09-11T15:18:01Z (`meta.judge_pass.at`). The run as
+it stood before the judge pass is kept at
 `results/groundedness/2026-09-11T145425Z-mcp_edgar-fixture.json`.
 
 What the suite asks: find one sentence in a real SEC filing and quote it back.
@@ -268,8 +268,8 @@ the other two under `unknown_rate` (0.0385). The 3B judge returned no unknowns.
 `unsupported_rate` is 0.2724, one minus the mean of the per-case
 `unsupported_claims` scores, so it reads as the average share of an answer's
 sentences HHEM could not find support for. That is the metric the gate
-compares. The run cost $0.00 and took 15 min 13 s, the judge pass 7 min 53 s,
-with `wall_ms_p50` 15,101 and `wall_ms_p95` 22,191.3 per case.
+compares. The run cost $0.00, and its `started_at` to `finished_at` window is
+15 min 09 s, with `wall_ms_p50` 15,101 and `wall_ms_p95` 22,191.3 per case.
 
 Two pass rates sit in the file and they mean different things. Before the judge
 pass a case had to clear two deterministic dimensions, and 28 of 52 did:
@@ -311,8 +311,9 @@ No judge available on this machine is calibrated, so the gate's judge row
 cannot fail a build. That row reports not_measured and carries the kappa and
 the floor in its detail.
 
-Source: `results/calibration/latest.json`, run 2026-09-11T15:18:41Z, 22 min
-42 s, $0.00. The labeled set is 120 items drawn from RAGTruth, which publishes
+Source: `results/calibration/latest.json`, run 2026-09-11T15:18:41Z, a
+`started_at` to `finished_at` window of 22 min 38 s, $0.00. The labeled set is
+120 items drawn from RAGTruth, which publishes
 human span annotations under MIT
 (<https://github.com/ParticleMedia/RAGTruth>). Each item's spans are reduced to
 one binary label, and the set is balanced at 60 supported and 60 unsupported.
@@ -358,7 +359,10 @@ evalplat calibrate --check results/calibration/latest.json
 
 That validates the committed report against the schema in
 `eval_platform/calibration.py`, prints each grader's verdict, and exits 2 on a
-missing or malformed file. It calls no model, which is what lets CI run it.
+missing or malformed file. It calls no model, which is what lets CI run it. It
+checks the report's shape and nothing else; matching a judge to a gate row is
+the gate's job, and `evalplat gate` is where a judge id that no report covers
+turns into a not_measured row.
 
 ## The gate
 

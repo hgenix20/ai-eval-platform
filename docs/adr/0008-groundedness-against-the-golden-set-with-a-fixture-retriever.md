@@ -11,7 +11,7 @@ questions whose answers are known.
 The obvious tool was the live SignalNodus MCP server, whose 31 tools include
 `filing_section` and `edgar_search`. A network-marked test has listed those
 tools since Phase 2. Calling them is paid per call, and a 52-case suite calls a
-retriever three to six times per case, every time anyone reruns the suite.
+retriever two to six times per case, every time anyone reruns the suite.
 A gate row has to be reproducible on a pull request, which is a hard fit for a
 metered endpoint.
 

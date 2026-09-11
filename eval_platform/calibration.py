@@ -249,7 +249,10 @@ class CalibrationReportFile(BaseModel):
     hosted credits, so the committed report is the only calibration evidence
     a build can read. `calibrated` carries `[ok, reason]` per judge, and
     every judge in `judges` must appear there, since a row with no verdict
-    would leave a reader guessing whether the judge may gate.
+    would leave a reader guessing whether the judge may gate. A `swap_pair`,
+    when present, has to name two judges the report actually scored: an
+    agreement figure between a scored judge and an absent one describes
+    nothing a reader can check.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -268,6 +271,16 @@ class CalibrationReportFile(BaseModel):
         missing = sorted(j.judge for j in self.judges if j.judge not in self.calibrated)
         if missing:
             raise ValueError(f"calibrated verdict missing for {', '.join(missing)}")
+        return self
+
+    @model_validator(mode="after")
+    def _swap_pair_names_scored_judges(self) -> CalibrationReportFile:
+        if self.swap_pair is None:
+            return self
+        scored = {j.judge for j in self.judges}
+        absent = [name for name in self.swap_pair if name not in scored]
+        if absent:
+            raise ValueError(f"swap_pair names a judge with no row: {', '.join(absent)}")
         return self
 
 

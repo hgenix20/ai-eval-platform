@@ -181,10 +181,11 @@ rows. Rung 3 calls no judge, because a GitHub runner has no GPU and the
 account has no hosted credits. What it does instead is read the judge-graded
 groundedness run and the calibration report out of the repository: `--check`
 validates the report's shape and prints each grader's verdict, and the gate
-step then reads the four groundedness rows from the committed run. A judge row
-stays not_measured until some judge clears the kappa floor. Rungs 1, 2, and 3
-can fail a pull request today.
-`.github/workflows/ci.yml` runs both, uploads `out/` as an artifact, and posts
+step then reads the four groundedness rows from the committed run. `--check`
+looks at shape alone; the gate is what matches a judge to a row, and a judge
+row stays not_measured until that judge clears the kappa floor. Rungs 1, 2, and
+3 can fail a pull request today.
+`.github/workflows/ci.yml` runs all three, uploads `out/` as an artifact, and posts
 the gate table as a PR comment. On merge to main it also re-measures the
 baselines from that run and commits them, so a pull request's cost and latency
 rows compare against numbers taken on the same class of machine the pull

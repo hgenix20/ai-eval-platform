@@ -124,6 +124,87 @@ def test_run_offline_then_gate_then_report(tmp_path: Path):
     assert "offline_core" in out.read_text(encoding="utf-8")
 
 
+def _minimal_summary() -> dict:
+    return {
+        "suite": "offline_core",
+        "target": "scripted",
+        "started_at": "2026-09-11T06:55:29+00:00",
+        "finished_at": "2026-09-11T06:55:30+00:00",
+        "metrics": {"pass_rate": 1.0, "usd_per_run_p50": 0.0},
+        "meta": {},
+        "cases": [{"name": "a", "passed": True, "grades": [], "skipped_reason": None}],
+    }
+
+
+def _minimal_calibration() -> dict:
+    judge = "faithfulness@1:mockllm/model"
+    return {
+        "started_at": "2026-09-11T15:18:41+00:00",
+        "finished_at": "2026-09-11T15:41:19+00:00",
+        "items": 8,
+        "judges": [
+            {
+                "judge": judge,
+                "version": "v1",
+                "items": 8,
+                "unknown": 0,
+                "kappa": 0.25,
+                "accuracy": 0.625,
+                "tp": 2,
+                "fp": 1,
+                "tn": 3,
+                "fn": 2,
+            }
+        ],
+        "swap_agreement": None,
+        "swap_pair": None,
+        "kappa_floor": 0.7,
+        "min_swap_agreement": 0.9,
+        "calibrated": {judge: [False, "kappa 0.25 < 0.70"]},
+    }
+
+
+def _write_results(results: Path, calibration: str | None) -> None:
+    (results / "offline_core").mkdir(parents=True)
+    (results / "offline_core" / "latest.json").write_text(
+        json.dumps(_minimal_summary()), encoding="utf-8"
+    )
+    if calibration is not None:
+        (results / "calibration").mkdir(parents=True)
+        (results / "calibration" / "latest.json").write_text(calibration, encoding="utf-8")
+
+
+def test_report_renders_the_calibration_table_next_to_a_suite(tmp_path: Path):
+    # results/calibration/latest.json matches the same */latest.json glob the
+    # suite summaries come from, and it carries no "metrics" key. Reading it
+    # as a summary took the whole report down; this pins that it does not.
+    results, out = tmp_path / "results", tmp_path / "report.html"
+    _write_results(results, json.dumps(_minimal_calibration()))
+    assert main(["report", "--results", str(results), "--out", str(out)]) == 0
+    html = out.read_text(encoding="utf-8")
+    assert "Judge calibration" in html and "faithfulness@1:mockllm/model" in html
+    assert "offline_core" in html and "kappa 0.25 &lt; 0.70" in html
+
+
+def test_report_without_a_calibration_file_omits_the_table(tmp_path: Path):
+    results, out = tmp_path / "results", tmp_path / "report.html"
+    _write_results(results, None)
+    assert main(["report", "--results", str(results), "--out", str(out)]) == 0
+    html = out.read_text(encoding="utf-8")
+    assert "offline_core" in html and "Judge calibration" not in html
+
+
+def test_report_warns_and_still_renders_on_a_malformed_calibration_file(
+    tmp_path: Path, capsys
+) -> None:
+    results, out = tmp_path / "results", tmp_path / "report.html"
+    _write_results(results, "{not json")
+    assert main(["report", "--results", str(results), "--out", str(out)]) == 0
+    html = out.read_text(encoding="utf-8")
+    assert "offline_core" in html and "Judge calibration" not in html
+    assert "skipping the calibration table" in capsys.readouterr().err
+
+
 def test_gate_fails_on_threshold(tmp_path: Path):
     suite = (
         tmp_path / "offline_core"

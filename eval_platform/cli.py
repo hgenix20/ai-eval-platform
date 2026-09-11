@@ -6,7 +6,7 @@ import argparse
 import json
 import sys
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 from eval_platform.budget import Budget, BudgetExceeded, Ledger
 from eval_platform.calibration import (
@@ -509,6 +509,25 @@ def cmd_judge(a: argparse.Namespace) -> int:
     return 0
 
 
+def _calibration_for_report(path: Path) -> dict[str, Any] | None:
+    """The calibration report at `path` as a dict, or None when there is no
+    file there. A file that will not parse as JSON prints a warning to
+    stderr and returns None, so `evalplat report` still renders everything
+    else. Validation against `CalibrationReportFile` belongs to
+    `evalplat calibrate --check`, which exits 2 on the same file."""
+    if not path.exists():
+        return None
+    try:
+        loaded = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as e:
+        print(f"skipping the calibration table: {path} did not parse: {e}", file=sys.stderr)
+        return None
+    if not isinstance(loaded, dict):
+        print(f"skipping the calibration table: {path} is not a JSON object", file=sys.stderr)
+        return None
+    return cast("dict[str, Any]", loaded)
+
+
 def cmd_report(a: argparse.Namespace) -> int:
     """Render every suite's latest summary under `--results` into one HTML
     report at `--out`, including `--gate-markdown`'s content when that
@@ -517,7 +536,10 @@ def cmd_report(a: argparse.Namespace) -> int:
 
     `results/calibration` is skipped by the suite glob on purpose: a
     calibration report is not a run summary and has no `metrics` key, so
-    reading it as one would take the whole report down.
+    reading it as one would take the whole report down. A calibration file
+    that will not parse costs the report its calibration table and prints a
+    warning; rendering the rest is worth more than an exit code here, and
+    `evalplat calibrate --check` is the command that fails on that file.
     """
     results = Path(a.results)
     summaries = [
@@ -528,8 +550,7 @@ def cmd_report(a: argparse.Namespace) -> int:
     gate_md = None
     if a.gate_markdown and Path(a.gate_markdown).exists():
         gate_md = Path(a.gate_markdown).read_text(encoding="utf-8")
-    cal_path = results / "calibration" / "latest.json"
-    calibration = read_summary(cal_path) if cal_path.exists() else None
+    calibration = _calibration_for_report(results / "calibration" / "latest.json")
     html = render_html(
         summaries,
         gate_markdown=gate_md,
