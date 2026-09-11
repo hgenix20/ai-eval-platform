@@ -1,8 +1,8 @@
 {
   "suite": "faults",
   "target": "agent-platform-local",
-  "started_at": "2026-09-11T07:16:00+00:00",
-  "finished_at": "2026-09-11T07:16:00+00:00",
+  "started_at": "2026-09-11T08:19:33+00:00",
+  "finished_at": "2026-09-11T08:19:33+00:00",
   "cases": [
     {
       "name": "no-fault-control",
@@ -47,7 +47,7 @@
         "answer": "plain",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 5.916299996897578,
+        "wall_ms": 6.095599965192378,
         "meta": {
           "steps_used": 1,
           "history_types": [
@@ -90,7 +90,7 @@
         "answer": null,
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 3.005600068718195,
+        "wall_ms": 2.8967999387532473,
         "meta": {
           "error": "ProviderError('injected fatal provider failure')",
           "faults_fired": [
@@ -156,7 +156,7 @@
         "answer": "after fallback",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 3.3115000696852803,
+        "wall_ms": 3.1958998879417777,
         "meta": {
           "steps_used": 1,
           "history_types": [
@@ -224,7 +224,7 @@
         "answer": "after fallback 1",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 3.176199970766902,
+        "wall_ms": 3.186000045388937,
         "meta": {
           "steps_used": 1,
           "history_types": [
@@ -309,7 +309,7 @@
         "answer": "second",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 4.131000023335218,
+        "wall_ms": 3.9039000403136015,
         "meta": {
           "steps_used": 2,
           "history_types": [
@@ -385,7 +385,7 @@
         "answer": "waited",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 304.4167999178171,
+        "wall_ms": 304.3927000835538,
         "meta": {
           "steps_used": 2,
           "history_types": [
@@ -435,7 +435,9 @@
           {
             "kind": "tool",
             "name": "lookup",
-            "input": null,
+            "input": {
+              "key": "x"
+            },
             "output": "",
             "latency_ms": 0.0,
             "tokens_in": 0,
@@ -459,7 +461,7 @@
         "answer": "handled empty",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 4.122900078073144,
+        "wall_ms": 3.675500047393143,
         "meta": {
           "steps_used": 2,
           "history_types": [
@@ -515,7 +517,9 @@
           {
             "kind": "tool",
             "name": "lookup",
-            "input": null,
+            "input": {
+              "key": "summary"
+            },
             "output": "<<malformed>>",
             "latency_ms": 0.0,
             "tokens_in": 0,
@@ -539,7 +543,7 @@
         "answer": "could not read the lookup result",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 3.587600076571107,
+        "wall_ms": 3.4179999493062496,
         "meta": {
           "steps_used": 2,
           "history_types": [
@@ -590,7 +594,7 @@
         "answer": null,
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 2.973899943754077,
+        "wall_ms": 2.8600000077858567,
         "meta": {
           "error": "RuntimeError('injected tool failure in lookup')",
           "faults_fired": [
@@ -644,7 +648,7 @@
         "answer": null,
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 2.9895000625401735,
+        "wall_ms": 2.8542999643832445,
         "meta": {
           "error": "RuntimeError('injected tool failure in lookup')",
           "faults_fired": [
@@ -692,7 +696,7 @@
         "answer": null,
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 3.123600035905838,
+        "wall_ms": 3.0356000643223524,
         "meta": {
           "error": "AllProvidersFailedError(\"every step in the 'draft' route failed: validator/validator-model: injected retryable provider failure\")",
           "faults_fired": [
@@ -716,8 +720,8 @@
     "cases_skipped": 0.0,
     "pass_rate": 0.8181818181818182,
     "usd_per_run_p50": 0.0,
-    "wall_ms_p50": 3.3115000696852803,
-    "wall_ms_p95": 155.16654995735735,
+    "wall_ms_p50": 3.1958998879417777,
+    "wall_ms_p95": 155.24415002437308,
     "expectation_match_rate": 0.8181818181818182,
     "recovery_rate": 0.75
   },
