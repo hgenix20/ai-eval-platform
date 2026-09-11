@@ -64,7 +64,27 @@ run on a different target reports not measured instead of a false regression.
 The `agent-platform` extra installs `enterprise-agent-platform`, the system
 under test. The `ifeval` extra installs what `inspect_evals`'s IFEval task
 imports while it builds; without it, `evalplat run public ifeval` fails at task
-construction.
+construction. The `mcp` extra installs the Model Context Protocol package the
+`run mcp` target needs.
+
+### MCP servers
+
+`run mcp` points an Inspect ReAct agent at one MCP server and runs a suite's
+cases through it. The server is either a local child process on stdio or a
+remote URL:
+
+```
+pip install -e ".[mcp]"
+evalplat run mcp --suite-dir suites/offline_core --mcp-command python --mcp-args tests/fixtures/mcp_fixture_server.py --model openai/gpt-4o-mini
+evalplat run mcp --suite-dir suites/offline_core --mcp-url https://mcp.example.com/ --mcp-authorization "$TOKEN" --model openai/gpt-4o-mini
+```
+
+The target's name is `mcp:<server name>` and its capabilities are
+`{"agent", "mcp"}`, so only cases whose `target_requirements` fit run against
+it. The server's tool list is read once before the suite starts, so an
+unreachable server exits 2 rather than failing every case, and those tool names
+are recorded in the summary's `meta["mcp_tools"]`. `--max-steps` caps the agent
+loop, and a case's own `max_steps` is bounded by it.
 
 ### Local models
 

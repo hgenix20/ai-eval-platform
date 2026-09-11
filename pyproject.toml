@@ -18,6 +18,12 @@ dependencies = [
 [project.optional-dependencies]
 dev = ["pytest>=8.0", "ruff==0.16.6", "pyright>=1.1.380", "bandit>=1.7", "types-PyYAML", "opentelemetry-sdk>=1.44"]
 agent-platform = ["agent-platform @ git+https://github.com/hgenix20/enterprise-agent-platform@d6fee0e"]
+# mcp 2.x renamed FastMCP to MCPServer; the stdio fixture server under
+# tests/fixtures uses the 2.x name, and Inspect 0.3.263's MCP client works
+# against 2.x, so the floor here is 2.0 rather than the 1.10 Inspect itself
+# asks for. Capped below 3 because the server API is what moved at the last
+# major, and the fixture would break the same way again.
+mcp = ["mcp>=2.0,<3"]
 ifeval = [
     "instruction_following_eval @ git+https://github.com/josejg/instruction_following_eval@0c495b2f95155e8b10acb919ae283bfb4d5be6e2",
     "langdetect",

@@ -3,12 +3,14 @@
 from .agent_platform_http import AgentPlatformHttpTarget
 from .agent_platform_local import AgentPlatformLocalTarget
 from .base import AgentTarget, TargetUnavailable
+from .mcp import MCPTarget
 from .scripted import ScriptedTarget
 
 __all__ = [
     "AgentPlatformHttpTarget",
     "AgentPlatformLocalTarget",
     "AgentTarget",
+    "MCPTarget",
     "ScriptedTarget",
     "TargetUnavailable",
 ]

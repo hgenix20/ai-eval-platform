@@ -1,4 +1,4 @@
-"""evalplat: catalog, run offline and public, gate, report."""
+"""evalplat: catalog, run offline, public and mcp, gate, report."""
 
 from __future__ import annotations
 
@@ -17,6 +17,7 @@ from eval_platform.suites import load_cases, run_public, run_suite
 from eval_platform.targets import (
     AgentPlatformHttpTarget,
     AgentPlatformLocalTarget,
+    MCPTarget,
     ScriptedTarget,
     TargetUnavailable,
 )
@@ -234,6 +235,69 @@ def cmd_run_public(a: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_run_mcp(a: argparse.Namespace) -> int:
+    """Run every case under `--suite-dir` against an MCP server, driven by
+    an Inspect ReAct agent on `--model`, and write the summary to
+    `--results`.
+
+    The server is either remote (`--mcp-url`, with `--mcp-authorization`
+    for a bearer token) or a local child process (`--mcp-command` plus any
+    `--mcp-args`); argparse requires exactly one of the two. `--max-steps`
+    is the target's own ceiling on agent steps, which bounds each case's
+    own `max_steps`. `--model-args` is a JSON object of Inspect model
+    constructor keyword arguments.
+
+    The server is contacted once before the suite runs, through
+    `list_tools()`, so an unreachable server costs one connection attempt
+    rather than one failed case for every case in the suite. The tool names
+    it reports are printed and recorded in the summary's
+    `meta["mcp_tools"]`, as the record of what the agent could reach.
+
+    Returns 2 if `--model-args` is not a JSON object or if the server
+    cannot be reached; 0 otherwise, however many cases failed, matching
+    `run offline` (the gate, not this command, decides pass/fail for CI).
+    Prints the pass count and each failing case's reason.
+    """
+    try:
+        model_args = _model_args(a)
+    except (json.JSONDecodeError, ValueError) as e:
+        print(f"invalid --model-args JSON: {e}", file=sys.stderr)
+        return 2
+    common: dict[str, Any] = {
+        "model": a.model,
+        "max_steps": a.max_steps,
+        "model_args": model_args,
+        "log_dir": Path(a.log_dir) if a.log_dir else None,
+    }
+    try:
+        if a.mcp_url:
+            target = MCPTarget.http(url=a.mcp_url, authorization=a.mcp_authorization, **common)
+        else:
+            target = MCPTarget.stdio(command=a.mcp_command, args=a.mcp_args or [], **common)
+        tools = target.list_tools()
+    except TargetUnavailable as e:
+        print(f"target unavailable: {e}", file=sys.stderr)
+        return 2
+    print(f"{target.name}: {len(tools)} tools ({', '.join(tools)})")
+    suite_dir = Path(a.suite_dir)
+    result = run_suite(
+        suite_dir.name,
+        load_cases(suite_dir),
+        target,
+        budget=Budget(max_usd=a.budget_usd, max_wall_s=a.max_wall_s),
+    )
+    result.meta["mcp_tools"] = tools
+    path = write_summary(result, Path(a.results))
+    passed = int(result.metrics["cases_passed"])
+    total = int(result.metrics["cases_total"])
+    print(f"{result.suite}: {passed}/{total} passed -> {path}")
+    for c in result.cases:
+        if not c.passed:
+            why = c.skipped_reason or "; ".join(g.explanation for g in c.grades if not g.passed)
+            print(f"  FAIL {c.name}: {why}")
+    return 0
+
+
 def _current_for(config_suites: list[str], results: Path) -> dict[str, dict[str, Any]]:
     """Find each configured suite's latest summary under `results`.
 
@@ -323,10 +387,39 @@ def cmd_report(a: argparse.Namespace) -> int:
     return 0
 
 
+def _add_run_mcp(run: argparse._SubParsersAction) -> None:
+    """Wire the `run mcp` subcommand onto the `run` subparser group.
+
+    Split out of `build_parser` so that function stays under the statement
+    ceiling the linter enforces. `--mcp-url` and `--mcp-command` are a
+    required mutually exclusive group: a run needs exactly one server, and
+    argparse rejects zero or both before any command code runs.
+    """
+    mcp = run.add_parser("mcp")
+    mcp.add_argument("--suite-dir", required=True)
+    where = mcp.add_mutually_exclusive_group(required=True)
+    where.add_argument("--mcp-url", help="URL of a remote MCP server (streamable HTTP).")
+    where.add_argument("--mcp-command", help="Executable that runs a local MCP server on stdio.")
+    mcp.add_argument("--mcp-args", nargs="*", help="Arguments for --mcp-command.")
+    mcp.add_argument("--mcp-authorization", help="OAuth bearer token for --mcp-url.")
+    mcp.add_argument("--model", required=True)
+    mcp.add_argument(
+        "--model-args",
+        help="JSON object of Inspect model constructor kwargs (e.g. device, "
+        "dtype for the hf/ provider).",
+    )
+    mcp.add_argument("--results", default="results")
+    mcp.add_argument("--log-dir", help="Where Inspect writes its .eval logs (default: temporary).")
+    mcp.add_argument("--max-steps", type=int, default=8)
+    mcp.add_argument("--budget-usd", type=float, default=5.0)
+    mcp.add_argument("--max-wall-s", type=float, default=1800.0)
+    mcp.set_defaults(fn=cmd_run_mcp)
+
+
 def build_parser() -> argparse.ArgumentParser:
     """Assemble the `evalplat` argument parser: `catalog list`,
-    `run offline`, `run public`, `gate`, and `report`, each wired to its
-    `cmd_*` function via `set_defaults(fn=...)`.
+    `run offline`, `run public`, `run mcp`, `gate`, and `report`, each
+    wired to its `cmd_*` function via `set_defaults(fn=...)`.
     """
     p = argparse.ArgumentParser(prog="evalplat")
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -380,6 +473,8 @@ def build_parser() -> argparse.ArgumentParser:
         "dtype for the hf/ provider).",
     )
     pub.set_defaults(fn=cmd_run_public)
+
+    _add_run_mcp(run)
 
     gate = sub.add_parser("gate")
     gate.add_argument("--config", default="gate.yaml")
