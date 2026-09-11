@@ -31,7 +31,7 @@ reproducible. Nothing in the suite reaches the network at run time.
 | Filings | 31 sections (24 10-K, 7 10-K/A), 24 companies |
 | Cases | 52, one per anchor phrase |
 | Paragraphs kept | 1,993 (median 83 per filing, 3 to 86) |
-| Committed size | 1.0 MB of fixtures, 42 KB of cases, 43 KB of golden set |
+| Committed size | 1.0 MB of fixtures, 43 KB of cases, 44 KB of golden set |
 
 Each fixture is one item's section of one filing:
 
@@ -68,7 +68,7 @@ python scripts/build_edgar_fixtures.py --golden suites/groundedness/golden.json 
 
 The script fetches each cited document from sec.gov once (User-Agent
 `ai-eval-platform research hgenix@agentmail.to`, 60 s timeout, 0.5 s between
-requests, a 403 or 429 backed off 10 s and retried three times), caches the
+requests, a 403 or 429 backed off 10 s and three attempts in all), caches the
 raw HTML under `.cache/edgar` (gitignored, about 81 MB), converts it to
 paragraphs at block boundaries, cuts out the item's section, and writes the
 fixtures and cases. A rebuild from a warm cache is offline.

@@ -419,8 +419,11 @@ uncalibrated: kappa 0.08 < 0.70 (kappa 0.08, floor 0.70)". The gate looks the
 judge up in `results/calibration/latest.json`, finds it marked uncalibrated,
 and reports not_measured with the reason. Both the baseline and the current
 value are still recorded at 0.8462, so the number stays visible while deciding
-nothing. It starts deciding the moment some judge clears the floors in the
-`judges:` block, with no further change to `gate.yaml`. See
+nothing. The row starts deciding the moment the judge it names clears the
+floors in the `judges:` block, with no further change to `gate.yaml`. Putting a
+different judge behind it takes more: the `--judge` value for the judge pass, a
+calibration run for that judge, the metric name on this row, since the metric
+carries the model id, and a baseline for the row under that new metric. See
 [ADR-0007](adr/0007-uncalibrated-judges-cannot-block.md).
 
 Three of these rows carry a Phase 2 decision worth naming. `faults` compares

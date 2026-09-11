@@ -13,8 +13,12 @@ Phase 3 (judges) is done, and its first finding is a negative one: no judge
 this machine can run is calibrated, so the gate's judge row reports
 not_measured and cannot fail a build. Against 120 human-labeled RAGTruth items,
 Qwen2.5-3B-Instruct scores kappa 0.08 and Qwen2.5-1.5B-Instruct 0.02, both near
-chance; HHEM-2.1-Open reaches 0.52 against a floor of 0.70. The floors stayed
-where they were, and the measured pass rates stay on the page deciding nothing
+chance; HHEM-2.1-Open reaches 0.52 against a floor of 0.70. HHEM's number still
+gates and the two judges' numbers do not: at 0.52 it feeds a relative row,
+`groundedness` at `max_rise: 0.02`, because the classifier is fixed and its
+snapshot is pinned, so a rise on the same cases means the answers changed. The
+floors stayed where they were, and the measured judge pass rates stay on the
+page deciding nothing
 ([ADR-0007](docs/adr/0007-uncalibrated-judges-cannot-block.md)).
 
 The groundedness suite ran anyway, since most of what it measures needs no
@@ -142,7 +146,10 @@ comparable across a re-grade:
 evalplat judge --suite-dir suites/groundedness --results results --judge hf/Qwen/Qwen2.5-3B-Instruct --judge hf/Qwen/Qwen2.5-1.5B-Instruct --model-args '{"device": "cuda:0", "dtype": "bfloat16", "do_sample": false}' --hhem
 ```
 
-A second `--judge` makes swap agreement measurable. `--hhem` adds
+A second `--judge` makes swap agreement measurable. An `hf/` judge has to be
+downloaded first, since both commands read the judge's snapshot hash out of the
+local Hugging Face cache to key the verdict cache: with no snapshot there, the
+command names the path it looked for and exits 2. `--hhem` adds
 HHEM-2.1-Open, a fixed classifier that scores each answer sentence against the
 retrieved context and reports `unsupported_rate`. Verdicts are cached under
 `.cache/judge/`, keyed by a hash over the case, the prompt, the judge's model
@@ -183,8 +190,13 @@ groundedness run and the calibration report out of the repository: `--check`
 validates the report's shape and prints each grader's verdict, and the gate
 step then reads the four groundedness rows from the committed run. `--check`
 looks at shape alone; the gate is what matches a judge to a row, and a judge
-row stays not_measured until that judge clears the kappa floor. Rungs 1, 2, and
-3 can fail a pull request today.
+row stays not_measured until that judge clears the kappa floor. What rung 3
+validates, then, is the committed artifacts: `--check` fails when the
+calibration report goes missing or stops parsing, and the gate step fails when
+an edit to the committed groundedness run moves one of its rows past a
+threshold. Re-measuring those numbers takes a local GPU run, which a CI runner
+has no way to do. Rungs 1 and 2 stay the rungs a code change can fail on its
+own.
 `.github/workflows/ci.yml` runs all three, uploads `out/` as an artifact, and posts
 the gate table as a PR comment. On merge to main it also re-measures the
 baselines from that run and commits them, so a pull request's cost and latency
@@ -321,9 +333,12 @@ Design spec: `docs/superpowers/specs/2026-09-07-ai-eval-platform-design.md`.
   and the groundedness suite on the EDGAR golden set, all measured on a local
   GPU for $0.00. The calibration rule then did the job it exists for: at kappa
   0.08, 0.02, and 0.52 against a floor of 0.70, nothing this machine can run
-  earned a vote in the gate, and the judge row reports not_measured. A hosted
-  judge is a different `--judge` value and a key, with no other change to the
-  pipeline. What is still open is a judge that clears the floor, and an
+  earned a vote in the gate, and the judge row reports not_measured. Moving to
+  a hosted judge takes four things: the `--judge` value and its key, a
+  calibration run for that judge, the metric name on the `groundedness_judge`
+  row in `gate.yaml`, and a baseline for the row under the new metric. Nothing
+  else in the pipeline changes. What is still open is a judge that clears the
+  floor, and an
   absolute ceiling on `unsupported_rate` once the level has been measured on a
   second answerer. Numbers in [docs/results.md](docs/results.md).
 - **Phase 4, online. Next.** Production sampling, a drift report, a dashboard

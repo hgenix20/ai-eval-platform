@@ -68,8 +68,8 @@ weigh the row for themselves.
   measurement is not a reason to move it.
 - **Wait for hosted credits before shipping any judge layer.** The cache, the
   rubric, the swap check, and the calibration arithmetic are all testable
-  without a good judge, and shipping them now means a hosted judge is a
-  command-line change instead of a project.
+  without a good judge, and shipping them now means a hosted judge costs a
+  calibration run and two lines of config instead of a project.
 - **Treat a judge's own confidence as the calibration signal.** A small model's
   stated confidence is a token distribution over words like "supported". It
   carries no information about agreement with a person, which is the thing the
@@ -77,9 +77,14 @@ weigh the row for themselves.
 
 ## Consequences
 
-- `evalplat judge` and `evalplat calibrate` both work today and cost $0.00. A
-  hosted judge needs one different `--judge` value and a key. Nothing else in
-  the pipeline changes.
+- `evalplat judge` and `evalplat calibrate` both work today and cost $0.00.
+  Moving to a hosted judge takes four things: the `--judge` value and its key,
+  a calibration run for that judge against the same 120 items, the metric name
+  on the `groundedness_judge` row in `gate.yaml` (the row names the model it
+  measures, so a new judge is a new metric), and a baseline for that row under
+  the new metric. Nothing else in the pipeline changes: the cache, the rubric,
+  the swap check, the calibration arithmetic, and the gate's own rule all take
+  the new judge as they stand.
 - `.cache/judge/` is gitignored and keyed by a SHA-256 over the case id, the
   prompt text, the judge model id and version (the Hugging Face snapshot hash
   for an `hf/` judge), the rubric id and version, and the sampling parameters.
