@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import asyncio
 import re
+import sys
 from dataclasses import dataclass
 from typing import Any, Literal
 
@@ -24,8 +25,14 @@ from eval_platform.types import Case, Grade, Trajectory
 Verdict = Literal["pass", "fail", "unknown"]
 # Anchored to a whole line, which is the form every rubric asks for. An
 # unanchored pattern would read "my verdict: leaning supported" mid-sentence
-# as the label and score the reasoning instead of the conclusion.
-_VERDICT_LINE = re.compile(r"^\s*verdict\s*:\s*([A-Z_]+)\s*$", re.IGNORECASE | re.MULTILINE)
+# as the label and score the reasoning instead of the conclusion. The
+# optional `*`/`_` runs and one closing `.`, `!`, or `;` are what small
+# judges write around the label in practice: "VERDICT: SUPPORTED." and
+# "**VERDICT: UNSUPPORTED**" state a verdict, and reading either as unknown
+# would throw away the judgment the model made.
+_VERDICT_LINE = re.compile(
+    r"^\s*[*_]*verdict\s*:\s*[*_]*([A-Z_]+)[*_]*[.!;]?\s*$", re.IGNORECASE | re.MULTILINE
+)
 
 
 @dataclass(frozen=True)
@@ -90,15 +97,20 @@ class JudgeGrader:
         The judge pass grades every case with one judge before it builds the
         next, and calls this in between, so two local judges never occupy GPU
         memory at the same time. A later `judge()` call reloads the handle
-        from `model`, which is why this is safe to call at any point. No-op
-        for a handle the caller injected: it is dropped here too, so an
-        injected mock is released on the same path as a real model.
+        from `model`, which is why this is safe to call at any point. A
+        handle the caller injected is dropped here too, so an injected mock
+        is released on the same path as a real model.
+
+        The CUDA cache is emptied only when torch is already imported in
+        this process. Nothing holds GPU memory otherwise, and a process
+        whose judges are all hosted models (or mocks) should not pay a
+        torch import to be told so.
         """
         self._handle = None
-        try:
-            import torch  # noqa: PLC0415
-        except ImportError:
+        if "torch" not in sys.modules:
             return
+        import torch  # noqa: PLC0415
+
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
 

@@ -1,4 +1,6 @@
+import sys
 from pathlib import Path
+from types import ModuleType
 
 import pytest
 from inspect_ai.model import ModelOutput, get_model
@@ -51,6 +53,10 @@ def _grader(tmp_path: Path, outputs: list[str]) -> JudgeGrader:
         # line of its own counts.
         ("my verdict: leaning supported\nVERDICT: UNSUPPORTED", "UNSUPPORTED"),
         ("the verdict: SUPPORTED is tentative", "UNKNOWN"),
+        # A small judge ends the line with punctuation or wraps it in markdown
+        # emphasis; both are still the verdict line.
+        ("VERDICT: SUPPORTED.", "SUPPORTED"),
+        ("**VERDICT: UNSUPPORTED**", "UNSUPPORTED"),
     ],
 )
 def test_parse_verdict(text, label):
@@ -119,6 +125,45 @@ def test_release_drops_the_model_handle(tmp_path: Path):
     assert g._handle is None
     again = g.judge(_case(), _traj("Paris."))
     assert again.cached is True and again.label == "SUPPORTED"
+
+
+class _FakeCuda:
+    def __init__(self) -> None:
+        self.emptied = 0
+
+    def is_available(self) -> bool:
+        return True
+
+    def empty_cache(self) -> None:
+        self.emptied += 1
+
+
+class _FakeTorch(ModuleType):
+    """Stands in for torch in sys.modules, so the release path can be tested
+    on a machine with no GPU and without importing torch for real."""
+
+    def __init__(self) -> None:
+        super().__init__("torch")
+        self.cuda = _FakeCuda()
+
+
+def test_release_empties_the_cuda_cache_when_torch_is_loaded(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    fake = _FakeTorch()
+    monkeypatch.setitem(sys.modules, "torch", fake)
+    _grader(tmp_path, []).release()
+    assert fake.cuda.emptied == 1
+
+
+def test_release_does_not_import_torch_when_it_is_absent(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    """A run whose judges are hosted models never loads torch, and releasing
+    one must not be what finally imports it."""
+    monkeypatch.delitem(sys.modules, "torch", raising=False)
+    _grader(tmp_path, []).release()
+    assert "torch" not in sys.modules
 
 
 def test_empty_answer_is_unknown_without_a_call(tmp_path: Path):
