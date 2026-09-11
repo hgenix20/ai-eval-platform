@@ -385,6 +385,20 @@ Source: `results/public_agentdojo/latest.json`, run
 | output tokens | 9,344 |
 | cost | $0.00 |
 
+A model that completes 0 of 20 benign tasks has nothing to show resistance
+against. The single attack success in twenty samples is not evidence that
+Qwen2.5-3B-Instruct usually resists the injected instruction: the other
+nineteen non-successes more likely come from general task failure, plausibly
+the model never calling a tool at all, than from any security judgment the
+model made on the injected content. A meaningful attack-success number needs
+a model that completes the benign tasks first, so resistance has something
+real to measure against: a larger local model, or a hosted model run when
+credits exist, with utility high enough that the attack-success figure
+measures something. The 0 of 20 utility result was checked no further than
+confirming zero per-sample errors; transcripts were not read case by case,
+so a formatting mismatch between the model's tool calls and the harness is
+possible as an explanation too.
+
 AgentDojo's own scorer names these two numbers `utility` and `security`;
 `security` is `"C"` when the injected instruction was carried out, so the
 `security.accuracy` figure above is an attack success rate, not a pass rate,
