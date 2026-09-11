@@ -118,11 +118,62 @@ def _cases_table(cases: Sequence[dict[str, Any]]) -> str:
     return f"<table>{header}{''.join(rows)}</table>" if rows else ""
 
 
+def _calibration_table(cal: dict[str, Any]) -> str:
+    """Render a calibration report dict (the shape `write_report` writes)
+    as a "Judge calibration" section: one row per judge, then the swap
+    agreement line when the report carries a pair.
+
+    The `calibrated` column is the verdict the gate reads, so it is printed
+    as the recorded yes or no plus the recorded reason rather than
+    recomputed here. A judge absent from the report's `calibrated` map
+    renders as "no verdict recorded", which keeps a hand-edited file from
+    taking the whole report down. Judge ids, versions, and reasons are
+    escaped, since a judge id is a model name a caller supplied.
+    """
+    verdicts = cal.get("calibrated") or {}
+    rows = []
+    for j in cal.get("judges", []):
+        recorded = verdicts.get(j.get("judge"))
+        if recorded is None:
+            cell, reason = "?", "no verdict recorded"
+        else:
+            cell, reason = ("yes" if recorded[0] else "no"), str(recorded[1])
+        rows.append(
+            f"<tr><td>{escape(str(j.get('judge', '')))}</td>"
+            f"<td>{escape(str(j.get('version', '')))}</td>"
+            f"<td>{j.get('items', 0)}</td><td>{j.get('unknown', 0)}</td>"
+            f"<td>{float(j.get('kappa', 0.0)):.4f}</td>"
+            f"<td>{float(j.get('accuracy', 0.0)):.4f}</td>"
+            f"<td class='{'pass' if cell == 'yes' else 'fail'}'>{cell}</td>"
+            f"<td>{escape(reason)}</td></tr>"
+        )
+    header = (
+        "<tr><th>judge</th><th>version</th><th>items</th><th>unknown</th>"
+        "<th>kappa</th><th>accuracy</th><th>calibrated</th><th>reason</th></tr>"
+    )
+    parts = [
+        "<h2>Judge calibration</h2>",
+        f"<p>{cal.get('items', 0)} labeled items, kappa floor "
+        f"{float(cal.get('kappa_floor', 0.0)):.2f}, "
+        f"run {escape(str(cal.get('started_at', '')))}.</p>",
+        f"<table>{header}{''.join(rows)}</table>",
+    ]
+    swap, pair = cal.get("swap_agreement"), cal.get("swap_pair")
+    if swap is not None and pair:
+        parts.append(
+            f"<p>Swap agreement {float(swap):.4f} between {escape(str(pair[0]))} "
+            f"and {escape(str(pair[1]))}, floor "
+            f"{float(cal.get('min_swap_agreement', 0.0)):.2f}.</p>"
+        )
+    return "".join(parts)
+
+
 def render_html(
     summaries: Sequence[dict[str, Any]],
     *,
     gate_markdown: str | None = None,
     ledger_total_usd: float | None = None,
+    calibration: dict[str, Any] | None = None,
 ) -> str:
     """Render one self-contained HTML report from a list of suite summary
     dicts (the shape written by `SuiteResult.to_dict()`): a header, a
@@ -144,6 +195,12 @@ def render_html(
     whole report. A scatter point whose cost or quality metric falls
     outside its expected range is clamped onto the canvas and labeled
     "(clamped)" (see `_scatter`).
+
+    `calibration` is a judge calibration report dict
+    (`results/calibration/latest.json`). When given, its section renders
+    after the suites and before the gate; when omitted, the page carries no
+    calibration section at all, so a repository that has never calibrated a
+    judge gets a report with nothing to explain away.
     """
     parts = [
         "<!doctype html><html><head><meta charset='utf-8'><title>Eval report</title>"
@@ -163,6 +220,8 @@ def render_html(
                 + _metrics_table(s["metrics"])
                 + _cases_table(s.get("cases", []))
             )
+    if calibration is not None:
+        parts.append(_calibration_table(calibration))
     if gate_markdown:
         parts.append("<h2>Gate</h2><pre>" + escape(gate_markdown) + "</pre>")
     parts.append("</body></html>")

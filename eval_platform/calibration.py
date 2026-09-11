@@ -17,7 +17,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, model_validator
 
 from eval_platform.graders.hhem import HHEMGrader
 from eval_platform.graders.judge import JudgeGrader
@@ -222,6 +222,63 @@ def calibrate(
         kappa_floor,
         min_swap_agreement,
     )
+
+
+class JudgeCalibrationRow(BaseModel):
+    """One judge's row as `write_report` serializes `JudgeCalibration`."""
+
+    model_config = ConfigDict(extra="forbid")
+    judge: str
+    version: str
+    items: int
+    unknown: int
+    kappa: float
+    accuracy: float
+    tp: int
+    fp: int
+    tn: int
+    fn: int
+
+
+class CalibrationReportFile(BaseModel):
+    """The on-disk shape of `results/calibration/latest.json`, which is
+    `CalibrationReport.to_dict()` written as JSON.
+
+    This is the contract a reader may rely on, and `evalplat calibrate
+    --check` is what enforces it without a model call: CI has no GPU and no
+    hosted credits, so the committed report is the only calibration evidence
+    a build can read. `calibrated` carries `[ok, reason]` per judge, and
+    every judge in `judges` must appear there, since a row with no verdict
+    would leave a reader guessing whether the judge may gate.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+    started_at: str
+    finished_at: str
+    items: int
+    judges: list[JudgeCalibrationRow]
+    swap_agreement: float | None
+    swap_pair: tuple[str, str] | None
+    kappa_floor: float
+    min_swap_agreement: float
+    calibrated: dict[str, tuple[bool, str]]
+
+    @model_validator(mode="after")
+    def _every_judge_carries_a_verdict(self) -> CalibrationReportFile:
+        missing = sorted(j.judge for j in self.judges if j.judge not in self.calibrated)
+        if missing:
+            raise ValueError(f"calibrated verdict missing for {', '.join(missing)}")
+        return self
+
+
+def load_report(path: Path) -> CalibrationReportFile:
+    """Read and validate a written calibration report.
+
+    Raises OSError when `path` cannot be read (FileNotFoundError included)
+    and ValueError when its content is not a valid report, so a caller can
+    tell a missing file from a malformed one by exception type.
+    """
+    return CalibrationReportFile.model_validate_json(path.read_text(encoding="utf-8"))
 
 
 def write_report(report: CalibrationReport, results_dir: Path) -> Path:

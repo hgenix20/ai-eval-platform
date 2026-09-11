@@ -9,7 +9,14 @@ from pathlib import Path
 from typing import Any
 
 from eval_platform.budget import Budget, BudgetExceeded, Ledger
-from eval_platform.calibration import calibrate, load_items, write_report
+from eval_platform.calibration import (
+    CalibrationReport,
+    CalibrationReportFile,
+    calibrate,
+    load_items,
+    load_report,
+    write_report,
+)
 from eval_platform.catalog import filter_entries, load_catalog
 from eval_platform.gate import compare, load_gate_config, to_junit, to_markdown
 from eval_platform.graders.base import Grader
@@ -505,17 +512,29 @@ def cmd_judge(a: argparse.Namespace) -> int:
 def cmd_report(a: argparse.Namespace) -> int:
     """Render every suite's latest summary under `--results` into one HTML
     report at `--out`, including `--gate-markdown`'s content when that
-    file exists. Always returns 0.
+    file exists, and the judge calibration table when
+    `<results>/calibration/latest.json` exists. Always returns 0.
+
+    `results/calibration` is skipped by the suite glob on purpose: a
+    calibration report is not a run summary and has no `metrics` key, so
+    reading it as one would take the whole report down.
     """
     results = Path(a.results)
-    summaries = [read_summary(p) for p in sorted(results.glob("*/latest.json"))]
+    summaries = [
+        read_summary(p)
+        for p in sorted(results.glob("*/latest.json"))
+        if p.parent.name != "calibration"
+    ]
     gate_md = None
     if a.gate_markdown and Path(a.gate_markdown).exists():
         gate_md = Path(a.gate_markdown).read_text(encoding="utf-8")
+    cal_path = results / "calibration" / "latest.json"
+    calibration = read_summary(cal_path) if cal_path.exists() else None
     html = render_html(
         summaries,
         gate_markdown=gate_md,
         ledger_total_usd=Ledger(results / "ledger.jsonl").total_usd(),
+        calibration=calibration,
     )
     Path(a.out).parent.mkdir(parents=True, exist_ok=True)
     Path(a.out).write_text(html, encoding="utf-8")
@@ -523,10 +542,49 @@ def cmd_report(a: argparse.Namespace) -> int:
     return 0
 
 
+def _print_calibration(report: CalibrationReport | CalibrationReportFile) -> None:
+    """Print one line per judge (kappa, accuracy, unknown count, whether it
+    may gate and why), then the swap-agreement line when the report carries
+    a pair. Takes either a freshly computed report or one read back from
+    disk, which is what keeps `calibrate` and `calibrate --check` printing
+    the same lines for the same numbers."""
+    for j in report.judges:
+        if isinstance(report, CalibrationReportFile):
+            ok, reason = report.calibrated[j.judge]
+        else:
+            ok, reason = report.calibrated(j.judge)
+        print(
+            f"{j.judge} kappa={j.kappa:.2f} acc={j.accuracy:.2f} "
+            f"unknown={j.unknown}/{j.items} calibrated={'yes' if ok else 'no'}: {reason}"
+        )
+    if report.swap_agreement is not None and report.swap_pair is not None:
+        first, second = report.swap_pair
+        print(f"swap agreement {report.swap_agreement:.2f} between {first} and {second}")
+
+
+def _check_calibration_report(path: Path) -> int:
+    """Validate a written calibration report against `CalibrationReportFile`
+    and print its verdicts. Returns 0 when the file parses and 2 when it is
+    missing or malformed, with the reason on stderr. No model is called, so
+    this runs in CI on a machine with no GPU and no credits."""
+    try:
+        report = load_report(path)
+    except (OSError, ValueError) as e:
+        print(f"could not read calibration report {path}: {e}", file=sys.stderr)
+        return 2
+    _print_calibration(report)
+    print(f"{path}: valid, {len(report.judges)} graders over {report.items} labeled items")
+    return 0
+
+
 def cmd_calibrate(a: argparse.Namespace) -> int:
     """Score every `--judge` (and HHEM, with `--hhem`) against the labeled
     items under `--items`, using the faithfulness rubric, and write the
     report under `--results`.
+
+    `--check PATH` does none of that. It reads an already written report,
+    validates its shape, prints the same per-judge lines, and exits 0 or 2.
+    Nothing else on the command line is read in that mode.
 
     `--limit` keeps only the first N items after loading (sorted file
     order), for a fast smoke run. `--model-args` is a JSON object of
@@ -538,10 +596,16 @@ def cmd_calibrate(a: argparse.Namespace) -> int:
     is calibrated and why), then the swap-agreement line when two or more
     judges were given, then the report path.
 
-    Returns 2 if `--items` cannot be loaded (missing directory, invalid
-    row, duplicate id) or `--model-args` is not valid JSON; the message
-    goes to stderr in either case. Returns 0 otherwise.
+    Returns 2 if `--items` or `--judge` is absent without `--check`, if
+    `--items` cannot be loaded (missing directory, invalid row, duplicate
+    id), or if `--model-args` is not valid JSON; the message goes to stderr
+    in every case. Returns 0 otherwise.
     """
+    if a.check:
+        return _check_calibration_report(Path(a.check))
+    if not a.items or not a.judge:
+        print("calibrate needs --items and at least one --judge, or --check", file=sys.stderr)
+        return 2
     try:
         model_args = _model_args(a)
     except (json.JSONDecodeError, ValueError) as e:
@@ -573,15 +637,7 @@ def cmd_calibrate(a: argparse.Namespace) -> int:
         hhem=hhem,
     )
     path = write_report(report, Path(a.results))
-    for j in report.judges:
-        ok, reason = report.calibrated(j.judge)
-        print(
-            f"{j.judge} kappa={j.kappa:.2f} acc={j.accuracy:.2f} "
-            f"unknown={j.unknown}/{j.items} calibrated={'yes' if ok else 'no'}: {reason}"
-        )
-    if report.swap_agreement is not None and report.swap_pair is not None:
-        first, second = report.swap_pair
-        print(f"swap agreement {report.swap_agreement:.2f} between {first} and {second}")
+    _print_calibration(report)
     print(f"-> {path}")
     return 0
 
@@ -593,14 +649,22 @@ def _add_calibrate(sub: argparse._SubParsersAction) -> None:
     `_add_run_mcp`: keeping that function under the linter's statement
     ceiling. `--judge` is repeatable; a second `--judge` is what makes
     swap agreement measurable.
+
+    `--items` and `--judge` are not marked required, because `--check` is a
+    complete command line on its own; `cmd_calibrate` exits 2 with a
+    message when they are missing from a scoring run.
     """
     cal = sub.add_parser("calibrate")
-    cal.add_argument("--items", required=True, help="Directory of *.jsonl calibration items.")
+    cal.add_argument("--items", help="Directory of *.jsonl calibration items.")
     cal.add_argument(
         "--judge",
         action="append",
-        required=True,
         help="Judge model id; repeat for a second judge, which enables swap agreement.",
+    )
+    cal.add_argument(
+        "--check",
+        help="Validate an already written calibration report and print its "
+        "verdicts, then exit 0 or 2. Calls no model.",
     )
     cal.add_argument(
         "--model-args",

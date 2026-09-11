@@ -27,6 +27,13 @@ jobs:
       - run: pyright
       - run: bandit -q -r eval_platform
       - run: pytest -m "not network and not live"
+      # rung 3: judge-graded. CI has no GPU and no hosted credits, so it does
+      # not call a judge. It reads the committed judge-graded results and the
+      # committed calibration report instead: --check validates the report's
+      # shape and prints each grader's calibrated verdict, and the gate step
+      # below then reads the judge row out of results/groundedness/latest.json.
+      # A judge row stays not_measured until a grader clears the kappa floor.
+      - run: evalplat calibrate --check results/calibration/latest.json
       # rung 2: offline deterministic suites against the published agent platform, in process
       - run: evalplat run offline --suite-dir suites/offline_core --target agent-platform-local --results results
       - run: evalplat run offline --suite-dir suites/trajectory --target agent-platform-local --results results
@@ -71,4 +78,4 @@ jobs:
             const fs = require('fs');
             const body = fs.existsSync('out/gate.md') ? fs.readFileSync('out/gate.md', 'utf8') : 'gate.md missing';
             await github.rest.issues.createComment({ ...context.repo, issue_number: context.issue.number, body });
-      # rung 3 (judge-sampled) and rung 4 (nightly public) are added by later phases
+      # rung 4 (nightly public benchmarks) is still run by hand; see README.

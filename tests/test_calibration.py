@@ -6,10 +6,12 @@ from inspect_ai.model import ModelOutput, get_model
 
 from eval_platform.calibration import (
     CalibrationItem,
+    CalibrationReportFile,
     agreement,
     calibrate,
     cohen_kappa,
     load_items,
+    load_report,
     write_report,
 )
 from eval_platform.cli import main
@@ -143,3 +145,63 @@ def test_cli_calibrate_runs_on_mock(tmp_path: Path, capsys):
     assert code == 0
     out = capsys.readouterr().out
     assert "kappa" in out and (tmp_path / "r" / "calibration" / "latest.json").exists()
+
+
+COMMITTED_REPORT = ROOT / "results" / "calibration" / "latest.json"
+
+
+def test_load_report_accepts_the_committed_report():
+    report = load_report(COMMITTED_REPORT)
+    assert report.items == 120
+    assert {j.judge for j in report.judges} == set(report.calibrated)
+    assert all(not report.calibrated[j.judge][0] for j in report.judges)
+
+
+def test_load_report_rejects_a_judge_with_no_verdict(tmp_path: Path):
+    d = json.loads(COMMITTED_REPORT.read_text(encoding="utf-8"))
+    d["calibrated"].pop(d["judges"][0]["judge"])
+    bad = tmp_path / "no-verdict.json"
+    bad.write_text(json.dumps(d), encoding="utf-8")
+    with pytest.raises(ValueError, match="calibrated verdict missing"):
+        load_report(bad)
+
+
+def test_load_report_rejects_a_missing_field(tmp_path: Path):
+    d = json.loads(COMMITTED_REPORT.read_text(encoding="utf-8"))
+    del d["kappa_floor"]
+    bad = tmp_path / "short.json"
+    bad.write_text(json.dumps(d), encoding="utf-8")
+    with pytest.raises(ValueError):
+        load_report(bad)
+
+
+def test_calibration_report_file_round_trips_a_fresh_report(tmp_path: Path):
+    outs = ["VERDICT: SUPPORTED" if n % 2 == 0 else "VERDICT: UNSUPPORTED" for n in range(8)]
+    report = calibrate(_items(), [_judge(tmp_path, "a", outs)])
+    path = write_report(report, tmp_path / "results")
+    parsed = CalibrationReportFile.model_validate_json(path.read_text(encoding="utf-8"))
+    assert parsed.swap_agreement is None and parsed.kappa_floor == 0.70
+
+
+def test_cli_calibrate_check_passes_on_the_committed_report(capsys):
+    assert main(["calibrate", "--check", str(COMMITTED_REPORT)]) == 0
+    out = capsys.readouterr().out
+    assert "hhem@2.1-open" in out and "calibrated=no" in out
+    assert "swap agreement 0.75" in out
+
+
+def test_cli_calibrate_check_exits_2_on_a_malformed_file(tmp_path: Path, capsys):
+    bad = tmp_path / "bad.json"
+    bad.write_text("{not json", encoding="utf-8")
+    assert main(["calibrate", "--check", str(bad)]) == 2
+    assert "could not read" in capsys.readouterr().err
+
+
+def test_cli_calibrate_check_exits_2_on_a_missing_file(tmp_path: Path, capsys):
+    assert main(["calibrate", "--check", str(tmp_path / "absent.json")]) == 2
+    assert "could not read" in capsys.readouterr().err
+
+
+def test_cli_calibrate_without_check_still_needs_items_and_judges(capsys):
+    assert main(["calibrate", "--judge", "mockllm/model"]) == 2
+    assert "--items" in capsys.readouterr().err

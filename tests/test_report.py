@@ -91,3 +91,68 @@ def test_render_escapes_hostile_strings():
 def test_metrics_table_renders_non_numeric_value_without_crashing():
     html = render_html([_summary("offline_core", "scripted", pass_rate=None)])
     assert "not numeric" in html
+
+
+def _calibration(judge="faithfulness@1:hf/Qwen/Qwen2.5-3B-Instruct", **over):
+    d = {
+        "started_at": "2026-09-11T15:18:41+00:00",
+        "finished_at": "2026-09-11T15:41:19+00:00",
+        "items": 120,
+        "judges": [
+            {
+                "judge": judge,
+                "version": "aa8e725",
+                "items": 120,
+                "unknown": 2,
+                "kappa": 0.0763,
+                "accuracy": 0.5339,
+                "tp": 16,
+                "fp": 11,
+                "tn": 47,
+                "fn": 44,
+            }
+        ],
+        "swap_agreement": 0.7458,
+        "swap_pair": [judge, "faithfulness@1:hf/Qwen/Qwen2.5-1.5B-Instruct"],
+        "kappa_floor": 0.7,
+        "min_swap_agreement": 0.9,
+        "calibrated": {judge: [False, "kappa 0.08 < 0.70"]},
+    }
+    d.update(over)
+    return d
+
+
+def test_calibration_table_appears_only_when_a_report_is_passed():
+    summaries = [_summary("groundedness", "mcp:edgar-fixture", pass_rate=0.38)]
+    with_table = render_html(summaries, calibration=_calibration())
+    without = render_html(summaries)
+    assert "Judge calibration" in with_table
+    assert "Judge calibration" not in without
+    assert "0.0763" in with_table and "kappa 0.08 &lt; 0.70" in with_table
+    assert "no" in with_table and "swap agreement" in with_table.lower()
+    assert "0.7458" in with_table and "120" in with_table
+
+
+def test_calibration_table_says_yes_for_a_calibrated_judge():
+    cal = _calibration()
+    cal["calibrated"] = {cal["judges"][0]["judge"]: [True, "kappa 0.80 >= 0.70"]}
+    html = render_html([], calibration=cal)
+    assert "yes" in html and "kappa 0.80 &gt;= 0.70" in html
+
+
+def test_calibration_table_without_a_swap_pair_omits_the_swap_line():
+    html = render_html([], calibration=_calibration(swap_agreement=None, swap_pair=None))
+    assert "Judge calibration" in html and "swap agreement" not in html
+
+
+def test_calibration_table_escapes_hostile_strings():
+    payload = "<script>alert(1)</script>"
+    html = render_html([], calibration=_calibration(judge=payload))
+    assert "<script>" not in html and "&lt;script&gt;" in html
+
+
+def test_calibration_table_survives_a_judge_with_no_verdict():
+    cal = _calibration()
+    cal["calibrated"] = {}
+    html = render_html([], calibration=cal)
+    assert "Judge calibration" in html and "no verdict recorded" in html
