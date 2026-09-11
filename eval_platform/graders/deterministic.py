@@ -133,11 +133,15 @@ def _recovered_grade(case: Case, t: Trajectory, out: list[Grade]) -> Grade | Non
         )
     else:
         ok = fired == 0 or t.status != "completed"
-        why = (
-            f"{fired} fault(s) fired but run status is {t.status!r}, not completed"
-            if fired
-            else "no fault fired"
-        )
+        if fired == 0:
+            why = "no fault fired"
+        elif t.status != "completed":
+            why = f"{fired} fault(s) fired and the run ended {t.status!r}"
+        else:
+            why = (
+                f"{fired} fault(s) fired and the run still completed, "
+                "but the case expected no recovery"
+            )
     return _g("recovered", ok, why)
 
 

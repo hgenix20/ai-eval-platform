@@ -45,7 +45,11 @@ def wrap_tool_handler(spec: ToolSpec, faults: list[Fault], ledger: FaultLedger) 
     """Return a ToolSpec whose handler misbehaves per `faults` matching
     `spec.name`, for the first `times` calls of each matching fault, then
     falls through to the real handler. Returns `spec` unchanged when no
-    fault targets this tool."""
+    fault targets this tool. The `malformed` kind returns the literal
+    marker string "<<malformed>>" rather than a structured bad value,
+    because the platform passes tool output to the model as plain text,
+    with no rendering layer in between for a structured value to exercise.
+    """
     mine = _matching(faults, "tool", spec.name)
     if not mine:
         return spec

@@ -87,3 +87,15 @@ def test_side_effects_fails_when_the_target_cannot_observe_them():
     assert grade.explanation == "side effects are not observable on this target"
     # The same expectation on a target that does watch the executor passes.
     assert _grades(Expect(side_effects=0), _traj())["side_effects"] is True
+
+
+def test_recovered_false_fails_when_a_fault_fired_but_the_run_still_completed():
+    """A fault that fires but does not stop the run from completing is the
+    one case `recovered: false` must reject: the case expected no
+    recovery to be needed, but a fault fired anyway."""
+    traj = _traj(status="completed", meta={"faults_fired": [{"kind": "raise"}]})
+    [grade] = grade_expect(Case(name="c", goal="g", expect=Expect(recovered=False)), traj)
+    assert grade.dimension == "recovered" and grade.passed is False
+    assert grade.explanation == (
+        "1 fault(s) fired and the run still completed, but the case expected no recovery"
+    )

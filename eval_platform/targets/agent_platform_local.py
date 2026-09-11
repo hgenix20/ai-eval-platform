@@ -28,6 +28,7 @@ if TYPE_CHECKING:
 
     from eval_platform.targets.faults import (
         FaultLedger,
+        FaultyProvider,
         fallback_route,
         wrap_provider,
         wrap_tool_handler,
@@ -131,7 +132,7 @@ def build_world(
         registry.register(registered(spec))
     approvals = ApprovalQueue()
     executor = ToolExecutor(registry, approvals)
-    providers: dict[str, Any] = {
+    providers: dict[str, FakeProvider | FaultyProvider] = {
         "planner": wrap_provider(
             FakeProvider(name="planner", responses=list(case.planner), text="{}"),
             case.faults,
