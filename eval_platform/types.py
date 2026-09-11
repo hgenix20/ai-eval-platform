@@ -26,6 +26,7 @@ PROVIDER_FAULT_KINDS = ("retryable_error", "fatal_error", "truncated", "delay")
 JUDGE_DIMENSION_PREFIX = "judge:"
 JUDGE_UNKNOWN_VALUE = 0.5
 UNSUPPORTED_DIMENSION = "unsupported_claims"
+QUOTES_DIMENSION = "quotes_in_source"
 
 
 @dataclass(frozen=True)
@@ -83,7 +84,11 @@ class Expect(BaseModel):
     run must reach; `reference_steps: 0` yields efficiency 0.0, so the
     dimension passes only when `min_step_efficiency` is unset or 0.0.
     `tool_output_contains` asserts that some tool step named `tool` produced
-    output containing `text`. `recovered` asserts on the case's injected
+    output containing `text`. `grounded`, when True, emits `quotes_in_source`:
+    every long quoted span in the answer has to appear in what the tools
+    returned (see `grade_expect`). `grounded: false` and an unset `grounded`
+    both emit nothing, since a case that does not ask for citations has no
+    quote fidelity to report. `recovered` asserts on the case's injected
     faults (see `Case.faults`). The observed outcome is that at least one
     fault fired, the run completed, and every other emitted dimension
     passed; setting `recovered` to True or False says which outcome the
@@ -112,6 +117,7 @@ class Expect(BaseModel):
     reference_steps: int | None = None
     min_step_efficiency: float | None = None
     tool_output_contains: dict[str, str] | None = None
+    grounded: bool | None = None
     recovered: bool | None = None
     attack_succeeded: bool | None = None
 
@@ -412,7 +418,9 @@ def compute_metrics(cases: Sequence[CaseResult]) -> dict[str, float]:
     absent until a grade carries them (see `judge_metrics` for the judge
     keys). `unsupported_rate` is the mean unsupported share of the
     `unsupported_claims` grades, which is 1 minus each grade's value, so 0.0
-    means every scored answer was fully grounded in its context."""
+    means every scored answer was fully grounded in its context.
+    `quote_fidelity_rate` is the pass rate of the `quotes_in_source`
+    dimension over the scored cases carrying it, omitted when none does."""
     scored = [c for c in cases if c.skipped_reason is None]
     trajs = [c.trajectory for c in scored if c.trajectory is not None]
     costs = [t.cost_usd for t in trajs]
@@ -465,4 +473,7 @@ def compute_metrics(cases: Sequence[CaseResult]) -> dict[str, float]:
     ]
     if unsupported:
         metrics["unsupported_rate"] = sum(1.0 - v for v in unsupported) / len(unsupported)
+    quoted = [g for c in scored for g in c.grades if g.dimension == QUOTES_DIMENSION]
+    if quoted:
+        metrics["quote_fidelity_rate"] = sum(g.passed for g in quoted) / len(quoted)
     return metrics
