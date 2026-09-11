@@ -1,0 +1,16 @@
+# The same lookup called twice with identical arguments is one redundant
+# call. The reference of one step means efficiency drops to 1/2, so this
+# case documents the cost of the repeat rather than failing outright.
+name: repeated-lookup-is-redundant
+goal: find the revenue figure
+planner:
+  - '{"action": "tool", "tool": "lookup", "arguments": {"key": "revenue"}}'
+  - '{"action": "tool", "tool": "lookup", "arguments": {"key": "revenue"}}'
+  - '{"action": "final", "answer": "revenue is value-for-revenue"}'
+validator:
+  - '{"approved": true, "reason": "ok"}'
+expect:
+  status: completed
+  max_redundant_calls: 1
+  reference_steps: 1
+  min_step_efficiency: 0.5

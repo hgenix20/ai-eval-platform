@@ -3,6 +3,7 @@ targets so both produce identical step shapes."""
 
 from __future__ import annotations
 
+from collections import defaultdict, deque
 from typing import Any
 
 from eval_platform.types import Step, Trajectory
@@ -25,6 +26,7 @@ def run_dict_to_trajectory(
     wall_ms: float,
     cost_usd: float,
     side_effects: list[dict[str, Any]] | None = None,
+    tool_calls: list[dict[str, Any]] | None = None,
 ) -> Trajectory:
     """Convert one agent-platform run record into a `Trajectory`.
 
@@ -41,14 +43,31 @@ def run_dict_to_trajectory(
     supplied by the caller, not read from `run`, since the agent platform
     reports them separately from the history.
 
+    `tool_calls` is the ordered list of `{"tool": name, "arguments": args}`
+    entries recorded as handlers actually ran (see `build_world`). Each
+    history entry's `tool_result` history carries only `tool` and `output`,
+    not the arguments that produced it, so `Step.input` is filled by
+    matching the i-th `tool_result` for a given tool name to the i-th
+    recorded call for that same name, in order. A gated tool that parked
+    waiting for approval never reached its handler, so it has no recorded
+    call; any `tool_result` left without a matching call keeps `input=None`.
+
     Sets `meta["steps_used"]` and `meta["history_types"]` (the ordered list
     of raw history type strings) because graders key off both.
     """
+    calls_by_tool: dict[str, deque[dict[str, Any]]] = defaultdict(deque)
+    for call in tool_calls or []:
+        calls_by_tool[call["tool"]].append(call["arguments"])
+
     steps: list[Step] = []
     for h in run.get("history", []):
         kind = h.get("type", "")
         if kind == "tool_result":
-            steps.append(Step(kind="tool", name=h["tool"], input=None, output=h.get("output")))
+            queue = calls_by_tool.get(h["tool"])
+            tool_input = queue.popleft() if queue else None
+            steps.append(
+                Step(kind="tool", name=h["tool"], input=tool_input, output=h.get("output"))
+            )
         elif kind == "proposed_answer":
             steps.append(
                 Step(kind="model", name="proposed_answer", input=None, output=h.get("answer"))

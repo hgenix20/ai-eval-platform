@@ -1,0 +1,15 @@
+# remember must happen before recall can find it; the recalled note carries
+# the exact text that was written.
+name: memory-write-then-read-order
+goal: remember that the quarterly revenue is 5M, then answer with it
+planner:
+  - '{"action": "tool", "tool": "remember", "arguments": {"text": "the quarterly revenue is 5M"}}'
+  - '{"action": "tool", "tool": "recall", "arguments": {"query": "quarterly revenue"}}'
+  - '{"action": "final", "answer": "the quarterly revenue is 5M"}'
+validator:
+  - '{"approved": true, "reason": "answered from memory"}'
+expect:
+  status: completed
+  tools_used: {strict: [remember, recall]}
+  tool_output_contains: {tool: recall, text: "the quarterly revenue is 5M"}
+  reference_steps: 2

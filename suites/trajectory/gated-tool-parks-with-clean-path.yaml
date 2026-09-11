@@ -1,0 +1,14 @@
+# A safe lookup runs, then a gated tool parks the run waiting for approval.
+# The path up to the park stays clean: only lookup ran, recall never did,
+# and no side effect happened because send_email's handler never fired.
+name: gated-tool-parks-with-clean-path
+goal: look up the summary then email it
+target_requirements: [agent, side_effects]
+planner:
+  - '{"action": "tool", "tool": "lookup", "arguments": {"key": "summary"}}'
+  - '{"action": "tool", "tool": "send_email", "arguments": {"to": "team@example.com"}}'
+expect:
+  status: waiting_approval
+  tools_used: {strict: [lookup]}
+  forbidden_tools: [recall]
+  side_effects: 0

@@ -1,0 +1,16 @@
+# A validator rejection sends the plan step back, but a re-submitted final
+# answer is still not a tool call: no tool ever ran, so redundancy stays
+# at zero even though the run took three history entries to complete.
+name: validator-rejection-adds-no-tool-calls
+goal: write a one-line status
+planner:
+  - '{"action": "final", "answer": "first draft"}'
+  - '{"action": "final", "answer": "second draft"}'
+validator:
+  - '{"approved": false, "reason": "too vague"}'
+  - '{"approved": true, "reason": "specific enough"}'
+expect:
+  status: completed
+  tools_used: {strict: []}
+  max_redundant_calls: 0
+  history_types: [proposed_answer, validator_feedback, proposed_answer]

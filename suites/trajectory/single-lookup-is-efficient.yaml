@@ -1,0 +1,13 @@
+# One lookup then a final answer is the ideal path: step efficiency is 1.0.
+name: single-lookup-is-efficient
+goal: find the revenue figure
+planner:
+  - '{"action": "tool", "tool": "lookup", "arguments": {"key": "revenue"}}'
+  - '{"action": "final", "answer": "revenue is value-for-revenue"}'
+validator:
+  - '{"approved": true, "reason": "ok"}'
+expect:
+  status: completed
+  tools_used: {strict: [lookup]}
+  reference_steps: 1
+  min_step_efficiency: 1.0

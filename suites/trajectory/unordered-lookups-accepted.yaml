@@ -1,0 +1,14 @@
+# Two lookups in either order are an acceptable path; different arguments
+# mean neither call repeats the other, so redundancy stays at zero.
+name: unordered-lookups-accepted
+goal: find headcount and revenue, in either order
+planner:
+  - '{"action": "tool", "tool": "lookup", "arguments": {"key": "headcount"}}'
+  - '{"action": "tool", "tool": "lookup", "arguments": {"key": "revenue"}}'
+  - '{"action": "final", "answer": "headcount is value-for-headcount, revenue is value-for-revenue"}'
+validator:
+  - '{"approved": true, "reason": "ok"}'
+expect:
+  status: completed
+  tools_used: {unordered: [lookup, lookup]}
+  max_redundant_calls: 0

@@ -1,0 +1,15 @@
+# Two lookups with different keys are two distinct calls, not a repeat: no
+# redundancy, and the reference of two steps is met exactly.
+name: two-lookups-no-redundancy
+goal: find revenue and headcount
+planner:
+  - '{"action": "tool", "tool": "lookup", "arguments": {"key": "revenue"}}'
+  - '{"action": "tool", "tool": "lookup", "arguments": {"key": "headcount"}}'
+  - '{"action": "final", "answer": "revenue is value-for-revenue, headcount is value-for-headcount"}'
+validator:
+  - '{"approved": true, "reason": "ok"}'
+expect:
+  status: completed
+  max_redundant_calls: 0
+  reference_steps: 2
+  min_step_efficiency: 1.0
