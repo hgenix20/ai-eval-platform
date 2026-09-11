@@ -1,3 +1,6 @@
+import pytest
+from pydantic import ValidationError
+
 from eval_platform.graders import grade_expect
 from eval_platform.graders.trajectory import redundant_calls, step_efficiency
 from eval_platform.types import Case, CaseResult, Expect, Grade, Step, Trajectory, compute_metrics
@@ -54,6 +57,12 @@ def test_tool_output_contains_dimension():
     assert not _g(Expect(tool_output_contains={"tool": "lookup", "text": "heron"}), traj)[
         "tool_output_contains"
     ].passed
+
+
+def test_tool_output_contains_requires_exactly_tool_and_text_keys():
+    with pytest.raises(ValidationError):
+        Expect(tool_output_contains={"tool": "x"})
+    Expect(tool_output_contains={"tool": "x", "text": "y"})
 
 
 def test_step_efficiency_mean_metric():

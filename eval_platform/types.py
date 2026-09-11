@@ -69,8 +69,10 @@ class Expect(BaseModel):
     called more than once. `reference_steps` is the ideal number of tool
     calls for the goal, used to compute step efficiency. `min_step_efficiency`
     is the minimum `reference_steps / max(tools_used, reference_steps)` the
-    run must reach. `tool_output_contains` asserts that some tool step named
-    `tool` produced output containing `text`.
+    run must reach; `reference_steps: 0` yields efficiency 0.0, so the
+    dimension passes only when `min_step_efficiency` is unset or 0.0.
+    `tool_output_contains` asserts that some tool step named `tool` produced
+    output containing `text`.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -94,6 +96,18 @@ class Expect(BaseModel):
             return v
         if len(v) != 1 or next(iter(v)) not in TOOLS_USED_MODES:
             raise ValueError(f"tools_used must have exactly one of {TOOLS_USED_MODES}")
+        return v
+
+    @field_validator("tool_output_contains")
+    @classmethod
+    def _tool_and_text_keys(cls, v: dict[str, str] | None) -> dict[str, str] | None:
+        """tool_output_contains must carry exactly {"tool", "text"}, both non-empty
+        strings, or None; this keeps grade_expect's dict lookups from raising a
+        KeyError on a malformed case."""
+        if v is None:
+            return v
+        if set(v) != {"tool", "text"} or not all(isinstance(x, str) and x for x in v.values()):
+            raise ValueError("tool_output_contains needs exactly the keys tool and text")
         return v
 
 

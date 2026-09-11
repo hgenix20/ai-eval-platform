@@ -1,4 +1,9 @@
-"""Pure trajectory measures shared by the deterministic graders and metrics."""
+"""Pure trajectory measures shared by the deterministic graders and metrics.
+
+The redundancy key for a tool step is its name, a colon, then the canonical
+(sorted-key) JSON of its arguments, so two calls key equal only when both the
+tool name and the arguments match exactly.
+"""
 
 from __future__ import annotations
 
