@@ -47,6 +47,10 @@ def _grader(tmp_path: Path, outputs: list[str]) -> JudgeGrader:
         ("VERDICT: UNKNOWN", "UNKNOWN"),
         ("I think it is fine.", "UNKNOWN"),
         ("VERDICT: SUPPORTED\nVERDICT: UNSUPPORTED", "UNSUPPORTED"),  # last line wins
+        # A verdict word inside a sentence is prose, not the label: only a
+        # line of its own counts.
+        ("my verdict: leaning supported\nVERDICT: UNSUPPORTED", "UNSUPPORTED"),
+        ("the verdict: SUPPORTED is tentative", "UNKNOWN"),
     ],
 )
 def test_parse_verdict(text, label):

@@ -15,13 +15,17 @@ from typing import Any, Literal
 
 from inspect_ai.model import ChatMessageSystem, ChatMessageUser, GenerateConfig, Model, get_model
 
+from eval_platform.graders.base import GraderKind
 from eval_platform.graders.judge_cache import JudgeCache, cache_key, model_version
 from eval_platform.graders.rubrics import RUBRICS, Rubric
 from eval_platform.telemetry import set_attributes, span
 from eval_platform.types import Case, Grade, Trajectory
 
 Verdict = Literal["pass", "fail", "unknown"]
-_VERDICT_LINE = re.compile(r"verdict\s*:\s*([A-Z_]+)", re.IGNORECASE)
+# Anchored to a whole line, which is the form every rubric asks for. An
+# unanchored pattern would read "my verdict: leaning supported" mid-sentence
+# as the label and score the reasoning instead of the conclusion.
+_VERDICT_LINE = re.compile(r"^\s*verdict\s*:\s*([A-Z_]+)\s*$", re.IGNORECASE | re.MULTILINE)
 
 
 @dataclass(frozen=True)
@@ -56,7 +60,10 @@ class JudgeGrader:
     solver step inside Inspect's own event loop.
     """
 
-    kind = "judge"
+    # Annotated, not inferred: the `Grader` protocol declares `kind` as a
+    # GraderKind, and a bare assignment would infer plain `str`, which no
+    # `Sequence[Grader]` parameter would accept.
+    kind: GraderKind = "judge"
 
     def __init__(
         self,
@@ -76,6 +83,24 @@ class JudgeGrader:
         self._handle = model_handle
         self.id = f"{rubric.id}@{rubric.version}:{model}"
         self.version = model_version(model)
+
+    def release(self) -> None:
+        """Drop the loaded model handle and free the CUDA cache it held.
+
+        The judge pass grades every case with one judge before it builds the
+        next, and calls this in between, so two local judges never occupy GPU
+        memory at the same time. A later `judge()` call reloads the handle
+        from `model`, which is why this is safe to call at any point. No-op
+        for a handle the caller injected: it is dropped here too, so an
+        injected mock is released on the same path as a real model.
+        """
+        self._handle = None
+        try:
+            import torch  # noqa: PLC0415
+        except ImportError:
+            return
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
 
     def _params(self) -> dict[str, Any]:
         return {"max_tokens": self.max_tokens, "model_args": self.model_args}

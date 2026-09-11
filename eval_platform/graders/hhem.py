@@ -23,6 +23,7 @@ import re
 from collections.abc import Sequence
 from typing import Any, Protocol, cast
 
+from eval_platform.graders.base import GraderKind
 from eval_platform.graders.rubrics.base import context_from
 from eval_platform.types import Case, Grade, Trajectory
 
@@ -156,7 +157,9 @@ class HHEMGrader:
     """The `unsupported_claims` dimension: value is 1 minus the unsupported
     share, so 1.0 is a fully grounded answer; passed only at share 0.0."""
 
-    kind = "semantic"
+    # Annotated for the same reason as JudgeGrader.kind: a bare assignment
+    # infers `str`, which the `Grader` protocol's GraderKind does not accept.
+    kind: GraderKind = "semantic"
     id = "hhem@2.1-open"
     version = HHEM_SNAPSHOT
 
