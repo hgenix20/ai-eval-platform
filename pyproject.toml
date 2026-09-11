@@ -33,7 +33,7 @@ ifeval = [
 # torch==2.6.0`, then `pip install -e ".[local]"` for the rest. torch is
 # deliberately not a core dependency: most of this platform's suites never
 # load a model in process.
-local = ["torch>=2.6", "transformers>=4.45", "accelerate>=1.0"]
+local = ["torch>=2.6", "transformers>=4.45", "accelerate>=1.0", "safetensors>=0.4", "huggingface_hub>=0.25"]
 
 [project.scripts]
 evalplat = "eval_platform.cli:main"
@@ -67,7 +67,12 @@ typeCheckingMode = "standard"
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"
-markers = ["network: needs internet", "live: needs an API key and spends money", "agent_platform: needs the agent-platform extra"]
+markers = [
+    "network: needs internet",
+    "live: needs an API key and spends money",
+    "agent_platform: needs the agent-platform extra",
+    "gpu: loads a real model on this machine's GPU or CPU; never in CI",
+]
 
 [tool.bandit]
 exclude_dirs = ["tests", ".venv"]
