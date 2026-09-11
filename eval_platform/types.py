@@ -72,7 +72,11 @@ class Expect(BaseModel):
     run must reach; `reference_steps: 0` yields efficiency 0.0, so the
     dimension passes only when `min_step_efficiency` is unset or 0.0.
     `tool_output_contains` asserts that some tool step named `tool` produced
-    output containing `text`.
+    output containing `text`. `recovered` asserts on the case's injected
+    faults (see `Case.faults`): True means at least one fault fired and
+    every other emitted dimension passed; False means either no fault
+    fired or the run did not complete. It is computed last, after every
+    other dimension in this class.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -87,6 +91,7 @@ class Expect(BaseModel):
     reference_steps: int | None = None
     min_step_efficiency: float | None = None
     tool_output_contains: dict[str, str] | None = None
+    recovered: bool | None = None
 
     @field_validator("tools_used")
     @classmethod
@@ -111,6 +116,44 @@ class Expect(BaseModel):
         return v
 
 
+class Fault(BaseModel):
+    """One injected misbehavior at a single seam: a tool handler or a
+    scripted provider. A fault fires for the first `times` calls to its
+    own seam, in call order, then the seam behaves normally.
+
+    `at` names the kind of seam: "tool" targets a tool handler by name;
+    "provider" targets a scripted provider by name ("planner" or
+    "validator"). `kind` is what happens while the fault is active:
+    - raise: the tool handler raises RuntimeError. Meaningful for tools only.
+    - malformed: the tool handler returns a value that is not the shape
+      the model expects, rendered as the text "<<malformed>>". Tools only.
+    - empty: the tool handler returns "". Tools only.
+    - delay: the seam sleeps `delay_ms` milliseconds, then does its real
+      work. Meaningful for both tools and providers.
+    - retryable_error: the provider raises ProviderError(retryable=True),
+      so the gateway may fall back to the next route step. Providers only.
+    - fatal_error: the provider raises ProviderError(retryable=False),
+      ending the run. Providers only.
+    - truncated: the provider's real reply is cut to its first 12
+      characters before being returned. Providers only.
+
+    `times` counts calls to this fault's own seam, never calls to a
+    fallback the platform substitutes for it. `seed` is recorded on every
+    firing but not otherwise used; it is reserved for a future randomized
+    fault schedule.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+    at: Literal["tool", "provider"]
+    name: str
+    kind: Literal[
+        "raise", "malformed", "empty", "delay", "retryable_error", "fatal_error", "truncated"
+    ]
+    times: int = 1
+    seed: int = 0
+    delay_ms: int = 0
+
+
 class Case(BaseModel):
     """One test case: a goal to pursue plus the expectations to grade it against.
 
@@ -122,6 +165,8 @@ class Case(BaseModel):
     step list a `ScriptedTarget` replays instead of running an agent; it is
     only used when the target is scripted. `max_steps` caps the agent loop,
     the maximum number of steps a target may take before it is forced to stop.
+    `faults` are the misbehaviors the target wires into its tools and
+    providers before the run starts; empty by default, meaning no faults.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -132,6 +177,7 @@ class Case(BaseModel):
     max_steps: int = 5
     target_requirements: list[str] = ["agent"]
     script: list[dict[str, Any]] | None = None
+    faults: list[Fault] = []
     expect: Expect
 
 
@@ -201,7 +247,9 @@ def compute_metrics(cases: Sequence[CaseResult]) -> dict[str, float]:
     """Suite-level metrics. Skipped cases count in cases_total and cases_skipped
     and are excluded from pass_rate, cost, and latency. `step_efficiency_mean`
     is the mean of the `step_efficiency` grade value over scored cases that
-    carry that dimension; it is omitted when no case carries one."""
+    carry that dimension; it is omitted when no case carries one.
+    `recovery_rate` is passed / scored over scored cases that carry a
+    `recovered` grade; it is omitted when no case carries one."""
     scored = [c for c in cases if c.skipped_reason is None]
     trajs = [c.trajectory for c in scored if c.trajectory is not None]
     costs = [t.cost_usd for t in trajs]
@@ -210,6 +258,7 @@ def compute_metrics(cases: Sequence[CaseResult]) -> dict[str, float]:
     step_efficiencies = [
         g.value for c in scored for g in c.grades if g.dimension == "step_efficiency"
     ]
+    recovered_grades = [g for c in scored for g in c.grades if g.dimension == "recovered"]
     metrics = {
         "cases_total": float(len(cases)),
         "cases_passed": float(passed),
@@ -221,4 +270,6 @@ def compute_metrics(cases: Sequence[CaseResult]) -> dict[str, float]:
     }
     if step_efficiencies:
         metrics["step_efficiency_mean"] = sum(step_efficiencies) / len(step_efficiencies)
+    if recovered_grades:
+        metrics["recovery_rate"] = sum(g.passed for g in recovered_grades) / len(recovered_grades)
     return metrics

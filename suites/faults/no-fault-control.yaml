@@ -1,0 +1,16 @@
+# Control case: no faults at all. The recovered dimension should pass
+# because nothing fired, not because anything was recovered from.
+#
+# What the platform actually does: the run completes normally with no
+# fault firing. recovered: false passes here since fired == 0, exactly as
+# the recovered dimension's contract defines it for a fault-free run.
+name: no-fault-control
+goal: answer the goal
+faults: []
+planner:
+  - '{"action": "final", "answer": "plain"}'
+validator:
+  - '{"approved": true, "reason": "ok"}'
+expect:
+  status: completed
+  recovered: false

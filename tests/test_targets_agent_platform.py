@@ -182,7 +182,7 @@ def test_http_target_approve_flow_resumes_run():
         validator=['{"approved": true, "reason": "ok"}'],
     )
 
-    orchestrator, approvals, executor, _side_effects, _calls = build_world(case)
+    orchestrator, approvals, executor, _side_effects, _calls, _ledger = build_world(case)
     approved_client = TestClient(create_app(orchestrator, approvals, executor))
     approved_target = AgentPlatformHttpTarget.from_client(approved_client, approve=True)
     approved = approved_target.run(case)
@@ -191,7 +191,7 @@ def test_http_target_approve_flow_resumes_run():
     assert approved.status == "completed"
     assert approved.answer == "sent"
 
-    orchestrator2, approvals2, executor2, _side_effects2, _calls2 = build_world(case)
+    orchestrator2, approvals2, executor2, _side_effects2, _calls2, _ledger2 = build_world(case)
     unapproved_client = TestClient(create_app(orchestrator2, approvals2, executor2))
     unapproved_target = AgentPlatformHttpTarget.from_client(unapproved_client, approve=False)
     unapproved = unapproved_target.run(case)

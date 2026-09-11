@@ -1,0 +1,30 @@
+# times: 2 on the planner fault, with two scripted planner replies, to check
+# what "times" counts when a fallback route exists. It counts calls to the
+# planner's own seam only, never calls to the fallback provider that
+# replaces it: the fallback is a separate FakeProvider instance the fault
+# does not wrap, so its calls are never charged against the planner
+# fault's budget.
+#
+# What the platform actually does: the goal is answerable in a single plan
+# step, so the planner is only ever called once. That one call raises
+# (fault fires once, "call_index": 0), the gateway falls back, and the
+# fallback answers with the first scripted planner line. The run completes
+# after that single step, so the fault's times: 2 budget is never
+# exhausted and the second scripted planner line is never consumed. This
+# case recovers as designed: no correction needed.
+name: provider-retryable-twice-exhausts-fallback
+goal: answer the goal
+faults:
+  - at: provider
+    name: planner
+    kind: retryable_error
+    times: 2
+planner:
+  - '{"action": "final", "answer": "after fallback 1"}'
+  - '{"action": "final", "answer": "after fallback 2"}'
+validator:
+  - '{"approved": true, "reason": "ok"}'
+expect:
+  status: completed
+  answer_contains: "after fallback 1"
+  recovered: true

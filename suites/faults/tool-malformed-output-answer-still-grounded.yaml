@@ -1,0 +1,23 @@
+# A tool that returns a malformed value (not the shape the schema promises)
+# should reach the model as ordinary text output, never as an exception, so
+# the model can notice the result looks wrong and say so.
+#
+# What the platform actually does: the malformed output ("<<malformed>>")
+# is recorded as an ordinary tool_result, the run proceeds to the model's
+# scripted final answer, and the run completes normally. This case recovers
+# as designed: no correction needed.
+name: tool-malformed-output-answer-still-grounded
+goal: look up the summary and answer
+faults:
+  - at: tool
+    name: lookup
+    kind: malformed
+planner:
+  - '{"action": "tool", "tool": "lookup", "arguments": {"key": "summary"}}'
+  - '{"action": "final", "answer": "could not read the lookup result"}'
+validator:
+  - '{"approved": true, "reason": "ok"}'
+expect:
+  status: completed
+  answer_contains: "could not read"
+  recovered: true

@@ -1,0 +1,26 @@
+# A planner reply cut short (truncated to 12 characters) is not valid JSON,
+# so it should read as a protocol error the orchestrator can recover from
+# on the next plan step, not as a crash.
+#
+# What the platform actually does: the orchestrator's JSON parser returns
+# None for the truncated text, which the plan node records as a
+# protocol_error history entry and loops back to plan again; the second,
+# unfaulted planner call answers normally and the run completes. This case
+# recovers as designed: no correction needed.
+name: provider-truncated-reply-recovers
+goal: answer the goal
+faults:
+  - at: provider
+    name: planner
+    kind: truncated
+    times: 1
+planner:
+  - '{"action": "final", "answer": "first"}'
+  - '{"action": "final", "answer": "second"}'
+validator:
+  - '{"approved": true, "reason": "ok"}'
+expect:
+  status: completed
+  history_types: [protocol_error, proposed_answer]
+  answer_contains: second
+  recovered: true

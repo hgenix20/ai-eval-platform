@@ -46,6 +46,12 @@ def grade_expect(case: Case, t: Trajectory) -> list[Grade]:
       floor the dimension records the value but always passes)
     - tool_output_contains: some Step(kind="tool", name=tool_output_contains
       ["tool"]).output contains tool_output_contains["text"] as a substring
+    - recovered: computed last, after every other dimension above. Let
+      fired be the number of entries in t.meta["faults_fired"]. When
+      expect.recovered is True, the dimension passes when fired >= 1 and
+      every other emitted Grade passed. When expect.recovered is False,
+      the dimension passes when fired == 0 or t.status != "completed"
+      (documenting a fault that fired but was not recovered from).
     """
     e = case.expect
     out: list[Grade] = []
@@ -102,7 +108,37 @@ def grade_expect(case: Case, t: Trajectory) -> list[Grade]:
             ok = set(got) <= set(want)
         out.append(_g("tools_used", ok, f"{mode}: expected {want}, got {got}"))
     out.extend(_trajectory_grades(case, t))
+    recovered = _recovered_grade(case, t, out)
+    if recovered is not None:
+        out.append(recovered)
     return out
+
+
+def _recovered_grade(case: Case, t: Trajectory, out: list[Grade]) -> Grade | None:
+    """The recovered dimension, computed last from every Grade already in
+    `out` (see grade_expect's docstring for the pass condition). Split out
+    of grade_expect to keep its branch count down; returns None when
+    `case.expect.recovered` is unset."""
+    e = case.expect
+    if e.recovered is None:
+        return None
+    fired = len(t.meta.get("faults_fired", []))
+    if e.recovered:
+        failing = [g.dimension for g in out if not g.passed]
+        ok = fired >= 1 and not failing
+        why = (
+            f"{fired} fault(s) fired and every other dimension passed"
+            if ok
+            else f"{fired} fault(s) fired; failing dimensions: {failing}"
+        )
+    else:
+        ok = fired == 0 or t.status != "completed"
+        why = (
+            f"{fired} fault(s) fired but run status is {t.status!r}, not completed"
+            if fired
+            else "no fault fired"
+        )
+    return _g("recovered", ok, why)
 
 
 def _trajectory_grades(case: Case, t: Trajectory) -> list[Grade]:

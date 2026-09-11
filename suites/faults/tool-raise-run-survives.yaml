@@ -1,0 +1,26 @@
+# Probes whether a raised tool exception reaches the model as an error, or
+# aborts the run before the model ever sees it.
+#
+# What the platform actually does: ToolExecutor.execute does not catch
+# handler exceptions, so the RuntimeError propagates out of the executor,
+# out of the orchestrator's plan node, and out of orchestrator.run. The
+# local target catches it at that outer boundary and reports
+# status=target_error with no steps. The planner's second scripted line
+# ("gave up") is never consumed; the model never learns the tool failed.
+# This case is left asserting the recovery that does not happen
+# (status: completed, recovered: true) so it fails, on purpose, as the
+# documented finding that a tool raise is not recoverable on this platform.
+name: tool-raise-run-survives
+goal: look up revenue and answer
+faults:
+  - at: tool
+    name: lookup
+    kind: raise
+planner:
+  - '{"action": "tool", "tool": "lookup", "arguments": {"key": "revenue"}}'
+  - '{"action": "final", "answer": "gave up"}'
+validator:
+  - '{"approved": true, "reason": "ok"}'
+expect:
+  status: completed
+  recovered: true

@@ -1,0 +1,27 @@
+# The fallback route this suite builds applies only to "reason" (the
+# planner's route); the validator's "draft" route never gains a fallback
+# step. This case checks what happens when a retryable fault targets the
+# validator instead of the planner.
+#
+# What the platform actually does: the validator's single route step
+# raises ProviderError(retryable=True); the gateway records the failure,
+# has no further step to try, and raises AllProvidersFailedError. That
+# propagates out of orchestrator.run, and the local target's exception
+# boundary reports status=target_error with no steps. recovered: false
+# matches this exactly, and the case passes: it correctly predicts that a
+# validator-side retryable fault does not recover, because there is no
+# fallback route for it to fall back to.
+name: validator-retryable-falls-back
+goal: answer the goal
+faults:
+  - at: provider
+    name: validator
+    kind: retryable_error
+    times: 1
+planner:
+  - '{"action": "final", "answer": "answer1"}'
+validator:
+  - '{"approved": true, "reason": "ok"}'
+expect:
+  status: target_error
+  recovered: false

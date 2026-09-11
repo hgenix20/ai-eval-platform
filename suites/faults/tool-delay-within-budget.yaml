@@ -1,0 +1,21 @@
+# A slow tool call (300 ms) should not fail the run, only cost latency.
+#
+# What the platform actually does: the delay runs before the real handler,
+# the tool result comes back normally, and the run completes; the delay
+# shows up in the trajectory's wall_ms. This case recovers as designed:
+# no correction needed.
+name: tool-delay-within-budget
+goal: look up a fact and answer
+faults:
+  - at: tool
+    name: lookup
+    kind: delay
+    delay_ms: 300
+planner:
+  - '{"action": "tool", "tool": "lookup", "arguments": {"key": "x"}}'
+  - '{"action": "final", "answer": "waited"}'
+validator:
+  - '{"approved": true, "reason": "ok"}'
+expect:
+  status: completed
+  recovered: true

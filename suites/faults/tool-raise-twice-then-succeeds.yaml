@@ -1,0 +1,28 @@
+# A second variant of the tool-raise probe, with times: 2 and three planned
+# lookup calls, to check whether the platform can shrug off more than one
+# raise from the same tool before answering.
+#
+# What the platform actually does: the very first lookup call already raises
+# and aborts the run (see tool-raise-run-survives.yaml), so the second and
+# third planner lines are never reached and "times: 2" has no visible effect
+# here. tools_used and status are left asserting full recovery so the case
+# fails, documenting that no number of tool-raise retries recovers on this
+# platform; the fault, and the abort, both happen on the first call.
+name: tool-raise-twice-then-succeeds
+goal: look up two things and answer
+faults:
+  - at: tool
+    name: lookup
+    kind: raise
+    times: 2
+planner:
+  - '{"action": "tool", "tool": "lookup", "arguments": {"key": "a"}}'
+  - '{"action": "tool", "tool": "lookup", "arguments": {"key": "b"}}'
+  - '{"action": "tool", "tool": "lookup", "arguments": {"key": "c"}}'
+  - '{"action": "final", "answer": "done"}'
+validator:
+  - '{"approved": true, "reason": "ok"}'
+expect:
+  status: completed
+  tools_used: {strict: [lookup, lookup, lookup]}
+  recovered: true

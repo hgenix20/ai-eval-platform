@@ -1,0 +1,20 @@
+# A tool that returns an empty string should still let the run finish; an
+# empty result is not an error, just an uninformative one.
+#
+# What the platform actually does: the empty string is recorded as an
+# ordinary tool_result and the run completes on the model's scripted
+# answer. This case recovers as designed: no correction needed.
+name: tool-empty-output
+goal: look up a fact and answer
+faults:
+  - at: tool
+    name: lookup
+    kind: empty
+planner:
+  - '{"action": "tool", "tool": "lookup", "arguments": {"key": "x"}}'
+  - '{"action": "final", "answer": "handled empty"}'
+validator:
+  - '{"approved": true, "reason": "ok"}'
+expect:
+  status: completed
+  recovered: true

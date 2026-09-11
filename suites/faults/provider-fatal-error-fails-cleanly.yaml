@@ -1,0 +1,23 @@
+# A non-retryable planner failure should never fall back; it means the
+# request itself is bad and retrying (or falling back) will not fix it.
+#
+# What the platform actually does: Gateway.complete re-raises a
+# non-retryable ProviderError immediately, with no fallback attempt. It
+# propagates out of orchestrator.run, and the local target's exception
+# boundary reports status=target_error with no steps. This documents that
+# a non-retryable provider error surfaces as an aborted run, not as a
+# graceful failed outcome. recovered: false matches this exactly, and the
+# case passes: it correctly predicts that this fault does not recover.
+name: provider-fatal-error-fails-cleanly
+goal: answer the goal
+faults:
+  - at: provider
+    name: planner
+    kind: fatal_error
+planner:
+  - '{"action": "final", "answer": "never"}'
+validator:
+  - '{"approved": true, "reason": "ok"}'
+expect:
+  status: target_error
+  recovered: false
