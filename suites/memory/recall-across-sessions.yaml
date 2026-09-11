@@ -1,0 +1,23 @@
+# The multi-session case in the task brief, as YAML: one session remembers
+# a fact, a later session recalls it. Proves memory written in one session
+# is visible to a later session sharing the same world.
+name: recall-across-sessions
+goal: ignored
+target_requirements: [agent, memory]
+sessions:
+  - goal: remember the code word
+    planner:
+      - '{"action": "tool", "tool": "remember", "arguments": {"text": "the code word is heron"}}'
+      - '{"action": "final", "answer": "stored"}'
+    validator:
+      - '{"approved": true, "reason": "ok"}'
+  - goal: what is the code word
+    planner:
+      - '{"action": "tool", "tool": "recall", "arguments": {"query": "code word"}}'
+      - '{"action": "final", "answer": "heron"}'
+    validator:
+      - '{"approved": true, "reason": "ok"}'
+expect:
+  status: completed
+  answer_contains: heron
+  tool_output_contains: {tool: recall, text: heron}

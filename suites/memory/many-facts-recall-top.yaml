@@ -1,0 +1,29 @@
+# Five facts remembered in one session, one of them recalled in the next.
+# The store's default k is 5, matching the item count exactly, so every
+# fact comes back in the recall output; this checks that the targeted one
+# is among them.
+name: many-facts-recall-top
+goal: ignored
+target_requirements: [agent, memory]
+max_steps: 6
+sessions:
+  - goal: remember five facts
+    planner:
+      - '{"action": "tool", "tool": "remember", "arguments": {"text": "fact alpha is one"}}'
+      - '{"action": "tool", "tool": "remember", "arguments": {"text": "fact bravo is two"}}'
+      - '{"action": "tool", "tool": "remember", "arguments": {"text": "fact charlie is three"}}'
+      - '{"action": "tool", "tool": "remember", "arguments": {"text": "fact delta is four"}}'
+      - '{"action": "tool", "tool": "remember", "arguments": {"text": "fact echo is five"}}'
+      - '{"action": "final", "answer": "stored five"}'
+    validator:
+      - '{"approved": true, "reason": "ok"}'
+  - goal: recall the echo fact
+    planner:
+      - '{"action": "tool", "tool": "recall", "arguments": {"query": "echo"}}'
+      - '{"action": "final", "answer": "five"}'
+    validator:
+      - '{"approved": true, "reason": "ok"}'
+expect:
+  status: completed
+  answer_contains: five
+  tool_output_contains: {tool: recall, text: "fact echo is five"}

@@ -1,0 +1,29 @@
+# A whole unrelated session runs between the remember and the recall, so
+# this proves recall finds the fact past an intervening session, not just
+# past an intervening tool call within one session.
+name: recall-after-distractor-session
+goal: ignored
+target_requirements: [agent, memory]
+sessions:
+  - goal: remember the meeting day
+    planner:
+      - '{"action": "tool", "tool": "remember", "arguments": {"text": "the meeting is on Tuesday"}}'
+      - '{"action": "final", "answer": "stored"}'
+    validator:
+      - '{"approved": true, "reason": "ok"}'
+  - goal: look up unrelated info
+    planner:
+      - '{"action": "tool", "tool": "lookup", "arguments": {"key": "weather"}}'
+      - '{"action": "final", "answer": "done"}'
+    validator:
+      - '{"approved": true, "reason": "ok"}'
+  - goal: what day is the meeting
+    planner:
+      - '{"action": "tool", "tool": "recall", "arguments": {"query": "meeting day"}}'
+      - '{"action": "final", "answer": "Tuesday"}'
+    validator:
+      - '{"approved": true, "reason": "ok"}'
+expect:
+  status: completed
+  answer_contains: Tuesday
+  tool_output_contains: {tool: recall, text: Tuesday}

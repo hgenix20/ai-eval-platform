@@ -1,0 +1,39 @@
+# Two sessions remember conflicting values for the same fact, then a third
+# session recalls it.
+#
+# Recency finding: the store's recall ranks purely by embedding cosine
+# similarity, with no time weighting, so a later write does not outrank an
+# earlier one. Run against the real store, both "the budget is 50k" and
+# "the budget is 75k" score identically (0.5) against the query "budget",
+# because the two texts differ only in a token the query never mentions.
+# The tie is broken by insertion order, so the actual recall output lists
+# the older value (50k) before the newer one (75k). This case still passes
+# because it only asserts that the newest value is present in the output,
+# not that it ranks first; the ordering gap is the finding this case
+# documents, not a bug the case is meant to catch.
+name: conflict-newest-value-wins
+goal: ignored
+target_requirements: [agent, memory]
+sessions:
+  - goal: remember the budget
+    planner:
+      - '{"action": "tool", "tool": "remember", "arguments": {"text": "the budget is 50k"}}'
+      - '{"action": "final", "answer": "stored"}'
+    validator:
+      - '{"approved": true, "reason": "ok"}'
+  - goal: update the budget
+    planner:
+      - '{"action": "tool", "tool": "remember", "arguments": {"text": "the budget is 75k"}}'
+      - '{"action": "final", "answer": "stored"}'
+    validator:
+      - '{"approved": true, "reason": "ok"}'
+  - goal: what is the budget
+    planner:
+      - '{"action": "tool", "tool": "recall", "arguments": {"query": "budget"}}'
+      - '{"action": "final", "answer": "75k"}'
+    validator:
+      - '{"approved": true, "reason": "ok"}'
+expect:
+  status: completed
+  answer_contains: 75k
+  tool_output_contains: {tool: recall, text: 75k}

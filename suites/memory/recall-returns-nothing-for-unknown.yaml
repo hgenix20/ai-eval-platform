@@ -1,0 +1,14 @@
+# Recall before anything was ever remembered. The store has no items for
+# this agent, so search returns an empty list regardless of the query; the
+# run still completes normally rather than erroring.
+name: recall-returns-nothing-for-unknown
+goal: recall a fact that was never stored
+target_requirements: [agent, memory]
+planner:
+  - '{"action": "tool", "tool": "recall", "arguments": {"query": "anything"}}'
+  - '{"action": "final", "answer": "nothing found"}'
+validator:
+  - '{"approved": true, "reason": "ok"}'
+expect:
+  status: completed
+  tool_output_contains: {tool: recall, text: "[]"}

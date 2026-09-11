@@ -154,6 +154,17 @@ class Fault(BaseModel):
     delay_ms: int = 0
 
 
+class Session(BaseModel):
+    """One turn of a multi-session case: its own goal and its own scripted
+    planner/validator replies, run to completion on a world shared with every
+    other session in the same case (see `Case.sessions`)."""
+
+    model_config = ConfigDict(extra="forbid")
+    goal: str
+    planner: list[str] = []
+    validator: list[str] = []
+
+
 class Case(BaseModel):
     """One test case: a goal to pursue plus the expectations to grade it against.
 
@@ -167,6 +178,12 @@ class Case(BaseModel):
     the maximum number of steps a target may take before it is forced to stop.
     `faults` are the misbehaviors the target wires into its tools and
     providers before the run starts; empty by default, meaning no faults.
+    `sessions`, when non-empty, replaces `goal`/`planner`/`validator`: the
+    target builds one world for the case and runs each session's goal on it
+    in order, so state a session writes (memory, in particular) is visible
+    to every session that runs after it. See `AgentPlatformLocalTarget` for
+    how the returned Trajectory and its `meta["sessions"]` /
+    `meta["all_tools_used"]` are built.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -178,6 +195,7 @@ class Case(BaseModel):
     target_requirements: list[str] = ["agent"]
     script: list[dict[str, Any]] | None = None
     faults: list[Fault] = []
+    sessions: list[Session] = []
     expect: Expect
 
 

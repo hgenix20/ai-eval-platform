@@ -220,7 +220,13 @@ class AgentPlatformLocalTarget:
         `meta["error"]` set to `repr(e)`; this is the honest record of an
         unrecovered fault, not a masked one. `meta["faults_fired"]` is set
         either way, from the run's `FaultLedger`.
+
+        When `case.sessions` is non-empty, the run is delegated to
+        `_run_sessions` instead, and `case.goal`/`case.planner`/
+        `case.validator` are ignored.
         """
+        if case.sessions:
+            return self._run_sessions(case)
         orchestrator, side_effects, calls, ledger = self._world(case)
         start = time.perf_counter()
         try:
@@ -249,4 +255,98 @@ class AgentPlatformLocalTarget:
             tool_calls=calls,
         )
         trajectory.meta["faults_fired"] = ledger.fired
+        return trajectory
+
+    def _run_sessions(self, case: Case) -> Trajectory:
+        """Run every entry of `case.sessions` in order on one world.
+
+        The world is built once, from a synthetic Case whose planner and
+        validator are every session's scripts concatenated in order (so the
+        shared `FakeProvider`s pop each session's replies in turn) and whose
+        name, max_steps, and faults are copied from `case`. Each session then
+        runs as its own `orchestrator.run(session.goal)` call: the graph
+        resets `history` and `steps_used` per call, but the registry, memory
+        store, approval queue, and recorded `calls` list are the same object
+        across every session, which is what lets a later session recall what
+        an earlier one remembered.
+
+        The returned Trajectory is converted from the last session's run
+        dict, using only the tool calls recorded during that session (sliced
+        out of the shared `calls` list by position) so `convert`'s
+        by-tool-name call matching lines up with that session's own history
+        instead of an earlier session's. `meta["sessions"]` carries one
+        entry per completed session (`status`, `answer`, `tools_used`,
+        `steps_used`); `meta["all_tools_used"]` is every session's tool
+        names concatenated in order, for the `tools_used` grading dimension.
+
+        A session that raises (a tool `raise` fault, a fatal provider fault)
+        is handled the same way a single-session run is: caught here and
+        turned into a `target_error` Trajectory, with `meta["sessions"]`
+        holding only the sessions that completed before the exception.
+        """
+        synthetic = case.model_copy(
+            update={
+                "planner": [p for s in case.sessions for p in s.planner],
+                "validator": [v for s in case.sessions for v in s.validator],
+                "sessions": [],
+            }
+        )
+        orchestrator, side_effects, calls, ledger = self._world(synthetic)
+        start = time.perf_counter()
+        sessions_meta: list[dict[str, Any]] = []
+        all_tools_used: list[str] = []
+        last_result: dict[str, Any] | None = None
+        last_session_calls: list[dict[str, Any]] = []
+        try:
+            for session in case.sessions:
+                calls_before = len(calls)
+                last_result = orchestrator.run(session.goal)
+                last_session_calls = calls[calls_before:]
+                tools_used = [c["tool"] for c in last_session_calls]
+                all_tools_used.extend(tools_used)
+                outcome = last_result.get("outcome") or {}
+                sessions_meta.append(
+                    {
+                        "status": outcome.get("status") or "failed",
+                        "answer": outcome.get("answer"),
+                        "tools_used": tools_used,
+                        "steps_used": last_result.get("steps_used", 0),
+                    }
+                )
+        except Exception as e:
+            wall_ms = (time.perf_counter() - start) * 1000.0
+            return Trajectory(
+                target=self.name,
+                goal=case.goal,
+                steps=(),
+                status="target_error",
+                answer=None,
+                side_effects=tuple(side_effects),
+                cost_usd=float(orchestrator.gateway.meter.snapshot()["total_usd"]),
+                wall_ms=wall_ms,
+                meta={
+                    "error": repr(e),
+                    "faults_fired": ledger.fired,
+                    "history_types": [],
+                    "sessions": sessions_meta,
+                    "all_tools_used": all_tools_used,
+                },
+            )
+        wall_ms = (time.perf_counter() - start) * 1000.0
+        # Type narrowing only: `run` calls this method exclusively when
+        # `case.sessions` is non-empty, so the loop above always executes at
+        # least once and sets `last_result`. Not a runtime validation bypass.
+        assert last_result is not None  # nosec B101
+        trajectory = run_dict_to_trajectory(
+            last_result,
+            target=self.name,
+            goal=case.sessions[-1].goal,
+            wall_ms=wall_ms,
+            cost_usd=float(orchestrator.gateway.meter.snapshot()["total_usd"]),
+            side_effects=side_effects,
+            tool_calls=last_session_calls,
+        )
+        trajectory.meta["faults_fired"] = ledger.fired
+        trajectory.meta["sessions"] = sessions_meta
+        trajectory.meta["all_tools_used"] = all_tools_used
         return trajectory

@@ -1,0 +1,25 @@
+# The second session's final answer must itself contain the recalled
+# value, not just produce a recall step that contains it. reference_steps
+# is graded against the last session's tools only (one recall call is the
+# ideal path here), even though tools_used elsewhere in this suite reads
+# meta["all_tools_used"] across every session.
+name: session-answer-uses-recall
+goal: ignored
+target_requirements: [agent, memory]
+sessions:
+  - goal: remember the password
+    planner:
+      - '{"action": "tool", "tool": "remember", "arguments": {"text": "the password is orchid"}}'
+      - '{"action": "final", "answer": "stored"}'
+    validator:
+      - '{"approved": true, "reason": "ok"}'
+  - goal: what is the password
+    planner:
+      - '{"action": "tool", "tool": "recall", "arguments": {"query": "password"}}'
+      - '{"action": "final", "answer": "the password is orchid"}'
+    validator:
+      - '{"approved": true, "reason": "ok"}'
+expect:
+  status: completed
+  answer_contains: orchid
+  reference_steps: 1

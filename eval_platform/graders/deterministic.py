@@ -36,7 +36,10 @@ def grade_expect(case: Case, t: Trajectory) -> list[Grade]:
       is at most expect.max_steps_used
     - tools_used: t.tools_used() checked against expect.tools_used's one
       mode ("strict": equal in order, "unordered": equal as sets/multisets
-      by sorted order, "subset_of": every used tool is in the allowed list)
+      by sorted order, "subset_of": every used tool is in the allowed list).
+      When `t.meta["all_tools_used"]` is present (a multi-session case; see
+      `Case.sessions`), that list is compared instead of `t.tools_used()`,
+      which otherwise reflects only the last session.
     - forbidden_tools: fails if any of these tool names appears in
       t.tools_used()
     - max_redundant_calls: redundant_calls(t.steps) is at most this cap
@@ -99,7 +102,7 @@ def grade_expect(case: Case, t: Trajectory) -> list[Grade]:
         )
     if e.tools_used is not None:
         mode, want = next(iter(e.tools_used.items()))
-        got = t.tools_used()
+        got = t.meta["all_tools_used"] if "all_tools_used" in t.meta else t.tools_used()
         if mode == "strict":
             ok = got == want
         elif mode == "unordered":

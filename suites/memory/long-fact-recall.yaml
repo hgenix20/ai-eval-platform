@@ -1,0 +1,22 @@
+# The remembered fact is exactly 300 characters. Recall by an unrelated
+# keyword ("invoice discrepancy") still returns the whole fact intact, and
+# a distinctive token from it (the invoice id) survives round-trip storage.
+name: long-fact-recall
+goal: ignored
+target_requirements: [agent, memory]
+sessions:
+  - goal: remember a long fact
+    planner:
+      - '{"action": "tool", "tool": "remember", "arguments": {"text": "The quarterly compliance audit for the northeast region uncovered a discrepancy in vendor invoice zephyrion-77 that must be reconciled before the fiscal close, and the finance team flagged it for immediate follow up with legal counsel on Thursday afternoon at the downtown regional office near lobby."}}'
+      - '{"action": "final", "answer": "stored"}'
+    validator:
+      - '{"approved": true, "reason": "ok"}'
+  - goal: recall the invoice fact
+    planner:
+      - '{"action": "tool", "tool": "recall", "arguments": {"query": "invoice discrepancy"}}'
+      - '{"action": "final", "answer": "found it"}'
+    validator:
+      - '{"approved": true, "reason": "ok"}'
+expect:
+  status: completed
+  tool_output_contains: {tool: recall, text: zephyrion-77}

@@ -1,0 +1,20 @@
+# Two independent facts, remembered and then recalled one at a time,
+# within a single session. answer_contains checks the first fact and
+# tool_output_contains checks the second, so both facts are verified even
+# though each Expect field can only name one string.
+name: two-facts-two-recalls
+goal: remember two facts then recall each of them
+target_requirements: [agent, memory]
+max_steps: 6
+planner:
+  - '{"action": "tool", "tool": "remember", "arguments": {"text": "the mascot is otter"}}'
+  - '{"action": "tool", "tool": "remember", "arguments": {"text": "the anthem is thunder"}}'
+  - '{"action": "tool", "tool": "recall", "arguments": {"query": "mascot"}}'
+  - '{"action": "tool", "tool": "recall", "arguments": {"query": "anthem"}}'
+  - '{"action": "final", "answer": "the mascot is otter and the anthem is thunder"}'
+validator:
+  - '{"approved": true, "reason": "ok"}'
+expect:
+  status: completed
+  answer_contains: otter
+  tool_output_contains: {tool: recall, text: thunder}

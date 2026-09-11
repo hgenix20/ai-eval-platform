@@ -1,0 +1,29 @@
+# Documents a real gap: this platform has remember and recall, but no
+# forget primitive. The second session tries to call a "forget" tool; it is
+# neither granted nor registered, and authorization is checked before
+# existence (see ToolExecutor.execute), so the attempt comes back as
+# tool_denied rather than tool_unknown. history_types on the last session
+# shows that denial. The finding: an agent that needs to retract a stored
+# fact has no tool to do it with; the only workaround is remembering a
+# correction and hoping recall ranks it usefully, which conflict-newest-
+# value-wins shows is not guaranteed either.
+name: forgetting-is-not-supported
+goal: ignored
+target_requirements: [agent, memory]
+sessions:
+  - goal: remember the secret code
+    planner:
+      - '{"action": "tool", "tool": "remember", "arguments": {"text": "the secret code is falcon"}}'
+      - '{"action": "final", "answer": "stored"}'
+    validator:
+      - '{"approved": true, "reason": "ok"}'
+  - goal: forget the stored secret
+    planner:
+      - '{"action": "tool", "tool": "forget", "arguments": {"query": "secret"}}'
+      - '{"action": "final", "answer": "cannot forget, no forget tool available"}'
+    validator:
+      - '{"approved": true, "reason": "ok"}'
+expect:
+  status: completed
+  history_types: [tool_denied, proposed_answer]
+  answer_contains: cannot forget

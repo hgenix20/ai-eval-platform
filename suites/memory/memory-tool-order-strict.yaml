@@ -1,0 +1,30 @@
+# The idea originally numbered 6 in the task brief ("recall scoped to
+# agent") cannot be expressed with a single agent and no forbidden-list
+# inversion, so this case replaces it: it checks that tools_used in strict
+# mode is graded against meta["all_tools_used"] (every session's tool
+# calls, concatenated in order) rather than only the last session's tools.
+name: memory-tool-order-strict
+goal: ignored
+target_requirements: [agent, memory]
+sessions:
+  - goal: remember fact one
+    planner:
+      - '{"action": "tool", "tool": "remember", "arguments": {"text": "fact one is alpha"}}'
+      - '{"action": "final", "answer": "stored"}'
+    validator:
+      - '{"approved": true, "reason": "ok"}'
+  - goal: remember fact two
+    planner:
+      - '{"action": "tool", "tool": "remember", "arguments": {"text": "fact two is beta"}}'
+      - '{"action": "final", "answer": "stored"}'
+    validator:
+      - '{"approved": true, "reason": "ok"}'
+  - goal: recall a fact
+    planner:
+      - '{"action": "tool", "tool": "recall", "arguments": {"query": "fact"}}'
+      - '{"action": "final", "answer": "recalled"}'
+    validator:
+      - '{"approved": true, "reason": "ok"}'
+expect:
+  status: completed
+  tools_used: {strict: [remember, remember, recall]}

@@ -1,0 +1,35 @@
+# A fact remembered in session one survives two entirely unrelated
+# sessions before a fourth session recalls it, showing memory persistence
+# is a property of the shared world, not of adjacency between sessions.
+name: memory-persists-across-three-sessions
+goal: ignored
+target_requirements: [agent, memory]
+sessions:
+  - goal: remember the launch date
+    planner:
+      - '{"action": "tool", "tool": "remember", "arguments": {"text": "the launch date is October 3rd"}}'
+      - '{"action": "final", "answer": "stored"}'
+    validator:
+      - '{"approved": true, "reason": "ok"}'
+  - goal: look up something unrelated
+    planner:
+      - '{"action": "tool", "tool": "lookup", "arguments": {"key": "weather"}}'
+      - '{"action": "final", "answer": "done"}'
+    validator:
+      - '{"approved": true, "reason": "ok"}'
+  - goal: look up something else unrelated
+    planner:
+      - '{"action": "tool", "tool": "lookup", "arguments": {"key": "traffic"}}'
+      - '{"action": "final", "answer": "done"}'
+    validator:
+      - '{"approved": true, "reason": "ok"}'
+  - goal: what is the launch date
+    planner:
+      - '{"action": "tool", "tool": "recall", "arguments": {"query": "launch date"}}'
+      - '{"action": "final", "answer": "October 3rd"}'
+    validator:
+      - '{"approved": true, "reason": "ok"}'
+expect:
+  status: completed
+  answer_contains: October 3rd
+  tool_output_contains: {tool: recall, text: "October 3rd"}
