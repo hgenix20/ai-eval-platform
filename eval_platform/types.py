@@ -20,6 +20,12 @@ TOOLS_USED_MODES = ("strict", "subset_of", "unordered")
 # wrapper in `eval_platform.targets.faults` and ignored by the other.
 TOOL_FAULT_KINDS = ("raise", "malformed", "empty", "delay")
 PROVIDER_FAULT_KINDS = ("retryable_error", "fatal_error", "truncated", "delay")
+# A judge grade's dimension is `judge:<rubric>:<model>` and its value is 1.0
+# for a pass, 0.0 for a fail, and this for an unknown: the judge declined to
+# label the case, which is neither evidence for nor against it.
+JUDGE_DIMENSION_PREFIX = "judge:"
+JUDGE_UNKNOWN_VALUE = 0.5
+UNSUPPORTED_DIMENSION = "unsupported_claims"
 
 
 @dataclass(frozen=True)
@@ -313,6 +319,70 @@ def _percentile(values: list[float], pct: float) -> float:
     return ordered[lo] + (ordered[hi] - ordered[lo]) * (pos - lo)
 
 
+def _split_judge_dimension(dimension: str) -> tuple[str, str] | None:
+    """`judge:<rubric>:<model>` as (rubric, model), or None when the
+    dimension does not carry both parts. Model ids hold slashes and dots
+    and are returned whole, so `judge:faithfulness:hf/org/m-3.2` reads as
+    ("faithfulness", "hf/org/m-3.2")."""
+    parts = dimension.split(":", 2)
+    return (parts[1], parts[2]) if len(parts) == 3 else None
+
+
+def _swap_agreement(cases: Sequence[CaseResult], dimensions: Sequence[str]) -> dict[str, float]:
+    """`judge.<rubric>.swap_agreement` for every rubric that two judges in
+    `dimensions` scored: the share of cases where both gave the same label,
+    over the cases where neither was unknown. With three or more judges on
+    one rubric the first two in `dimensions` are the pair, matching the
+    calibration report, which measures its swap on the first two judges
+    given. A rubric with no case both judges labeled is omitted."""
+    by_rubric: dict[str, list[str]] = {}
+    for dimension in dimensions:
+        split = _split_judge_dimension(dimension)
+        if split is not None:
+            by_rubric.setdefault(split[0], []).append(dimension)
+    out: dict[str, float] = {}
+    for rubric, dims in by_rubric.items():
+        if len(dims) < 2:
+            continue
+        agreed: list[bool] = []
+        for c in cases:
+            first = next((g for g in c.grades if g.dimension == dims[0]), None)
+            second = next((g for g in c.grades if g.dimension == dims[1]), None)
+            if first is None or second is None:
+                continue
+            if JUDGE_UNKNOWN_VALUE in (first.value, second.value):
+                continue
+            agreed.append(first.value == second.value)
+        if agreed:
+            out[f"judge.{rubric}.swap_agreement"] = sum(agreed) / len(agreed)
+    return out
+
+
+def judge_metrics(cases: Sequence[CaseResult]) -> dict[str, float]:
+    """Per-judge metrics over `cases`: `judge.<rubric>.<model>.pass_rate`
+    across the grades that carry a label (unknowns excluded, and the key
+    omitted when a judge labeled nothing), `judge.<rubric>.<model>.unknown_rate`
+    across every grade the judge produced, and the swap agreement described
+    in `_swap_agreement`. An empty dict when no case carries a judge grade."""
+    by_dimension: dict[str, list[Grade]] = {}
+    for c in cases:
+        for g in c.grades:
+            if g.dimension.startswith(JUDGE_DIMENSION_PREFIX):
+                by_dimension.setdefault(g.dimension, []).append(g)
+    out: dict[str, float] = {}
+    for dimension, grades in by_dimension.items():
+        split = _split_judge_dimension(dimension)
+        if split is None:
+            continue
+        rubric, model = split
+        labeled = [g for g in grades if g.value != JUDGE_UNKNOWN_VALUE]
+        if labeled:
+            out[f"judge.{rubric}.{model}.pass_rate"] = sum(g.passed for g in labeled) / len(labeled)
+        out[f"judge.{rubric}.{model}.unknown_rate"] = (len(grades) - len(labeled)) / len(grades)
+    out.update(_swap_agreement(cases, list(by_dimension)))
+    return out
+
+
 def compute_metrics(cases: Sequence[CaseResult]) -> dict[str, float]:
     """Suite-level metrics. Skipped cases count in cases_total and cases_skipped
     and are excluded from pass_rate, cost, and latency. `step_efficiency_mean`
@@ -337,7 +407,12 @@ def compute_metrics(cases: Sequence[CaseResult]) -> dict[str, float]:
     `attack_success_rate` is omitted as well when the attack cases carry no
     `attack_succeeded` grade, the same shape as `recovery_rate`, so a suite
     whose attack cases were never graded on the dimension does not publish a
-    0.0 that reads as nine of nine attacks stopped."""
+    0.0 that reads as nine of nine attacks stopped.
+    The judge pass adds two more families, both over scored cases and both
+    absent until a grade carries them (see `judge_metrics` for the judge
+    keys). `unsupported_rate` is the mean unsupported share of the
+    `unsupported_claims` grades, which is 1 minus each grade's value, so 0.0
+    means every scored answer was fully grounded in its context."""
     scored = [c for c in cases if c.skipped_reason is None]
     trajs = [c.trajectory for c in scored if c.trajectory is not None]
     costs = [t.cost_usd for t in trajs]
@@ -384,4 +459,10 @@ def compute_metrics(cases: Sequence[CaseResult]) -> dict[str, float]:
         metrics["utility_rate"] = (
             sum(c.passed for c in benign_cases) / len(benign_cases) if benign_cases else 0.0
         )
+    metrics.update(judge_metrics(scored))
+    unsupported = [
+        g.value for c in scored for g in c.grades if g.dimension == UNSUPPORTED_DIMENSION
+    ]
+    if unsupported:
+        metrics["unsupported_rate"] = sum(1.0 - v for v in unsupported) / len(unsupported)
     return metrics

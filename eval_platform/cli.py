@@ -1,4 +1,4 @@
-"""evalplat: catalog, run offline, public and mcp, calibrate, gate, report."""
+"""evalplat: catalog, run offline, public and mcp, calibrate, judge, gate, report."""
 
 from __future__ import annotations
 
@@ -12,12 +12,14 @@ from eval_platform.budget import Budget, BudgetExceeded, Ledger
 from eval_platform.calibration import calibrate, load_items, write_report
 from eval_platform.catalog import filter_entries, load_catalog
 from eval_platform.gate import compare, load_gate_config, to_junit, to_markdown
+from eval_platform.graders.base import Grader
 from eval_platform.graders.hhem import HHEMGrader
 from eval_platform.graders.judge import JudgeGrader
 from eval_platform.graders.judge_cache import JudgeCache
 from eval_platform.graders.rubrics import RUBRICS
+from eval_platform.judge_pass import apply as apply_judge_pass
 from eval_platform.reports import render_html
-from eval_platform.results import latest_summary, read_summary, write_summary
+from eval_platform.results import latest_summary, read_summary, summary_to_result, write_summary
 from eval_platform.suites import load_cases, run_public, run_suite
 from eval_platform.targets import (
     AgentPlatformHttpTarget,
@@ -388,6 +390,11 @@ def cmd_gate(a: argparse.Namespace) -> int:
     the current run was measured on the same target as the baseline; see
     `gate.compare.compare`.
 
+    `--calibration` is the calibration report that says which judges may
+    decide a row. It is read when the file exists and passed to `compare`;
+    with no file, every judge-derived row reads as not measured, which is
+    the right default for a repository that has not calibrated a judge yet.
+
     Returns 0 when every threshold passes (or after updating baselines);
     returns 1 when any threshold fails or is unstable.
     """
@@ -412,7 +419,9 @@ def cmd_gate(a: argparse.Namespace) -> int:
         for name in config.suites
         if (baselines / f"{name}.json").exists()
     }
-    report = compare(config, baseline, current)
+    cal_path = Path(a.calibration)
+    calibration = json.loads(cal_path.read_text(encoding="utf-8")) if cal_path.exists() else None
+    report = compare(config, baseline, current, calibration=calibration)
     md = to_markdown(report)
     print(md)
     if a.junit:
@@ -422,6 +431,75 @@ def cmd_gate(a: argparse.Namespace) -> int:
         Path(a.markdown).parent.mkdir(parents=True, exist_ok=True)
         Path(a.markdown).write_text(md, encoding="utf-8")
     return 0 if report.passed else 1
+
+
+def _judge_graders(a: argparse.Namespace, model_args: dict[str, Any] | None) -> list[Grader]:
+    """One JudgeGrader per `--judge`, all on `--rubric` and all sharing
+    `model_args`, plus HHEM when `--hhem` was given. Each judge gets its own
+    directory under `--cache`, so two judges never share cache entries."""
+    cache_root = Path(a.cache)
+    graders: list[Grader] = [
+        JudgeGrader(
+            model=m,
+            rubric=RUBRICS[a.rubric],
+            cache=JudgeCache(cache_root / m.replace("/", "_")),
+            model_args=model_args,
+        )
+        for m in (a.judge or [])
+    ]
+    if a.hhem:
+        graders.append(HHEMGrader())
+    return graders
+
+
+def cmd_judge(a: argparse.Namespace) -> int:
+    """Grade the stored run at `--results`/<suite>/latest.json with every
+    requested grader and write the result back as a new run file, promoted
+    to `latest.json`.
+
+    The suite name is `--suite-dir`'s own directory name, the same name the
+    run was written under, and the cases come from that directory, so the
+    judges see each case's goal and expectations. `--sample N` grades only
+    the first N scored cases. Prints the graders it ran and the file it
+    wrote, then every metric the pass changed, four decimals.
+
+    The new file keeps the original run's `started_at`, since that is when
+    the run being graded happened, so its name is the graded run's name
+    with a `-2` (or `-3`, ...) suffix.
+
+    Returns 2, with the reason on stderr, when that suite has no stored run,
+    when neither `--judge` nor `--hhem` asked for a grader, or when
+    `--model-args` is not a JSON object. Returns 0 on a completed pass,
+    however many cases the judges failed: this command records verdicts, and
+    the gate decides what they mean.
+    """
+    suite_dir, results = Path(a.suite_dir), Path(a.results)
+    summary = latest_summary(results, suite_dir.name)
+    if summary is None:
+        print(f"no stored run at {results / suite_dir.name / 'latest.json'}", file=sys.stderr)
+        return 2
+    if not a.judge and not a.hhem:
+        print("no grader requested: pass --judge <model> or --hhem", file=sys.stderr)
+        return 2
+    try:
+        model_args = _model_args(a)
+    except (json.JSONDecodeError, ValueError) as e:
+        print(f"invalid --model-args JSON: {e}", file=sys.stderr)
+        return 2
+    graders = _judge_graders(a, model_args)
+    result = apply_judge_pass(
+        summary_to_result(summary),
+        {c.name: c for c in load_cases(suite_dir)},
+        graders,
+        sample=a.sample,
+    )
+    path = write_summary(result, results)
+    before = summary.get("metrics", {})
+    print(f"{result.suite}: graded by {', '.join(g.id for g in graders)} -> {path}")
+    for name, value in sorted(result.metrics.items()):
+        if before.get(name) != value:
+            print(f"  {name}: {value:.4f}")
+    return 0
 
 
 def cmd_report(a: argparse.Namespace) -> int:
@@ -539,6 +617,53 @@ def _add_calibrate(sub: argparse._SubParsersAction) -> None:
     cal.set_defaults(fn=cmd_calibrate)
 
 
+def _add_judge(sub: argparse._SubParsersAction) -> None:
+    """Wire the `judge` subcommand onto the top-level parser.
+
+    Split out of `build_parser` for the same reason `calibrate` has
+    `_add_calibrate`: keeping that function under the linter's statement
+    ceiling. `--judge` is repeatable; a second `--judge` is what makes the
+    run's own swap agreement measurable, which the gate can then require.
+    """
+    jud = sub.add_parser("judge")
+    jud.add_argument("--suite-dir", required=True)
+    jud.add_argument(
+        "--judge",
+        action="append",
+        help="Judge model id; repeat for a second judge, which enables swap agreement.",
+    )
+    jud.add_argument(
+        "--model-args",
+        help="JSON object of Inspect model constructor kwargs, applied to every --judge.",
+    )
+    jud.add_argument("--rubric", default="faithfulness", choices=sorted(RUBRICS))
+    jud.add_argument(
+        "--hhem", action="store_true", help="Also grade unsupported_claims with HHEM-2.1-open."
+    )
+    jud.add_argument("--results", default="results")
+    jud.add_argument("--cache", default=".cache/judge")
+    jud.add_argument("--sample", type=int, help="Grade only the first N scored cases.")
+    jud.set_defaults(fn=cmd_judge)
+
+
+def _add_gate(sub: argparse._SubParsersAction) -> None:
+    """Wire the `gate` subcommand onto the top-level parser, split out of
+    `build_parser` to keep it under the linter's statement ceiling."""
+    gate = sub.add_parser("gate")
+    gate.add_argument("--config", default="gate.yaml")
+    gate.add_argument("--baseline", default="baselines")
+    gate.add_argument("--results", default="results")
+    gate.add_argument(
+        "--calibration",
+        default="results/calibration/latest.json",
+        help="Calibration report saying which judges may decide a gate row.",
+    )
+    gate.add_argument("--junit")
+    gate.add_argument("--markdown")
+    gate.add_argument("--update-baseline", action="store_true")
+    gate.set_defaults(fn=cmd_gate)
+
+
 def _add_run_mcp(run: argparse._SubParsersAction) -> None:
     """Wire the `run mcp` subcommand onto the `run` subparser group.
 
@@ -574,8 +699,9 @@ def _add_run_mcp(run: argparse._SubParsersAction) -> None:
 
 def build_parser() -> argparse.ArgumentParser:
     """Assemble the `evalplat` argument parser: `catalog list`,
-    `run offline`, `run public`, `run mcp`, `calibrate`, `gate`, and
-    `report`, each wired to its `cmd_*` function via `set_defaults(fn=...)`.
+    `run offline`, `run public`, `run mcp`, `calibrate`, `judge`, `gate`,
+    and `report`, each wired to its `cmd_*` function via
+    `set_defaults(fn=...)`.
     """
     p = argparse.ArgumentParser(prog="evalplat")
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -637,15 +763,8 @@ def build_parser() -> argparse.ArgumentParser:
 
     _add_run_mcp(run)
     _add_calibrate(sub)
-
-    gate = sub.add_parser("gate")
-    gate.add_argument("--config", default="gate.yaml")
-    gate.add_argument("--baseline", default="baselines")
-    gate.add_argument("--results", default="results")
-    gate.add_argument("--junit")
-    gate.add_argument("--markdown")
-    gate.add_argument("--update-baseline", action="store_true")
-    gate.set_defaults(fn=cmd_gate)
+    _add_judge(sub)
+    _add_gate(sub)
 
     rep = sub.add_parser("report")
     rep.add_argument("--results", default="results")

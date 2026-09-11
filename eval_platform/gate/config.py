@@ -7,7 +7,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import yaml
-from pydantic import BaseModel, ConfigDict, ValidationError
+from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
 
 class Threshold(BaseModel):
@@ -30,13 +30,34 @@ class Threshold(BaseModel):
     max_increase_pct: float | None = None
 
 
+class JudgeRules(BaseModel):
+    """When a judge-derived metric may decide a gate row.
+
+    A judge that has not been calibrated against human labels never blocks a
+    merge; `kappa_floor` and `min_swap_agreement` are the thresholds the
+    calibration report was asked to meet, repeated here so a gate report can
+    say which floor a judge missed. `require_swap_agreement` turns on the
+    second check at gate time: when the run's own summary carries a swap
+    agreement below `min_swap_agreement`, the two judges disagreed on this
+    set of cases whatever the calibration set said, and the row is unstable.
+    Unknown fields are rejected (extra="forbid").
+    """
+
+    model_config = ConfigDict(extra="forbid")
+    kappa_floor: float = 0.70
+    min_swap_agreement: float = 0.90
+    require_swap_agreement: bool = True
+
+
 class GateConfig(BaseModel):
-    """The full gate: one Threshold per suite, plus the PR sample size used
-    by cheaper CI runs. Unknown top-level fields are rejected."""
+    """The full gate: one Threshold per suite, the PR sample size used by
+    cheaper CI runs, and the rules that let a judge-derived row count.
+    Unknown top-level fields are rejected."""
 
     model_config = ConfigDict(extra="forbid")
     suites: dict[str, Threshold]
     pr_sample: int = 20
+    judges: JudgeRules = Field(default_factory=JudgeRules)
 
 
 def load_gate_config(path: Path) -> GateConfig:

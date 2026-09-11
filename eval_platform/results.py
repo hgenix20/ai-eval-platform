@@ -9,7 +9,7 @@ import shutil
 from pathlib import Path
 from typing import Any
 
-from eval_platform.types import SuiteResult
+from eval_platform.types import CaseResult, Grade, Step, SuiteResult, Trajectory
 
 
 def _safe(component: str) -> str:
@@ -73,6 +73,86 @@ def read_summary(path: Path) -> dict[str, Any]:
     exist, or a json.JSONDecodeError if its content is not valid JSON.
     """
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _step(d: dict[str, Any]) -> Step:
+    """One Step from the dict `SuiteResult.to_dict()` wrote for it."""
+    return Step(
+        kind=d["kind"],
+        name=d["name"],
+        input=d.get("input"),
+        output=d.get("output"),
+        latency_ms=float(d.get("latency_ms", 0.0)),
+        tokens_in=int(d.get("tokens_in", 0)),
+        tokens_out=int(d.get("tokens_out", 0)),
+        cost_usd=float(d.get("cost_usd", 0.0)),
+        error=d.get("error"),
+    )
+
+
+def _trajectory(d: dict[str, Any]) -> Trajectory:
+    """One Trajectory from its dict form, steps and side effects included."""
+    return Trajectory(
+        target=d["target"],
+        goal=d["goal"],
+        steps=tuple(_step(s) for s in d["steps"]),
+        status=d["status"],
+        answer=d.get("answer"),
+        side_effects=tuple(dict(x) for x in d.get("side_effects", ())),
+        cost_usd=float(d["cost_usd"]),
+        wall_ms=float(d["wall_ms"]),
+        meta=dict(d.get("meta") or {}),
+    )
+
+
+def _case_result(d: dict[str, Any]) -> CaseResult:
+    """One CaseResult from its dict form. Raises ValueError naming the case
+    when a key it needs is missing or holds the wrong kind of value."""
+    name = d.get("name", "<unnamed>")
+    try:
+        traj = d.get("trajectory")
+        return CaseResult(
+            name=d["name"],
+            passed=bool(d["passed"]),
+            grades=tuple(
+                Grade(g["dimension"], float(g["value"]), bool(g["passed"]), g["explanation"])
+                for g in d["grades"]
+            ),
+            trajectory=_trajectory(traj) if traj is not None else None,
+            skipped_reason=d.get("skipped_reason"),
+            kind=d.get("kind", "benign"),
+        )
+    except (AttributeError, KeyError, TypeError, ValueError) as e:
+        raise ValueError(f"case {name}: malformed summary entry: {e}") from e
+
+
+def summary_to_result(d: dict[str, Any]) -> SuiteResult:
+    """Rebuild a SuiteResult from the dict `SuiteResult.to_dict()` produced,
+    as `read_summary` hands it back: the inverse of that method, down to the
+    tuples the dataclasses declare, so `summary_to_result(x).to_dict() == x`
+    for any summary this package wrote.
+
+    Failure mode: raises ValueError when the dict is not shaped like a
+    summary, including a metric that is not a number. A bad case entry names
+    the case in the message, so the caller can find the offending record in
+    a file of hundreds.
+    """
+    try:
+        cases = tuple(_case_result(c) for c in d["cases"])
+    except (AttributeError, KeyError, TypeError) as e:
+        raise ValueError(f"not a suite summary: {e}") from e
+    try:
+        return SuiteResult(
+            suite=d["suite"],
+            target=d["target"],
+            started_at=d["started_at"],
+            finished_at=d["finished_at"],
+            cases=cases,
+            metrics={k: float(v) for k, v in d["metrics"].items()},
+            meta=dict(d.get("meta") or {}),
+        )
+    except (AttributeError, KeyError, TypeError, ValueError) as e:
+        raise ValueError(f"not a suite summary: {e}") from e
 
 
 def latest_summary(results_dir: Path, suite: str) -> dict[str, Any] | None:

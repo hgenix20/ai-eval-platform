@@ -13,9 +13,12 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Literal
 
-from .config import GateConfig, Threshold
+from eval_platform.graders.rubrics import RUBRICS
+
+from .config import GateConfig, JudgeRules, Threshold
 
 Verdict = Literal["pass", "fail", "unstable", "not_measured"]
+JUDGE_METRIC_PREFIX = "judge."
 
 
 @dataclass(frozen=True)
@@ -152,6 +155,91 @@ def _judge(
     return "pass", "within thresholds"
 
 
+def judge_id_for(metric: str) -> str | None:
+    """The calibration id of the judge behind a `judge.<rubric>.<model>.<stat>`
+    metric, as `f"{rubric}@{version}:{model}"`, or None when the metric names
+    no single judge. The rubric's version comes from `RUBRICS`, so a rubric
+    edit that bumps the version leaves the old id uncalibrated until the
+    calibration run is repeated. The model segment is everything between the
+    rubric and the trailing statistic, since model ids carry dots
+    ("judge.faithfulness.hf/org/m-3.2.pass_rate"). `judge.<rubric>.swap_agreement`
+    belongs to a pair of judges, not one, and returns None.
+    """
+    parts = metric.split(".")
+    if len(parts) < 4 or parts[0] != "judge":
+        return None
+    rubric = RUBRICS.get(parts[1])
+    if rubric is None:
+        return None
+    return f"{parts[1]}@{rubric.version}:{'.'.join(parts[2:-1])}"
+
+
+def _reported_kappa(judge_id: str, calibration: dict[str, Any] | None) -> float | None:
+    """The kappa the calibration report recorded for `judge_id`, or None
+    when the report is missing or does not carry that judge."""
+    for row in (calibration or {}).get("judges", []):
+        if isinstance(row, dict) and row.get("judge") == judge_id and row.get("kappa") is not None:
+            return float(row["kappa"])
+    return None
+
+
+def _calibration_verdict(judge_id: str, calibration: dict[str, Any] | None) -> tuple[bool, str]:
+    """Whether the calibration report clears `judge_id` to decide a gate
+    row, with the reason either way, read from the report's `calibrated`
+    map (`{judge id: [ok, reason]}`, written by `CalibrationReport.to_dict`)."""
+    if not calibration:
+        return False, "no calibration report"
+    entry = calibration.get("calibrated", {}).get(judge_id)
+    if not isinstance(entry, list) or not entry:
+        return False, "not in the calibration report"
+    return bool(entry[0]), str(entry[1]) if len(entry) > 1 else "no reason recorded"
+
+
+def _uncalibrated_detail(
+    judge_id: str, reason: str, calibration: dict[str, Any] | None, rules: JudgeRules
+) -> str:
+    """Why an uncalibrated judge's row is not_measured, with the measured
+    kappa and the floor it was held to when the report carries them."""
+    kappa = _reported_kappa(judge_id, calibration)
+    reported_floor = (calibration or {}).get("kappa_floor")
+    floor = float(reported_floor if reported_floor is not None else rules.kappa_floor)
+    measured = "" if kappa is None else f" (kappa {kappa:.2f}, floor {floor:.2f})"
+    return f"judge {judge_id} uncalibrated: {reason}{measured}"
+
+
+def _judge_row_verdict(
+    suite: str,
+    metric: str,
+    cur_summary: dict[str, Any] | None,
+    calibration: dict[str, Any] | None,
+    rules: JudgeRules,
+) -> tuple[Verdict, str] | None:
+    """The verdict for a `judge.` row that its threshold must not decide, or
+    None when the row is fit to be compared normally.
+
+    Calibration comes first: a judge that has not cleared its kappa floor
+    against human labels has no standing to pass or fail a merge, and its
+    row is not_measured, which does not block. Only a calibrated judge
+    reaches the swap check, and only when `require_swap_agreement` is on:
+    two calibrated judges that disagreed on this run's own cases produce a
+    number nobody should act on, so the row is unstable, which does block.
+    A run with one judge carries no swap agreement and skips that check.
+    """
+    judge_id = judge_id_for(metric)
+    if judge_id is None:
+        return "not_measured", f"no single judge behind metric {metric}"
+    ok, reason = _calibration_verdict(judge_id, calibration)
+    if not ok:
+        return "not_measured", _uncalibrated_detail(judge_id, reason, calibration, rules)
+    if not rules.require_swap_agreement:
+        return None
+    rubric = metric.split(".")[1]
+    swap = _metric(cur_summary, suite, f"{JUDGE_METRIC_PREFIX}{rubric}.swap_agreement")
+    if swap is not None and swap < rules.min_swap_agreement:
+        return "unstable", f"swap agreement {swap:.2f} < {rules.min_swap_agreement:.2f}"
+    return None
+
+
 def _target_mismatch(
     base_summary: dict[str, Any] | None, cur_summary: dict[str, Any] | None
 ) -> str | None:
@@ -178,6 +266,8 @@ def compare(
     config: GateConfig,
     baseline: dict[str, dict[str, Any]],
     current: dict[str, dict[str, Any]],
+    *,
+    calibration: dict[str, Any] | None = None,
 ) -> GateReport:
     """Compare `current` suite summaries against `config`'s thresholds, using
     `baseline` for any relative checks.
@@ -214,6 +304,21 @@ def compare(
     existed has no `target` key and is unaffected: the check only fires
     when both sides state a target and they disagree.
 
+    A row whose metric starts with "judge." is decided by its threshold only
+    once the judge behind it has been calibrated. `calibration` is a
+    calibration report as `CalibrationReport.to_dict()` wrote it (normally
+    `results/calibration/latest.json`); its `calibrated` map says which judge
+    ids cleared their kappa floor and swap agreement. A judge that is absent
+    from the report, or that the report marks uncalibrated, makes the row
+    not_measured with a detail naming the judge and the reason, so an
+    unproven judge cannot block or clear a merge. With no report at all,
+    every judge row reads that way. A calibrated judge's row goes on to the
+    ordinary threshold comparison, except that
+    `config.judges.require_swap_agreement` first checks the run's own
+    `judge.<rubric>.swap_agreement`: below `min_swap_agreement` the two
+    judges disagreed on these cases, and the row is unstable, which blocks.
+    See `_judge_row_verdict`.
+
     Failure mode: raises ValueError if a metric value in `baseline` or
     `current` is present but not numeric (see `_metric`).
     """
@@ -237,6 +342,11 @@ def compare(
                 MetricVerdict(suite, t.metric, base, None, _describe(t), "not_measured", detail)
             )
             continue
+        if t.metric.startswith(JUDGE_METRIC_PREFIX):
+            blocked = _judge_row_verdict(suite, t.metric, cur_summary, calibration, config.judges)
+            if blocked is not None:
+                out.append(MetricVerdict(suite, t.metric, base, cur, _describe(t), *blocked))
+                continue
         target_mismatch = _target_mismatch(base_summary, cur_summary)
         verdict, detail = _judge(t, base, cur, target_mismatch=target_mismatch)
         out.append(MetricVerdict(suite, t.metric, base, cur, _describe(t), verdict, detail))
