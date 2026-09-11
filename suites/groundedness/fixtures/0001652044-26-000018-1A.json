@@ -1,0 +1,368 @@
+{
+ "accession": "0001652044-26-000018",
+ "company": "Alphabet Inc.",
+ "form": "10-K",
+ "item": "1A",
+ "filing_date": "2026-02-05",
+ "document_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/goog-20251231.htm",
+ "golden_id": "googl-0001652044-26-000018-1A",
+ "window_paragraphs": 40,
+ "paragraphs": [
+  {
+   "id": 0,
+   "text": "ITEM 1A. RISK FACTORS"
+  },
+  {
+   "id": 1,
+   "text": "Our operations and financial results are subject to various risks and uncertainties, including but not limited to those described below, which could harm our business, reputation, financial condition, and operating results, and may affect the trading price and price volatility of our Class A and Class C stock."
+  },
+  {
+   "id": 2,
+   "text": "Risks Specific to our Company"
+  },
+  {
+   "id": 3,
+   "text": "We generate a significant portion of our revenues from advertising. Reduced spending by advertisers, a loss of partners, shifts in online advertising, new and evolving advertising formats, or new or existing technologies that block ads online or affect our ability to personalize ads could harm our business."
+  },
+  {
+   "id": 4,
+   "text": "We generated more than 70% of total revenues from online advertising in 2025. Many of our advertisers, companies that distribute our products and services, digital publishers, and content providers can terminate their contracts with us at any time. These partners may not continue to do business with us if we do not create more value (such as increased numbers of users or customers, new sales leads, increased brand awareness, or more effective monetization) than their available alternatives."
+  },
+  {
+   "id": 5,
+   "text": "We believe AI is quickly reshaping the advertising industry, including how ads are delivered online, and we and our competitors are constantly adjusting to meet this shift and provide new and evolving advertising formats. There is no assurance that we will adapt effectively and competitively to meet this shift, and that such advertising formats, strategies, and offerings will be successful."
+  },
+  {
+   "id": 6,
+   "text": "Changes to our advertising policies and data privacy practices, as well as changes to other companies' advertising or data privacy practices have in the past, and may in the future, affect the advertising services that we are able to provide. In addition, technologies have been developed that make personalized ads more difficult, or that block the display of ads altogether, and some providers of online services have integrated technologies that could impair the availability and functionality of third-party digital advertising. Failing to provide superior value or deliver advertisements effectively and competitively could harm our business, reputation, financial condition, and operating results."
+  },
+  {
+   "id": 7,
+   "text": "Expenditures by advertisers tend to correlate with overall economic conditions. Adverse macroeconomic conditions have affected, and may in the future affect, the demand for advertising, resulting in fluctuations in the amounts our advertisers spend on advertising, which could harm our financial condition and operating results."
+  },
+  {
+   "id": 8,
+   "text": "Our increasing investment in new businesses, products, services, and technologies is inherently risky, and could divert management attention and harm our business, financial condition, and operating results."
+  },
+  {
+   "id": 9,
+   "text": "We have invested and expect to expand our investment in new businesses, products, services, and technologies in a wide range of industries beyond online advertising. The investments that we are making across our businesses — such as building AI-optimized infrastructure, including our custom TPUs, and integrating AI capabilities into new and existing products and services — reflect our ongoing efforts to innovate and provide products and services that are helpful to users, advertisers, publishers, customers, content providers, and distribution partners. Our investments ultimately may not be commercially viable or may not result in an adequate return of capital and, in pursuing new strategies, we may incur unanticipated liabilities."
+  },
+  {
+   "id": 10,
+   "text": "To meet the compute capacity demands of AI training and inference, as well as traditional cloud computing services, we are entering into significant leasing arrangements with third party operators, which may increase costs and operational complexity. We also have a number of large, long-duration commercial agreements, which could increase our liabilities and obligations in the event of nonperformance by us, our counterparties, or vendors. In such nonperformance or an industry downturn, we may incur additional liabilities, have excess capacity that we cannot easily redeploy, and not receive payments from our counterparties or customers."
+  },
+  {
+   "id": 11,
+   "text": "We have invested and expect to significantly expand our investment in property and equipment, including our technical infrastructure, and we expect these assets to benefit our business over their estimated useful lives. Changes in facts and circumstances such as changes to historical asset performance, expected technology advancements, and future network deployment plans could change the period over which we expect to benefit from the asset and impact our financial condition and operating results."
+  },
+  {
+   "id": 12,
+   "text": "Innovations in our products and services could also result in changes to user and customer behavior and affect our revenue trends. These endeavors involve significant risks and uncertainties, including diversion of resources and management attention from current operations, different monetization models, and the use of alternative investment, governance, or compensation structures that may fail to adequately align incentives across the company or otherwise accomplish their objectives."
+  },
+  {
+   "id": 13,
+   "text": "9."
+  },
+  {
+   "id": 14,
+   "text": "Table of Contents"
+  },
+  {
+   "id": 15,
+   "text": "Alphabet Inc."
+  },
+  {
+   "id": 16,
+   "text": "Within Google Services, we continue to invest heavily in devices, including our smartphones, home devices, and wearables, which is a highly competitive market with frequent introduction of new products and services, rapid adoption of technological advancements by competitors, increased market saturation in developed countries, short product life cycles, evolving industry standards, continual improvement in performance characteristics, and price and feature sensitivity on the part of consumers and businesses. There can be no assurance we will be able to provide devices that compete effectively."
+  },
+  {
+   "id": 17,
+   "text": "Within Google Cloud, we devote significant resources to develop and deploy our enterprise-ready cloud services, including Google Cloud Platform and Google Workspace, and we are advancing our AI platforms and models to support these tools and technologies, including the development of our custom TPUs and how we deliver them to our customers. We are incurring significant and increasing costs and new liabilities, including contingent liabilities, to build and maintain infrastructure to support cloud computing services, invest in cybersecurity, and hire talent. Meanwhile, our competitors are rapidly developing and deploying cloud-based services and capacity. Pricing and delivery models, which are subject to increasing regulatory scrutiny and requirements, are competitive and constantly evolving, and we may therefore not achieve our business objectives. Further, our business with financial services, healthcare, and public sector customers may present additional risks, including regulatory compliance risks. For instance, we may be subject to government audits and cost reviews, and any failure to comply or any deficiencies found may expose us to legal, financial, and reputational risks. Evolving laws and regulations may require us to make new capital investments, build new products, and seek partners to deliver localized services in other countries, and we may not be able to meet sovereign operating requirements."
+  },
+  {
+   "id": 18,
+   "text": "Within Other Bets, we are investing significantly in areas such as life sciences and transportation, among others. These investment areas face intense competition from large, experienced, and well-funded competitors, and our offerings, many of which involve the development of new and emerging technologies, may not be successful, or be able to compete effectively or operate at sufficient levels of profitability."
+  },
+  {
+   "id": 19,
+   "text": "In addition, new and evolving products and services, including those that use AI, raise ethical, technological, legal, regulatory, and other challenges, which could harm our brands and demand for our products and services. Because all of these investment areas are inherently risky, no assurance can be given that such strategies and offerings will be successful or will not harm our reputation, financial condition, and operating results."
+  },
+  {
+   "id": 20,
+   "text": "We face intense competition. If we do not continue to innovate and provide products and services that are useful to users, customers, and other partners, we may not remain competitive, which could harm our business, financial condition, and operating results."
+  },
+  {
+   "id": 21,
+   "text": "Our business environment is rapidly evolving and intensely competitive. Our businesses face changing technologies, shifting user needs, and frequent introductions of rival products and services. To compete successfully, we must accurately anticipate technology developments and deliver innovative, relevant, and useful products, services, and technologies in a timely manner. For example, with the rise of AI in recent years, we have increasingly focused our investments in building powerful AI tools and AI enhancements to our existing products and services to better cater to our users, customers, and other partners. As our businesses evolve, the competitive pressure to innovate will encompass a wider range of products and services. We must continue to invest significant resources in technical infrastructure, including the development of our custom TPUs, and research and development, including through acquisitions, in order to enhance our technology, products, and services."
+  },
+  {
+   "id": 22,
+   "text": "We have many competitors in different industries. Our current and potential domestic and international competitors range from large and established companies to emerging start-ups. Some competitors have longer operating histories and well-established relationships in various sectors. They can use their experience and resources in ways that could affect our competitive position, including by making acquisitions and entering into other strategic arrangements; continuing to invest heavily in technical infrastructure, research and development, and in talent; initiating intellectual property and competition claims (whether or not meritorious); and continuing to compete for users, advertisers, customers, and content providers. Further, discrepancies in enforcement of existing laws may enable our lesser known competitors to aggressively interpret those laws without commensurate scrutiny, thereby affording them competitive advantages. Our competitors may also be able to innovate and provide products and services faster or more cost effectively than we can or may foresee the need for products and services before we do."
+  },
+  {
+   "id": 23,
+   "text": "We are developing frontier generative AI models and building AI capabilities into products and services across the company, tailoring them to the evolving preferences of our users and customers. AI technology and services are highly competitive, rapidly evolving, and require significant investment, including technical infrastructure, development, and operational costs. Our ability to deploy certain AI technologies critical for our products and services and for our business strategy may depend on the availability and pricing of third-party equipment and other technical infrastructure operations costs, including network capacity, energy, and equipment costs. Additionally, other companies may develop"
+  },
+  {
+   "id": 24,
+   "text": "10."
+  },
+  {
+   "id": 25,
+   "text": "Table of Contents"
+  },
+  {
+   "id": 26,
+   "text": "Alphabet Inc."
+  },
+  {
+   "id": 27,
+   "text": "AI products and technologies that are similar or superior to our technologies or more cost-effective to develop or deploy. Other companies may also have (or in the future may obtain) patents or other proprietary rights that would prevent, limit, or interfere with our ability to make, use, or sell our own AI products and services."
+  },
+  {
+   "id": 28,
+   "text": "Our financial condition and operating results may also suffer if our products and services are not responsive in a timely manner to the evolving needs and desires of our users, advertisers, publishers, customers, and content providers, or if we miscalculate those needs and desires and invest significantly in areas that fail to gain sufficient market traction. As new and existing technologies continue to develop, competitors and new entrants may be able to offer experiences that are, or that are perceived to be, substantially similar to or better than ours, and the consumers may change how they obtain information online, potentially reducing the utility of our existing products and services. These technologies could reduce usage of our products and services, and force us to compete in different ways and expend significant resources to develop and operate equal or better products and services. Competitors' success in providing compelling products and services or in attracting and retaining users, advertisers, publishers, customers, and content providers could harm our financial condition and operating results."
+  },
+  {
+   "id": 29,
+   "text": "Our revenue growth rate could decline over time, and we may experience downward pressure on our operating margin in the future."
+  },
+  {
+   "id": 30,
+   "text": "Our revenue growth rate could decline over time as a result of a number of factors, including changes in customer usage and demand for our existing products and increasing demand for competing technologies; changes in the devices and modalities used to access our products and services; changes in geographic mix; deceleration or declines in advertiser spending; competition; decreases in the pricing of our products and services; ongoing product and policy changes; and shifts to lower priced products and services."
+  },
+  {
+   "id": 31,
+   "text": "We may experience downward pressure on our operating margin resulting from a variety of factors. These include increasing costs for many aspects of our business resulting from a higher level of investment in technical infrastructure, increasing regulations, and increasing competition. Certain of our costs and expenses are relatively fixed and may not correlate to changes in revenue, and we may also not be able to continue to drive efficiencies at the rate we have in the past. We may also face margin compression from an increase in the mix of lower-margin products and services, in particular from the continued expansion of our business into new fields, including products and services such as Google Cloud, our devices, and consumer subscription products, as well as significant investments in Other Bets. For instance, margins on our devices have had, and may continue to have, an adverse effect on our consolidated margins due to pricing pressures and higher cost of sales. Due to these factors and the evolving nature of our business, our historical revenue growth rate and historical operating margin may not be indicative of our future performance. For additional information, see Trends in Our Business and Financial Effect and Revenues and Monetization Metrics in Part II, Item 7 of this Annual Report on Form 10-K."
+  },
+  {
+   "id": 32,
+   "text": "Our intellectual property rights are valuable, and any inability to protect them could reduce the value of our products, services, and brands as well as affect our ability to compete."
+  },
+  {
+   "id": 33,
+   "text": "Our patents, trademarks, trade secrets, copyrights, and other intellectual property rights are important assets for us. Various events outside of our control pose a threat to our intellectual property rights, as well as to our products, services, and technologies. For example, effective intellectual property protection may not be available in every country in which our products and services are distributed or made available through the Internet. Also, the efforts we have taken and may take in the future to protect our proprietary rights, including obtaining copyright and patent protections for our important innovations, including AI innovations, may not be sufficient or effective. There is also the possibility that an issued patent may be deemed invalid or unenforceable."
+  },
+  {
+   "id": 34,
+   "text": "We also seek to maintain certain intellectual property as trade secrets. The confidentiality of such trade secrets and other sensitive information could be compromised, which could cause us to lose the competitive advantage resulting from these trade secrets. We also face risks associated with our trademarks. For example, there is a risk that the word \"Google\" could become so commonly used that it becomes synonymous with the word \"search.\" Some courts have ruled that \"Google\" is a protectable trademark, but it is possible that other courts, particularly those outside of the US, may reach a different determination. If this happens, we could lose protection for this trademark."
+  },
+  {
+   "id": 35,
+   "text": "Any significant impairment of our intellectual property rights could harm our business and ability to compete. Protecting our intellectual property rights is costly and time consuming; any increase in unauthorized use could make it more expensive to do business and harm our financial condition and operating results."
+  },
+  {
+   "id": 36,
+   "text": "Our business depends on strong brands, and failing to maintain and enhance our brands would hurt our ability to expand our base of users, advertisers, customers, content providers, and other partners."
+  },
+  {
+   "id": 37,
+   "text": "Our strong brands have significantly contributed to the success of our business. Maintaining and enhancing the brands within Google Services, Google Cloud, and Other Bets increases our ability to enter new categories and launch"
+  },
+  {
+   "id": 38,
+   "text": "11."
+  },
+  {
+   "id": 39,
+   "text": "Table of Contents"
+  },
+  {
+   "id": 40,
+   "text": "Alphabet Inc."
+  },
+  {
+   "id": 41,
+   "text": "new and innovative products and services that better serve the needs of our users, advertisers, customers, content providers, and other partners. Our brands have been, and may in the future be, harmed by a number of factors, including, among others, reputational issues, third-party content shared on our platforms, data privacy and security issues and developments, issues in delivering age-appropriate experiences to minors, and product or technical performance failures. For example, if we fail to respond appropriately to the sharing of misinformation or objectionable content on our services or products or objectionable practices by advertisers, or otherwise to adequately address user concerns, our users may lose confidence in our brands. Furthermore, failure to maintain and enhance our brands could harm our business, reputation, financial condition, and operating results. Our success will depend largely on our ability to remain a technology leader and continue to provide high-quality, trustworthy, innovative products and services that are truly useful and play a valuable role in a range of settings."
+  },
+  {
+   "id": 158,
+   "text": "Further, due to shifting economic and political conditions, tax policies, laws, or rates in various jurisdictions may be subject to significant changes in ways that could harm our financial condition and operating results. For example, various jurisdictions around the world have enacted or are considering revenue-based taxes such as digital services taxes and other targeted taxes, which could lead to inconsistent and potentially overlapping international tax regimes. The US has imposed a 1% excise tax on the fair market value of shares repurchased, which could increase in the future. Over 140 countries are negotiating changes to international tax policies led by the Organization for Economic Cooperation and Development (OECD), including a 15% global minimum tax rate. In January 2026, the OECD announced a \"Side-by-Side Safe Harbor\" that exempts US operations of US-parented companies from global minimum tax rules. Adoption of minimum tax rules outside the US could increase our effective tax rate and cash tax payments."
+  },
+  {
+   "id": 159,
+   "text": "Risks Related to Ownership of Our Stock"
+  },
+  {
+   "id": 160,
+   "text": "We cannot guarantee that any share repurchase program or dividend program will be continuously active or fully consummated or will enhance long-term stockholder value, and share repurchases or dividends could increase the volatility of our stock prices and could diminish our cash reserves."
+  },
+  {
+   "id": 161,
+   "text": "We engage in share repurchases of our Class A and Class C stock from time to time in accordance with authorizations from the Board of Directors of Alphabet. Our repurchase program does not have an expiration date and does not obligate Alphabet to repurchase any specific dollar amount or to acquire any specific number of shares. Our cash dividend program pays regular cash dividends to our Class A, Class B, and Class C stockholders. Any and all future cash dividends are subject to declaration by our Board of Directors in its sole discretion, and in accordance with the requirements of any applicable laws, rules, and regulations, including the Delaware General Corporation Law. Our cash dividend program does not require, and our Board of Directors may decide not to declare, a cash dividend each quarter, and does not obligate our Board of Directors to declare a dividend at any specific dollar amount per share. Any such decision by our Board of Directors may depend on a variety of factors that it may deem relevant, including but not limited to our earnings, liquidity, financial condition, other capital deployment opportunities, level of indebtedness, and general market conditions. Our share repurchases and dividends could affect our share trading prices, increase their volatility, reduce our cash reserves and may be suspended or terminated at any time, which may result in a decrease in the trading prices of our stock."
+  },
+  {
+   "id": 162,
+   "text": "The concentration of our stock ownership limits our stockholders' ability to influence corporate matters."
+  },
+  {
+   "id": 163,
+   "text": "Our Class B stock has 10 votes per share, our Class A stock has one vote per share, and our Class C stock has no voting rights. As of December 31, 2025, Larry Page and Sergey Brin beneficially owned approximately 89.3% of our"
+  },
+  {
+   "id": 164,
+   "text": "21."
+  },
+  {
+   "id": 165,
+   "text": "Table of Contents"
+  },
+  {
+   "id": 166,
+   "text": "Alphabet Inc."
+  },
+  {
+   "id": 167,
+   "text": "outstanding Class B stock, which represented approximately 52.7% of the voting power of our outstanding common stock. Through their stock ownership, Larry and Sergey have significant influence over all matters requiring stockholder approval, including the election of directors and significant corporate transactions, such as a merger or other sale of our company or our assets, for the foreseeable future. In addition, because our Class C stock carries no voting rights (except as required by applicable law), the issuance of the Class C stock, including in future stock-based acquisition transactions and to fund employee equity incentive programs, could continue Larry and Sergey's current relative voting power and their ability to elect all of our directors and to determine the outcome of most matters submitted to a vote of our stockholders. The share repurchases made pursuant to our repurchase program may also affect Larry and Sergey's relative voting power. This concentrated control limits or severely restricts other stockholders' ability to influence corporate matters and we may take actions that some of our stockholders do not view as beneficial, which could reduce the market price of our Class A stock and our Class C stock."
+  },
+  {
+   "id": 168,
+   "text": "Provisions in our charter documents and under Delaware law could discourage a takeover that stockholders may consider favorable."
+  },
+  {
+   "id": 169,
+   "text": "Provisions in Alphabet's certificate of incorporation and bylaws may have the effect of delaying or preventing a change of control or changes in our management. These provisions include the following:"
+  },
+  {
+   "id": 170,
+   "text": "• Our Board of Directors has the right to elect directors to fill a vacancy created by the expansion of the Board of Directors or the resignation, death, or removal of a director."
+  },
+  {
+   "id": 171,
+   "text": "• Our stockholders may not act by written consent, which makes it difficult to take certain actions without holding a stockholders' meeting."
+  },
+  {
+   "id": 172,
+   "text": "• Our certificate of incorporation prohibits cumulative voting in the election of directors. This limits the ability of minority stockholders to elect director candidates."
+  },
+  {
+   "id": 173,
+   "text": "• Stockholders must provide advance notice to nominate individuals for election to the Board of Directors or to propose matters that can be acted upon at a stockholders' meeting. These provisions may discourage or deter a potential acquirer from conducting a solicitation of proxies to elect the acquirer's own slate of directors or otherwise attempting to obtain control of our company."
+  },
+  {
+   "id": 174,
+   "text": "• Our Board of Directors may issue, without stockholder approval, shares of undesignated preferred stock, which makes it possible for our Board of Directors to issue preferred stock with voting or other rights or preferences that could impede the success of any attempt to acquire us."
+  },
+  {
+   "id": 175,
+   "text": "As a Delaware corporation, we are also subject to certain Delaware anti-takeover provisions. Under Delaware law, a corporation may not engage in a business combination with any holder of 15% or more of its outstanding voting stock unless the holder has held the stock for three years or, among other things, the Board of Directors has approved the transaction. Our Board of Directors could rely on Delaware law to prevent or delay an acquisition of us."
+  },
+  {
+   "id": 176,
+   "text": "General Risks"
+  },
+  {
+   "id": 177,
+   "text": "Our operating results may fluctuate, which makes our results difficult to predict and could cause our results to fall short of expectations."
+  },
+  {
+   "id": 178,
+   "text": "Our operating results have fluctuated, and may in the future fluctuate, as a result of a number of factors, many outside of our control, including the cyclical nature and seasonality in our business and geopolitical events. As a result, comparing our operating results (including our expenses as a percentage of our revenues) on a period-to-period basis may not be meaningful, and our past results should not be relied on as an indication of our future performance. Consequently, our operating results in future quarters may fall below expectations."
+  },
+  {
+   "id": 179,
+   "text": "Acquisitions, joint ventures, investments, and divestitures could result in operating difficulties, dilution, and other consequences that could harm our business, financial condition, and operating results."
+  },
+  {
+   "id": 180,
+   "text": "Acquisitions, joint ventures, investments, and divestitures are important elements of our overall corporate strategy and use of capital, and these transactions could be material to our financial condition and operating results. We expect to continue to evaluate and enter into discussions regarding a wide array of such potential strategic arrangements, which could create unforeseen operating difficulties and expenditures. Some of the areas where we face risks include:"
+  },
+  {
+   "id": 181,
+   "text": "• diversion of management time and focus from operating our business to challenges related to acquisitions and other strategic arrangements;"
+  },
+  {
+   "id": 182,
+   "text": "• failure to obtain required approvals on a timely basis, if at all, from governmental authorities, or conditions placed upon approval, either of which could, among other things, delay or prevent us from completing a transaction, result in the payment of fees or penalties to a counterparty, or otherwise restrict our ability to"
+  },
+  {
+   "id": 183,
+   "text": "22."
+  },
+  {
+   "id": 184,
+   "text": "Table of Contents"
+  },
+  {
+   "id": 185,
+   "text": "Alphabet Inc."
+  },
+  {
+   "id": 186,
+   "text": "realize the expected financial or strategic goals of a transaction; or investigations or litigation by governmental authorities related to our acquisitions, investments, and other strategic arrangements;"
+  },
+  {
+   "id": 187,
+   "text": "• failure to successfully integrate the acquired operations, technologies, services, and personnel (including cultural integration and retention of employees) and further develop the acquired business or technology;"
+  },
+  {
+   "id": 188,
+   "text": "• implementation of controls (or remediation of deficiencies), procedures, and policies at the acquired company;"
+  },
+  {
+   "id": 189,
+   "text": "• integration of the acquired company's accounting and other administrative systems, and the coordination of product, engineering, and sales and marketing functions;"
+  },
+  {
+   "id": 190,
+   "text": "• transition of operations, users, and customers onto our existing platforms;"
+  },
+  {
+   "id": 191,
+   "text": "• in the case of foreign acquisitions, the need to integrate operations across different cultures and languages and to address the particular economic, currency, political, and regulatory risks associated with specific countries;"
+  },
+  {
+   "id": 192,
+   "text": "• failure to accomplish commercial, strategic, or financial objectives with respect to investments, joint ventures, and other strategic arrangements;"
+  },
+  {
+   "id": 193,
+   "text": "• failure to realize the value of investments and joint ventures due to a lack of liquidity or an inability to identify buyers or negotiate favorable terms for intended divestitures;"
+  },
+  {
+   "id": 194,
+   "text": "• liability for activities of the acquired company before the acquisition, including intellectual property infringement claims, data privacy and security issues, violations of laws, commercial disputes, tax liabilities, warranty claims, product liabilities, and other known and unknown liabilities; and"
+  },
+  {
+   "id": 195,
+   "text": "• litigation or other claims in connection with the acquired company, including claims from terminated employees, customers, former stockholders, or other third parties."
+  },
+  {
+   "id": 196,
+   "text": "Our failure to address these risks or other problems encountered in connection with our past or future acquisitions and other strategic arrangements could cause us to fail to realize their anticipated benefits, incur unanticipated liabilities, and harm our business generally."
+  },
+  {
+   "id": 197,
+   "text": "Our acquisitions and other strategic arrangements could also result in dilutive issuances of our equity securities, the incurrence of debt, contingent liabilities, or amortization expenses, or impairment of goodwill or purchased long-lived assets, and restructuring charges, any of which could harm our financial condition and operating results. Also, the anticipated benefits or value of our acquisitions, investments, and other strategic arrangements may not materialize. In connection with our divestitures and certain strategic arrangements, we have agreed, and may in the future agree, to provide indemnification for certain potential liabilities, which could harm our financial condition and operating results."
+  },
+  {
+   "id": 198,
+   "text": "We rely on highly skilled personnel and, if we are unable to retain or motivate key personnel, hire qualified personnel, or maintain and continue to adapt our corporate culture, we may not be able to grow or operate effectively."
+  },
+  {
+   "id": 199,
+   "text": "Our performance and future success depends in large part upon the continued service of key technical leads as well as members of our senior management team. For instance, Sundar Pichai is critical to the overall management of Alphabet and its subsidiaries and plays an important role in the development of our technology, maintaining our culture, and setting our strategic direction."
+  },
+  {
+   "id": 200,
+   "text": "Our ability to compete effectively and our future success depend on our continuing to identify, hire, develop, motivate, and retain highly skilled personnel for all areas of our organization. Competition in our industry for qualified employees, particularly AI talent, is intense, and certain of our competitors have directly targeted, and may continue to target, our employees. In addition, our compensation arrangements, such as our equity award programs, may not always be successful in attracting new employees and retaining and motivating our existing employees. Immigration policy and regulatory changes, and uncertainty regarding such policies and regulations, may also affect our ability to hire, mobilize, or retain some of our global talent. All of our executive officers and key employees are at-will employees, and we do not maintain any key-person life insurance policies."
+  },
+  {
+   "id": 201,
+   "text": "We believe that our corporate culture fosters innovation, creativity, and teamwork. As our organization grows and evolves, we may need to adapt our corporate culture and work environments to ever-changing circumstances, and these changes could affect our ability to compete effectively or have an adverse effect on our corporate culture."
+  }
+ ],
+ "anchors": [
+  {
+   "phrase": "including but not limited to those described below",
+   "paragraph_id": 1,
+   "sentence": "Our operations and financial results are subject to various risks and uncertainties, including but not limited to those described below, which could harm our business, reputation, financial condition, and operating results, and may affect the trading price and price volatility of our Class A and Class C stock."
+  },
+  {
+   "phrase": "corporate culture",
+   "paragraph_id": 198,
+   "sentence": "We rely on highly skilled personnel and, if we are unable to retain or motivate key personnel, hire qualified personnel, or maintain and continue to adapt our corporate culture, we may not be able to grow or operate effectively."
+  }
+ ]
+}

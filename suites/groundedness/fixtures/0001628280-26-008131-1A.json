@@ -1,0 +1,187 @@
+{
+ "accession": "0001628280-26-008131",
+ "company": "JPMORGAN CHASE & CO",
+ "form": "10-K",
+ "item": "1A",
+ "filing_date": "2026-02-13",
+ "document_url": "https://www.sec.gov/Archives/edgar/data/19617/000162828026008131/jpm-20251231.htm",
+ "golden_id": "jpm-0001628280-26-008131-1A",
+ "window_paragraphs": 40,
+ "paragraphs": [
+  {
+   "id": 0,
+   "text": "Item 1A. Risk Factors."
+  },
+  {
+   "id": 1,
+   "text": "The following discussion sets forth the material risk factors that could affect JPMorganChase’s financial condition and operations. Readers should not consider any descriptions of these factors to be a complete set of all potential risks that could affect the Firm. Any of the risk factors discussed below could by itself, or combined with other factors, materially and adversely affect JPMorganChase’s business, results of operations, financial condition, capital position, liquidity, competitive position or reputation, including by materially increasing expenses or decreasing revenues, which could result in material losses or a decrease in earnings."
+  },
+  {
+   "id": 2,
+   "text": "Summary"
+  },
+  {
+   "id": 3,
+   "text": "The principal risk factors include:"
+  },
+  {
+   "id": 4,
+   "text": "• Legal and Regulatory risks, including the impact of extensive supervision and regulation, as well as changes to or in the application, interpretation or enforcement of applicable law or executive branch actions, on JPMorganChase’s business and operations; the ways in which differences in regulatory implementation in different jurisdictions or with respect to certain competitors could negatively impact JPMorganChase’s business; the ways in which governmental policies that discourage or penalize business relationships with certain industries, or require specific business practices, could negatively affect JPMorganChase's businesses; the penalties and other repercussions that JPMorganChase could face when resolving litigation or investigations by governmental authorities; the ways in which less predictable legal and regulatory frameworks in certain jurisdictions could negatively impact JPMorganChase’s operations and financial results; and the losses that security holders and other unsecured creditors will absorb if JPMorganChase were to enter into a resolution."
+  },
+  {
+   "id": 5,
+   "text": "• Political risks, including the potential negative effects on JPMorganChase’s businesses due to economic uncertainty resulting from political developments."
+  },
+  {
+   "id": 6,
+   "text": "• Market risks, including the effects that unfavorable economic and market events and conditions, political developments, changes in interest rates and credit spreads, and market fluctuations could have on JPMorganChase’s businesses, investments and market-making positions, as well as on its earnings and liquidity and capital levels."
+  },
+  {
+   "id": 7,
+   "text": "• Credit risks, including the effects from adverse changes in the financial condition of clients, customers, counterparties, central counterparties and other market participants; the potential for losses due to declines in the value of collateral; and potential negative impacts from concentrations of"
+  },
+  {
+   "id": 8,
+   "text": "credit risk with respect to clients, customers, counterparties and other market participants."
+  },
+  {
+   "id": 9,
+   "text": "• Liquidity risks, including the risk that JPMorganChase’s ability to operate could be impaired by constrained liquidity; the dependence of JPMorgan Chase & Co. on its subsidiaries for funding; and the potential adverse effects that any downgrades of JPMorganChase’s credit ratings could have on its liquidity and cost of funding."
+  },
+  {
+   "id": 10,
+   "text": "• Capital risks, including the risk that JPMorganChase’s ability to distribute capital to shareholders or to support its business activities could be limited if it does not satisfy applicable regulatory capital requirements."
+  },
+  {
+   "id": 11,
+   "text": "• Operational risks, including risks associated with JPMorganChase’s dependence on its operational systems and its employees, as well as the systems and employees of acquired businesses and external parties; the harm that could be caused by a successful cyber attack affecting JPMorganChase or by other extraordinary events; the adverse effects of failing to identify and address operational risks associated with the introduction of or changes to products, services and delivery platforms or technologies, as well as risks related to data management processes; risks related to safeguarding personal information; potential adverse effects of failing to comply with applicable standards for the oversight of vendors and other service providers; and risks associated with JPMorganChase’s risk management framework and control environment, its models and estimations and associated judgments used in its stress testing and financial statements, and controls over disclosure and financial reporting."
+  },
+  {
+   "id": 12,
+   "text": "• Strategic risks, including the damage to JPMorganChase’s competitive standing that could result from ineffective business strategies; risks associated with the significant competition that JPMorganChase faces; and the potential adverse impacts of climate change on JPMorganChase’s business and operations and those of its clients and customers."
+  },
+  {
+   "id": 13,
+   "text": "• Conduct risks, including the negative impact that could result from misconduct of JPMorganChase’s employees."
+  },
+  {
+   "id": 14,
+   "text": "• Reputation risks, including the potential negative commercial impacts that can arise from JPMorganChase’s decisions related to clients and business activities; and the failure to effectively manage conflicts of interest or to satisfy fiduciary obligations, or other factors that could damage JPMorganChase’s reputation."
+  },
+  {
+   "id": 15,
+   "text": "• Country risks, including potential impacts on JPMorganChase’s businesses from an outbreak or escalation of hostilities between countries or within a country or region; and the potential adverse effects"
+  },
+  {
+   "id": 16,
+   "text": "9"
+  },
+  {
+   "id": 17,
+   "text": "Part I"
+  },
+  {
+   "id": 18,
+   "text": "of local economic, political, regulatory and social factors on JPMorganChase’s business in certain countries in which it operates."
+  },
+  {
+   "id": 19,
+   "text": "• People risks, including the criticality of attracting and retaining qualified employees."
+  },
+  {
+   "id": 20,
+   "text": "The above summary is subject in its entirety to the discussion of the risk factors set forth below."
+  },
+  {
+   "id": 21,
+   "text": "The following terms which are used in the risk factors set forth below have these meanings:"
+  },
+  {
+   "id": 22,
+   "text": "“applicable law” means the laws, rules and regulations that apply to JPMorganChase’s businesses in the jurisdictions in which it operates."
+  },
+  {
+   "id": 23,
+   "text": "“extraordinary events” include any of the events or circumstances mentioned in the risk factor entitled “JPMorganChase’s operations, results and reputation could be harmed by occurrences of extraordinary events beyond its control.”"
+  },
+  {
+   "id": 24,
+   "text": "“governmental authorities” means governmental and regulatory agencies, legislative and judicial bodies and other governmental entities and authorities in the countries, states, municipalities, territories, regions and other jurisdictions in which JPMorganChase does business."
+  },
+  {
+   "id": 25,
+   "text": "“penalties” means fines, penalties or other sanctions imposed by governmental authorities."
+  },
+  {
+   "id": 26,
+   "text": "Legal and Regulatory"
+  },
+  {
+   "id": 27,
+   "text": "JPMorganChase’s businesses are highly regulated and are significantly affected by applicable law and supervisory expectations."
+  },
+  {
+   "id": 28,
+   "text": "JPMorganChase must comply with applicable law in all of the jurisdictions around the world where it does business. Like other financial services firms, JPMorganChase is subject to extensive supervision and regulation that significantly affects the way that it conducts its business and structures its operations. The supervisory and regulatory framework also imposes requirements for JPMorganChase to implement and maintain compliance programs, and the complexity of these programs can increase its risks of non-compliance. In addition, entering into or acquiring a new business or expanding current business could increase the scope of applicable law or supervision and regulation to which JPMorganChase is subject."
+  },
+  {
+   "id": 29,
+   "text": "JPMorganChase has in the past and could in the future be required to modify its business and operations in response to changes in applicable law, regulatory decisions or supervisory expectations, such as:"
+  },
+  {
+   "id": 30,
+   "text": "• limiting the products and services that it offers"
+  },
+  {
+   "id": 31,
+   "text": "• increasing the prices that it charges for products and services, which could reduce the demand for them"
+  },
+  {
+   "id": 32,
+   "text": "• reducing the liquidity that it provides through market-making activities"
+  },
+  {
+   "id": 33,
+   "text": "• paying higher taxes or other governmental charges"
+  },
+  {
+   "id": 34,
+   "text": "• absorbing losses arising from fraudulent transactions perpetrated against its clients and customers"
+  },
+  {
+   "id": 35,
+   "text": "• disposing of certain assets, and doing so at disadvantageous times or prices"
+  },
+  {
+   "id": 36,
+   "text": "• forgoing business opportunities that it might otherwise pursue, or"
+  },
+  {
+   "id": 37,
+   "text": "• otherwise restricting its business activities."
+  },
+  {
+   "id": 38,
+   "text": "These types of changes could increase JPMorganChase’s costs or reduce its revenues. In addition, any failure by JPMorganChase to comply with applicable law or meet supervisory expectations could result in:"
+  },
+  {
+   "id": 39,
+   "text": "• increased regulatory scrutiny"
+  },
+  {
+   "id": 40,
+   "text": "• enforcement actions by governmental authorities"
+  },
+  {
+   "id": 41,
+   "text": "• the imposition of penalties"
+  }
+ ],
+ "anchors": [
+  {
+   "phrase": "material risk factors that could affect",
+   "paragraph_id": 1,
+   "sentence": "The following discussion sets forth the material risk factors that could affect JPMorganChase’s financial condition and operations."
+  }
+ ]
+}

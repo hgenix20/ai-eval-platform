@@ -1,0 +1,31 @@
+{
+ "accession": "0000943440-09-000520",
+ "company": "Gold Star Tutoring Services, Inc.",
+ "form": "10-K/A",
+ "item": "1A",
+ "filing_date": "2009-10-02",
+ "document_url": "https://www.sec.gov/Archives/edgar/data/1431528/000094344009000520/goldstarform10ka2008.htm",
+ "golden_id": "0001431528-0000943440-09-000520-1A",
+ "window_paragraphs": 40,
+ "paragraphs": [
+  {
+   "id": 0,
+   "text": "Item 1A."
+  },
+  {
+   "id": 1,
+   "text": "Risk Factors ."
+  },
+  {
+   "id": 2,
+   "text": "As a Smaller Reporting Company we are not required to provide the information required by this Item."
+  }
+ ],
+ "anchors": [
+  {
+   "phrase": "not required to provide the information",
+   "paragraph_id": 2,
+   "sentence": "As a Smaller Reporting Company we are not required to provide the information required by this Item."
+  }
+ ]
+}

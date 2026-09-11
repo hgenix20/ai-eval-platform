@@ -1,0 +1,360 @@
+{
+ "accession": "0001018724-25-000004",
+ "company": "AMAZON COM INC",
+ "form": "10-K",
+ "item": "1A",
+ "filing_date": "2025-02-07",
+ "document_url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872425000004/amzn-20241231.htm",
+ "golden_id": "amzn-0001018724-25-000004-1A",
+ "window_paragraphs": 40,
+ "paragraphs": [
+  {
+   "id": 0,
+   "text": "Item 1A."
+  },
+  {
+   "id": 1,
+   "text": "Risk Factors"
+  },
+  {
+   "id": 2,
+   "text": "Please carefully consider the following discussion of significant factors, events, and uncertainties that make an investment in our securities risky. The events and consequences discussed in these risk factors could, in circumstances we may or may not be able to accurately predict, recognize, or control, have a material adverse effect on our business, growth, reputation, prospects, financial condition, operating results (including components of our financial results), cash flows, liquidity, and stock price. These risk factors do not identify all risks that we face; our operations could also be affected by factors, events, or uncertainties that are not presently known to us or that we currently do not consider to present significant risks to our operations. In addition to the factors discussed in Item 7 of Part II, “Management’s Discussion and Analysis of Financial Condition and Results of Operations,” and in the risk factors below, global economic and geopolitical conditions and additional or unforeseen circumstances, developments, or events may give rise to or amplify many of the risks discussed below. Many of the risks discussed below also impact our customers, including third-party sellers, which could indirectly have a material adverse effect on us."
+  },
+  {
+   "id": 3,
+   "text": "Business and Industry Risks"
+  },
+  {
+   "id": 4,
+   "text": "We Face Intense Competition"
+  },
+  {
+   "id": 5,
+   "text": "Our businesses are rapidly evolving and intensely competitive, and we have many competitors across geographies, including cross-border competition, and in different industries, including physical, e-commerce, and omnichannel retail, e-commerce services, web and infrastructure computing services, electronic devices, digital content, advertising, grocery, healthcare, communications, and transportation and logistics services. Some of our current and potential competitors have greater resources, longer histories, more customers, and/or greater brand recognition, particularly with our newly-launched products and services and in our newer geographic regions. They may secure better terms from vendors, adopt more aggressive pricing, and devote more resources to technology, infrastructure, fulfillment, and marketing."
+  },
+  {
+   "id": 6,
+   "text": "Competition continues to intensify, including with the development of new business models and the entry of new and well-funded competitors, and as our competitors enter into business combinations or alliances and established companies in other market segments expand to become competitive with our business. In addition, new and enhanced technologies, including search, web and infrastructure computing services, practical applications of artificial intelligence and machine learning, digital content, satellites, and electronic devices continue to increase our competition. The internet facilitates competitive entry and comparison shopping, which enhances the ability of new, smaller, or lesser known businesses to compete against us. As a result of competition, our product and service offerings may not be successful, we may fail to gain or may lose business, and we may be required to increase our spending or lower prices, any of which could materially reduce our sales and profits."
+  },
+  {
+   "id": 7,
+   "text": "Our Expansion into New Products, Services, Technologies, and Geographic Regions Subjects Us to Additional Risks"
+  },
+  {
+   "id": 8,
+   "text": "We may have limited or no experience in our newer market segments, and our customers may not adopt our product or service offerings. These offerings, which can present new and difficult technology challenges, may subject us to claims if customers of these offerings experience, or are otherwise impacted by, service disruptions, delays, setbacks, or failures or quality issues. In addition, profitability or other intended benefits, if any, in our newer activities may not meet our expectations, and we may not be successful enough in these newer activities to recoup our investments in them, which investments are often significant. Failure to realize the benefits of amounts we invest in new technologies, products, or services could result in the"
+  },
+  {
+   "id": 9,
+   "text": "6"
+  },
+  {
+   "id": 10,
+   "text": "Table of Contents"
+  },
+  {
+   "id": 11,
+   "text": "value of those investments being written down or written off. In addition, our sustainability initiatives may be unsuccessful for a variety of reasons, including if we are unable to realize the expected benefits of new technologies or if we do not successfully plan or execute new strategies, which could harm our business or damage our reputation."
+  },
+  {
+   "id": 12,
+   "text": "Our International Operations Expose Us to a Number of Risks"
+  },
+  {
+   "id": 13,
+   "text": "Our international activities are significant to our revenues and profits, and we plan to further expand internationally. In certain international market segments, we have relatively little operating experience and may not benefit from any first-to-market advantages or otherwise succeed. It is costly to establish, develop, and maintain international operations and stores, and promote our brand internationally. Our international operations may not become profitable on a sustained basis."
+  },
+  {
+   "id": 14,
+   "text": "In addition to risks described elsewhere in this section, our international sales and operations are subject to a number of risks, including:"
+  },
+  {
+   "id": 15,
+   "text": "• local economic and political conditions;"
+  },
+  {
+   "id": 16,
+   "text": "• government regulation (such as regulation of our product and service offerings and of competition); restrictive governmental actions (such as trade protection measures, including export duties and quotas and custom duties and tariffs, and restrictions around the import and export of certain products, technologies, and components); nationalization; and restrictions on foreign ownership;"
+  },
+  {
+   "id": 17,
+   "text": "• restrictions on sales or distribution of certain products or services and uncertainty regarding liability for products, services, and content, including uncertainty as a result of less internet-friendly legal systems, local laws, lack of legal precedent, and varying rules, regulations, and practices regarding the physical and digital distribution of media products and enforcement of intellectual property rights;"
+  },
+  {
+   "id": 18,
+   "text": "• business licensing or certification requirements, such as for imports, exports, web services, electronic devices, and communications services;"
+  },
+  {
+   "id": 19,
+   "text": "• limitations on the repatriation and investment of funds and foreign currency exchange restrictions;"
+  },
+  {
+   "id": 20,
+   "text": "• limited fulfillment and technology infrastructure;"
+  },
+  {
+   "id": 21,
+   "text": "• shorter payable and longer receivable cycles and the resultant negative impact on cash flow;"
+  },
+  {
+   "id": 22,
+   "text": "• laws and regulations regarding privacy, data use, data protection, data security, data localization, network security, consumer protection, payments, advertising, and restrictions on pricing or discounts;"
+  },
+  {
+   "id": 23,
+   "text": "• lower levels of use of the internet;"
+  },
+  {
+   "id": 24,
+   "text": "• lower levels of consumer spending and fewer opportunities for growth compared to the U.S.;"
+  },
+  {
+   "id": 25,
+   "text": "• lower levels of credit card usage and increased payment risk;"
+  },
+  {
+   "id": 26,
+   "text": "• difficulty in staffing, developing, and managing foreign operations as a result of distance, language, and cultural differences;"
+  },
+  {
+   "id": 27,
+   "text": "• different employee/employer relationships and the existence of works councils and labor unions;"
+  },
+  {
+   "id": 28,
+   "text": "• compliance with the U.S. Foreign Corrupt Practices Act and other applicable U.S. and foreign laws prohibiting corrupt payments to government officials and other third parties;"
+  },
+  {
+   "id": 29,
+   "text": "• laws and policies of the U.S. and other jurisdictions affecting trade, foreign investment, loans, and taxes; and"
+  },
+  {
+   "id": 30,
+   "text": "• geopolitical events, including war and terrorism."
+  },
+  {
+   "id": 31,
+   "text": "As international physical, e-commerce, and omnichannel retail, cloud services, and other services grow, competition will intensify, including through adoption of evolving business models. Local companies may have a substantial competitive advantage because of their greater understanding of, and focus on, the local customer, as well as their more established local brand names. The inability to hire, train, retain, and manage sufficient required personnel may limit our international growth."
+  },
+  {
+   "id": 32,
+   "text": "The People’s Republic of China (“PRC”) and India regulate Amazon’s and its affiliates’ businesses and operations in country through regulations and license requirements that may restrict (i) foreign investment in and operation of the internet, IT infrastructure, data centers, retail, delivery, and other sectors, (ii) internet content, and (iii) the sale of media and other products and services. For example, in order to meet local ownership, regulatory licensing, and cybersecurity requirements, we provide certain technology services in China through contractual relationships with third parties that hold PRC licenses to provide services. In India, the government restricts the ownership or control of Indian companies by foreign entities involved in online multi-brand retail trading activities. For www.amazon.in, we provide certain marketing tools and logistics services to third-party sellers to enable them to sell online and deliver to customers, and we hold an indirect minority interest in an entity that is a third-party seller on the www.amazon.in marketplace. Although we believe these structures and activities comply with existing"
+  },
+  {
+   "id": 33,
+   "text": "7"
+  },
+  {
+   "id": 34,
+   "text": "Table of Contents"
+  },
+  {
+   "id": 35,
+   "text": "laws, they involve unique risks, and the PRC and India may from time to time consider and implement additional changes in their regulatory, licensing, or other requirements that could impact these structures and activities. There are substantial uncertainties regarding the interpretation of PRC and Indian laws and regulations, and it is possible that these governments will ultimately take a view contrary to ours. In addition, our Chinese and Indian businesses and operations may be unable to continue to operate if we or our affiliates are unable to access sufficient funding or, in China, enforce contractual relationships we or our affiliates have in place. Violation of any existing or future PRC, Indian, or other laws or regulations or changes in the interpretations of those laws and regulations could result in our businesses in those countries being subject to fines and other financial penalties, having licenses revoked, or being forced to restructure our operations or shut down entirely."
+  },
+  {
+   "id": 36,
+   "text": "In addition, because China-based sellers account for significant portions of our third-party seller services and advertising revenues, and China-based suppliers provide significant portions of our components and finished goods, regulatory and trade restrictions, data protection and cybersecurity laws, economic factors, geopolitical events, security issues, or other factors negatively impacting China-based sellers and suppliers could adversely affect our operating results."
+  },
+  {
+   "id": 37,
+   "text": "The Variability in Our Retail Business Places Increased Strain on Our Operations"
+  },
+  {
+   "id": 38,
+   "text": "Demand for our products and services can fluctuate significantly for many reasons, including as a result of seasonality, promotions, product launches, or unforeseeable events, such as in response to global economic conditions such as recessionary fears or rising inflation, natural or human-caused disasters (including public health crises) or extreme weather (including as a result of climate change), or geopolitical events. For example, we expect a disproportionate amount of our retail sales to occur during our fourth quarter. Our failure to stock or restock popular products in sufficient amounts such that we fail to meet customer demand could significantly affect our revenue and our future growth. When we overstock products, we may be required to take significant inventory markdowns or write-offs and incur commitment costs, which could materially reduce profitability. We regularly experience increases in our net shipping cost due to complimentary upgrades, split-shipments, and additional long-zone shipments necessary to ensure timely delivery for the holiday season. If too many customers access our websites within a short period of time due to increased demand, we may experience system interruptions that make our websites unavailable or prevent us from efficiently fulfilling orders, which may reduce the volume of goods we offer or sell and the attractiveness of our products and services. In addition, we may be unable to adequately staff our fulfillment network and customer service centers during these peak periods and delivery and other fulfillment companies and customer service co-sourcers may be unable to meet the seasonal demand. Risks described elsewhere in this Item 1A relating to fulfillment network optimization and inventory are magnified during periods of high demand."
+  },
+  {
+   "id": 39,
+   "text": "As a result of holiday sales, as of December 31 of each year, our cash, cash equivalents, and marketable securities balances typically reach their highest level (other than as a result of cash flows provided by or used in investing and financing activities) because consumers primarily use credit cards in our stores and the related receivables settle quickly. Typically, there is also a corresponding increase in accounts payable as of December 31 due to inventory purchases and third-party seller sales. Our accounts payable balance generally declines during the first three months of the year as vendors and sellers are paid, resulting in a corresponding decline in our cash, cash equivalents, and marketable securities balances."
+  },
+  {
+   "id": 40,
+   "text": "We Are Impacted by Fraudulent or Unlawful Activities of Sellers"
+  },
+  {
+   "id": 41,
+   "text": "The law relating to the liability of online service providers is currently unsettled. In addition, governmental agencies have in the past and could in the future require changes in the way this business is conducted. Under our seller programs, we maintain policies and processes designed to prevent sellers from collecting payments, fraudulently or otherwise, when buyers never receive the products they ordered or when the products received are materially different from the sellers’ descriptions, and to prevent sellers in our stores or through other stores from selling unlawful, counterfeit, pirated, or stolen goods, selling goods in an unlawful or unethical manner, violating the proprietary rights of others, or otherwise violating our policies. When these policies and processes are circumvented or fail to operate sufficiently, it can harm our business or damage our reputation and we could face civil or criminal liability for unlawful activities by our sellers. Under our A-to-z Guarantee, we may reimburse customers for payments up to certain limits in these situations, and as our third-party seller sales grow, the cost of this program will increase and could negatively affect our operating results."
+  },
+  {
+   "id": 42,
+   "text": "We Face Risks Related to Adequately Protecting Our Intellectual Property Rights and Being Accused of Infringing Intellectual Property Rights of Third Parties"
+  },
+  {
+   "id": 130,
+   "text": "• for foreign transactions, additional risks related to the integration of operations across different cultures and languages, and the economic, political, and regulatory risks associated with specific countries."
+  },
+  {
+   "id": 131,
+   "text": "As a result of future acquisitions or mergers, we might need to issue additional equity securities, spend our cash, or incur debt, contingent liabilities, or amortization expenses related to intangible assets, any of which could reduce our profitability and harm our business or only be available on unfavorable terms, if at all. In addition, valuations supporting our acquisitions and strategic investments could change rapidly. We could determine that such valuations have experienced impairments or other-than-temporary declines in fair value which could adversely impact our financial results."
+  },
+  {
+   "id": 132,
+   "text": "We Face Significant Inventory Risk"
+  },
+  {
+   "id": 133,
+   "text": "In addition to risks described elsewhere in this Item 1A relating to fulfillment network and inventory optimization by us and third parties, we are exposed to significant inventory risks that may adversely affect our operating results as a result of seasonality, new product launches, rapid changes in product cycles and pricing, defective merchandise, changes in customer demand and consumer spending patterns, changes in consumer tastes with respect to our products, spoilage, and other factors. We endeavor to accurately predict these trends and avoid overstocking or understocking products we manufacture and/or sell. Demand for products, however, can change significantly between the time inventory or components are ordered and the date of sale. In addition, when we begin selling or manufacturing a new product or offering a new service, it may be difficult to establish vendor relationships, determine appropriate product or component selection, and accurately forecast demand. The acquisition of certain types of inventory or components requires significant lead-time and prepayment and they may not be returnable. We carry a broad selection and significant inventory levels of certain products, such as consumer electronics, and at times we are unable to sell products in sufficient quantities or to meet demand during the relevant selling seasons. Any one of the inventory risk factors set forth above may adversely affect our operating results."
+  },
+  {
+   "id": 134,
+   "text": "13"
+  },
+  {
+   "id": 135,
+   "text": "Table of Contents"
+  },
+  {
+   "id": 136,
+   "text": "We Are Subject to Payments-Related Risks"
+  },
+  {
+   "id": 137,
+   "text": "We accept payments using a variety of methods, including credit card, debit card, credit accounts (including promotional financing), gift cards, direct debit from a customer’s bank account, consumer invoicing, checks, and payment upon delivery. For existing and future payment options we offer to our customers, we currently are subject to, and may become subject to additional, regulations and compliance requirements (including obligations to implement enhanced authentication processes that could result in significant costs and reduce the ease of use of our payments products), as well as fraud. For certain payment methods, including credit and debit cards, we pay interchange and other fees, which may increase over time and raise our operating costs and lower profitability. We rely on third parties to provide certain Amazon-branded payment methods and payment processing services, including the processing of credit cards, debit cards, electronic checks, and promotional financing. In each case, it could disrupt our business if these companies become unwilling or unable to provide these services to us. We also offer co-branded credit card programs, which could adversely affect our operating results if renewed on less favorable terms or terminated. We are also subject to payment card association operating rules, including data security rules, certification requirements, and rules governing electronic funds transfers, which could change or be reinterpreted to make it difficult or impossible for us to comply. Failure to comply with these rules or requirements, as well as any breach, compromise, or failure to otherwise detect or prevent fraudulent activity involving our data security systems, could result in our being liable for card issuing banks’ costs, subject to fines and higher transaction fees, and loss of our ability to accept credit and debit card payments from our customers, process electronic funds transfers, or facilitate other types of online payments, and our business and operating results could be adversely affected."
+  },
+  {
+   "id": 138,
+   "text": "In addition, we provide regulated services in certain jurisdictions because we enable customers to keep account balances with us and transfer money to third parties, and because we provide services to third parties to facilitate payments on their behalf. Jurisdictions subject us to requirements for licensing, regulatory inspection, bonding and capital maintenance, the use, handling, and segregation of transferred funds, consumer disclosures, maintaining or processing data, and authentication. We are also subject to or voluntarily comply with a number of other laws and regulations relating to payments, money laundering, international money transfers, privacy, data use, data protection, data security, data localization, network security, consumer protection, and electronic fund transfers. If we were found to be in violation of applicable laws or regulations, we could be subject to additional requirements and civil and criminal penalties, or forced to cease providing certain services."
+  },
+  {
+   "id": 139,
+   "text": "We Have a Rapidly Evolving Business Model and Our Stock Price Is Highly Volatile"
+  },
+  {
+   "id": 140,
+   "text": "We have a rapidly evolving business model. The trading price of our common stock fluctuates significantly in response to, among other risks, the risks described elsewhere in this Item 1A, as well as:"
+  },
+  {
+   "id": 141,
+   "text": "• changes in interest rates;"
+  },
+  {
+   "id": 142,
+   "text": "• conditions or trends in the internet and the industry segments we operate in;"
+  },
+  {
+   "id": 143,
+   "text": "• quarterly variations in operating results;"
+  },
+  {
+   "id": 144,
+   "text": "• fluctuations in the stock market in general and market prices for internet-related companies in particular;"
+  },
+  {
+   "id": 145,
+   "text": "• changes in financial estimates by us or decisions to increase or decrease future spending or investment levels;"
+  },
+  {
+   "id": 146,
+   "text": "• changes in financial estimates and recommendations by securities analysts;"
+  },
+  {
+   "id": 147,
+   "text": "• changes in our capital structure, including issuance of additional debt or equity to the public;"
+  },
+  {
+   "id": 148,
+   "text": "• changes in the valuation methodology of, or performance by, other e-commerce or technology companies; and"
+  },
+  {
+   "id": 149,
+   "text": "• transactions in our common stock by major investors and certain analyst reports, news, social media activity, and speculation."
+  },
+  {
+   "id": 150,
+   "text": "Volatility in our stock price could adversely affect our business and financing opportunities and force us to increase our cash compensation to employees or grant larger stock awards than we have historically, which could hurt our operating results or reduce the percentage ownership of our existing stockholders, or both."
+  },
+  {
+   "id": 151,
+   "text": "Legal and Regulatory Risks"
+  },
+  {
+   "id": 152,
+   "text": "Government Regulation Is Evolving and Unfavorable Changes Could Harm Our Business"
+  },
+  {
+   "id": 153,
+   "text": "We are subject to general business regulations and laws, as well as regulations and laws specifically governing the internet, physical, e-commerce, and omnichannel retail, digital content, web services, electronic devices, advertising, artificial intelligence technologies and services, satellite communications services, healthcare, and other products and services that we offer or sell. These regulations and laws cover taxation, privacy, data use, data protection, data security, data localization, network security, consumer protection, pricing, content, copyrights, distribution, transportation, communications, electronic device certification, electronic waste, energy consumption, environmental and climate-related regulation, electronic contracts"
+  },
+  {
+   "id": 154,
+   "text": "14"
+  },
+  {
+   "id": 155,
+   "text": "Table of Contents"
+  },
+  {
+   "id": 156,
+   "text": "and other communications, competition, employment, trade and protectionist measures, web services, the provision of online payment services, registration, licensing, and information reporting requirements, unencumbered internet access to our services or access to our facilities, the design and operation of websites, health, safety, and sanitation standards, the characteristics, legality, and quality of products and services, product labeling, the commercial operation of unmanned aircraft systems, healthcare, and other matters. It is not clear how existing laws governing issues such as property ownership, libel, privacy, data use, data protection, data security, data localization, network security, and consumer protection apply to aspects of our operations such as the internet, e-commerce, digital content, web services, electronic devices, advertising, artificial intelligence technologies and services, satellite communications services, and healthcare. A large number of jurisdictions regulate our operations, and the extent, nature, and scope of such regulations is evolving and expanding as the scope of our businesses expand. We are regularly subject to formal and informal reviews, investigations, and other proceedings by governments and regulatory authorities under existing laws, regulations, or interpretations or pursuing new and novel approaches to regulate our operations. For example, we face a number of open investigations based on claims that aspects of our operations infringe competition or consumer protection rules, including aspects of Amazon’s operation of its stores, including its fulfillment network and Prime, and certain aspects of AWS’s offering of cloud services. We strongly dispute these claims and intend to defend ourselves vigorously in these investigations. Similarly, we face investigations under a growing patchwork of laws and regulations governing the collection, use, and disclosure of data, the interpretation of which continues to evolve, leading to uncertainty about how regulators will view our privacy practices. In addition, regulators and lawmakers are increasingly focused on controlling additional aspects of the operations of technology companies and companies they have characterized to be online “gatekeepers” through the application of existing regulations and laws and the adoption of new regulations and laws, which increases our compliance costs and limits the operation of our business. Unfavorable regulations, laws, decisions, or interpretations by government or regulatory authorities applying those laws and regulations, or inquiries, investigations, or enforcement actions threatened or initiated by them, could cause us to incur substantial costs, expose us to unanticipated civil and criminal liability or penalties (including substantial monetary fines), diminish the demand for, or availability of, our products and services, increase our cost of doing business, require us to change our business practices in a manner materially adverse to our business, damage our reputation, impede our growth, or otherwise have a material effect on our operations. The media, political, and regulatory scrutiny we face, which may continue to increase, amplifies these risks."
+  },
+  {
+   "id": 157,
+   "text": "Claims, Litigation, Government Investigations, and Other Proceedings May Adversely Affect Our Business and Results of Operations"
+  },
+  {
+   "id": 158,
+   "text": "As an innovative company offering a wide range of consumer and business products and services around the world, we are regularly subject to actual and threatened claims, litigation, reviews, investigations, and other proceedings, including proceedings by governments and regulatory authorities, involving a wide range of issues, including patent and other intellectual property matters, taxes, labor and employment (including the characterization of delivery drivers), competition and antitrust, privacy, data use, data protection, data security, data localization, network security, consumer protection, commercial disputes, goods and services offered by us and by third parties (including artificial intelligence technologies and services), healthcare, and other matters. The number and scale of these proceedings have increased over time as our businesses have expanded in scope and geographic reach, as our products, services, and operations have become more complex and available to, and used by, more people, and as governments and regulatory authorities seek to regulate us on a pre-emptive basis. For example, we are litigating a number of matters alleging price fixing, monopolization, and consumer protection claims, including those brought by state attorneys general and the Federal Trade Commission. Any of these types of proceedings can have an adverse effect on us because of legal costs, disruption of our operations, diversion of management resources, negative publicity, and other factors. The outcomes of these matters are inherently unpredictable and subject to significant uncertainties. Determining legal reserves or possible losses from such matters involves judgment and may not reflect the full range of uncertainties and unpredictable outcomes. Until the final resolution of such matters, we may be exposed to losses in excess of the amount recorded, and such amounts could be material. Should any of our estimates and assumptions change or prove to have been incorrect, it could have a material effect on our business, consolidated financial position, results of operations, or cash flows. In addition, it is possible that a resolution of one or more such proceedings, including as a result of a settlement, could involve licenses, sanctions, consent decrees, or orders requiring us to make substantial future payments, preventing us from offering certain products or services, requiring us to change our business practices in a manner materially adverse to our business, requiring development of non-infringing or otherwise altered products or technologies, damaging our reputation, or otherwise having a material effect on our operations."
+  },
+  {
+   "id": 159,
+   "text": "We Are Subject to Product Liability Claims When People or Property Are Harmed by the Products We Sell or Manufacture"
+  },
+  {
+   "id": 160,
+   "text": "Some of the products we sell or manufacture expose us to product liability or food safety claims relating to personal injury or illness, death, or environmental or property damage, and can require product recalls or other actions. Third parties who sell products using our services and stores also expose us to product liability claims. Additionally, under our A-to-z Guarantee,"
+  },
+  {
+   "id": 161,
+   "text": "15"
+  },
+  {
+   "id": 162,
+   "text": "Table of Contents"
+  },
+  {
+   "id": 163,
+   "text": "we may reimburse customers for certain product liability claims up to certain limits in these situations, and as our third-party seller sales grow, the cost of this program will increase and could negatively affect our operating results. Although we maintain liability insurance, we cannot be certain that our coverage will be adequate for liabilities actually incurred or that insurance will continue to be available to us on economically reasonable terms, or at all. Although we impose contractual terms on sellers that are intended to prohibit sales of certain type of products, we may not be able to detect, enforce, or collect sufficient damages for breaches of such agreements. In addition, some of our agreements with our vendors and sellers do not indemnify us from product liability."
+  },
+  {
+   "id": 164,
+   "text": "We Face Additional Tax Liabilities and Collection Obligations"
+  },
+  {
+   "id": 165,
+   "text": "We are subject to a variety of taxes and tax collection obligations in the U.S. (federal and state) and numerous foreign jurisdictions. We may recognize additional tax expense and be subject to additional tax liabilities, including other liabilities for tax collection obligations due to changes in laws, regulations, administrative practices, principles, and interpretations related to tax, including changes to the global tax framework, competition, and other laws and accounting rules in various jurisdictions. Such changes could come about as a result of economic, political, and other conditions. An increasing number of jurisdictions are considering or have adopted laws or administrative practices that impose new tax measures, including revenue-based taxes, targeting online commerce and the remote selling of goods and services. These include new obligations to withhold or collect sales, consumption, value added, or other taxes on online marketplaces and remote sellers, or other requirements that may result in liability for third party obligations. For example, non-U.S. jurisdictions have proposed or enacted taxes on online advertising and marketplace service revenues. Proliferation of these or similar unilateral tax measures may continue unless broader international tax reform is implemented. In addition, the European Union and other countries (including those in which we operate) have enacted or have committed to enact global minimum taxes, which may increase our tax expense."
+  },
+  {
+   "id": 166,
+   "text": "Our results of operations and cash flows could be adversely affected by additional taxes imposed on us prospectively or retroactively or additional taxes or penalties resulting from the failure to comply with any collection obligations or failure to provide information about our customers, suppliers, and other third parties for tax reporting purposes to various government agencies. In some cases we also may not have sufficient notice to enable us to build systems and adopt processes to properly comply with new reporting or collection obligations by the effective date."
+  },
+  {
+   "id": 167,
+   "text": "Our tax expense and liabilities are also affected by other factors, such as changes in our business operations, acquisitions, investments, entry into new businesses and geographies, intercompany transactions, the relative amount of our foreign earnings, losses incurred in jurisdictions for which we are not able to realize related tax benefits, the applicability of special or extraterritorial tax regimes, changes in foreign exchange rates, changes in our stock price, changes to our forecasts of income and loss and the mix of jurisdictions to which they relate, and changes in our tax assets and liabilities and their valuation. In the ordinary course of our business, there are many transactions and calculations for which the ultimate tax determination is uncertain. Significant judgment is required in evaluating and estimating our tax expense, assets, and liabilities."
+  },
+  {
+   "id": 168,
+   "text": "We are also subject to tax controversies in various jurisdictions that can result in tax assessments against us. Developments in an audit, investigation, or other tax controversy can have a material effect on our operating results or cash flows in the period or periods for which that development occurs, as well as for prior and subsequent periods. Due to the inherent complexity and uncertainty of these matters, interpretations of certain tax laws by authorities, and judicial, administrative, and regulatory processes in certain jurisdictions, the final outcome of any such controversy may be materially different from our expectations. For example, the Indian tax authority has asserted that tax applies to cloud services fees paid to Amazon in the U.S. We are contesting this position; however, if this matter is adversely resolved, we may be required to pay additional amounts with respect to current and prior periods and our taxes in the future could increase. We regularly assess the likelihood of an adverse outcome resulting from these proceedings to determine the adequacy of our tax accruals. Although we believe our tax estimates are reasonable, the final outcome of audits, investigations, and any other tax controversies could be materially different from our historical tax accruals."
+  },
+  {
+   "id": 169,
+   "text": "We Are Subject to Risks Related to Government Contracts and Related Procurement Regulations"
+  },
+  {
+   "id": 170,
+   "text": "Our contracts with U.S., as well as state, local, and foreign, government entities are subject to various procurement regulations and other requirements relating to their formation, administration, and performance. We are subject to audits and investigations relating to our government contracts, and any violations could result in various civil and criminal penalties and administrative sanctions, including termination of contract, refunding or suspending of payments, forfeiture of profits, payment of fines, and suspension or debarment from future government business. In addition, some of these contracts are subject to periodic funding approval and/or provide for termination by the government at any time, without cause."
+  }
+ ],
+ "anchors": [
+  {
+   "phrase": "investment in our securities risky",
+   "paragraph_id": 2,
+   "sentence": "Please carefully consider the following discussion of significant factors, events, and uncertainties that make an investment in our securities risky."
+  },
+  {
+   "phrase": "without cause",
+   "paragraph_id": 170,
+   "sentence": "In addition, some of these contracts are subject to periodic funding approval and/or provide for termination by the government at any time, without cause."
+  }
+ ]
+}

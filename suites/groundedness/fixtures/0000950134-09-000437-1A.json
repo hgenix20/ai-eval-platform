@@ -1,0 +1,47 @@
+{
+ "accession": "0000950134-09-000437",
+ "company": "CAPSTEAD MORTGAGE CORP",
+ "form": "10-K/A",
+ "item": "1A",
+ "filing_date": "2009-01-12",
+ "document_url": "https://www.sec.gov/Archives/edgar/data/766701/000095013409000437/d65837e10vkza.htm",
+ "golden_id": "0000766701-0000950134-09-000437-1A",
+ "window_paragraphs": 40,
+ "paragraphs": [
+  {
+   "id": 0,
+   "text": "ITEM 1A. RISK FACTORS (updated for page references to Exhibit 13)."
+  },
+  {
+   "id": 1,
+   "text": "Under the captions “Risk Factors” and “Critical Accounting Policies” on pages 46 through 56 of the"
+  },
+  {
+   "id": 2,
+   "text": "Registrant’s Amended Annual Report to Stockholders for the year ended December 31, 2007 which is"
+  },
+  {
+   "id": 3,
+   "text": "incorporated herein by reference, are discussions of risk factors and critical accounting policies"
+  },
+  {
+   "id": 4,
+   "text": "affecting Capstead’s financial condition and results of operations that are an integral part of"
+  },
+  {
+   "id": 5,
+   "text": "this discussion and analysis. Readers are strongly urged to consider the potential impact of these"
+  },
+  {
+   "id": 6,
+   "text": "factors and accounting policies on the Company while reading this document."
+  }
+ ],
+ "anchors": [
+  {
+   "phrase": "updated for page references",
+   "paragraph_id": 0,
+   "sentence": "RISK FACTORS (updated for page references to Exhibit 13)."
+  }
+ ]
+}

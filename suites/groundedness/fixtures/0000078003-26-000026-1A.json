@@ -1,0 +1,360 @@
+{
+ "accession": "0000078003-26-000026",
+ "company": "PFIZER INC",
+ "form": "10-K",
+ "item": "1A",
+ "filing_date": "2026-02-26",
+ "document_url": "https://www.sec.gov/Archives/edgar/data/78003/000007800326000026/pfe-20251231.htm",
+ "golden_id": "pfe-0000078003-26-000026-1A",
+ "window_paragraphs": 40,
+ "paragraphs": [
+  {
+   "id": 0,
+   "text": "ITEM 1A."
+  },
+  {
+   "id": 1,
+   "text": "RISK FACTORS"
+  },
+  {
+   "id": 2,
+   "text": "This section describes the material risks to our business, which should be considered carefully in addition to the other information in this report and our other filings with the SEC. Investors should be aware that it is not possible to predict or identify all such factors and that the following is not meant to be a complete discussion of all potential risks or uncertainties. Additionally, our business is subject to general risks applicable to any company, such as economic conditions, geopolitical events, extreme weather and natural disasters. If known or unknown risks or uncertainties materialize, our business operations, financial condition, operating results (including components of our financial results), cash flows, prospects, reputation or credit ratings could be materially adversely affected now and in the future. The following discussion of risk factors contains forward-looking statements, as discussed in the Forward-Looking Information and Factors that May Affect Future Results section."
+  },
+  {
+   "id": 3,
+   "text": "RISKS RELATED TO OUR BUSINESS, INDUSTRY AND OPERATIONS:"
+  },
+  {
+   "id": 4,
+   "text": "MANAGED CARE TRENDS"
+  },
+  {
+   "id": 5,
+   "text": "Private payors, such as health plans, and other managed care entities, such as PBMs, continue to take action to manage the utilization and costs of drugs in the U.S., the single largest market for biopharmaceutical products. The negotiating power of MCOs, PBMs and other private third-party payors has increased due to consolidation, and they, along with state and federal governments, increasingly employ tools to control costs and encourage utilization of certain drugs, including through the use of deductibles, utilization management tools, cost sharing or formulary placement. They may demand rebates and/or fees from biopharmaceutical manufacturers for preferred formulary placement, or for unrestricted access on a drug formulary. The growing availability and use of higher-cost innovative specialty pharmaceutical medicines that treat rare life-threatening conditions has also increased payor interest in the deployment of cost-containment strategies. We may fail to obtain or maintain timely or adequate pricing or formulary placement of our products, or fail to obtain such formulary placement at pricing that reflects the value of the treatment."
+  },
+  {
+   "id": 6,
+   "text": "Some payers are directing beneficiaries to third-party patient assistance programs, rather than covering certain treatments. In other instances, insurers disallow manufacturers’ co-pay assistance from counting toward reaching the deductible or out-of-pocket maximum. Both approaches can delay access to treatment or result in treatment abandonment. Further, consumers are facing responsibility for a larger portion of their prescription costs, or administrative hurdles to access, and may favor lower-cost, or generic alternatives, or seek direct-to-consumer medications outside of insurance plans."
+  },
+  {
+   "id": 7,
+   "text": "Third-party payors also use additional measures such as new-to-market blocks, exclusion lists, carve-outs or indication-based pricing and value-based pricing/contracting to improve their cost containment efforts and cost efficiency. Such payors are also increasingly imposing utilization management tools requiring prior authorization for a branded product or requiring the patient to first fail on one or more other products before permitting access to a particular branded medicine. As the U.S. third-party payor market consolidates further, and as the IRA prices become publicly available, we may face greater pricing pressure from third-party payors, including insurers and PBMs, as they continue to drive more of their patients to use lower cost alternatives or seek even larger rebates to control costs or offset losses from the IRA and other market pressures. For additional information on the IRA see the Item 1. Business –– Pricing Pressures and Managed Care Organizations and ––Government Regulation and Price Constraints and Item 1A. Risk Factors –– Pricing and Reimbursement sections."
+  },
+  {
+   "id": 8,
+   "text": "Also, business arrangements in this area are subject to a high degree of government scrutiny, and available exceptions and safe harbors under applicable federal and state fraud and abuse laws are subject to change through legislative and regulatory action, as well as evolving judicial interpretations. Our approach to these arrangements may also be informed by such government and industry guidance."
+  },
+  {
+   "id": 9,
+   "text": "COMPETITIVE PRODUCTS"
+  },
+  {
+   "id": 10,
+   "text": "Competitive product launches have and may erode future sales of our products, including our existing products and those currently under development, or result in product obsolescence. Such launches continue to occur, and potentially competitive products are in various stages of development. We cannot predict with accuracy the timing or impact of the introduction of competitive products that treat or prevent diseases and conditions like those treated or prevented by our in-line products and product candidates. In addition to the impact of competitive product launches, we are facing an increasing number of potential competitors worldwide, including from China, that have expanded R&D capabilities."
+  },
+  {
+   "id": 11,
+   "text": "Some of our competitors may have competitive, technical or other advantages over us for the development of technologies and processes or greater experience in particular therapeutic areas, and technological innovation and/or consolidation among certain pharmaceutical and biotechnology companies can enhance such advantages. These advantages may make it difficult for us to compete with them successfully to discover, develop and market new products and for our current products to compete with new products or indications they may bring to market. Our products and product candidates compete, and may compete in the future, against products or product candidates that offer higher rebates or discounts, exclusionary contracting, lower prices, equivalent or superior efficacy and/or coverage, better safety or tolerability profiles, easier administration, earlier market availability or other competitive features, including greater brand recognition or potential preference to prescribe existing competitor treatments over our novel therapies. For example, with the growing competition in the vaccine space, we are subject to increasing discounts to meet competitive dynamics and to help ensure our vaccines are available in retail pharmacies. If we are unable to compete effectively, this could reduce actual or anticipated future sales, which could negatively impact our results of operations."
+  },
+  {
+   "id": 12,
+   "text": "Several manufacturers, including Pfizer, have signed voluntary agreements with the Trump Administration designed to ensure U.S. patients pay lower prices for their prescription medicines. This may impact the competitive environment, including pricing dynamics for any of our current or potential future products, as well as contracting with payers."
+  },
+  {
+   "id": 13,
+   "text": "In addition, competition from manufacturers of generic drugs, including from generic versions of competitors’ branded products that lose their market exclusivity, is a major challenge for our branded products. Certain of our products have experienced significant generic competition over the last few years. We anticipate a significant reduction of revenue from patent-based or regulatory exclusivity expiries in 2026 through 2030 as several of our in-line products experience these expirations, with the rate of the reduction of revenues from patent-based or regulatory exclusivity expiries expected to significantly accelerate over the next few years. See the Item 1. Business—Patents and Other Intellectual Property Rights"
+  },
+  {
+   "id": 14,
+   "text": "Pfizer Inc."
+  },
+  {
+   "id": 15,
+   "text": "2025 Form 10-K"
+  },
+  {
+   "id": 16,
+   "text": "16"
+  },
+  {
+   "id": 17,
+   "text": "section. In China, we expect to continue to face intense competition by certain generic manufacturers, which has resulted, and may result in the future, in price cuts and volume loss of some of our products."
+  },
+  {
+   "id": 18,
+   "text": "In addition, our patented products may face generic or biosimilar competition before patent-based and/or regulatory exclusivity expires, including from “at-risk” launch (despite pending patent infringement litigation against the generic or biosimilar product) by a manufacturer of a generic or biosimilar version of one of our patented products. Generic and biosimilar manufacturers have filed or could file applications with the FDA seeking approval of product candidates that they claim do not infringe our or our collaboration and licensing partners’ patents or claim that our or our collaboration and licensing partners’ patents are not valid. We and our licensing and collaboration partners also face challenges in various jurisdictions by generic drug manufacturers to patents covering products for which we have patent rights, licenses or co-promotion rights. See Note 16A1 ."
+  },
+  {
+   "id": 19,
+   "text": "We may become subject to competition from biosimilars referencing our biologic products if competitors are able to obtain marketing approval for such biosimilars."
+  },
+  {
+   "id": 20,
+   "text": "We also commercialize biosimilar products that compete with products of others, including other biosimilar products. The number of current and forthcoming competing biosimilars, coupled with Medicare’s average sales price-based provider reimbursement methodology, is expected to increase pricing pressures on our biosimilar products. Uptake of our biosimilars may be lower due to various factors, such as access challenges where our product may not receive appropriate coverage/reimbursement access or remains in a disadvantaged position relative to an innovator product."
+  },
+  {
+   "id": 21,
+   "text": "For additional information on competition our products face, see the Item 1. Business — Competition section."
+  },
+  {
+   "id": 22,
+   "text": "CONCENTRATION"
+  },
+  {
+   "id": 23,
+   "text": "We recorded revenues of more than $1 billion for each of 12 products that collectively accounted for 65% of Total revenues in 2025. For example, Eliquis accounted for 13% of Total revenues in 2025. See N otes 1 and 17 . If these products or any of our other major products were to, or continue to (if applicable), experience loss of patent protection (if applicable), changes in prescription or vaccination purchasing or growth rates, reduced product demand, material product liability litigation, unexpected side effects or safety concerns, regulatory proceedings or investigations, lower governmental and/or regulatory confidence, negative publicity affecting doctor or patient confidence, pressure from competitive products, changes in recommendations and coverage, changes in labeling, pricing and access pressures, including those related to the IRA and MFN, or supply shortages or if a new, more effective product should be introduced, the adverse impact on our revenues could be significant and our revenue forecasts and expectations could prove to be inaccurate and we may fail to meet these expectations. In particular, certain of our products have experienced patent-based expirations or loss of regulatory exclusivity in certain markets in the last few years, and we expect certain products to face new or increased generic competition over the next few years. We anticipate a significant reduction of revenue from patent-based or regulatory exclusivity expiries in 2026 through 2030 as several of our in-line products experience these expirations. In addition, patents covering a number of our best-selling products are, or have been, the subject of pending legal challenges. For additional information on our patents, see the Item 1. Business — Patents and Other Intellectual Property Rights section. Furthermore, our recent business development initiatives have been concentrated in certain therapeutic areas — for example, our acquisitions of Metsera and Seagen represent significant investments in obesity and oncology, respectively, which are extremely competitive therapeutic areas. In addition, revenues from Comirnaty and Paxlovid have decreased substantially over time and could continue to decrease. For Paxlovid, utilization is expected to follow infection trends, and revenues may fluctuate based on the timing, duration and severity of COVID-19 infections. For information on risks associated with Comirnaty and Paxlovid, see the COVID-19 section below."
+  },
+  {
+   "id": 24,
+   "text": "In addition, certain of our customers account for a significant portion of our revenues. If one of our significant customers should encounter financial or other difficulties, it might decrease the amount of business such customer does with us and/or we might be unable to timely collect all the amounts that such customer owes us or at all, which could negatively impact our results of operations. In addition, we expect that consolidation and integration of pharmacy chains and wholesalers will increase competitive and pricing pressures on pharmaceutical manufacturers, including us. See Note 17C for a discussion of our significant customers."
+  },
+  {
+   "id": 25,
+   "text": "RESEARCH AND DEVELOPMENT"
+  },
+  {
+   "id": 26,
+   "text": "The discovery and development of new products, as well as the development of additional uses for existing products, are necessary for the continued strength of our business. Our product lines must be replenished over time to offset revenue losses when products lose exclusivity or market share or to respond to healthcare and innovation trends, as well as to provide for earnings growth, primarily through internal R&D or through collaborations, acquisitions, JVs, licensing or other arrangements, including co-funding agreements with third-parties . Growth depends in large part on our ability to identify and develop new products or new indications for existing products that address unmet medical needs and receive reimbursement from payors. However, balancing current growth, investment for future growth and the delivery of shareholder return remains a major challenge. The costs of product development continue to be high and are growing, as are regulatory requirements in many therapeutic areas, which may affect the complexity of drug trials, and the number of candidates we are able to fund as well as the sustainability of the R&D portfolio. Decisions made early in the development process of a drug or vaccine candidate can have a substantial impact on the marketing strategy and payor reimbursement possibilities if the candidate receives regulatory approval. We try to plan clinical trials prudently and to reasonably anticipate and address challenges, but there is no assurance that an optimal balance between trial conduct, speed and desired outcome will be achieved. In addition, potential quality issues may be identified in the course of a clinical trial that cannot be remediated to the satisfaction of a regulatory authority that may take actions within the scope of its enforcement authority, including excluding data and placing restrictions on future clinical trials."
+  },
+  {
+   "id": 27,
+   "text": "Additionally, our product candidates can fail at any stage of the R&D process, and may not receive regulatory approval even after many years of R&D. We may fail to correctly identify compounds or indications for which our science is promising or allocate R&D investment resources efficiently, and failure to invest in the right technology platforms, therapeutic areas, product classes, geographic markets and/or licensing opportunities could adversely impact the productivity of our pipeline. Further, even if we identify areas with the greatest commercial potential, the scientific approach may not succeed despite the significant investment required for R&D, and the product may not be as competitive as expected because of, among other things, the highly dynamic regulatory and market environments, the competitive landscape and the hurdles in terms of access, coverage and reimbursement. In addition, changes in the commercial landscape may impact our decisions around future product development."
+  },
+  {
+   "id": 28,
+   "text": "Pfizer Inc."
+  },
+  {
+   "id": 29,
+   "text": "2025 Form 10-K"
+  },
+  {
+   "id": 30,
+   "text": "17"
+  },
+  {
+   "id": 31,
+   "text": "GLOBAL OPERATIONS"
+  },
+  {
+   "id": 32,
+   "text": "We operate on a global scale and could be affected by currency and interest rate fluctuations; global trade tensions; capital and exchange controls; local and global economic conditions including inflation, recession, volatility and/or lack of liquidity in capital markets; expropriation and other restrictive government actions; changes in intellectual property; legal protections and remedies; trade regulations; tariffs; tax laws and regulations; and procedures and actions affecting approval, production, pricing, and marketing of, reimbursement for and access to our products, as well as impacts of political or civil unrest or military action, including, without limitation, the conflicts between Russia and Ukraine and in the Middle East and their economic consequences, geopolitical instability, terrorist activity, unstable governments and legal systems, inter-governmental disputes, public health outbreaks, epidemics, pandemics, natural disasters or disruptions related to climate change."
+  },
+  {
+   "id": 33,
+   "text": "Some emerging market countries may be particularly vulnerable to periods of financial, economic or political instability or significant currency fluctuations or may have limited resources for healthcare spending. As a result of these and other factors, our strategy to grow in emerging markets may not be successful, and any growth rates in these markets may not be sustainable. Additionally, local economic conditions may adversely affect the ability of payors, as well as our distributors, customers, suppliers and service providers, to pay for our products, or otherwise to buy necessary inventory or raw materials, and to perform their obligations under agreements with us."
+  },
+  {
+   "id": 34,
+   "text": "Government financing and economic pressures can lead to negative pricing pressure in various markets where governments take an active role in setting prices, access criteria (e.g., through health technology assessments) or other means of cost control. For additional information on government pricing pressures, see the Item 1. Business—Government Regulation and Price Constraints section."
+  },
+  {
+   "id": 35,
+   "text": "We continue to monitor the global trade environment and potential trade conflicts, sanctions and impediments that could impact our business. If trade restrictions or tariffs reduce global economic activity, potential impacts could include declining sales; increased costs; volatility in foreign exchange rates; a decline in the value of our financial assets and pension plan investments; required increases of our pension funding obligations; increased government cost control efforts; delays or failures in the performance of customers, suppliers and other third parties on whom we may depend for the performance of our business; and the risk that our allowance for doubtful accounts may not be adequate. In addition, issued or future executive orders, or other new or changes in laws, regulations or policy regarding tariffs or other trade or foreign policy, could have a material adverse effect on our business, earnings, cash flow, liquidity and financial guidance. As discussed above, in September 2025, Pfizer entered into a voluntary agreement with the Trump Administration and will receive a three-year grace period during which time Pfizer products will not face Section 232 tariffs, provided we further invest in manufacturing in the U.S. We face risks and uncertainties associated with the agreement and negotiating the binding final agreement, including the possibility of, among other things, unfavorable terms and increased costs related to tariffs and investment requirements and our ability to meet those investment requirements, as well as the possibility of tariffs that could be outside the scope of the agreement. The actual impact of any new tariffs on our business would be subject to a number of factors including, but not limited to, restrictions on trade, the effective date and duration of such tariffs, countries included in the scope of tariffs, changes to amounts of tariffs, and potential retaliatory tariffs or other retaliatory actions imposed by other countries."
+  },
+  {
+   "id": 36,
+   "text": "We operate in many countries and transact in many different currencies. Changes in the value of those currencies relative to the U.S. dollar, or high inflation or deflation in those countries, can impact our revenues, costs and expenses and our financial guidance. Significant portions of our revenues, costs and expenses, as well as our substantial international net assets, are exposed to exchange rate changes. In 2025, 41% of our total revenues were derived from international operations, including 21% from Europe and 12% from China, Japan and the rest of the Asia Pacific region. Future changes in exchange rates or economic conditions and the impact they may have on our results of operations, financial condition or business are difficult to predict. For additional information about our exposure to foreign currency risk, see the Analysis of Financial Condition, Liquidity, Capital Resources and Market Risk section within MD&A."
+  },
+  {
+   "id": 37,
+   "text": "In addition, our borrowing, pension benefit and postretirement benefit obligations and interest-bearing investments are subject to risk from changes in interest and exchange rates. The risks related to interest-bearing investments and borrowings and the measures we have taken to help contain them are discussed in the Analysis of Financial Condition, Liquidity, Capital Resources and Market Risk section within MD&A and Note 7E . For additional details on critical accounting estimates and assumptions for our benefit plans, see the Significant Accounting Policies and Application of Critical Accounting Estimates and Assumptions—Benefit Plans section within MD&A and Note 11 ."
+  },
+  {
+   "id": 38,
+   "text": "PRODUCT MANUFACTURING, SALES AND MARKETING RISKS"
+  },
+  {
+   "id": 39,
+   "text": "We could encounter difficulties, delays or inefficiencies in our supply chain, product manufacturing and distribution networks, as well as sales or marketing, due to regulatory actions, shut-downs, work stoppages or strikes, approval delays, withdrawals, recalls, penalties, supply disruptions, shortages or stock-outs at our facilities or third-party facilities that we rely on, reputational harm, the impact to our facilities due to health pandemics or natural or man-made disasters, including as a result of climate change, product liability or unanticipated costs. Examples of such difficulties or delays include the inability to increase or maintain production capacity commensurate with demand; challenges related to component materials to maintain supply and/or appropriate quality standards throughout our supply network and/or comply with applicable regulations; inability to supply certain products due to voluntary product recalls or withdrawals, including, for example, our voluntary withdrawal of all lots of Oxbryta in all markets where it is approved; and supply chain disruptions at our facilities or at a supplier or vendor. In addition, we engage contract manufacturers, and, from time to time, our contract manufacturers may face difficulties or are unable to manufacture our products at the necessary quantity or quality levels."
+  },
+  {
+   "id": 40,
+   "text": "Regulatory agencies periodically inspect our manufacturing facilities, as well as third-party facilities that we rely on, to evaluate compliance with cGMP or other applicable requirements. Failure to comply with these requirements may subject us to possible legal or regulatory actions, such as warning letters, suspension of manufacturing, seizure of product, injunctions, debarment, product recalls, delays or denials of product approvals, import bans or denials of import certifications. In response to requests from various regulatory authorities, manufacturers across the pharmaceutical industry, including Pfizer, are evaluating their product portfolios for the potential presence or formation of nitrosamines and we are actively engaging with regulatory authorities on this topic. If nitrosamines are detected in products, this may lead to submission of comprehensive data packages to regulatory authorities to support discussions on the relevant intake limit for the product and potential impact on patient supply, and, in some instances, may lead to market action for such products. For example, i n 2021, Pfizer recalled Chantix due to the presence of a nitrosamine, N-nitroso-varenicline, at or above acceptable intake limits communicated by various regulatory authorities. Following issuance of updated guidance on acceptable intake limits for N-nitroso-varenicline by regulatory authorities, in 2025, Chantix returned to market in the U.S. and in certain international markets."
+  },
+  {
+   "id": 41,
+   "text": "See the Overview of Our Performance, Operating Environment, Strategy and Outlook — Our Operating Environment section within MD&A."
+  },
+  {
+   "id": 42,
+   "text": "Pfizer Inc."
+  },
+  {
+   "id": 103,
+   "text": "their relationship with us. Despite these efforts and precautions, we may be unable to prevent a third-party from copying or otherwise obtaining and using our trade secrets or our other intellectual property without authorization, and legal remedies may not adequately compensate us for the damages caused by such unauthorized use. Further, others may independently and lawfully develop substantially similar or identical products that circumvent our intellectual property by means of alternative designs or processes or otherwise."
+  },
+  {
+   "id": 104,
+   "text": "THIRD-PARTY INTELLECTUAL PROPERTY CLAIMS"
+  },
+  {
+   "id": 105,
+   "text": "A properly functioning intellectual property regime is essential to our business model. We are committed to respecting the valid intellectual property rights of other companies, but the patent granting process is imperfect. Accordingly, the pursuit of valid business opportunities may require us to challenge intellectual property rights held by others that we believe were improperly granted, including challenges through negotiation and litigation, and such challenges may not always be successful."
+  },
+  {
+   "id": 106,
+   "text": "Part of our business depends upon identifying biosimilar opportunities and launching products to take advantage of those opportunities, which may involve litigation, associated costs and time delays, and may ultimately not be successful. These opportunities may arise in situations where patent protection of equivalent branded products has expired or been declared invalid, or where products do not infringe the patents of others. In some circumstances we may take action, such as litigation, asserting that our products do not infringe patents of existing products or that those patents are invalid or unenforceable in order to achieve a “first-to-market” or early market position for our products."
+  },
+  {
+   "id": 107,
+   "text": "Third parties may claim that our products infringe one or more patents owned or controlled by them. Claims of intellectual property infringement can be costly and time-consuming to resolve, may delay or prevent product launches, and may result in significant royalty payments or damages or potential licensing agreements. For example, our R&D in a therapeutic area may not be first and another company or entity may have obtained relevant patents before us. We are involved in patent-related disputes with third parties over our attempts to market pharmaceutical products. Once we have final regulatory approval of the related products, we may decide to commercially market these products even though associated legal proceedings (including any appeals) have not been resolved (i.e., “at-risk” launch). If one of our marketed products (or a product of our collaboration/licensing partners to which we have licenses or co-promotion rights) is found to infringe valid patent rights of a third party, such third party may be awarded significant damages or royalty payments, or we may be prevented from further sales of that product. Such damages may be enhanced as much as three-fold if we or one of our subsidiaries is found to have willfully infringed valid patent rights of a third party. Potential expansion of our mRNA portfolio could result in an increase in patent-related disputes as well. For additional information, including information regarding certain legal proceedings in which we are involved, see Note 16A1 ."
+  },
+  {
+   "id": 108,
+   "text": "INFORMATION TECHNOLOGY AND CYBERSECURITY"
+  },
+  {
+   "id": 109,
+   "text": "Significant disruptions of IT systems or breaches of information security could adversely affect our business. We extensively rely upon sophisticated IT systems (including cloud services) to operate our business. We produce, collect, process, store and transmit large amounts of confidential information (including personal information and intellectual property), and we deploy and operate an array of technical and procedural controls to maintain the confidentiality, integrity and availability of such confidential information. We develop and operate digital systems to engage patients, healthcare providers, governments, payors and supply chain partners to conduct business and deliver medicines, digital diagnostics, clinical trials and digital therapies. Such systems include mobile applications, wearable devices, internet websites and other digital technologies that may be targets of attack. We have outsourced significant elements of our operations, including significant elements of our IT infrastructure and, as a result, we manage relationships with many third-party providers who may or could have access to our confidential information. We rely on technology developed, supplied and/or maintained by third-parties that may make us vulnerable to “supply chain” style cyber-attacks. Further, technology and security vulnerabilities of acquisitions, business partners or third-party providers may not be identified during due diligence or soon enough to mitigate potential risks. The size and complexity of our IT and information security systems, and those of our third-party providers (and the large amounts of confidential information present on them), make such systems potentially vulnerable to service interruptions or to security breaches from inadvertent or intentional actions by, but not limited to, our employees, contingent workers, service providers, business partners, customers or malicious attackers. As a global pharmaceutical company, our systems and assets are the target of frequent cyber-attacks. Such cyber-attacks are of ever-increasing levels of sophistication, including the use of adversarial AI techniques (for example, AI may be used to automate phishing attacks and other forms of social engineering, and accelerate vulnerability exploitation), and are made by groups and individuals with a wide range of motives (including, but not limited to, industrial espionage, extortion, property destruction and personal information theft) and expertise, including, but not limited to, organized criminal groups, “hacktivists,” nation states, employees, business partners and others. Due to the sophistication of some of these attacks, there is a risk that they may remain undetected for a period of time. While we have invested in the protection of data and IT and develop and maintain systems and controls, our efforts, like those of other similar companies, have not always prevented and may not in the future prevent service interruptions, extortion, theft of confidential, personal or proprietary information, compromise of data integrity or unauthorized information disclosure. Any technology service interruption or breach of our systems could adversely affect our business operations and/or result in potential legal liability, the loss of personal data, confidential information or intellectual property. Such incidents could require disclosure to government authorities and/or regulators and could require notification to affected individuals and any incident could result in financial, legal, business and reputational harm to us. We maintain cyber liability insurance; however, this insurance may not be sufficient to cover the financial, legal, business or reputational losses that may result from an interruption or breach of our systems."
+  },
+  {
+   "id": 110,
+   "text": "AI, including machine learning and generative AI, is increasingly being used in the biopharmaceutical and global healthcare industries. We have begun deploying AI in various parts of our internal and external operations, including in R&D, and continue to explore further use cases for AI, and our investments in AI may not yield anticipated benefits. As with many developing technologies, AI presents risks and challenges. For example, existing regulatory frameworks governing the use, development, and deployment of AI, including regulatory guidance on the use of AI in medical products, remain uncertain and subject to significant change. New regulatory requirements could impose significant compliance costs, limit our ability to deploy AI, require changes to our practices (including documentation, risk management, testing, or transparency measures), or increase litigation and enforcement risk. In addition, AI may be used by payors to limit access to care or to deny prior authorization requests, which could impact Pfizer’s business results. Further, AI technology itself can give rise to risks. Generative AI output is probabilistic in nature and may not be reproducible or generate consistent results over time. AI can generate outputs that are false, misleading, incomplete, or inconsistent, and may be difficult to monitor, explain, or reproduce. AI performance may also degrade over time due to changes in inputs, data drift, updates by vendors, or adversarial manipulation. AI design or training may be flawed, including as a result of external vendors or others training AI models on content without the necessary intellectual property rights or other legal rights or permissions or using data sets that may not be appropriate for the intended use, of poor quality, contain biased information, or that become corrupted during a cyber-attack; and flawed or inappropriate data practices by data scientists, engineers, and end-users could impair results. If the output that AI produces or assists in producing is deficient or inaccurate, we could be subjected to competitive harm, regulatory scrutiny, potential legal liability and brand or reputational harm. The use of AI"
+  },
+  {
+   "id": 111,
+   "text": "Pfizer Inc."
+  },
+  {
+   "id": 112,
+   "text": "2025 Form 10-K"
+  },
+  {
+   "id": 113,
+   "text": "23"
+  },
+  {
+   "id": 114,
+   "text": "may also lead to the unauthorized release of confidential or proprietary information which may impact our ability to realize the benefits of our data, including intellectual property. Further, reliance on third-party AI tools or services that incorporate AI may expose our organization to compliance gaps that are outside of our control. In addition, we could face risks related to our reliance on a small number of AI models or service providers."
+  },
+  {
+   "id": 115,
+   "text": "GENERAL RISKS"
+  },
+  {
+   "id": 116,
+   "text": "BUSINESS DEVELOPMENT ACTIVITIES AND STRATEGIC GOALS"
+  },
+  {
+   "id": 117,
+   "text": "We have established financial and strategic goals, which we plan to achieve, in part, by not only advancing our own product pipelines and maximizing the value of our existing products, but also through various forms of business development activities, which can include alliances, licenses, JVs, collaborations, equity- or debt-based investments, dispositions, divestments, mergers and acquisitions, including our recent acquisition of Metsera. We view our business development activity as an enabler of our strategies and seek to generate growth by pursuing opportunities and transactions that have the potential to strengthen our business and our capabilities. The success of our business development activities is dependent on the availability and accurate evaluation of appropriate opportunities, competition from others seeking similar opportunities and our ability to successfully identify, structure and execute transactions, including the ability to satisfy closing conditions in the anticipated timeframes or at all, and our ability to successfully integrate acquired businesses and develop and commercialize acquired products. Pursuing, executing and consummating these transactions may require substantial investment, which may require us to obtain additional equity or debt financing, which has in the past and could in the future result in increased leverage and/or a downgrade of our credit ratings and could limit our ability to obtain future financing. We incurred substantial indebtedness to fund certain of our acquisitions. For example, we financed a portion of the acquisitions of Seagen and Metsera with the proceeds from the issuance of long-term debt, plus additional short-term indebtedness issued prior to such acquisitions. Such short-term indebtedness was subsequently repaid. The amount of debt that we have incurred could have significant consequences including, among other things, reducing our operating or financial flexibility, requiring a portion of our cash flow from operations to make interest payments and reducing the cash flow available to fund capital expenditures and other corporate purposes and to grow our business. To the extent we incur additional indebtedness or interest rates increase, these risks could increase further."
+  },
+  {
+   "id": 118,
+   "text": "The success of our business development transactions depends on our ability to realize the anticipated benefits of these transactions and is subject to numerous risks and uncertainties, many of which are outside of our control. Unsuccessful clinical trials, regulatory hurdles, new information, changes in competitive dynamics and commercialization challenges, among other factors, may adversely impact revenue and income contribution from business development transactions, including from acquired products and businesses, and may lead to impairment of acquired assets. We may fail to generate expected revenue growth for our existing products, product pipeline and contribution from these transactions or from acquired products or businesses or we may fail to achieve anticipated cost savings, within expected time frames or at all, which may impact our ability to meet our growth objectives. In certain transactions, we may agree to provide certain transition services for an extended period of time, which may divert our focus and resources that would otherwise be invested into maintaining or growing our business. Similarly, the accretive impact anticipated from certain transactions may not be realized or may be delayed. Integration of acquired products or businesses may result in the loss of key employees, the disruption of ongoing business, including third-party relationships, or inconsistencies in standards, controls, procedures and policies. Further, while we seek to mitigate risks and liabilities through, among other things, due diligence, we may be exposed to risks and liabilities as a result of business development transactions. There is no assurance that we will be able to acquire attractive businesses or enter into strategic business relationships on favorable terms ahead of our competitors, or that such acquisitions or strategic business development relationships will be accretive to earnings or improve our competitive position."
+  },
+  {
+   "id": 119,
+   "text": "Where we invest in or otherwise obtain debt or equity securities of third parties in connection with business development transactions, we may be unable to direct or influence the management, operational decisions and policies of such companies and the value of the acquired securities will fluctuate and may lose value. Any future distribution or sale of such securities will be subject to prevailing market conditions and other factors, including the size of our ownership stake, at the time of such distribution or sale and there is no assurance as to the price that such securities will ultimately be sold or that such securities will be sold at all."
+  },
+  {
+   "id": 120,
+   "text": "PANDEMICS"
+  },
+  {
+   "id": 121,
+   "text": "Pandemics, such as the COVID-19 pandemic, have impacted and may in the future impact our business, operations and financial condition and results. Related risks and challenges for our business include, among others: uncertainty regarding the severity and duration of a pandemic; impacts to business operations; decreased demand for certain of our products; increased costs of doing business; manufacturing disruptions and delays; supply chain disruptions and shortages, including challenges related to reliance on third-party suppliers resulting in reduced availability of materials or components used in the development, manufacturing, distribution or administration of our products; evolving macroeconomic factors and conditions, including general economic uncertainty, unemployment rates and recessionary pressures; changes in labor markets, including challenges related to our human capital and talent development; unknown consequences on our business performance and initiatives stemming from the substantial investment of time and other resources to any potential pandemic response; increased difficulty and uncertainty regarding predicting or estimating future performance; pace of post-pandemic recovery, disruption and volatility within the financial or credit markets; and our financial performance in general."
+  },
+  {
+   "id": 122,
+   "text": "COVID-19"
+  },
+  {
+   "id": 123,
+   "text": "We face risks and uncertainties related to our COVID-19 products, including Comirnaty and Paxlovid or any potential future COVID-19 vaccines, treatments or combinations, including, among others, the risk that as the market for COVID-19 products remains endemic and seasonal and/or COVID-19 infection rates do not follow prior patterns, demand for our COVID-19 products has and may continue to be reduced or not meet expectations, which has and may continue to lead to reduced revenues, excess inventory or other unanticipated charges; risks related to our ability to develop, receive regulatory approval for, and commercialize variant adapted vaccines, combinations and/or treatments; uncertainties related to recommendations and coverage for, and the public’s adherence to, vaccines, boosters, treatments or combinations, including uncertainties related to the potential impact of narrowing recommended patient populations; risks related to our ability to accurately predict revenue for Comirnaty and Paxlovid or any potential future COVID-19 vaccines or treatments; whether and when EUA or biologics license or drug applications or amendments to any such applications may be filed in particular jurisdictions for Paxlovid or Comirnaty or any other potential vaccine or vaccine candidates or product candidates, including those related to potential future annual boosters, re-vaccinations, or vaccines in additional populations, and if obtained, whether or when such EUA or licenses, or existing EUAs, will expire, terminate or be revoked; whether and when additional supply or purchase agreements will be reached or existing agreements will be modified; potential third-party royalties or other claims related to Comirnaty or Paxlovid; and the other risks and uncertainties discussed throughout this Item 1A. Risk Factors."
+  },
+  {
+   "id": 124,
+   "text": "Pfizer Inc."
+  },
+  {
+   "id": 125,
+   "text": "2025 Form 10-K"
+  },
+  {
+   "id": 126,
+   "text": "24"
+  },
+  {
+   "id": 127,
+   "text": "RESPONSIBLE BUSINESS PRACTICES"
+  },
+  {
+   "id": 128,
+   "text": "Pfizer is subject to transitional and physical risks related to climate change. Transitional risks include, for example, a disorderly global transition away from fossil fuels that may result in increased energy prices; customer preference for low or no-carbon products; stakeholder pressure to decarbonize assets; or new legal or regulatory requirements that result in new or expanded carbon pricing, taxes, restrictions on GHG emissions, and increased GHG disclosure and transparency. These risks could increase operating costs, including the cost of our electricity and energy use, or otherwise increase compliance costs. Physical risks to our operations include water stress and drought; flooding and storm surge; wildfires; extreme temperatures and storms, which could impact pharmaceutical production, increase costs, or disrupt supply chains of medicines for patients. Our supply chain is subject to these same transitional and physical risks and would likely pass along any increased costs to us."
+  },
+  {
+   "id": 129,
+   "text": "In June 2022, Pfizer established our fourth consecutive GHG reduction goal with new near- and long-term targets to achieve the Science Based Target Initiative’s voluntary Net-Zero Standard by 2040. While we are working to implement emission reduction plans to achieve our voluntary climate goals, various factors, including the long time horizons and commercial availability of new technologies to enable emission reductions, in the time and scale needed, may present inherent risk in our ability to meet these goals. Additionally, success may depend on the actions of governments and third parties and may require, among other things, significant capital investment; R&D; and government policies and incentives to foster innovation and reduce costs of technologies that may not currently exist or be available at scale."
+  },
+  {
+   "id": 130,
+   "text": "Certain governmental authorities, non-governmental organizations, customers, investors, employees, and other stakeholders have differing views on matters perceived to be related to responsible business practices, such as equitable access to medicines and vaccines, product quality and safety, human capital, diversity, equity and inclusion, environmental stewardship, support for local communities, value chain environmental and human rights due diligence, and corporate governance and transparency. In addition, certain governments and the public expect companies like us to report on our business practices with respect to human rights, responsible sourcing and environmental impact, as well as the actions of our third-party contractors and suppliers around the world. This focus may lead to new expectations or requirements that could result in increased costs associated with research, development, manufacture, or distribution of our products. Our ability to compete could also be affected by changing customer preferences and requirements, such as demand for companies to establish Net Zero targets or offer more sustainable products. While we are committed to responsible business practices, if we do not meet, or are perceived not to meet, our goals or other stakeholder expectations in these key areas, we risk negative stakeholder reaction, as well as damage to our brand and reputation, reduced demand for our products or other negative impacts on our business and operations."
+  },
+  {
+   "id": 131,
+   "text": "MARKET FLUCTUATIONS IN OUR EQUITY AND OTHER INVESTMENTS"
+  },
+  {
+   "id": 132,
+   "text": "Changes in the fair value of certain equity investments that are recognized in net income may result in increased volatility of our income. See Note 4 and the Analysis of Financial Condition, Liquidity, Capital Resources and Market Risk section within MD&A."
+  },
+  {
+   "id": 133,
+   "text": "Our pension and postretirement plans are subject to volatility from changes in the fair value of equity investments and other investment risk in the assets funding these plans, as well as changes in the appropriate discount rates used to measure the plans’ obligations. See the Significant Accounting Policies and Application of Critical Accounting Estimates and Assumptions — Benefit Plans section within MD&A and Note 11 ."
+  },
+  {
+   "id": 134,
+   "text": "COST AND EXPENSE CONTROL AND UNUSUAL EVENTS"
+  },
+  {
+   "id": 135,
+   "text": "Growth in costs and expenses, changes in product and geographic mix and the impact of acquisitions, divestitures, restructurings, internal reorganizations, product withdrawals, recalls and other unusual events that could result from evolving business strategies, evaluation of asset realization and organizational restructuring could adversely affect future results. Such risks and uncertainties include, in particular, our ability to realize the projected benefits of our cost-reduction and productivity initiatives, including our enterprise-wide cost realignment program and manufacturing optimization program, other corporate strategic initiatives and any acquisitions, divestitures or other initiatives, as well as potential disruption of ongoing business, such as potential impacts on our ability to deliver on our pipeline as planned. Additionally, as a result of these initiatives, we may experience a loss of continuity, loss of accumulated knowledge or intellectual property and/or inefficiency, adverse effects on employee morale, loss of key employees and/or other retention issues during transitional periods. Reorganizations and restructurings can require a significant amount of time and focus, which may divert attention from operating and growing our business. If we fail to achieve some or all of the expected benefits of restructuring or other initiatives, it could have a material adverse effect on our competitive position, business, financial condition, results of operations and cash flows."
+  },
+  {
+   "id": 136,
+   "text": "INTANGIBLE ASSETS, GOODWILL AND EQUITY-METHOD INVESTMENTS"
+  },
+  {
+   "id": 137,
+   "text": "Our consolidated balance sheet contains significant amounts of intangible assets, including IPR&D and goodwill. For IPR&D assets, the risk of failure is significant, and there can be no certainty that these assets ultimately will yield successful products. Our ability to realize value on these significant investments is often contingent upon, among other things, regulatory approvals and market acceptance. As such, IPR&D assets have and may become impaired and/or be written off in the future if the associated R&D effort is abandoned or is curtailed. For goodwill, all reporting units can confront events and circumstances that can lead to a goodwill impairment charge such as, among other things, unanticipated competition, an adverse action or assessment by a regulator, a significant adverse change in legal matters or in the business climate and/or a failure to replace the contributions of products that lose market exclusivity. Our other intangible assets, including developed technology rights, brands and licensing agreements, face similar risks for impairment. Our equity-method investments may also be subject to impairment charges that may result from the occurrence of unexpected adverse events or management decisions that impact our estimates of expected cash flows to be generated from these investments. We may recognize impairment charges as a result of a weak economic environment, challenging market conditions, decisions by management, or events related to particular customers or asset types, such as the development of competing assets by us or others, regulatory actions or product recalls or withdrawals. Any such impairment charge of our intangible assets, goodwill and equity-method investments may be significant. See Note 4 for a discussion of recent impairments of intangible assets. For additional details, see the S ignificant Accounting Policies and Application of Critical Accounting Estimates and Assumptions — Asset Impairments section within MD&A."
+  },
+  {
+   "id": 138,
+   "text": "CHANGES IN LAWS AND ACCOUNTING STANDARDS"
+  },
+  {
+   "id": 139,
+   "text": "Our future results could be adversely affected by changes in laws, regulations or policies, or their interpretation, including, among others, new or changes in accounting standards, tariffs, tax laws and regulations internationally and in the U.S., including, without limitation, the IRA, and the OBBBA, which is still subject to further guidance; the adoption of global minimum taxation requirements outside the U.S. generally effective in most jurisdictions since January 1, 2024; government cost-cutting measures and related impacts on, among other matters, government staffing, resources and ability to timely review and process regulatory or other submissions; restrictions related to certain data transfers, including data security, data localization and cross border data transfer regulations, and transactions involving certain countries; and potential changes to"
+  },
+  {
+   "id": 140,
+   "text": "Pfizer Inc."
+  },
+  {
+   "id": 141,
+   "text": "2025 Form 10-K"
+  },
+  {
+   "id": 142,
+   "text": "25"
+  },
+  {
+   "id": 143,
+   "text": "existing tax laws, tariffs, competition laws, privacy laws and environmental laws or changes to other laws, regulations or policies in the U.S., including by the U.S. Presidential administration and Congress, as well as in other countries. For example, issued or future executive orders or other new or changes in laws, regulations or policy regarding tariffs or other trade or foreign policy, could have a material adverse effect on our business, earnings, cash flow, liquidity and financial guidance. The actual impact of any new tariffs on our business would be subject to a number of factors including, but not limited to, restrictions on trade, the effective date and duration of such tariffs, countries included in the scope of tariffs, changes to amounts of tariffs, and potential retaliatory tariffs or other retaliatory actions imposed by other countries. In the EU, several recently adopted or proposed legislative initiatives may affect our business, including the EU Pharma Package, the EU HTA -R, the EU Critical Medicines Act, and the EU Biotech Act, as well as legislation such as the EU AI Act, EU Data Act, and the EU Health Data Space Regulation, among others. See the Item 1. Business — G overnment Regulation and Price Constraints section for additional information regarding privacy and other laws. For additional information on changes in tax laws or rates or accounting standards, see the Provision/(Benefit) for Taxes on Income and New Accounting Standards sections within MD&A and Note 1B ."
+  }
+ ],
+ "anchors": [
+  {
+   "phrase": "material risks to our business",
+   "paragraph_id": 2,
+   "sentence": "This section describes the material risks to our business, which should be considered carefully in addition to the other information in this report and our other filings with the SEC."
+  },
+  {
+   "phrase": "privacy and other laws",
+   "paragraph_id": 143,
+   "sentence": "Business — G overnment Regulation and Price Constraints section for additional information regarding privacy and other laws."
+  }
+ ]
+}

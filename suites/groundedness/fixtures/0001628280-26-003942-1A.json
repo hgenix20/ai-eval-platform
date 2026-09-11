@@ -1,0 +1,356 @@
+{
+ "accession": "0001628280-26-003942",
+ "company": "Meta Platforms, Inc.",
+ "form": "10-K",
+ "item": "1A",
+ "filing_date": "2026-01-29",
+ "document_url": "https://www.sec.gov/Archives/edgar/data/1326801/000162828026003942/meta-20251231.htm",
+ "golden_id": "meta-0001628280-26-003942-1A",
+ "window_paragraphs": 40,
+ "paragraphs": [
+  {
+   "id": 0,
+   "text": "Item 1A. Risk Factors"
+  },
+  {
+   "id": 1,
+   "text": "Certain factors may have a material adverse effect on our business, financial condition, and results of operations. You should consider carefully the risks and uncertainties described below, in addition to other information contained in this Annual Report on Form 10-K, including our consolidated financial statements and related notes. The risks and uncertainties described below are not the only ones we face. Additional risks and uncertainties that we are unaware of, or that we currently believe are not material, may also become important factors that adversely affect our business. If any of the following risks actually occurs, our business, financial condition, results of operations, and future prospects could be materially and adversely affected. In that event, the trading price of our Class A common stock could decline, and you could lose part or all of your investment."
+  },
+  {
+   "id": 2,
+   "text": "Summary Risk Factors"
+  },
+  {
+   "id": 3,
+   "text": "Our business is subject to a number of risks, including risks that may prevent us from achieving our business objectives or may adversely affect our business, financial condition, results of operations, cash flows, and prospects. These risks are discussed more fully below and include, but are not limited to, risks related to:"
+  },
+  {
+   "id": 4,
+   "text": "Risks Related to Our Product Offerings"
+  },
+  {
+   "id": 5,
+   "text": "• our ability to add and retain users and maintain levels of user engagement with our products;"
+  },
+  {
+   "id": 6,
+   "text": "• the loss of, or reduction in spending by, our marketers;"
+  },
+  {
+   "id": 7,
+   "text": "• reduced availability of data signals used by our ad targeting and measurement tools;"
+  },
+  {
+   "id": 8,
+   "text": "• ineffective operation with mobile operating systems or changes in our relationships with mobile operating system partners;"
+  },
+  {
+   "id": 9,
+   "text": "• failure of our new products, or changes to our existing products, to attract or retain users or generate revenue;"
+  },
+  {
+   "id": 10,
+   "text": "Risks Related to Our Business Operations and Financial Results"
+  },
+  {
+   "id": 11,
+   "text": "• our ability to compete effectively;"
+  },
+  {
+   "id": 12,
+   "text": "• fluctuations in our financial results;"
+  },
+  {
+   "id": 13,
+   "text": "• unfavorable media coverage and other risks affecting our ability to maintain and enhance our brands;"
+  },
+  {
+   "id": 14,
+   "text": "• our ability to build, maintain, and scale our technical infrastructure, and risks associated with disruptions in our service, catastrophic events, and crises;"
+  },
+  {
+   "id": 15,
+   "text": "• operating our business in multiple countries around the world;"
+  },
+  {
+   "id": 16,
+   "text": "• litigation, including class action lawsuits;"
+  },
+  {
+   "id": 17,
+   "text": "• acquisitions and our ability to successfully integrate our acquisitions;"
+  },
+  {
+   "id": 18,
+   "text": "Risks Related to Government Regulation and Enforcement"
+  },
+  {
+   "id": 19,
+   "text": "• government restrictions on access to Facebook or our other products, or other actions that impair our ability to sell or deliver advertising, in their countries;"
+  },
+  {
+   "id": 20,
+   "text": "• complex and evolving U.S. and foreign privacy, data use, data combination, data protection, content and content moderation, competition, youth, safety, consumer protection, advertising, and other laws and regulations, including the General Data Protection Regulation (GDPR), Digital Markets Act (DMA), Digital Services Act (DSA), UK Online Safety Act (OSA), Artificial Intelligence Act (EU AI Act), and the UK Digital Markets, Competition and Consumer Act (DMCC);"
+  },
+  {
+   "id": 21,
+   "text": "• the impact of government investigations, enforcement actions, and settlements, including litigation and investigations by privacy, consumer protection, and competition authorities, among others;"
+  },
+  {
+   "id": 22,
+   "text": "12"
+  },
+  {
+   "id": 23,
+   "text": "Table of Contents"
+  },
+  {
+   "id": 24,
+   "text": "• our ability to comply with regulatory and legislative privacy requirements, including our consent order with the Federal Trade Commission (FTC);"
+  },
+  {
+   "id": 25,
+   "text": "Risks Related to Data, Security, Platform Integrity, and Intellectual Property"
+  },
+  {
+   "id": 26,
+   "text": "• the occurrence of security breaches, improper access to or disclosure of our data or user data, and other cyber incidents, as well as intentional misuse of our services and other undesirable activity on our platform;"
+  },
+  {
+   "id": 27,
+   "text": "• our ability to obtain, maintain, protect, and enforce our intellectual property rights; and"
+  },
+  {
+   "id": 28,
+   "text": "Risks Related to Ownership of Our Class A Common Stock"
+  },
+  {
+   "id": 29,
+   "text": "• limitations on the ability of holders of our Class A Common Stock to influence corporate matters due to the dual class structure of our common stock and the control of a majority of the voting power of our outstanding capital stock by our founder, Chairman, and Chief Executive Officer (CEO)."
+  },
+  {
+   "id": 30,
+   "text": "Risks Related to Our Product Offerings"
+  },
+  {
+   "id": 31,
+   "text": "If we fail to retain existing users or add new users, or if our users decrease their level of engagement with our products, our revenue, financial results, and business may be significantly harmed."
+  },
+  {
+   "id": 32,
+   "text": "The size of our active user base and our users' level of engagement across our products are critical to our success. Our financial performance has been and will continue to be significantly determined by our success in adding, retaining, and engaging active users of our products that deliver ad impressions, particularly for Facebook and Instagram. We have experienced, and expect to continue to experience, fluctuations and declines in the size of our active user base in one or more markets from time to time, particularly in markets where we have achieved higher penetration rates. User growth and engagement are also impacted by a number of other factors, including competitive products and services, such as TikTok, that have reduced some users' engagement with our products and services, as well as global and regional business, macroeconomic, and geopolitical conditions. For example, in connection with the war in Ukraine, access to Facebook and Instagram was restricted in Russia and these services were then prohibited by the Russian government, which contributed to slight decreases in the size of our active user base following the onset of the war. Any future declines in the size of our active user base may adversely impact our ability to deliver ad impressions and, in turn, our financial performance."
+  },
+  {
+   "id": 33,
+   "text": "If people do not perceive our products to be useful, reliable, and trustworthy, we may not be able to attract or retain users or otherwise maintain or increase the frequency and duration of their engagement. A number of other social networking companies that achieved early popularity have since seen their active user bases or levels of engagement decline, in some cases precipitously. There is no guarantee that we will not experience a similar erosion of our active user base or engagement levels. Our user engagement patterns have changed over time, and user engagement can be difficult to measure, particularly as we and our competitors introduce new and different products and services. Any number of factors can negatively affect user retention, growth, and engagement, including if:"
+  },
+  {
+   "id": 34,
+   "text": "• users increasingly engage with other competitive products or services;"
+  },
+  {
+   "id": 35,
+   "text": "• we fail to introduce new features, products, or services that users find engaging or if we introduce new products or services, or make changes to existing products and services, that are not favorably received;"
+  },
+  {
+   "id": 36,
+   "text": "• users feel that their experience is diminished as a result of the decisions we make with respect to the frequency, prominence, format, size, and quality of ads that we display;"
+  },
+  {
+   "id": 37,
+   "text": "• users have difficulty installing, updating, or otherwise accessing our products on mobile devices as a result of actions by us or third parties that we rely on to distribute our products and deliver our services;"
+  },
+  {
+   "id": 38,
+   "text": "• user behavior on any of our products changes, including decreases in the quality and frequency of content shared on our products and services;"
+  },
+  {
+   "id": 39,
+   "text": "• we are unable to continue to develop products for mobile devices that users find engaging, that work with a variety of mobile operating systems and networks, and that achieve a high level of market acceptance;"
+  },
+  {
+   "id": 40,
+   "text": "13"
+  },
+  {
+   "id": 41,
+   "text": "Table of Contents"
+  },
+  {
+   "id": 386,
+   "text": "From time to time, we receive notice from patent, copyright, and trademark holders and other parties alleging that certain of our products and services, trademarks, or user content, infringe their intellectual property rights or that certain employees may have misappropriated trade secrets from their former employers. We presently are involved in a number of intellectual property lawsuits, and as we face increasing competition and develop new products and services, we expect the number of intellectual property claims against us to grow. For example, we and other companies are, and expect to continue to be, the subject of litigation in the United States, Europe, Canada, and elsewhere alleging copyright infringement in connection with the acquisition, distribution, and use of copyrighted materials for AI training as well as potential reproduction of copyrighted materials in AI outputs, including cases addressing the applicability of the fair use defense in the United States. There can be no assurances that favorable final outcomes will be obtained in these cases. In addition, plaintiffs may seek, and we may become subject to, preliminary or provisional rulings in the course of any such litigation, including potential preliminary injunctions requiring us to change or cease some or all of our operations. We may decide to settle such lawsuits and disputes on terms that are unfavorable to us. Similarly, if any litigation to which we are a party is resolved adversely, we may be subject to an unfavorable judgment that may not be reversed upon appeal. The terms of such a settlement or judgment may require us to change or cease some or all of our operations or pay substantial amounts to the other parties, including statutory damages to large numbers of copyright holders. For certain jurisdictions, including the United States, statutory damages for copyright liability are calculated on a per work basis, which may result in substantial damages, particularly given the large volumes of data required to train AI models. In addition, we may have to seek a license to continue practices found to be in violation of a third party's rights, which may not be available on reasonable terms, or at all, and may significantly increase our operating costs and expenses. As a result, we may also be required to develop alternative non-infringing technology or practices, or branding or discontinue the practices or branding. The development of alternative non-infringing technology, branding or practices could require significant effort and expense, could result in less effective technology, branding or practices or otherwise negatively affect the user experience, or may not be feasible. We have experienced unfavorable outcomes in such disputes and litigation in the past, and our business, financial condition, and results of operations could be materially and adversely affected as a result of an unfavorable resolution of the disputes and litigation referred to above."
+  },
+  {
+   "id": 387,
+   "text": "Risks Related to Ownership of Our Class A Common Stock"
+  },
+  {
+   "id": 388,
+   "text": "The trading price of our Class A common stock has been and will likely continue to be volatile."
+  },
+  {
+   "id": 389,
+   "text": "The trading price of our Class A common stock has been, and is likely to continue to be, volatile. Since shares of our Class A common stock were sold in our initial public offering in May 2012 at a price of $38.00 per share, our stock price has ranged from $17.55 to $796.25 through December 31, 2025. In addition to the factors discussed in this Annual Report on Form 10-K, the trading price of our Class A common stock has in the past fluctuated and may in the future fluctuate significantly in response to numerous factors, many of which are beyond our control, including:"
+  },
+  {
+   "id": 390,
+   "text": "• actual or anticipated fluctuations in our revenue and other operating results for either of our reportable segments;"
+  },
+  {
+   "id": 391,
+   "text": "• the financial projections we may provide to the public, any changes in these projections, or our failure to meet these projections;"
+  },
+  {
+   "id": 392,
+   "text": "• actions of securities analysts who initiate or maintain coverage of us, changes in financial estimates by any securities analysts who follow our company, or our failure to meet these estimates or the expectations of investors;"
+  },
+  {
+   "id": 393,
+   "text": "• additional shares of our stock being sold into the market by us, our existing stockholders, or in connection with acquisitions, or the anticipation of such sales;"
+  },
+  {
+   "id": 394,
+   "text": "• investor sentiment with respect to our competitors, our business partners, and our industry in general;"
+  },
+  {
+   "id": 395,
+   "text": "• announcements by us or our competitors of significant products or features, technical innovations, acquisitions, strategic partnerships, joint ventures, or capital commitments;"
+  },
+  {
+   "id": 396,
+   "text": "• announcements by us or estimates by third parties of actual or anticipated changes in the size of our user base, the level of user engagement, or the effectiveness of our ad products;"
+  },
+  {
+   "id": 397,
+   "text": "46"
+  },
+  {
+   "id": 398,
+   "text": "Table of Contents"
+  },
+  {
+   "id": 399,
+   "text": "• changes in operating performance and stock market valuations of technology companies in our industry, including our developers and competitors;"
+  },
+  {
+   "id": 400,
+   "text": "• price and volume fluctuations in the overall stock market, including as a result of trends in the economy as a whole;"
+  },
+  {
+   "id": 401,
+   "text": "• the inclusion, exclusion, or deletion of our stock from any trading indices, such as the S&P 500 Index;"
+  },
+  {
+   "id": 402,
+   "text": "• media coverage of our business and financial performance;"
+  },
+  {
+   "id": 403,
+   "text": "• lawsuits threatened or filed against us, or developments in pending lawsuits;"
+  },
+  {
+   "id": 404,
+   "text": "• adverse government actions or legislative or regulatory developments relating to advertising, competition, content, privacy, or other matters, including interim or final rulings by tax, judicial, or regulatory bodies;"
+  },
+  {
+   "id": 405,
+   "text": "• trading activity in our share repurchase program; and"
+  },
+  {
+   "id": 406,
+   "text": "• other events or factors, including those resulting from war, incidents of terrorism, pandemics, and other disruptive external events, or responses to these events."
+  },
+  {
+   "id": 407,
+   "text": "In addition, the stock markets have experienced extreme price and volume fluctuations that have affected and continue to affect the market prices of equity securities of many technology companies. We are currently subject to securities litigation in connection with our platform and user data practices and the misuse of certain data by a developer that shared such data with third parties in violation of our terms and policies; the disclosure of our earnings results for the second quarter of 2018; a former employee's allegations and release of internal company documents beginning in September 2021; and the disclosure of our earnings results for the fourth quarter of 2021. We may experience more such litigation following future periods of volatility. Any securities litigation could subject us to substantial costs, divert resources and the attention of management from our business, and adversely affect our business."
+  },
+  {
+   "id": 408,
+   "text": "The dual class structure of our common stock has the effect of concentrating voting control with our CEO and certain other holders of our Class B common stock; this will limit or preclude your ability to influence corporate matters."
+  },
+  {
+   "id": 409,
+   "text": "Our Class B common stock has ten votes per share and our Class A common stock has one vote per share. Holders of our Class B common stock, including our founder, Chairman, and CEO, together hold a majority of the combined voting power of our outstanding capital stock, and therefore are able to control the outcome of all matters submitted to our stockholders for approval so long as the shares of Class B common stock represent at least 9.1% of all outstanding shares of our Class A and Class B common stock. This concentrated control will limit or preclude your ability to influence corporate matters for the foreseeable future."
+  },
+  {
+   "id": 410,
+   "text": "Transfers by holders of Class B common stock will generally result in those shares converting to Class A common stock, subject to limited exceptions, such as certain transfers effected for estate planning or charitable purposes. The conversion of Class B common stock to Class A common stock will have the effect, over time, of increasing the relative voting power of those holders of Class B common stock who retain their shares in the long term. If, for example, Mr. Zuckerberg retains a significant portion of his holdings of Class B common stock for an extended period of time, he could, in the future, continue to control a majority of the combined voting power of our outstanding capital stock."
+  },
+  {
+   "id": 411,
+   "text": "Our status as a \"controlled company\" could make our Class A common stock less attractive to some investors or otherwise harm our stock price."
+  },
+  {
+   "id": 412,
+   "text": "Because we qualify as a \"controlled company\" under the corporate governance rules for Nasdaq-listed companies, we are not required to have a majority of our board of directors be independent, nor are we required to have a compensation committee or an independent nominating function. In the future we could elect not to have a majority of our board of directors be independent or not to have a compensation committee or an independent nominating function. Accordingly, should the interests of our controlling stockholder differ from those of other stockholders, the other stockholders may not have the same protections afforded to stockholders of companies that are subject to all of the corporate governance rules for Nasdaq-listed companies. Our status as a controlled company could make our Class A common stock less attractive to some investors or otherwise harm our stock price."
+  },
+  {
+   "id": 413,
+   "text": "47"
+  },
+  {
+   "id": 414,
+   "text": "Table of Contents"
+  },
+  {
+   "id": 415,
+   "text": "Delaware law and provisions in our certificate of incorporation and bylaws could make a merger, tender offer, or proxy contest difficult, thereby depressing the trading price of our Class A common stock."
+  },
+  {
+   "id": 416,
+   "text": "Our status as a Delaware corporation and the anti-takeover provisions of the Delaware General Corporation Law may discourage, delay, or prevent a change in control by prohibiting us from engaging in a business combination with an interested stockholder for a period of three years after the person becomes an interested stockholder, even if a change of control would be beneficial to our existing stockholders. In addition, our current certificate of incorporation and bylaws contain provisions that may make the acquisition of our company more difficult, including the following:"
+  },
+  {
+   "id": 417,
+   "text": "• until the first date on which the outstanding shares of our Class B common stock represent less than 35% of the combined voting power of our common stock, any transaction that would result in a change in control of our company requires the approval of a majority of our outstanding Class B common stock voting as a separate class;"
+  },
+  {
+   "id": 418,
+   "text": "• we currently have a dual class common stock structure, which provides Mr. Zuckerberg with the ability to control the outcome of matters requiring stockholder approval, even if he owns significantly less than a majority of the shares of our outstanding Class A and Class B common stock;"
+  },
+  {
+   "id": 419,
+   "text": "• when the outstanding shares of our Class B common stock represent less than a majority of the combined voting power of common stock, certain amendments to our certificate of incorporation or bylaws will require the approval of two-thirds of the combined vote of our then-outstanding shares of Class A and Class B common stock;"
+  },
+  {
+   "id": 420,
+   "text": "• when the outstanding shares of our Class B common stock represent less than a majority of the combined voting power of our common stock, vacancies on our board of directors will be able to be filled only by our board of directors and not by stockholders;"
+  },
+  {
+   "id": 421,
+   "text": "• when the outstanding shares of our Class B common stock represent less than a majority of the combined voting power of our common stock, our board of directors will be classified into three classes of directors with staggered three-year terms and directors will only be able to be removed from office for cause;"
+  },
+  {
+   "id": 422,
+   "text": "• when the outstanding shares of our Class B common stock represent less than a majority of the combined voting power of our common stock, our stockholders will only be able to take action at a meeting of stockholders and not by written consent;"
+  },
+  {
+   "id": 423,
+   "text": "• only our board chair, our chief executive officer, our president, or a majority of our board of directors are authorized to call a special meeting of stockholders;"
+  },
+  {
+   "id": 424,
+   "text": "• advance notice procedures apply for stockholders to nominate candidates for election as directors or to bring matters before an annual meeting of stockholders;"
+  },
+  {
+   "id": 425,
+   "text": "• our certificate of incorporation authorizes undesignated preferred stock, the terms of which may be established, and shares of which may be issued, without stockholder approval; and"
+  },
+  {
+   "id": 426,
+   "text": "• certain litigation against us can only be brought in Delaware."
+  }
+ ],
+ "anchors": [
+  {
+   "phrase": "consider carefully the risks and uncertainties described below",
+   "paragraph_id": 1,
+   "sentence": "You should consider carefully the risks and uncertainties described below, in addition to other information contained in this Annual Report on Form 10-K, including our consolidated financial statements and related notes."
+  },
+  {
+   "phrase": "brought in delaware",
+   "paragraph_id": 426,
+   "sentence": "• certain litigation against us can only be brought in Delaware."
+  }
+ ]
+}

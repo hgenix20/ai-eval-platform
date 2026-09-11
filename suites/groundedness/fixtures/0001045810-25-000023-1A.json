@@ -1,0 +1,356 @@
+{
+ "accession": "0001045810-25-000023",
+ "company": "NVIDIA CORP",
+ "form": "10-K",
+ "item": "1A",
+ "filing_date": "2025-02-26",
+ "document_url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581025000023/nvda-20250126.htm",
+ "golden_id": "nvda-0001045810-25-000023-1A",
+ "window_paragraphs": 40,
+ "paragraphs": [
+  {
+   "id": 0,
+   "text": "Item 1A. Risk Factors"
+  },
+  {
+   "id": 1,
+   "text": "The following risk factors should be considered in addition to the other information in this Annual Report on Form 10-K. The following risks could harm our business, financial condition, results of operations or reputation, which could cause our stock"
+  },
+  {
+   "id": 2,
+   "text": "13"
+  },
+  {
+   "id": 3,
+   "text": "Table of Contents"
+  },
+  {
+   "id": 4,
+   "text": "price to decline. Additional risks, trends and uncertainties not presently known to us or that we currently believe are immaterial may also harm our business, financial condition, results of operations or reputation."
+  },
+  {
+   "id": 5,
+   "text": "Risk Factors Summary"
+  },
+  {
+   "id": 6,
+   "text": "Risks Related to Our Industry and Markets"
+  },
+  {
+   "id": 7,
+   "text": "• Failure to meet the evolving needs of our industry and markets may adversely impact our financial results."
+  },
+  {
+   "id": 8,
+   "text": "• Competition could adversely impact our market share and financial results."
+  },
+  {
+   "id": 9,
+   "text": "Risks Related to Demand, Supply, and Manufacturing"
+  },
+  {
+   "id": 10,
+   "text": "• Long manufacturing lead times and uncertain supply and component availability, combined with a failure to estimate customer demand accurately has led and could lead to mismatches between supply and demand."
+  },
+  {
+   "id": 11,
+   "text": "• Dependency on third-party suppliers and their technology to manufacture, assemble, test, or package our products reduces our control over product quantity and quality, manufacturing yields, and product delivery schedules and could harm our business."
+  },
+  {
+   "id": 12,
+   "text": "• Defects in our products have caused and could cause us to incur significant expenses to remediate and could damage our business."
+  },
+  {
+   "id": 13,
+   "text": "Risks Related to Our Global Operating Business"
+  },
+  {
+   "id": 14,
+   "text": "• Adverse economic conditions may harm our business."
+  },
+  {
+   "id": 15,
+   "text": "• International sales and operations are a significant part of our business, which exposes us to risks that could harm our business."
+  },
+  {
+   "id": 16,
+   "text": "• Product, system security and data breaches and cyber-attacks could disrupt our operations and adversely affect our financial condition, stock price and reputation."
+  },
+  {
+   "id": 17,
+   "text": "• Business disruptions could harm our operations and financial results."
+  },
+  {
+   "id": 18,
+   "text": "• Climate change may have a long-term impact on our business."
+  },
+  {
+   "id": 19,
+   "text": "• We may not be able to realize the potential benefits of business investments or acquisitions, nor successfully integrate acquisition targets."
+  },
+  {
+   "id": 20,
+   "text": "• A significant amount of our revenue stems from a limited number of partners and distributors and we have a concentration of sales to customers, and our revenue could be adversely affected if we lose or are prevented from selling to any of these end customers."
+  },
+  {
+   "id": 21,
+   "text": "• We may be unable to attract, retain, and motivate our executives and key employees."
+  },
+  {
+   "id": 22,
+   "text": "• Modification or interruption of our business processes and information systems may disrupt our business and internal controls."
+  },
+  {
+   "id": 23,
+   "text": "• Our operating results have in the past fluctuated and may in the future fluctuate, and if our operating results are below the expectations of securities analysts or investors, our stock price could decline."
+  },
+  {
+   "id": 24,
+   "text": "Risks Related to Regulatory, Legal, Our Stock, and Other Matters"
+  },
+  {
+   "id": 25,
+   "text": "• We are subject to complex laws, rules, regulations, and political and other actions, including restrictions on the export of our products, which may adversely impact our business."
+  },
+  {
+   "id": 26,
+   "text": "• Increased scrutiny regarding our corporate sustainability practices could result in financial, reputational, or operational harm and liability."
+  },
+  {
+   "id": 27,
+   "text": "• Issues relating to the responsible use of our technologies, including AI, may result in reputational or financial harm and liability."
+  },
+  {
+   "id": 28,
+   "text": "• Adequately protecting our IP rights could be costly, and our ability to compete could be harmed if we are unsuccessful or if we are prohibited from making or selling our products."
+  },
+  {
+   "id": 29,
+   "text": "• We are subject to stringent and changing data privacy and security laws, rules, regulations, and other obligations. These areas could damage our reputation, deter customers, affect product design, or result in legal or regulatory proceedings and liability."
+  },
+  {
+   "id": 30,
+   "text": "14"
+  },
+  {
+   "id": 31,
+   "text": "Table of Contents"
+  },
+  {
+   "id": 32,
+   "text": "• Our operating results may be adversely impacted by additional tax liabilities, higher than expected tax rates, changes in tax laws, and other tax-related factors."
+  },
+  {
+   "id": 33,
+   "text": "• Our business is exposed to the burden and risks associated with litigation, investigations, and regulatory proceedings."
+  },
+  {
+   "id": 34,
+   "text": "• Delaware law, provisions in our governing documents and our agreement with Microsoft could delay or prevent a change in control."
+  },
+  {
+   "id": 35,
+   "text": "Risk Factors"
+  },
+  {
+   "id": 36,
+   "text": "Risks Related to Our Industry and Markets"
+  },
+  {
+   "id": 37,
+   "text": "Failure to meet the evolving needs of our industry and markets may adversely impact our financial results."
+  },
+  {
+   "id": 38,
+   "text": "Our accelerated computing platforms experience rapid changes in technology, customer requirements, competitive products, and industry standards."
+  },
+  {
+   "id": 39,
+   "text": "Our success depends on our ability to:"
+  },
+  {
+   "id": 40,
+   "text": "• timely identify industry changes, adapt our strategies, and develop new or enhance and maintain existing products and technologies that meet the evolving needs of our markets, including addressing unexpected shifts in industry standards or disruptive technological innovations that could render our products incompatible with those developed by other companies;"
+  },
+  {
+   "id": 41,
+   "text": "• develop or acquire new products and technologies through investments in research and development;"
+  },
+  {
+   "id": 220,
+   "text": "Table of Contents"
+  },
+  {
+   "id": 221,
+   "text": "Following these 2022 export controls, we transitioned some operations, including certain testing, validation, and supply and distribution operations out of China and Hong Kong. Any future transitions could be costly and time consuming, and adversely affect our research and development and supply and distribution operations, as well as our revenue, during any such transition period. We expanded our Data Center product portfolio to offer new solutions, including those for which the USG does not require a license or advance notice before each shipment. To the extent that a customer requires products covered by the licensing requirements, we may seek a license for the customer. However, the licensing process is time-consuming. We have no assurance that the USG will grant such a license or that the USG will act on the license application in a timely manner or at all. Even if a license is approved, it may impose burdensome conditions that we or our customer or end users cannot or decide not to accept. The USG evaluates license requests in a closed process that does not have clear standards or an opportunity for review. For example, the Notified Advanced Computing, or “NAC,” process has not resulted in approvals for exports of products to customers in China. The license process for exports to D1 and D4 countries has been time-consuming and resulted in license conditions that are onerous, even for small-sized systems that are not able to train frontier AI models. The requirements have a disproportionate impact on NVIDIA and already have disadvantaged and may in the future disadvantage NVIDIA against certain of our competitors who sell products that are not subject to the new restrictions or may be able to acquire licenses for their products."
+  },
+  {
+   "id": 222,
+   "text": "Our competitive position has been harmed by the existing export controls, and our competitive position and future results may be further harmed, over the long term, if there are further changes in the USG’s export controls, including further expansion of the geographic, customer, or product scope of the controls, if customers purchase product from competitors, if customers develop their own internal solution, if we are unable to provide contractual warranty or other extended service obligations, if the USG does not grant licenses in a timely manner or denies licenses to significant customers or if we incur significant transition costs. Even if the USG grants any requested licenses, the licenses may be temporary or impose burdensome conditions that we or our customers or end users cannot or choose not to fulfill. The licensing requirements may benefit certain of our competitors, as the licensing process will make our pre-sale and post-sale technical support efforts more cumbersome and less certain and encourage customers in China to pursue alternatives to our products, including semiconductor suppliers based in China, Europe, and Israel."
+  },
+  {
+   "id": 223,
+   "text": "Given the increasing strategic importance of AI and rising geopolitical tensions, the USG has changed and may again change the export control rules at any time and further subject a wider range of our products to export restrictions and licensing requirements, negatively impacting our business and financial results. In the event of such change, we may be unable to sell our inventory of such products and may be unable to develop replacement products not subject to the licensing requirements, effectively excluding us from all or part of the China market, as well as other impacted markets, including the Middle East and countries designated “Tier 2” by the AI Diffusion IFR. For example, the USG has already imposed conditions to limit the ability of foreign firms to create and offer as a service large-scale GPU clusters, for example by imposing license conditions on the use of products to be exported to certain countries, and may impose additional conditions such as requiring chip tracking and throttling mechanisms that could disable or impair GPUs if certain events, including unauthorized system configuration, use, or location, are detected. The USG has already imposed export controls restricting certain gaming GPUs, and if the USG expands such controls to restrict additional gaming products, it may disrupt a significant portion of our supply and distribution chain and negatively impact sales of such products to markets outside China, including the U.S. and Europe. In addition, as the performance of the gaming GPUs increases over time, export controls may have a greater impact on our ability to compete in markets subject to those controls. Export controls may disrupt our supply and distribution chain for a substantial portion of our products, which are warehoused in and distributed from Hong Kong. Export controls restricting our ability to sell data center GPUs may also negatively impact demand for our networking products used in servers containing our GPUs. The USG may also impose export controls on our networking products, such as high-speed network interconnects, to limit the ability of downstream parties to create large clusters for frontier model training. Any new control that impacts a wider range of our products would likely have a disproportionate impact on NVIDIA and may disadvantage us against certain of our competitors that sell chips that are outside the scope of such control. Excessive or shifting export controls have already and may in the future encourage customers outside China and other impacted regions to “design-out” certain U.S. semiconductors from their products to reduce the compliance burden and risk, and to ensure that they are able to serve markets worldwide. Excessive or shifting export controls have already encouraged and may in the future encourage overseas governments to request that our customers purchase from our competitors rather than NVIDIA or other U.S. firms, harming our business, market position, and financial results. As a result, excessive or shifting export controls may negatively impact demand for our products and services not only in China, but also in other markets, such as Europe, Latin America, and Southeast Asia. Excessive or shifting export controls increase the risk of investing in U.S. advanced semiconductor products, because by the time a new product is ready for market, it may be subject to new unilateral export controls restricting its sale. At the same time, such controls may increase investment in foreign competitors, which would be less likely to be restricted by U.S. controls. If additional products are subject to worldwide licensing requirements, we may incur significant inventory provisions and excess purchase obligation charges."
+  },
+  {
+   "id": 224,
+   "text": "In addition to export controls, the USG may impose restrictions on the import and sale of products that incorporate technologies developed or manufactured in whole or in part in China. For example, the USG is considering restrictions on the import and sale of certain automotive products in the United States, which if adopted and interpreted broadly, could impact our ability to develop and supply solutions for our automotive customers."
+  },
+  {
+   "id": 225,
+   "text": "28"
+  },
+  {
+   "id": 226,
+   "text": "Table of Contents"
+  },
+  {
+   "id": 227,
+   "text": "Additionally, restrictions imposed by the Chinese government on the duration of gaming activities and access to games may adversely affect our Gaming revenue, and increased oversight of digital platform companies may adversely affect our Data Center revenue. The Chinese government may also encourage customers to purchase from our China-based competitors, or impose restrictions on the sale to certain customers of our products, or any products containing components made by our partners and suppliers. For example, the Chinese government announced restrictions relating to certain sales of products containing certain products made by Micron, a supplier of ours. As another example, an agency of the Chinese government announced an Action Plan that endorses new standards regarding the compute performance per watt and per memory bandwidth of accelerators used in new and renovated data centers in China. If the Chinese government modifies or implements the Action Plan in a way that effectively prevents us from being able to design products to meet the new standard, this may restrict the ability of customers to use some of our data center products and may have a material and adverse impact on our business, operating results and financial condition. Further restrictions on our products or the products of our suppliers could negatively impact our business and financial results."
+  },
+  {
+   "id": 228,
+   "text": "Finally, our business depends on our ability to receive consistent and reliable supply from our overseas partners, especially in Taiwan and South Korea. Any new restrictions that negatively impact our ability to receive supply of components, parts, or services from Taiwan and South Korea, would negatively impact our business and financial results."
+  },
+  {
+   "id": 229,
+   "text": "Increased scrutiny from shareholders, regulators and others regarding our corporate sustainability practices could result in additional costs or risks and adversely impact our reputation and willingness of customers and suppliers to do business with us."
+  },
+  {
+   "id": 230,
+   "text": "Certain shareholder advocacy groups, investment funds, shareholders and other market participants, customers and government regulators have focused on corporate sustainability practices and disclosures, including those associated with climate change and human rights. Stakeholders may not be satisfied with our corporate sustainability practices and goals or the speed of their adoption. Further, there are state-level initiatives in the U.S. that may differ from other regulatory requirements or our various stakeholders’ expectations. Additionally, our corporate sustainability practices, oversight of our practices or disclosure controls may not meet evolving shareholder, regulator or other industry stakeholder expectations, or we may fail to meet corporate sustainability disclosure or reporting standards or legal requirements. We could also incur additional costs and require additional resources to monitor, report, and comply with various corporate sustainability practices and legal requirements, choose not to conduct business with potential customers and suppliers, or discontinue or not expand business with existing customers and suppliers due to our policies. These factors and increased disclosure may negatively harm our brand, reputation and business activities or expose us to liability."
+  },
+  {
+   "id": 231,
+   "text": "Issues relating to the responsible use of our technologies, including AI in our offerings, may result in reputational or financial harm and liability."
+  },
+  {
+   "id": 232,
+   "text": "Concerns relating to the responsible use of new and evolving technologies, such as AI, in our products and services may result in reputational or financial harm and liability and may cause us to incur costs to resolve such issues. We are increasingly building AI capabilities and protections into many of our products and services, and we also offer stand-alone AI applications. AI poses emerging legal, social, and ethical issues and presents risks and challenges that could affect its adoption, and therefore our business. If we enable or offer solutions that draw controversy due to their perceived or actual impact on society, such as AI solutions that have unintended consequences, infringe copyright or rights of publicity, or are controversial because of their impact on human rights, privacy, employment or other social, economic or political issues, or if we are unable to develop effective internal policies and frameworks relating to the responsible development and use of AI models and systems offered through our sales channels, we may experience brand or reputational harm, competitive harm or legal liability. Leveraging AI capabilities to potentially improve our internal functions and operations may present further risks, costs, and challenges. Complying with multiple regulations from different jurisdictions related to AI may further increase our cost of doing business, may change the way that we operate in certain jurisdictions, and may impede our ability to offer certain products and services in certain jurisdictions if we are unable to comply with regulations. Compliance with existing and proposed government regulation of AI, including in jurisdictions such as the European Union, may further increase the cost of related research and development, and create additional reporting and/or transparency requirements. For example, regulation adopted in response to the European Union Code of Practice for General Purpose Artificial Intelligence could require us to notify the European Commission regarding details of some of our Trustworthy AI processes related to our risk framework. Furthermore, changes in AI-related regulation could disproportionately impact and disadvantage us and require us to change our business practices, which may negatively impact our financial results. Our failure to adequately address concerns and regulations relating to the responsible use of AI by us or others could undermine public confidence in AI and slow adoption of AI in our products and services or cause reputational or financial harm."
+  },
+  {
+   "id": 233,
+   "text": "Actions to adequately protect our IP rights could result in substantial costs to us and our ability to compete could be harmed if we are unsuccessful or if we are prohibited from making or selling our products."
+  },
+  {
+   "id": 234,
+   "text": "From time to time, we are involved in lawsuits or other legal proceedings alleging patent infringement or other IP rights violations by us, our employees or parties that we have agreed to indemnify. An unfavorable ruling could include significant damages, invalidation of one or more patents, indemnification of third parties, payment of lost profits, or injunctive relief. Claims that our products or processes infringe the IP rights of others, regardless of their merit, could"
+  },
+  {
+   "id": 235,
+   "text": "29"
+  },
+  {
+   "id": 236,
+   "text": "Table of Contents"
+  },
+  {
+   "id": 237,
+   "text": "cause us to incur significant costs to respond to, defend, and resolve such claims, and they may also divert the efforts and attention of management and technical personnel."
+  },
+  {
+   "id": 238,
+   "text": "We may commence legal proceedings to protect our IP rights, which may increase our operating expenses. We could be subject to countersuits as a result. If infringement claims are made against us or our products are found to infringe a third party’s IP, we or one of our indemnitees may have to seek a license to the third party’s IP rights. If we or one of our indemnitees is unable to obtain such a license on acceptable terms or at all, we could be subject to substantial liabilities or have to suspend or discontinue the manufacture and sale of one or more of our products. We may also have to make royalty or other payments or cross license our technology. If these arrangements are not concluded on commercially reasonable terms, our business could be negatively impacted. Furthermore, the indemnification of a customer or other indemnitee may increase our operating expenses and negatively impact our operating results."
+  },
+  {
+   "id": 239,
+   "text": "We rely on patents, trademarks, trade secrets, employee and third-party nondisclosure agreements, licensing arrangements and the laws of the countries in which we operate to protect our IP. Foreign laws may not protect our products or IP rights to the same extent as United States law. This makes the possibility of piracy of our technology and products more likely. The theft or unauthorized use or publication of our trade secrets and other confidential information could harm our competitive position and reduce acceptance of our products; as a result, the value of our investment in research and development, product development and marketing could be reduced. We also may face risks to our IP if our employees are hired by competitors. We continuously assess whether and where to seek formal protection for existing and new innovations and technologies but cannot be certain whether our applications for such protections will be approved, and, if approved, whether they will be enforceable."
+  },
+  {
+   "id": 240,
+   "text": "We are subject to stringent and changing data privacy and security laws, rules, regulations and other obligations. These areas could damage our reputation, deter current and potential customers, affect our product design, or result in legal or regulatory proceedings and liability."
+  },
+  {
+   "id": 241,
+   "text": "We process sensitive, confidential or personal data or information that is subject to privacy and security laws, regulations, industry standards, external and internal policies, contracts and other obligations that govern the processing of such data by us and on our behalf. Concerns about our practices or the ultimate use of our products and services with regard to the collection, use, retention, security or disclosure of personal information or other privacy-related matters, including for use in AI, even if unfounded, could damage our reputation and adversely affect our operating results. The theft, loss or misuse of personal data in our possession or by one of our partners could result in damage to our reputation, regulatory proceedings, disruption of our business activities or increased security or remediation costs and costs related to defending legal claims."
+  },
+  {
+   "id": 242,
+   "text": "In the United States, federal, state and local authorities have enacted numerous data privacy and security laws, including for data breach notification, personal data privacy and consumer protection. Numerous U.S. states have enacted comprehensive privacy laws that impose certain obligations on covered businesses, including providing specific disclosures in privacy notices and affording residents with certain rights concerning their personal data. As applicable, such rights may include the right to access, correct, or delete certain personal data, and to opt-out of certain data processing activities, such as targeted advertising, profiling and automated decision-making. The exercise of these rights may impact our business and ability to provide our products and services. Certain states also impose stricter requirements for processing certain personal data, including sensitive information, such as conducting data privacy impact assessments. These state laws allow for statutory fines for noncompliance. For example, the California Consumer Privacy Act of 2018, as amended by the California Privacy Rights Act of 2020, or CPRA, or collectively the CCPA, gives California residents the right to access, delete and opt-out of certain sharing of their personal information, and to receive detailed information about how it is used and shared. The CCPA provides for substantial fines for intentional violation and the law created a private right of action for certain data breaches. Similar laws are being considered in several other states, as well as at the federal and local levels. Additionally, several states and localities have enacted measures related to the use of AI and machine learning in products and services. If we become subject to additional data privacy laws, the risk of enforcement action against us could increase."
+  },
+  {
+   "id": 243,
+   "text": "Worldwide regulatory authorities are also considering and have approved various legislative proposals concerning data protection. The European Union adopted the General Data Protection Regulation, or GDPR, and the United Kingdom similarly adopted the U.K. GDPR, governing the strict handling of personal data of persons within the European Economic Area, or EEA, and the United Kingdom, respectively, including its use and protection and the ability of persons whose data is stored to access, correct, and delete such data about themselves. If we are found not to comply, we could be subject to penalties of up to €20 million or 4% of worldwide revenue, whichever is greater, and classes of individuals or consumer protection organizations may initiate litigation related to our processing of their personal data. Furthermore, the EU AI Act and similar legislation could impose onerous obligations that may disproportionately impact and disadvantage us and require us to change our business practices. Additionally, Europe’s Network and Information Security Directive, or NIS2, regulates resilience and incident response capabilities of entities operating in a number of sectors, including the digital infrastructure sector. Non-compliance with NIS2 may lead to administrative fines of a maximum of 10 million Euros or up to 2% of the total worldwide revenue of the preceding fiscal year."
+  },
+  {
+   "id": 244,
+   "text": "In the ordinary course of business, we transfer personal data from Europe, China, and other jurisdictions to the United States or other countries. Certain jurisdictions have enacted data localization laws and cross-border personal data"
+  },
+  {
+   "id": 245,
+   "text": "30"
+  },
+  {
+   "id": 246,
+   "text": "Table of Contents"
+  },
+  {
+   "id": 247,
+   "text": "transfer laws. For example, the GDPR governs the transfer of personal data to countries outside of the EEA. The European Commission released a set of “Standard Contractual Clauses” designed for entities to validly transfer personal data out of the EEA to jurisdictions that the European Commission has not found to provide an adequate level of protection, including the United States. Additionally, the U.K.’s International Data Transfer Agreement / Addendum, as well as the EU-U.S. Data Privacy Framework and the U.K. extension thereto (which allows for transfers to relevant U.S.-based organizations who self-certify compliance and participate in the Framework) are mechanisms that may be used to transfer personal data from the EEA and U.K. to the United States. However, these mechanisms are subject to legal challenges, and there is no assurance that we can satisfy or rely on these measures to lawfully transfer personal data to the United States. Other jurisdictions have enacted or are considering similar cross-border personal data transfer laws and local personal data residency laws, any of which would increase the cost and complexity of doing business and could result in fines from regulators. For example, China’s law imposes various requirements relating to data processing and data localization. Data broadly defined as important under China’s law, including personal data, may not be transferable outside of China without prior assessment and approval by the Cyberspace Administration of China, or CAC. Compliance with these requirements, including CAC assessments and any deemed failures of such assessments, could cause us to incur liability, prevent us from using data collected in China or impact our ability to transfer data outside of China. The inability to import personal data to the United States could significantly and negatively impact our business operations, limit our ability to collaborate with parties that are subject to European, China and other data privacy and security laws, or require us to increase our personal data processing capabilities in Europe and/or elsewhere at significant expense. Some European regulators have prevented companies from transferring personal data out of Europe for allegedly violating the GDPR’s cross-border data transfer limitations, which could negatively impact our business."
+  },
+  {
+   "id": 248,
+   "text": "We are also bound by certain contractual obligations related to data privacy and security, and our efforts to comply with such obligations may not be successful or may be claimed to be non-compliant. For example, certain privacy laws, such as the GDPR and the CCPA, require our customers to impose specific contractual restrictions on their service providers. We sometimes host personal data in collaboration with our customers, and if a breach exposed or altered that personal data, it could harm those customer relationships and subject us to litigation, regulatory action, or fines. We publish privacy policies, marketing materials and other statements, such as compliance with certain certifications or self-regulatory principles, regarding data privacy and security. Regulators in the U.S. are increasingly scrutinizing these statements, and if these policies, materials or statements are found to be deficient, lacking in transparency, deceptive, unfair or misrepresentative of our practices, we may be subject to investigation, enforcement actions by regulators or other adverse consequences."
+  },
+  {
+   "id": 249,
+   "text": "Data protection laws around the world are quickly changing and may be interpreted and applied in an increasingly stringent fashion and in a manner that is inconsistent with our data practices. These obligations may affect our product design and necessitate changes to our information technologies, systems and practices and to those of any third parties that process personal data on our behalf. Despite our efforts, we or third parties we rely upon may fail to comply with such obligations. If we fail, or are perceived to have failed, to address or comply with data privacy and security obligations, we could face significant consequences, including but not limited to, government enforcement actions, litigation, additional reporting requirements and/or oversight, bans on processing personal data, and orders to destroy or not use personal data. Any of these events could have a material adverse effect on our reputation, business, or financial condition."
+  },
+  {
+   "id": 250,
+   "text": "We may have exposure to additional tax liabilities and our operating results may be adversely impacted by changes in tax laws, higher than expected tax rates and other tax-related factors."
+  },
+  {
+   "id": 251,
+   "text": "We are subject to complex income tax laws and regulations, as well as non-income-based taxes, in various jurisdictions. Significant judgment is required in determining our worldwide provision for income taxes and other tax liabilities. We are regularly under audit by tax authorities in different jurisdictions. Although we believe our tax estimates are reasonable, any adverse outcome could increase our worldwide effective tax rate, increase the amount of non-income taxes imposed on our business, and harm our financial position, results of operations, net income, and cash flows."
+  },
+  {
+   "id": 252,
+   "text": "Further, changes in tax laws or their interpretation by tax authorities in the U.S. or foreign jurisdictions could increase our future tax liability or cause other adverse tax impacts, which may materially impact our results of operations, or the way we conduct our business. Most of our income is taxable in the U.S., with a significant portion qualifying for preferential treatment as foreign-derived intangible income, or FDII. If U.S. tax rates increase or the FDII deduction is reduced, our provision for income taxes, results of operations, net income, and cash flows would be adversely affected. In addition, our tax obligations and effective tax rate in the jurisdictions in which we conduct business could increase as a result of international tax developments, including the implementation of the Two-Pillar framework led by the Organization for Economic Cooperation and Development, or OECD, which involves the reallocation of taxing rights in respect of certain multinational enterprises above a fixed profit margin to the jurisdictions in which they carry on business (referred to as Pillar One), and imposes a minimum effective corporate tax rate (referred to as Pillar Two). A number of countries in which we conduct business have enacted, or are in the process of enacting, elements of the Pillar Two rules. Any such tax laws, or changes in any such tax laws may increase tax uncertainty and compliance costs and adversely affect our provision for income taxes, cash tax payments, results of operations, and financial condition."
+  },
+  {
+   "id": 253,
+   "text": "Our future effective tax rate may also be affected by a variety of factors, including changes in our business or statutory rates, the mix of earnings in countries with differing statutory tax rates, available tax incentives, credits and deductions,"
+  },
+  {
+   "id": 254,
+   "text": "31"
+  },
+  {
+   "id": 255,
+   "text": "Table of Contents"
+  },
+  {
+   "id": 256,
+   "text": "the expiration of statutes of limitations, changes in accounting principles, adjustments to income taxes upon finalization of tax returns, increases in expenses not deductible for tax purposes, the estimates of our deferred tax assets and liabilities and deferred tax asset valuation allowances, changing interpretation of existing laws or regulations, the impact of accounting for business combinations, as well as changes in the domestic or international organization of our business and structure. Furthermore, the tax effects of accounting for stock-based compensation and volatility in our stock price may significantly impact our effective tax rate in the period in which they occur. A decline in our stock price may result in reduced future tax benefits from stock-based compensation, increase our effective tax rate, and adversely affect our financial results."
+  },
+  {
+   "id": 257,
+   "text": "Our business is exposed to the burden and risks associated with litigation, investigations and regulatory proceedings."
+  },
+  {
+   "id": 258,
+   "text": "We currently and will likely continue to face legal, administrative and regulatory proceedings, claims, demands and/or investigations involving shareholder, consumer, competition and/or other issues relating to our business. For example, we are defending a securities class action lawsuit from multiple shareholders asserting claims that we and certain of our officers made false and/or misleading statements related to channel inventory and the impact of cryptocurrency mining on GPU demand in 2017 and 2018. Litigation and regulatory proceedings are inherently uncertain, and adverse rulings could occur, including monetary damages or fines, or an injunction stopping us from manufacturing or selling certain products, engaging in certain business practices, or requiring other remedies, such as compulsory licensing of patents. An unfavorable outcome or settlement may result in a material adverse impact. Regardless of the outcome, litigation can be costly, time-consuming, and disruptive to our operations."
+  },
+  {
+   "id": 259,
+   "text": "Delaware law and our certificate of incorporation, bylaws and agreement with Microsoft could delay or prevent a change in control."
+  },
+  {
+   "id": 260,
+   "text": "The anti-takeover provisions of the Delaware General Corporation Law may discourage, delay, or prevent a change in control. Provisions in our certificate of incorporation and bylaws could make it more difficult for a third party to acquire a majority of our outstanding stock. These provisions include the ability of our Board of Directors to create and issue preferred stock, change the number of directors, and to make, amend or repeal our bylaws without prior shareholder approval; the inability of our shareholders to act by written consent; advance notice requirements for director nominations and shareholder proposals; and super-majority voting requirement to amend some provisions in our certificate of incorporation and bylaws. Under our agreement with Microsoft for the Xbox, if someone makes an offer to purchase at least 30% of our outstanding common stock, Microsoft may have first and last rights of refusal to purchase the stock. These provisions could delay or prevent a change in control of NVIDIA, discourage proxy contests, and make it more difficult for shareholders to elect directors of their choosing and to cause us to take other corporate actions they desire."
+  }
+ ],
+ "anchors": [
+  {
+   "phrase": "should be considered in addition to the other information",
+   "paragraph_id": 1,
+   "sentence": "The following risk factors should be considered in addition to the other information in this Annual Report on Form 10-K."
+  },
+  {
+   "phrase": "proxy contests",
+   "paragraph_id": 260,
+   "sentence": "These provisions could delay or prevent a change in control of NVIDIA, discourage proxy contests, and make it more difficult for shareholders to elect directors of their choosing and to cause us to take other corporate actions they desire."
+  }
+ ]
+}

@@ -1,0 +1,187 @@
+{
+ "accession": "0000320193-25-000079",
+ "company": "Apple Inc.",
+ "form": "10-K",
+ "item": "7",
+ "filing_date": "2025-10-31",
+ "document_url": "https://www.sec.gov/Archives/edgar/data/320193/000032019325000079/aapl-20250927.htm",
+ "golden_id": "aapl-0000320193-25-000079-7",
+ "window_paragraphs": 40,
+ "paragraphs": [
+  {
+   "id": 0,
+   "text": "Item 7. Management’s Discussion and Analysis of Financial Condition and Results of Operations"
+  },
+  {
+   "id": 1,
+   "text": "The following discussion should be read in conjunction with the consolidated financial statements and accompanying notes included in Part II, Item 8 of this Form 10-K. This Item generally discusses 2025 and 2024 items and year-to-year comparisons between 2025 and 2024. Discussions of 2023 items and year-to-year comparisons between 2024 and 2023 are not included, and can be found in “Management’s Discussion and Analysis of Financial Condition and Results of Operations” in Part II, Item 7 of the Company’s Annual Report on Form 10-K for the fiscal year ended September 28, 2024."
+  },
+  {
+   "id": 2,
+   "text": "Product, Service and Software Announcements"
+  },
+  {
+   "id": 3,
+   "text": "The Company announces new product, service and software offerings at various times during the year. Significant announcements during fiscal year 2025 included the following:"
+  },
+  {
+   "id": 4,
+   "text": "First Quarter 2025:"
+  },
+  {
+   "id": 5,
+   "text": "• MacBook Pro"
+  },
+  {
+   "id": 6,
+   "text": "• Mac mini"
+  },
+  {
+   "id": 7,
+   "text": "• iMac"
+  },
+  {
+   "id": 8,
+   "text": "• iPad mini"
+  },
+  {
+   "id": 9,
+   "text": "Second Quarter 2025:"
+  },
+  {
+   "id": 10,
+   "text": "• iPhone 16e"
+  },
+  {
+   "id": 11,
+   "text": "• iPad Air"
+  },
+  {
+   "id": 12,
+   "text": "• iPad"
+  },
+  {
+   "id": 13,
+   "text": "• MacBook Air"
+  },
+  {
+   "id": 14,
+   "text": "• Mac Studio"
+  },
+  {
+   "id": 15,
+   "text": "Third Quarter 2025:"
+  },
+  {
+   "id": 16,
+   "text": "• iOS 26, macOS Tahoe 26, iPadOS 26, watchOS 26, visionOS 26 and tvOS 26"
+  },
+  {
+   "id": 17,
+   "text": "Fourth Quarter 2025:"
+  },
+  {
+   "id": 18,
+   "text": "• iPhone 17, iPhone Air, iPhone 17 Pro and iPhone 17 Pro Max"
+  },
+  {
+   "id": 19,
+   "text": "• Apple Watch Series 11, Apple Watch SE 3 and Apple Watch Ultra 3"
+  },
+  {
+   "id": 20,
+   "text": "• AirPods Pro 3"
+  },
+  {
+   "id": 21,
+   "text": "Fiscal Period"
+  },
+  {
+   "id": 22,
+   "text": "The Company’s fiscal year is the 52- or 53-week period that ends on the last Saturday of September. An additional week is included in the first fiscal quarter every five or six years to realign the Company’s fiscal quarters with calendar quarters, which occurred in the first quarter of 2023. The Company’s fiscal years 2025 and 2024 spanned 52 weeks each, whereas fiscal year 2023 spanned 53 weeks."
+  },
+  {
+   "id": 23,
+   "text": "Macroeconomic Conditions"
+  },
+  {
+   "id": 24,
+   "text": "Macroeconomic conditions, including inflation, interest rates and currency fluctuations, have directly and indirectly impacted, and could in the future materially impact, the Company’s results of operations and financial condition."
+  },
+  {
+   "id": 25,
+   "text": "Apple Inc. | 2025 Form 10-K | 21"
+  },
+  {
+   "id": 26,
+   "text": "Tariffs and Other Measures"
+  },
+  {
+   "id": 27,
+   "text": "Beginning in the second quarter of 2025, new U.S. Tariffs were announced, including additional tariffs on imports from China, India, Japan, South Korea, Taiwan, Vietnam and the EU, among others. In response, several countries have imposed, or threatened to impose, reciprocal tariffs on imports from the U.S. and other retaliatory measures. Various modifications to the U.S. Tariffs have been announced and further changes could be made in the future, which may include additional sector-based tariffs or other measures. For example, the U.S. Department of Commerce has initiated an investigation under Section 232 of the Trade Expansion Act of 1962, as amended, into, among other things, imports of semiconductors, semiconductor manufacturing equipment, and their derivative products, including downstream products that contain semiconductors. Tariffs and other measures that are applied to the Company’s products or their components can have a material adverse impact on the Company’s business, results of operations and financial condition, including impacting the Company’s supply chain, the availability of rare earths and other raw materials and components, pricing and gross margin. The ultimate impact remains uncertain and will depend on several factors, including whether additional or incremental U.S. Tariffs or other measures are announced or imposed, to what extent other countries implement tariffs or other retaliatory measures in response, and the overall magnitude and duration of these measures. Trade and other international disputes can have an adverse impact on the overall macroeconomic environment and result in shifts and reductions in consumer spending and negative consumer sentiment for the Company’s products and services, all of which can further adversely affect the Company’s business and results of operations."
+  },
+  {
+   "id": 28,
+   "text": "Segment Operating Performance"
+  },
+  {
+   "id": 29,
+   "text": "The following table shows net sales by reportable segment for 2025, 2024 and 2023 (dollars in millions):"
+  },
+  {
+   "id": 30,
+   "text": "2025"
+  },
+  {
+   "id": 31,
+   "text": "Change"
+  },
+  {
+   "id": 32,
+   "text": "2024"
+  },
+  {
+   "id": 33,
+   "text": "Change"
+  },
+  {
+   "id": 34,
+   "text": "2023"
+  },
+  {
+   "id": 35,
+   "text": "Americas"
+  },
+  {
+   "id": 36,
+   "text": "$"
+  },
+  {
+   "id": 37,
+   "text": "178,353"
+  },
+  {
+   "id": 38,
+   "text": "7"
+  },
+  {
+   "id": 39,
+   "text": "%"
+  },
+  {
+   "id": 40,
+   "text": "$"
+  },
+  {
+   "id": 41,
+   "text": "167,045"
+  }
+ ],
+ "anchors": [
+  {
+   "phrase": "read in conjunction with the consolidated financial statements",
+   "paragraph_id": 1,
+   "sentence": "The following discussion should be read in conjunction with the consolidated financial statements and accompanying notes included in Part II, Item 8 of this Form 10-K."
+  }
+ ]
+}

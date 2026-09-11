@@ -1,0 +1,99 @@
+{
+ "accession": "0001672572-18-000012",
+ "company": "Landbay Inc",
+ "form": "10-K/A",
+ "item": "1A",
+ "filing_date": "2018-07-10",
+ "document_url": "https://www.sec.gov/Archives/edgar/data/1672572/000167257218000012/landbay20180331form10ka.htm",
+ "golden_id": "lnby-0001672572-18-000012-1A",
+ "window_paragraphs": 40,
+ "paragraphs": [
+  {
+   "id": 0,
+   "text": "Item 1A. Risk Factors"
+  },
+  {
+   "id": 1,
+   "text": "We have disclosured the risk factors which the Corporation is engaging in trading the spot silver in Canada's Market."
+  },
+  {
+   "id": 2,
+   "text": "We have disclosured the risk factors which the Corporation is engaging in trading and holding securities in US Market."
+  },
+  {
+   "id": 3,
+   "text": "The risk factors for holding and trading in whisky:"
+  },
+  {
+   "id": 4,
+   "text": "1. Policies' Risk"
+  },
+  {
+   "id": 5,
+   "text": "If some restrict policies for whisky will be issued by UK government, all whisky's price in the UK market are falling, and then loses are brought to shareholders."
+  },
+  {
+   "id": 6,
+   "text": "2. Trading platform's Risk"
+  },
+  {
+   "id": 7,
+   "text": "If the WhiskyInvestDirect.com which is the trading platform will be going bankrupcy, the corporation will lose fund."
+  },
+  {
+   "id": 8,
+   "text": "3. Custodian's Risk"
+  },
+  {
+   "id": 9,
+   "text": "If the WhiskyInvestDirect Limited which is the custodian will be going bankrupcy, the corporation will lose properties."
+  },
+  {
+   "id": 10,
+   "text": "4. Risk in Trading Process"
+  },
+  {
+   "id": 11,
+   "text": "In current market, the important trading ways are the trading by internet. There are the follow same risk factors:"
+  },
+  {
+   "id": 12,
+   "text": "(1). Because the reasons of technology and equipment, make the risk that the trading entrust functions can't be used or delayed, and the transferring functions can't be used or delayed."
+  },
+  {
+   "id": 13,
+   "text": "(2). Because relevant private information, example for trading password, shareholders' code, fund account, etc. are disclosure, and incur the risk that the investor's will is be violated."
+  },
+  {
+   "id": 14,
+   "text": "(3). In the process of all kinds entrusting trading, because the mistakes or the invalid operations of investors, make loses to the investors."
+  },
+  {
+   "id": 15,
+   "text": "(4). Because factors which can't be predicted and controlled, make the risk that system incur malfunction, equipment incur malfunction, communication incur malfunction, power cut or other outburst accident, and make that the trading can't be proceeded."
+  },
+  {
+   "id": 16,
+   "text": "5. Risk of the Force Majeure"
+  },
+  {
+   "id": 17,
+   "text": "Because earthquake, typhoon, flood, fire disaster, war, strike or other force majeure reasons, make the risk that the whisky market can't be normal to trade, or the properties are lost."
+  },
+  {
+   "id": 18,
+   "text": "4"
+  },
+  {
+   "id": 19,
+   "text": "Back to Table of Contents"
+  }
+ ],
+ "anchors": [
+  {
+   "phrase": "spot silver",
+   "paragraph_id": 1,
+   "sentence": "We have disclosured the risk factors which the Corporation is engaging in trading the spot silver in Canada's Market."
+  }
+ ]
+}
