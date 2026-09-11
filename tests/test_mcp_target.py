@@ -1,3 +1,4 @@
+import asyncio
 import json
 import sys
 from pathlib import Path
@@ -92,8 +93,49 @@ def test_messages_to_trajectory_empty_conversation():
 
 def test_target_name_and_capabilities():
     target = MCPTarget.stdio(command=sys.executable, args=[FIXTURE], model="mockllm/model")
-    assert target.name.startswith("mcp:") and FIXTURE in target.name
+    assert target.name.startswith(f"mcp:{Path(sys.executable).name}-")
     assert target.capabilities == frozenset({"agent", "mcp"})
+
+
+def test_stdio_name_is_bounded_and_stable():
+    """The fallback name has to fit in a results filename, and must not
+    change between two targets built from the same command line."""
+    first = MCPTarget.stdio(command=sys.executable, args=[FIXTURE], model="mockllm/model")
+    second = MCPTarget.stdio(command=sys.executable, args=[FIXTURE], model="mockllm/model")
+    assert first.name == second.name
+    assert len(first.name) <= 60
+    assert FIXTURE not in first.name and sys.executable not in first.name
+
+
+def test_stdio_name_differs_for_a_different_command_line():
+    first = MCPTarget.stdio(command=sys.executable, args=[FIXTURE], model="mockllm/model")
+    other = MCPTarget.stdio(command=sys.executable, args=[FIXTURE, "-x"], model="mockllm/model")
+    assert first.name != other.name
+
+
+def test_explicit_server_name_wins():
+    target = MCPTarget.stdio(
+        command=sys.executable, args=[FIXTURE], model="mockllm/model", server_name="fixture"
+    )
+    assert target.name == "mcp:fixture"
+
+
+def test_http_target_is_named_after_its_url():
+    target = MCPTarget.http(url="https://example.invalid/mcp", model="mockllm/model")
+    assert target.name == "mcp:https://example.invalid/mcp"
+
+
+def test_list_tools_rejects_being_called_inside_an_event_loop():
+    """A running loop is a caller bug, and must not be reported as an
+    unreachable server."""
+    target = MCPTarget.stdio(command=sys.executable, args=[FIXTURE], model="mockllm/model")
+
+    async def call() -> list[str]:
+        return target.list_tools()
+
+    with pytest.raises(RuntimeError, match="must be called from synchronous code") as caught:
+        asyncio.run(call())
+    assert not isinstance(caught.value, TargetUnavailable)
 
 
 def test_list_tools_reports_the_fixture_servers_tools():
@@ -215,6 +257,8 @@ def test_cli_run_mcp_stdio_builds_the_target_and_runs_the_suite(
             '{"custom_outputs": []}',
             "--max-steps",
             "3",
+            "--server-name",
+            "fixture",
             "--results",
             str(results),
         ]
@@ -223,6 +267,7 @@ def test_cli_run_mcp_stdio_builds_the_target_and_runs_the_suite(
     built = _FakeMCPTarget.built
     assert built["kind"] == "stdio" and built["command"] == sys.executable
     assert built["args"] == [FIXTURE] and built["max_steps"] == 3
+    assert built["server_name"] == "fixture"
     assert built["model_args"] == {"custom_outputs": []} and built["log_dir"] is None
     out = capsys.readouterr().out
     assert "2 tools (add, echo)" in out and "mcp_smoke: 1/1 passed" in out
@@ -254,6 +299,7 @@ def test_cli_run_mcp_url_passes_the_authorization_token(tmp_path: Path, monkeypa
     built = _FakeMCPTarget.built
     assert built["kind"] == "http" and built["url"] == "https://example.invalid/mcp"
     assert built["authorization"] == "tok" and built["log_dir"] == tmp_path / "logs"
+    assert built["server_name"] is None
     capsys.readouterr()
 
 

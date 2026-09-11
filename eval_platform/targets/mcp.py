@@ -10,19 +10,20 @@ resulting conversation into a `Trajectory` the graders already understand.
 from __future__ import annotations
 
 import asyncio
+import hashlib
 import tempfile
 from pathlib import Path
 from typing import Any
 
 from inspect_ai import Task
 from inspect_ai import eval as inspect_eval
+
+# PrerequisiteError has no public import path in Inspect 0.3.263.
 from inspect_ai._util.error import PrerequisiteError
 from inspect_ai.agent import react
 from inspect_ai.dataset import Sample
 from inspect_ai.model import ChatMessage, ChatMessageAssistant, ChatMessageTool
-from inspect_ai.tool import mcp_server_http, mcp_server_stdio, mcp_tools
-from inspect_ai.tool._mcp._types import MCPServer
-from inspect_ai.tool._tool_def import ToolDef
+from inspect_ai.tool import MCPServer, ToolDef, mcp_server_http, mcp_server_stdio, mcp_tools
 
 from eval_platform.targets.base import TargetUnavailable
 from eval_platform.types import Case, Step, Trajectory
@@ -40,6 +41,29 @@ def _server_name(server: MCPServer) -> str:
     """
     name = getattr(server, "_name", None)
     return str(name) if name else type(server).__name__
+
+
+def _stdio_name(command: str, args: list[str]) -> str:
+    """A short, stable name for a stdio server: the executable's own file
+    name, then the first 8 hex characters of the SHA-256 of the whole
+    command line.
+
+    Inspect names a stdio server after its entire command line, which on
+    Windows is routinely 150 characters of absolute paths. That name reaches
+    the target name, the trajectory, and the results filename
+    `write_summary` builds, where an unbounded string is a path-length
+    failure waiting to happen. This is bounded (the file name plus nine
+    characters), stable for a given command line, and different for
+    different ones, so two servers never collide in the results directory.
+    The hash is a naming device, not a security control.
+
+    Applied by `MCPTarget.stdio` rather than by `_server_name`, which sees
+    only an already-built `MCPServer` and has no public way to tell a stdio
+    server from an HTTP one, whose URL is short and worth keeping readable.
+    """
+    line = " ".join([command, *args])
+    digest = hashlib.sha256(line.encode("utf-8")).hexdigest()[:8]
+    return f"{Path(command).name}-{digest}"
 
 
 def messages_to_trajectory(
@@ -184,10 +208,17 @@ class MCPTarget:
         the process and speaks JSON-RPC over its stdin/stdout. Every other
         keyword goes to `__init__`.
 
+        The target's name defaults to `_stdio_name(command, args)`, which is
+        bounded and stable, rather than to Inspect's own name for the server
+        (the whole command line). Pass `server_name` to override it.
+
         Raises `TargetUnavailable` when the `mcp` package is not installed
         (`pip install -e ".[mcp]"`), since without it no MCP server can be
         reached at all.
         """
+        # get(...) or ..., not setdefault: the CLI always passes the keyword,
+        # with None meaning "no --server-name given".
+        kw["server_name"] = kw.get("server_name") or _stdio_name(command, args)
         return cls(server=_stdio_server(command, args), model=model, **kw)
 
     @classmethod
@@ -212,17 +243,29 @@ class MCPTarget:
         is the cheapest reachability check available: a server that answers
         here is one an agent can use.
 
-        Must not be called from inside a running event loop: it drives its
-        own loop through `asyncio.run`, which raises `RuntimeError` if one
-        is already running.
+        Must be called from synchronous code: it drives its own loop through
+        `asyncio.run`. A running event loop is a caller bug, not a server
+        problem, so it is detected up front and raises `RuntimeError` naming
+        the misuse; letting `asyncio.run` raise instead would send that
+        RuntimeError into the connection-failure path below and report a
+        healthy server as unreachable.
 
         Raises `TargetUnavailable` when the server cannot be reached or
         rejects the connection (process failed to start, URL unreachable,
         authorization refused). The transport raises a wide range of
         exception types through several layers, including exception groups,
-        so every non-exiting exception is treated as unreachable and the
-        original is attached as the cause.
+        so every non-exiting exception from the connection itself is treated
+        as unreachable and the original is attached as the cause.
         """
+        try:
+            asyncio.get_running_loop()
+        except RuntimeError:
+            pass  # No loop running, which is what this method needs.
+        else:
+            raise RuntimeError(
+                "MCPTarget.list_tools() must be called from synchronous code; "
+                "a running event loop was detected"
+            )
 
         async def _names() -> list[str]:
             async with self._server as session:

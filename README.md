@@ -81,9 +81,12 @@ evalplat run mcp --suite-dir suites/offline_core --mcp-url https://mcp.example.c
 
 The target's name is `mcp:<server name>` and its capabilities are
 `{"agent", "mcp"}`, so only cases whose `target_requirements` fit run against
-it. The server's tool list is read once before the suite starts, so an
-unreachable server exits 2 rather than failing every case, and those tool names
-are recorded in the summary's `meta["mcp_tools"]`. `--max-steps` caps the agent
+it. A stdio server is named after its executable plus a short hash of its
+command line (`mcp:python.exe-0cdd10e1`), keeping results filenames bounded;
+an HTTP server is named after its URL. `--server-name` overrides both. The
+server's tool list is read once before the suite starts, so an unreachable
+server exits 2 rather than failing every case, and those tool names are
+recorded in the summary's `meta["mcp_tools"]`. `--max-steps` caps the agent
 loop, and a case's own `max_steps` is bounded by it.
 
 ### Local models

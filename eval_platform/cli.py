@@ -245,7 +245,10 @@ def cmd_run_mcp(a: argparse.Namespace) -> int:
     `--mcp-args`); argparse requires exactly one of the two. `--max-steps`
     is the target's own ceiling on agent steps, which bounds each case's
     own `max_steps`. `--model-args` is a JSON object of Inspect model
-    constructor keyword arguments.
+    constructor keyword arguments. `--server-name` names the target
+    explicitly, as `mcp:<name>`; without it a stdio server is named after
+    its executable plus a hash of its command line, and an HTTP server
+    after its URL.
 
     The server is contacted once before the suite runs, through
     `list_tools()`, so an unreachable server costs one connection attempt
@@ -268,6 +271,7 @@ def cmd_run_mcp(a: argparse.Namespace) -> int:
         "max_steps": a.max_steps,
         "model_args": model_args,
         "log_dir": Path(a.log_dir) if a.log_dir else None,
+        "server_name": a.server_name,
     }
     try:
         if a.mcp_url:
@@ -402,6 +406,10 @@ def _add_run_mcp(run: argparse._SubParsersAction) -> None:
     where.add_argument("--mcp-command", help="Executable that runs a local MCP server on stdio.")
     mcp.add_argument("--mcp-args", nargs="*", help="Arguments for --mcp-command.")
     mcp.add_argument("--mcp-authorization", help="OAuth bearer token for --mcp-url.")
+    mcp.add_argument(
+        "--server-name",
+        help="Name this target mcp:<name>, instead of deriving one from the command line or URL.",
+    )
     mcp.add_argument("--model", required=True)
     mcp.add_argument(
         "--model-args",
