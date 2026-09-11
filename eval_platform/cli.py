@@ -131,6 +131,55 @@ def _model_args(a: argparse.Namespace) -> dict[str, Any] | None:
     return parsed
 
 
+def _task_args(a: argparse.Namespace) -> dict[str, Any] | None:
+    """Parse `--task-args` (a JSON object of keyword arguments for the
+    Inspect task function itself, e.g. `with_sandbox_tasks` for
+    `inspect_evals/agentdojo`) into a dict, or None if the option was not
+    given.
+
+    Raises `json.JSONDecodeError` on malformed JSON and `ValueError` when
+    the parsed JSON is not an object (e.g. a list or a scalar); the caller
+    must catch both and turn them into exit code 2 rather than let them
+    propagate as a traceback.
+    """
+    if a.task_args is None:
+        return None
+    parsed = json.loads(a.task_args)
+    if not isinstance(parsed, dict):
+        raise ValueError(f"--task-args must be a JSON object, got {type(parsed).__name__}")
+    return parsed
+
+
+class _CliOptionError(Exception):
+    """Carries a ready-to-print message for one invalid `run public` JSON
+    option (`--extra-body`, `--model-args`, `--task-args`). Raised by
+    `_parse_public_options` so `cmd_run_public` needs only one
+    `except`/`return 2` for all three, instead of one pair per option."""
+
+
+def _parse_public_options(
+    a: argparse.Namespace,
+) -> tuple[dict[str, Any] | None, dict[str, Any] | None, dict[str, Any] | None]:
+    """Parse `--extra-body`/`--temperature`/`--max-tokens` into `generate`,
+    `--model-args` into `model_args`, and `--task-args` into `task_args`,
+    returning all three. Raises `_CliOptionError` with a message naming the
+    offending option on the first parse failure.
+    """
+    try:
+        generate = _generate_config(a)
+    except json.JSONDecodeError as e:
+        raise _CliOptionError(f"invalid --extra-body JSON: {e}") from e
+    try:
+        model_args = _model_args(a)
+    except (json.JSONDecodeError, ValueError) as e:
+        raise _CliOptionError(f"invalid --model-args JSON: {e}") from e
+    try:
+        task_args = _task_args(a)
+    except (json.JSONDecodeError, ValueError) as e:
+        raise _CliOptionError(f"invalid --task-args JSON: {e}") from e
+    return generate, model_args, task_args
+
+
 def cmd_run_public(a: argparse.Namespace) -> int:
     """Run one catalog entry's public benchmark against `--model`, append a
     spend record to `--results`/ledger.jsonl, and write the summary to
@@ -146,18 +195,22 @@ def cmd_run_public(a: argparse.Namespace) -> int:
     build the `generate` dict passed to `run_public`; only the options
     actually given are included. `--model-args` (parsed as a JSON object,
     e.g. `{"device": "cuda:0", "dtype": "bfloat16"}` for Inspect's
-    `hf/` provider) passes through to `run_public` as `model_args`. After
-    the success line, every metric whose name contains "strict" or "loose"
-    (IFEval's per-dimension accuracy metrics) prints on its own line, four
-    decimals, so a calibration run's full metric set is visible without
-    opening the summary file.
+    `hf/` provider) passes through to `run_public` as `model_args`.
+    `--task-args` (parsed as a JSON object, e.g.
+    `{"with_sandbox_tasks": "no"}` for `inspect_evals/agentdojo`) passes
+    through to `run_public` as `task_args`, keyword arguments for the
+    Inspect task function itself rather than the model. After the success
+    line, every metric whose name contains "strict" or "loose" (IFEval's
+    per-dimension accuracy metrics) prints on its own line, four decimals,
+    so a calibration run's full metric set is visible without opening the
+    summary file.
 
     Returns 2 if `entry` is not in the catalog, if `--extra-body` is not
-    valid JSON, if `--model-args` is not a JSON object, if the entry is not
-    runnable through Inspect, if `--model` has no cost data Inspect can
-    use, or if the run exceeds `--budget-usd`/`--max-wall-s`; the message
-    goes to stderr in each case, with no traceback. Returns 0 on a
-    completed run.
+    valid JSON, if `--model-args` or `--task-args` is not a JSON object, if
+    the entry is not runnable through Inspect, if `--model` has no cost
+    data Inspect can use, or if the run exceeds `--budget-usd`/`--max-wall-s`;
+    the message goes to stderr in each case, with no traceback. Returns 0
+    on a completed run.
 
     An Inspect run that comes back with `result.meta["status"] != "success"`
     (e.g. a provider ran out of credits mid-run) is a record, not a
@@ -175,14 +228,9 @@ def cmd_run_public(a: argparse.Namespace) -> int:
         print(f"no catalog entry {a.entry}", file=sys.stderr)
         return 2
     try:
-        generate = _generate_config(a)
-    except json.JSONDecodeError as e:
-        print(f"invalid --extra-body JSON: {e}", file=sys.stderr)
-        return 2
-    try:
-        model_args = _model_args(a)
-    except (json.JSONDecodeError, ValueError) as e:
-        print(f"invalid --model-args JSON: {e}", file=sys.stderr)
+        generate, model_args, task_args = _parse_public_options(a)
+    except _CliOptionError as e:
+        print(str(e), file=sys.stderr)
         return 2
     budget = Budget(max_usd=a.budget_usd, max_wall_s=a.max_wall_s)
     try:
@@ -192,6 +240,7 @@ def cmd_run_public(a: argparse.Namespace) -> int:
             limit=a.limit,
             budget=budget,
             log_dir=Path(a.log_dir),
+            task_args=task_args,
             no_cost_cap=a.no_cost_cap,
             full=a.full,
             generate=generate,
@@ -479,6 +528,11 @@ def build_parser() -> argparse.ArgumentParser:
         "--model-args",
         help="JSON object of Inspect model constructor kwargs (e.g. device, "
         "dtype for the hf/ provider).",
+    )
+    pub.add_argument(
+        "--task-args",
+        help="JSON object of keyword arguments for the Inspect task function "
+        "itself (e.g. with_sandbox_tasks for inspect_evals/agentdojo).",
     )
     pub.set_defaults(fn=cmd_run_public)
 

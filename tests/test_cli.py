@@ -417,6 +417,70 @@ def test_run_public_passes_model_args(tmp_path: Path, monkeypatch, capsys):
     assert received["model_args"] == {"device": "cuda:0", "torch_dtype": "bfloat16"}
 
 
+def test_run_public_passes_task_args(tmp_path: Path, monkeypatch, capsys):
+    """--task-args reaches run_public as a parsed dict, for an Inspect task
+    function's own keyword arguments (e.g. with_sandbox_tasks for
+    inspect_evals/agentdojo, distinct from --model-args)."""
+    results = tmp_path / "results"
+    received: dict = {}
+
+    def fake_run_public(entry, **kwargs):
+        received.update(kwargs)
+        return eval_log_to_suite_result(
+            _mock_log(tmp_path), suite="public_ifeval", target=kwargs["model"]
+        )
+
+    monkeypatch.setattr(cli_mod, "run_public", fake_run_public)
+
+    rc = main(
+        [
+            "run",
+            "public",
+            "ifeval",
+            "--model",
+            "hf/Qwen/Qwen2.5-3B-Instruct",
+            "--task-args",
+            '{"with_sandbox_tasks": "no"}',
+            "--catalog",
+            str(ROOT / "catalog" / "entries"),
+            "--results",
+            str(results),
+        ]
+    )
+    assert rc == 0
+    assert received["task_args"] == {"with_sandbox_tasks": "no"}
+
+
+def test_run_public_bad_task_args_json_exits_2(tmp_path: Path, monkeypatch, capsys):
+    """A --task-args value that parses as JSON but is not a JSON object
+    (e.g. a list) exits 2 with a message on stderr, before run_public (and
+    any spend) is attempted."""
+    results = tmp_path / "results"
+
+    def fake_run_public(*args, **kwargs):
+        raise AssertionError("run_public must not be called on non-object --task-args")
+
+    monkeypatch.setattr(cli_mod, "run_public", fake_run_public)
+
+    rc = main(
+        [
+            "run",
+            "public",
+            "ifeval",
+            "--model",
+            "hf/Qwen/Qwen2.5-3B-Instruct",
+            "--task-args",
+            "[1]",
+            "--catalog",
+            str(ROOT / "catalog" / "entries"),
+            "--results",
+            str(results),
+        ]
+    )
+    assert rc == 2
+    assert capsys.readouterr().err.strip() != ""
+
+
 def test_run_public_bad_model_args_json_exits_2(tmp_path: Path, monkeypatch, capsys):
     """A --model-args value that parses as JSON but is not a JSON object
     (e.g. a list) exits 2 with a message on stderr, before run_public (and

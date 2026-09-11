@@ -224,17 +224,18 @@ Design spec: `docs/superpowers/specs/2026-09-07-ai-eval-platform-design.md`.
 
 ## Roadmap
 
-- **Phase 2, gap suites. Complete**, except one optional run. Five suites of
-  at least 10 cases each are live against the agent platform, with recovery
-  rate, attack success rate, step efficiency, and per-suite cost and latency
-  published in [docs/results.md](docs/results.md) and the red-team write-up in
-  [docs/red-team-findings.md](docs/red-team-findings.md). Spec section 4.9's
-  OpenTelemetry instrumentation is wired through both runners, an `eval.suite`
-  span per run and an `eval.case` span per case, no-ops until a provider is
-  configured. The MCP target landed alongside it. Still open and optional: a
-  20-task
-  AgentDojo sample against a local model, which would add the model-side
-  susceptibility number the built suites deliberately leave out.
+- **Phase 2, gap suites. Complete**, including the optional run. Five suites
+  of at least 10 cases each are live against the agent platform, with
+  recovery rate, attack success rate, step efficiency, and per-suite cost and
+  latency published in [docs/results.md](docs/results.md) and the red-team
+  write-up in [docs/red-team-findings.md](docs/red-team-findings.md). Spec
+  section 4.9's OpenTelemetry instrumentation is wired through both runners,
+  an `eval.suite` span per run and an `eval.case` span per case, no-ops
+  until a provider is configured. The MCP target landed alongside it. The
+  optional 20-task AgentDojo sample against a local model also ran, adding
+  the model-side susceptibility number the built suites deliberately leave
+  out: see "AgentDojo, local model" in
+  [docs/results.md](docs/results.md).
 - **Phase 3, judges. Next.** Judge graders with a cache keyed on model version, a
   calibration set of at least 50 labeled items, per-judge kappa from
   `evalplat calibrate`, a swap-stability check against a second judge model,

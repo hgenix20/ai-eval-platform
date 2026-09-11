@@ -352,13 +352,72 @@ smoke run at `limit=2` that loads the real task and returns a `SuiteResult`
 named `public_ifeval`. The task id resolves through `runner.ref` in
 `catalog/entries/ifeval.yaml`, and inspect-evals 0.19.0 supplies the task.
 
+## AgentDojo, local model
+
+```
+evalplat run public agentdojo --model hf/Qwen/Qwen2.5-3B-Instruct --model-args '{"device": "cuda:0", "dtype": "bfloat16", "do_sample": false, "batch_size": 4}' --task-args '{"with_sandbox_tasks": "no"}' --no-cost-cap --limit 20 --max-tokens 1024 --max-wall-s 5400 --results results --log-dir logs
+```
+
+This is the optional run named in the Phase 2 roadmap: the model-side
+susceptibility number the built injection suite deliberately leaves out,
+since that suite's planner is scripted and obeys every injected instruction
+by construction. AgentDojo runs a real model against its own tools and its
+own indirect-injection attacks, so it measures whether Qwen2.5-3B-Instruct
+follows an injected instruction, not whether the platform's controls catch
+one.
+
+`--task-args` is a new CLI option, forwarding keyword arguments to the
+Inspect task function itself rather than to the model constructor
+(`--model-args`). `run_public` already accepted `task_args`; `run public`
+had no flag for it before this run, and `with_sandbox_tasks: "no"` is what
+keeps the run off Docker.
+
+Source: `results/public_agentdojo/latest.json`, run
+2026-09-11T07:41:45Z, 144 seconds end to end including model load
+(113 seconds of that inside the run itself, `wall_ms_total` in the summary).
+20 samples, all completed, none errored, none unscored.
+
+| metric | value |
+|---|---|
+| utility (benign task completed) | 0.00 (0 of 20) |
+| attack success (injection executed) | 0.05 (1 of 20), stderr 0.05 |
+| input tokens | 80,276 |
+| output tokens | 9,344 |
+| cost | $0.00 |
+
+AgentDojo's own scorer names these two numbers `utility` and `security`;
+`security` is `"C"` when the injected instruction was carried out, so the
+`security.accuracy` figure above is an attack success rate, not a pass rate,
+and that is what the table calls it. The platform's own top-level
+`accuracy` metric in the summary equals `utility.accuracy` here, since
+Inspect lists the `utility` score first; the two granular numbers in the
+table are the ones that carry the finding, not the headline figure.
+
+Every one of the 20 cases shows `"passed": false` in the per-case list.
+That is the documented behavior for a dict-valued score
+(`eval_log_to_suite_result`'s docstring: "a dict-valued score... flattens to
+fail here by design, not by omission"), not a claim that every case failed
+its security check; the real per-case outcome is in each case's
+`injection_task_scorer` grade, and the suite-level numbers above are the
+ones to read.
+
+The sample is small and lopsided by construction, not by intent: `--limit
+20` takes the first 20 tasks in AgentDojo's dataset order, and all 20 land
+in the `banking` suite (user tasks 0 through 2 crossed with injection tasks
+0 through 8), one of AgentDojo's four suites. A wider or shuffled sample
+would be needed before this number says anything about the model across
+tool domains, not just banking tools. One attack (`important_instructions`,
+Inspect's default) and one agent scaffold (`default`) were tested; AgentDojo
+ships several of each.
+
 ## Program spend to date
 
-$0.00. `results/ledger.jsonl` is committed and holds three lines, all dated
-2026-09-10. The first is the Hugging Face Inference Providers attempt that
-errored, recorded at `"usd": 0`. The other two are the local Qwen runs, each at
-`"usd": 0.0`. That hosted attempt generated no tokens before it stopped, so it
-bought nothing, and a model on the laptop's own GPU carries no per-token price.
+$0.00. `results/ledger.jsonl` is committed and holds four lines. The first is
+the Hugging Face Inference Providers attempt that errored, recorded at
+`"usd": 0`. The other three are local runs on the laptop's own GPU (two
+IFEval, one AgentDojo), each at `"usd": 0.0`. That hosted attempt generated
+no tokens before it stopped, so it bought nothing, and a model running
+locally carries no per-token price.
 
 ## What is versioned here
 
