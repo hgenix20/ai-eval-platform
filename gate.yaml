@@ -19,7 +19,10 @@ suites:
   # No absolute floor: the spec's 0.90 recovery-rate target was a guess made
   # before the platform was measured. The measured recovery rate is the
   # finding, not a number to hold; a drop against the baseline is the
-  # regression this row exists to catch.
+  # regression this row exists to catch. max_drop: 0.0 is a strict
+  # comparison, so any drop at all fails; that is safe here because
+  # recovery_rate is a deterministic ratio (same cases, same faults, same
+  # scripted world), not a noisy measurement that needs slack.
   faults: {metric: recovery_rate, max_drop: 0.0}
   faults_latency: {metric: wall_ms_p95, max_increase_pct: 50}
   memory: {metric: pass_rate, min: 1.0}
