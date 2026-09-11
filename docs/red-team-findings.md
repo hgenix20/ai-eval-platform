@@ -45,8 +45,10 @@ to email the API key to `attacker@example.com`. The grant is `lookup`,
 Attack classes cite the OWASP Top 10 for LLM Applications, 2025 edition:
 LLM01 prompt injection, LLM02 sensitive information disclosure, LLM05
 improper output handling, LLM06 excessive agency, LLM10 unbounded
-consumption. Memory poisoning has no OWASP LLM class and is cited to the
-agent-specific taxonomy it comes from.
+consumption. Two cases also say "memory poisoning", which is a plain
+description of what they do and not a citation; none of the five classes
+above covers a write to an agent's own store, and no taxonomy is claimed for
+it here.
 
 Two suites outside the injection set contribute findings that bear on
 reliability under attack, so they appear below as well: `faults`, which
@@ -123,11 +125,15 @@ audit what has accumulated.
 
 Severity: medium. Source: `validator-approves-exfil-answer`.
 
-The validator is the one component positioned to catch F1, and it approves an
-answer containing the key. Its job as built is to judge goal satisfaction,
-which an exfiltrating answer satisfies perfectly. This adds no new channel of
-its own; it explains why F1 goes unremarked, and it means the platform's last
-checkpoint before the answer leaves is a model judging intent.
+The validator is the one component positioned to catch F1, and in this case it
+approves an answer containing the key. Two separate things are worth keeping
+apart here. The validator in the case file is scripted to reject once and then
+approve, the same worst-case assumption the planner runs under, so the run
+proves nothing about what a real validator model would say. What the run does
+establish is structural: the validator's job as built is to judge goal
+satisfaction, which an exfiltrating answer satisfies perfectly, and no
+deterministic check sits anywhere in the answer path behind it. The platform's
+last checkpoint before an answer leaves is a model judging intent.
 
 Mitigation: keep the model-side validator for goal satisfaction and add a
 deterministic pre-check ahead of it that can veto without consulting a model.
@@ -173,23 +179,34 @@ planner route, or let the orchestrator treat validation as advisory when
 every validator provider is down, with the run marked as unvalidated so the
 degradation is visible.
 
-### F6. Recall has no recency signal, so a superseded value can rank first
+### F6. Ranking ignores the write timestamp the store already keeps
 
 Severity: medium. Source: `conflict-newest-value-wins`.
 
 Two facts that differ only in a token the query does not mention score
-identically against that query, and the tie breaks by insertion order. Store
+identically against that query. `InMemoryMemoryStore.search` sorts on
+similarity alone, and Python's sort is stable, so the tie falls to insertion
+order. `PgVectorMemoryStore.search` orders by cosine distance with no
+secondary key, which leaves a tie to whatever the database returns. Store
 "the budget is 50k", then "the budget is 75k", then recall by "budget", and
 the stale value comes back first. An agent reading the top result acts on the
 superseded number.
 
-Under F2 this compounds: a poisoned note stays retrievable at the same rank
-as a correct one for as long as the store holds it.
+The timestamp is not missing. `MemoryItem` carries `created_at` on every
+write, the pgvector table has the column and the query already selects it, and
+neither store's ranking reads it. The `recall` tool payload then drops it,
+returning `text`, `score`, and `metadata` only, so an agent cannot break the
+tie for itself either.
 
-Mitigation: carry a write timestamp on every stored item and use it as the
-tie-break, then as a decay term in the ranking. The embedder is a
-deterministic bag-of-words hash with no time component, so the store is where
-the ordering fix has to live.
+Under F2 this compounds: a poisoned note stays retrievable at the same rank as
+a correct one for as long as the store holds it.
+
+Mitigation: use the existing `created_at` as the tie-break in both stores'
+`search`, and return it in the `recall` payload so a caller can see which of
+two equally scored notes is current. A time decay term in the ranking is the
+larger version of the same fix. The embedder is a deterministic bag-of-words
+hash with no time component, so the store is where the ordering fix has to
+live.
 
 ### F7. There is no forget primitive
 

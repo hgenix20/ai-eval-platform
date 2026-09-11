@@ -1,10 +1,11 @@
 # Results
 
-Every measured number below comes from a file committed under `results/` and
-reproduces with the command shown above it. Two classes of figure come from
-outside that rule and say so where they appear: a vendor's published benchmark
-score, each carrying a link to the page it was read from, and the live MCP
-server's tool count, which a network-marked test produced.
+Every measured number below comes from a committed file and reproduces with
+the command shown above it: a run summary under `results/`, or, for the gate
+table's baseline column, a file under `baselines/`. Two classes of figure come
+from outside that rule and say so where they appear: a vendor's published
+benchmark score, each carrying a link to the page it was read from, and the
+live MCP server's tool count, which a network-marked test produced.
 
 Five offline suites run against the agent platform in process: `offline_core`
 from Phase 1, and the four gap suites `trajectory`, `faults`, `memory`, and
@@ -37,10 +38,15 @@ order, the final run status, the steps consumed, side effects on targets that
 can observe them, and that the answer the platform accepted is the one the case
 script supplied. The planner and validator lines are scripted, so what these
 cases measure is the platform's control flow and its governance behavior, not
-the quality of a model's answer. The memory suite below closes the one gap
-this section used to name: `session-answer-uses-recall` grades a final answer
-that has to contain the recalled value, so a recall failure changes the
-answer.
+the quality of a model's answer.
+
+One gap this section has always named is still open. No case here binds a
+tool's real output to the graded answer, so that a recall failure would change
+what the answer says. `session-answer-uses-recall` in the memory suite moves
+partway: the grade reads the final answer instead of the recall step. The
+answer text is still a scripted string, so the binding itself waits on a
+target where a model writes the answer, which means Phase 3 or the MCP target
+with a live model.
 
 ## Trajectory suite
 
@@ -89,16 +95,21 @@ provider reply, and a validator-side provider error.
 Two metrics answer two questions. `recovery_rate` is the share of the eight
 cases that were supposed to recover and did, which is 6 of 8.
 `expectation_match_rate` is the share of all eleven that ended the way their
-case predicted, which is 9 of 11. Three cases predict a run the platform
-cannot come back from, and those three are excluded from the recovery
-denominator instead of being counted as recoveries. Across all eleven, seven
-runs completed and four ended in `target_error`.
+case predicted, which is 9 of 11. Three cases set `recovered: false` and sit
+outside the recovery denominator: two predict a run the platform cannot come
+back from, and the third is the control case, which fires no fault at all.
+Across all eleven, seven runs completed and four ended in `target_error`.
+
+A run counts as recovered when at least one fault fired, the run completed,
+and every other dimension the case asserts on passed. That last term means an
+unrelated assertion failure reads as a non-recovery. In every case here the
+two coincide, since a case whose run came back also meets its other
+assertions.
 
 Two of those four aborts are predicted and pass. A fatal provider error is
 re-raised with no fallback attempt, and a validator fault has no fallback
 route at all, since the fallback this suite installs applies only to the
-planner route. Both are the platform behaving as designed. The third
-predicted case, `no-fault-control`, fires no fault to come back from.
+planner route. Both are the platform behaving as designed.
 
 The other two aborts are the finding, and both are tool-raise cases.
 `ToolExecutor.execute` in the agent platform does not catch an exception from
@@ -134,14 +145,19 @@ unrelated distractor session, recall after two non-adjacent sessions, a
 300-character fact recovered by an unrelated keyword, and five facts stored in
 one session with one of them retrieved by name.
 
-Two findings came out of authoring the suite. When two stored values differ
-only in a token the query does not mention, they score identically against
-that query and the tie breaks by insertion order, so the older value ranks
-first; the store has no recency signal. And there is no forget primitive:
-`forget` is neither granted nor registered, and a call to it comes back as
-`tool_denied`, which is the authorization check running before the existence
-check. Both are recorded as platform properties, and neither is patched from
-this repository.
+Two findings came out of authoring the suite. The first is about ranking.
+When two stored values differ only in a token the query does not mention,
+they score identically against that query, and `search` sorts on similarity
+alone; Python's stable sort then leaves the older value first. Every
+`MemoryItem` already carries a `created_at`, in the in-process store and in
+the pgvector schema alike, and nothing in the ranking reads it. The `recall`
+tool payload drops it too, returning text, score, and metadata only, so an
+agent cannot break the tie for itself either.
+
+The second is that there is no forget primitive. `forget` is neither granted
+nor registered, and a call to it comes back as `tool_denied`, which is the
+authorization check running before the existence check. Both findings are
+recorded as platform properties, and neither is patched from this repository.
 
 ## Injection suite
 
