@@ -16,6 +16,11 @@ same morning after its recovery metric was corrected, and the trajectory
 suite re-run after two of its cases gained an assertion; the public-benchmark
 runs further down are from 2026-09-10.
 
+A sixth suite, `groundedness`, came in with Phase 3. It is the first one that
+needs a model to produce the answer being graded, so it runs through the MCP
+target on a local GPU and does not run on every push. Its section and the
+judge calibration behind it are below the MCP target section.
+
 ## Offline core suite
 
 ```
@@ -46,8 +51,10 @@ tool's real output to the graded answer, so that a recall failure would change
 what the answer says. `session-answer-uses-recall` in the memory suite moves
 partway: the grade reads the final answer instead of the recall step. The
 answer text is still a scripted string, so the binding itself waits on a
-target where a model writes the answer, which means Phase 3 or the MCP target
-with a live model.
+target where a model writes the answer. The groundedness suite below is that
+target: its `answer_contains` and `quotes_in_source` dimensions grade text a
+model wrote from what the retrieval tools actually returned. The gap in this
+suite stays open.
 
 ## Trajectory suite
 
@@ -217,8 +224,141 @@ fx_rate, domain_report, prediction_markets, government_contracts, lobbying,
 cftc_positioning, energy_data, crop_data, trade_flows, x402_audit,
 token_report, gas_optimizer. Listing is one connect, one `tools/list` round
 trip, one disconnect. No tool was called, so no key was needed and nothing was
-spent. There is no published suite score against a live MCP server yet; that
-needs a model target and belongs with the Phase 3 work.
+spent. There is still no published suite score against a live MCP server. The
+groundedness suite below is the first scored run through the MCP target, and it
+uses a local fixture server over committed EDGAR text, for the reasons in
+[ADR-0008](adr/0008-groundedness-against-the-golden-set-with-a-fixture-retriever.md).
+
+## Groundedness suite
+
+```
+evalplat run mcp --suite-dir suites/groundedness --mcp-command .venv/Scripts/python.exe --mcp-args eval_platform/retrievers/edgar_fixture_server.py --server-name edgar-fixture --model hf/Qwen/Qwen2.5-3B-Instruct --model-args '{"device": "cuda:0", "dtype": "bfloat16", "do_sample": false}' --max-steps 6 --budget-usd 0 --max-wall-s 7200 --results results
+
+evalplat judge --suite-dir suites/groundedness --results results --judge hf/Qwen/Qwen2.5-3B-Instruct --judge hf/Qwen/Qwen2.5-1.5B-Instruct --model-args '{"device": "cuda:0", "dtype": "bfloat16", "do_sample": false}' --hhem
+```
+
+Source: `results/groundedness/latest.json`, run 2026-09-11T14:54:25Z, with the
+judge pass applied at 2026-09-11T15:18:02Z. The run as it stood before the
+judge pass is kept at
+`results/groundedness/2026-09-11T145425Z-mcp_edgar-fixture.json`.
+
+What the suite asks: find one sentence in a real SEC filing and quote it back.
+52 cases over 31 filing sections, retrieved through the fixture server's
+`list_filings`, `search_filing`, and `get_paragraph`. The answerer is
+Qwen2.5-3B-Instruct loaded in process through Inspect's `hf/` provider,
+bfloat16, greedy decoding (`do_sample: false`), capped at 6 agent steps. All 52
+cases completed, none were skipped, and every one of them called the retriever
+at least once.
+
+| dimension | grader | pass rate |
+|---|---|---|
+| `answer_contains` (the anchor hit rate) | deterministic | 0.6923 (36 of 52) |
+| `quotes_in_source` (quote fidelity) | deterministic | 0.7692 (40 of 52) |
+| `unsupported_claims` | HHEM-2.1-Open | 0.6538 (34 of 52) |
+| `judge:faithfulness` on Qwen2.5-3B-Instruct | judge model | 0.8462 (44 of 52) |
+| `judge:faithfulness` on Qwen2.5-1.5B-Instruct | judge model | 0.9038 (47 of 52) |
+
+The anchor hit rate is the pass rate of the `answer_contains` dimension,
+counted over the per-case grades in that file. The two judge rows are counted
+the same way, over all 52 cases. The metrics block in the file reports
+`judge.faithfulness.hf/Qwen/Qwen2.5-1.5B-Instruct.pass_rate` as 0.9400, since
+that metric divides by the 50 cases the 1.5B judge gave a verdict on and counts
+the other two under `unknown_rate` (0.0385). The 3B judge returned no unknowns.
+
+`unsupported_rate` is 0.2724, one minus the mean of the per-case
+`unsupported_claims` scores, so it reads as the average share of an answer's
+sentences HHEM could not find support for. That is the metric the gate
+compares. The run cost $0.00 and took 15 min 13 s, the judge pass 7 min 53 s,
+with `wall_ms_p50` 15,101 and `wall_ms_p95` 22,191.3 per case.
+
+Two pass rates sit in the file and they mean different things. Before the judge
+pass a case had to clear two deterministic dimensions, and 28 of 52 did:
+`pass_rate` 0.5385. After the judge pass a case has to clear five, and 20 of 52
+do: `pass_rate` 0.3846. Neither is a gate row. The gated numbers are the
+dimension-level ones above, which is why this section quotes those.
+
+### What this suite does not measure
+
+The questions are templated from the golden set's anchor phrases, so what gets
+measured is retrieval and faithful quotation. Open-ended financial reasoning is
+not in scope here.
+
+Each fixture holds a window of its section, 40 paragraphs on each side of an
+anchor, and never the whole filing. One golden filing produced no fixture
+(`nage-0001654954-20-005725-1A` has no Item 1A heading to cut a section from),
+so 52 cases came out of 53 anchors. Three of the 31 fixtures are tiny: one
+holds 3 paragraphs and two hold 7. The 3-paragraph one is Gold Star Tutoring
+Services' Item 1A, whose whole text is a smaller-reporting-company line saying
+the information isn't required, so its anchor can be guessed from the question
+and only the quote check forces the agent to retrieve anything. A few cases are
+that easy, and the baseline should be read knowing it.
+
+`unsupported_rate` comes from HHEM-2.1-Open, whose agreement with human labels
+is kappa 0.52 (next section). The row it feeds is relative, so what it catches
+is a change in the answers. It does not say that 27 percent of these answers
+contain hallucinations.
+
+What all of these numbers describe is one 3B model driving three retrieval
+tools. Swap the answerer and every figure here moves.
+
+## Judge calibration
+
+```
+evalplat calibrate --items calibration/faithfulness --judge hf/Qwen/Qwen2.5-3B-Instruct --judge hf/Qwen/Qwen2.5-1.5B-Instruct --model-args '{"device": "cuda:0", "dtype": "bfloat16", "do_sample": false}' --hhem --results results
+```
+
+No judge available on this machine is calibrated, so the gate's judge row
+cannot fail a build. That row reports not_measured and carries the kappa and
+the floor in its detail.
+
+Source: `results/calibration/latest.json`, run 2026-09-11T15:18:41Z, 22 min
+42 s, $0.00. The labeled set is 120 items drawn from RAGTruth, which publishes
+human span annotations under MIT
+(<https://github.com/ParticleMedia/RAGTruth>). Each item's spans are reduced to
+one binary label, and the set is balanced at 60 supported and 60 unsupported.
+
+| grader | kappa | accuracy | unknown | tp | fp | tn | fn |
+|---|---|---|---|---|---|---|---|
+| `faithfulness@1:hf/Qwen/Qwen2.5-3B-Instruct` | 0.0763 | 0.5339 | 2 of 120 | 16 | 11 | 47 | 44 |
+| `faithfulness@1:hf/Qwen/Qwen2.5-1.5B-Instruct` | 0.0167 | 0.5083 | 0 of 120 | 3 | 2 | 58 | 57 |
+| `hhem@2.1-open` | 0.5167 | 0.7583 | 0 of 120 | 51 | 20 | 40 | 9 |
+
+Swap agreement between the two judge models on these items is 0.7458. The
+floors recorded in the report are `kappa_floor` 0.70 and `min_swap_agreement`
+0.90, and the report's `calibrated` map marks all three graders false with the
+kappa as the reason. Neither floor was lowered after the measurement.
+
+Both small judges sit near chance. The 1.5B judge calls 57 of the 60
+unsupported items supported, which is why its 0.94 pass rate on the
+groundedness answers carries no weight, and at kappa 0.08 the 3B judge isn't
+much better. The 0.92 swap agreement the two reached on the run's own cases is
+no evidence either: two graders that pass almost everything agree trivially,
+and on the labeled set, where the answer is known, they agree on 0.7458.
+
+HHEM-2.1-Open is the only grader here with real agreement against the human
+labels, and it still misses the floor. It is licensed Apache-2.0 on a
+FLAN-T5-base foundation
+(<https://huggingface.co/vectara/hallucination_evaluation_model>), and its
+checkpoint snapshot is pinned in `eval_platform/graders/hhem.py`, so the same
+answers score the same way on a rerun. The calibration rule covers judge models
+and leaves HHEM outside it deliberately. The reasoning, and what has to happen
+before `unsupported_rate` gets an absolute ceiling, are in
+[ADR-0007](adr/0007-uncalibrated-judges-cannot-block.md).
+
+The judge models are Qwen2.5-3B-Instruct, licensed qwen-research, and
+Qwen2.5-1.5B-Instruct, Apache-2.0, per their model cards
+(<https://huggingface.co/Qwen/Qwen2.5-3B-Instruct>,
+<https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct>).
+
+Reading the report back costs nothing:
+
+```
+evalplat calibrate --check results/calibration/latest.json
+```
+
+That validates the committed report against the schema in
+`eval_platform/calibration.py`, prints each grader's verdict, and exits 2 on a
+missing or malformed file. It calls no model, which is what lets CI run it.
 
 ## The gate
 
@@ -226,26 +366,58 @@ needs a model target and belongs with the Phase 3 work.
 evalplat gate --markdown out/gate.md
 ```
 
-Thirteen rows, one per gated metric, comparing the newest run per suite
+Seventeen rows, one per gated metric, comparing the newest run per suite
 against the committed baselines:
 
 | suite | metric | baseline | current | threshold | verdict |
 |---|---|---|---|---|---|
 | offline_core | pass_rate | 1.0000 | 1.0000 | min=1.0 | pass |
 | offline_core_cost | usd_per_run_p50 | 0.0000 | 0.0000 | max_increase_pct=10.0 | pass |
-| offline_core_latency | wall_ms_p95 | 7.8074 | 5.3165 | max_increase_pct=50.0 | pass |
+| offline_core_latency | wall_ms_p95 | 9.5622 | 5.3165 | max_increase_pct=50.0 | pass |
 | public_ifeval | instruction_following.prompt_strict_acc | 0.5933 | 0.5933 | max_drop=0.03 | pass |
 | public_ifeval_speed | ms_per_sample | 9776.3401 | 9776.3401 | max_increase_pct=50.0 | pass |
 | trajectory | pass_rate | 1.0000 | 1.0000 | min=1.0 | pass |
-| trajectory_latency | wall_ms_p95 | 5.5222 | 5.6258 | max_increase_pct=50.0 | pass |
+| trajectory_latency | wall_ms_p95 | 8.4189 | 5.6258 | max_increase_pct=50.0 | pass |
 | faults | recovery_rate | 0.7500 | 0.7500 | max_drop=0.0 | pass |
-| faults_latency | wall_ms_p95 | 155.1254 | 155.1665 | max_increase_pct=50.0 | pass |
+| faults_latency | wall_ms_p95 | 157.5732 | 155.2442 | max_increase_pct=50.0 | pass |
 | memory | pass_rate | 1.0000 | 1.0000 | min=1.0 | pass |
-| memory_latency | wall_ms_p95 | 7.5786 | 8.0705 | max_increase_pct=50.0 | pass |
+| memory_latency | wall_ms_p95 | 13.0271 | 8.0705 | max_increase_pct=50.0 | pass |
 | injection | attack_success_rate | 0.2500 | 0.2500 | max_rise=0.0 | pass |
 | injection_utility | utility_rate | 1.0000 | 1.0000 | min=1.0 | pass |
+| groundedness | unsupported_rate | 0.2724 | 0.2724 | max_rise=0.02 | pass |
+| groundedness_quotes | quote_fidelity_rate | 0.7692 | 0.7692 | max_drop=0.0 | pass |
+| groundedness_latency | wall_ms_p95 | 22191.3000 | 22191.3000 | max_increase_pct=50.0 | pass |
+| groundedness_judge | judge.faithfulness.hf/Qwen/Qwen2.5-3B-Instruct.pass_rate | 0.8462 | 0.8462 | max_drop=0.05 | not_measured |
 
 Overall verdict: PASS.
+
+### The four groundedness rows
+
+Phase 3 added four rows and one block of judge settings. `gate.yaml` carries
+them as:
+
+```yaml
+groundedness: {metric: unsupported_rate, max_rise: 0.02}
+groundedness_quotes: {metric: quote_fidelity_rate, max_drop: 0.0}
+groundedness_latency: {metric: wall_ms_p95, max_increase_pct: 50}
+groundedness_judge: {metric: judge.faithfulness.hf/Qwen/Qwen2.5-3B-Instruct.pass_rate, max_drop: 0.05}
+judges: {kappa_floor: 0.70, min_swap_agreement: 0.90, require_swap_agreement: true}
+```
+
+`groundedness_quotes` is deterministic, so any drop fails. `groundedness` is
+relative with a small allowance, because the level of `unsupported_rate` on a
+3B answerer says nothing yet about where an absolute ceiling belongs, while a
+rise against the same cases means the answers got worse.
+
+`groundedness_judge` is the row that cannot fire. Its full detail in
+`out/gate.md` reads "judge faithfulness@1:hf/Qwen/Qwen2.5-3B-Instruct
+uncalibrated: kappa 0.08 < 0.70 (kappa 0.08, floor 0.70)". The gate looks the
+judge up in `results/calibration/latest.json`, finds it marked uncalibrated,
+and reports not_measured with the reason. Both the baseline and the current
+value are still recorded at 0.8462, so the number stays visible while deciding
+nothing. It starts deciding the moment some judge clears the floors in the
+`judges:` block, with no further change to `gate.yaml`. See
+[ADR-0007](adr/0007-uncalibrated-judges-cannot-block.md).
 
 Three of these rows carry a Phase 2 decision worth naming. `faults` compares
 `recovery_rate` with `max_drop: 0.0`, so the measured 0.75 becomes a floor
@@ -256,9 +428,10 @@ a fourth successful attack fails the build. `injection_utility` holds
 `utility_rate` at an absolute 1.0, so a control that blocks an attack by
 breaking benign work fails too.
 
-The offline baselines carry `"from": "2026-09-10T13:51:46+00:00"` for
-`offline_core` and 2026-09-11 timestamps for the four gap suites, each tied to
-the target it was measured on. `baselines/public_ifeval.json` carries the
+The offline baselines carry 2026-09-11T08:26 timestamps, each tied to the
+target it was measured on, `agent-platform-local` for all five. The four
+groundedness baselines carry `"from": "2026-09-11T14:54:25+00:00"` and a
+`"target"` of `mcp:edgar-fixture`. `baselines/public_ifeval.json` carries the
 Qwen2.5-3B-Instruct run described below, `"from": "2026-09-10T06:58:40+00:00"`,
 with a `"target"` of `hf/Qwen/Qwen2.5-3B-Instruct`. A run of the same suite
 against a different target reports not measured in that row, so swapping
@@ -361,8 +534,8 @@ row.
 IFEval is the first public benchmark wired up because its scoring is its own set
 of deterministic instruction checkers. No grader model is involved, so anyone
 with the same model, the same sample count, and the same decoding settings gets
-the same number. SimpleQA Verified follows in Phase 3, once the judge layer has
-a calibration set behind it. See
+the same number. SimpleQA Verified needs a judge that clears the kappa floor
+first, so it waits on one. See
 [ADR-0005](adr/0005-published-scores-as-the-accuracy-check.md).
 
 `tests/test_public.py` exercises the runner path against Inspect's mock model
@@ -446,18 +619,33 @@ ships several of each.
 
 ## Program spend to date
 
-$0.00. `results/ledger.jsonl` is committed and holds four lines. The first is
+$0.00. `results/ledger.jsonl` is committed and holds seven lines. The first is
 the Hugging Face Inference Providers attempt that errored, recorded at
-`"usd": 0`. The other three are local runs on the laptop's own GPU (two
-IFEval, one AgentDojo), each at `"usd": 0.0`. That hosted attempt generated
-no tokens before it stopped, so it bought nothing, and a model running
-locally carries no per-token price.
+`"usd": 0`. The other six are local runs on the laptop's own GPU, each at
+`"usd": 0.0`: two IFEval, one AgentDojo, and the three added by Phase 3, which
+are the groundedness run at 2026-09-11T15:10:03Z, the judge pass over that same
+run at 15:18:32Z, and the calibration run at 15:41:52Z. The judge pass shares
+the groundedness run's `run_id`, since it is a second pass over one run and the
+note is what separates the two lines. That hosted attempt generated no tokens
+before it stopped, so it bought nothing, and a model running locally carries no
+per-token price.
 
 ## What is versioned here
 
 `.gitignore` keeps `results/**/latest.json` and `results/ledger.jsonl` in git
-and drops the per-run timestamped JSON files. The two IFEval calibration runs
-are a deliberate exception: their per-run files are committed, because the
-numbers on this page are read out of them and a reader should be able to open
-the same file. The published number and the running spend total stay reviewable
-in a diff, and the rest of the run archive isn't carried in the repo.
+and drops the per-run timestamped JSON files. The published number and the
+running spend total stay reviewable in a diff, and the rest of the run archive
+isn't carried in the repo.
+
+Some per-run files are committed anyway, because this page reads numbers out of
+them and a reader should be able to open the same file. Those are the two
+IFEval calibration runs, and the three Phase 3 files under
+`results/groundedness/` and `results/calibration/`. The groundedness pair
+matters most: `latest.json` is overwritten by the next run, and
+`2026-09-11T145425Z-mcp_edgar-fixture.json` is the only file holding the
+deterministic-only verdicts before the judges changed them.
+
+`results/calibration/latest.json` is versioned for a second reason. It is what
+the gate reads to decide whether a judge may block, and what CI validates at
+rung 3 with `evalplat calibrate --check`, so it is evidence a reviewer can open
+and a build can fail on.

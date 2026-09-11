@@ -9,13 +9,28 @@ trajectory runner, so they cost nothing and run on every push.
 
 ## Status
 
-Phase 2 (gap suites). Five offline suites run against the agent platform in
-process for $0.00, all measured 2026-09-11: `offline_core` 12 of 12,
-`trajectory` 10 of 10 at 0.75 mean step efficiency over its five scored paths,
-`faults` recovery 6 of the 8 cases meant to recover, `memory` 11 of 11, and
-`injection` attack success 3 of 12 at utility 4 of 4. `evalplat gate` reports
-PASS across thirteen rows. The catalog holds 77 entries. Rungs 1 and 2 of the
-ladder run in CI.
+Phase 3 (judges) is done, and its first finding is a negative one: no judge
+this machine can run is calibrated, so the gate's judge row reports
+not_measured and cannot fail a build. Against 120 human-labeled RAGTruth items,
+Qwen2.5-3B-Instruct scores kappa 0.08 and Qwen2.5-1.5B-Instruct 0.02, both near
+chance; HHEM-2.1-Open reaches 0.52 against a floor of 0.70. The floors stayed
+where they were, and the measured pass rates stay on the page deciding nothing
+([ADR-0007](docs/adr/0007-uncalibrated-judges-cannot-block.md)).
+
+The groundedness suite ran anyway, since most of what it measures needs no
+judge. 52 cases ask Qwen2.5-3B-Instruct to find a sentence in a real SEC filing
+and quote it back, through three MCP retrieval tools over committed EDGAR text
+([ADR-0008](docs/adr/0008-groundedness-against-the-golden-set-with-a-fixture-retriever.md)).
+The anchor hit rate is 0.69, quote fidelity 0.77, and HHEM's unsupported rate
+0.27, at $0.00 and 22.2 s p95 per case. `evalplat gate` reports PASS across
+seventeen rows.
+
+Phase 2's five offline suites run against the agent platform in process for
+$0.00, all measured 2026-09-11: `offline_core` 12 of 12, `trajectory` 10 of 10
+at 0.75 mean step efficiency over its five scored paths, `faults` recovery 6 of
+the 8 cases meant to recover, `memory` 11 of 11, and `injection` attack success
+3 of 12 at utility 4 of 4. The catalog holds 77 entries. Rungs 1, 2, and 3 of
+the ladder run in CI.
 
 The two unrecovered fault cases and the three landed attacks are findings
 about the platform under test, written up with severities and proposed
@@ -116,6 +131,40 @@ provider, for example (transformers rejects a temperature of 0, so greedy decodi
 evalplat run public ifeval --model hf/Qwen/Qwen2.5-3B-Instruct --model-args '{"device": "cuda:0", "dtype": "bfloat16", "do_sample": false, "batch_size": 8}' --no-cost-cap --full --max-tokens 1024
 ```
 
+### Judges
+
+`evalplat judge` adds model-graded dimensions to a run that already exists. It
+reads the suite's newest summary, grades each answer again, and writes a new
+summary next to it, so the deterministic numbers and the latencies stay
+comparable across a re-grade:
+
+```
+evalplat judge --suite-dir suites/groundedness --results results --judge hf/Qwen/Qwen2.5-3B-Instruct --judge hf/Qwen/Qwen2.5-1.5B-Instruct --model-args '{"device": "cuda:0", "dtype": "bfloat16", "do_sample": false}' --hhem
+```
+
+A second `--judge` makes swap agreement measurable. `--hhem` adds
+HHEM-2.1-Open, a fixed classifier that scores each answer sentence against the
+retrieved context and reports `unsupported_rate`. Verdicts are cached under
+`.cache/judge/`, keyed by a hash over the case, the prompt, the judge's model
+id and version, the rubric and its version, and the sampling parameters, so a
+re-grade with the same judge is free and a judge upgrade misses every entry.
+
+`evalplat calibrate` is what decides whether any of those judges may block a
+build. It scores them against a labeled set and writes
+`results/calibration/latest.json`:
+
+```
+evalplat calibrate --items calibration/faithfulness --judge hf/Qwen/Qwen2.5-3B-Instruct --judge hf/Qwen/Qwen2.5-1.5B-Instruct --model-args '{"device": "cuda:0", "dtype": "bfloat16", "do_sample": false}' --hhem --results results
+evalplat calibrate --check results/calibration/latest.json
+```
+
+A judge contributes to the gate once its Cohen's kappa against the labels
+clears `judges.kappa_floor` in `gate.yaml` and it agrees with a second judge on
+`judges.min_swap_agreement` of the items. Below either floor, its gate row
+reports not_measured and names the kappa. `--check` validates an already
+written report and prints its verdicts without calling a model, which is how
+rung 3 runs on a machine with no GPU.
+
 ## The ladder
 
 Four rungs, in the order a pull request meets them.
@@ -124,11 +173,17 @@ Four rungs, in the order a pull request meets them.
 |---|---|---|---|---|
 | 1. static | catalog, case, and gate-config validation; ruff, pyright, bandit, pytest | free | every push | live |
 | 2. offline deterministic | `offline_core`, `trajectory`, `faults`, `memory`, `injection` against scripted providers and the agent platform in process | free | every push | live |
-| 3. judge-graded, sampled | first `pr_sample` cases per suite on a PR, the full set on merge | cached | on a PR | Phase 3 |
+| 3. judge-graded | the committed judge-graded results and the calibration report, validated with `evalplat calibrate --check` | free | every push | live |
 | 4. public benchmarks | catalog entries through Inspect AI against a hosted or local model, under a per-run cap | budgeted | nightly or manual | manual |
 
-Rung 2 carries all five built suites, 60 cases, and 11 of the gate's thirteen
-rows. Rungs 1 and 2 can fail a pull request today.
+Rung 2 carries all five built suites, 60 cases, and 11 of the gate's seventeen
+rows. Rung 3 calls no judge, because a GitHub runner has no GPU and the
+account has no hosted credits. What it does instead is read the judge-graded
+groundedness run and the calibration report out of the repository: `--check`
+validates the report's shape and prints each grader's verdict, and the gate
+step then reads the four groundedness rows from the committed run. A judge row
+stays not_measured until some judge clears the kappa floor. Rungs 1, 2, and 3
+can fail a pull request today.
 `.github/workflows/ci.yml` runs both, uploads `out/` as an artifact, and posts
 the gate table as a PR comment. On merge to main it also re-measures the
 baselines from that run and commits them, so a pull request's cost and latency
@@ -139,8 +194,10 @@ A fifth target sits alongside the four in the Layout section: `run mcp` drives
 a suite's cases through one MCP server's tools, local on stdio or remote over
 HTTP. It reads the server's tool list once before the suite starts, so an
 unreachable server exits 2 instead of failing every case. A live listing
-against <https://mcp.signalnodus.ai/> returned 31 tools with nothing called;
-running a scored suite through it needs a model target and waits on Phase 3.
+against <https://mcp.signalnodus.ai/> returned 31 tools with nothing called.
+The first scored run through that target is the groundedness suite, against a
+local fixture server over committed EDGAR text; the same suite points at the
+live server with `--mcp-url` and `--mcp-authorization`.
 
 Rung 4 runs by hand so far. IFEval has gone the full 541 prompts against two
 local models, and its gate row compares prompt-strict accuracy against a
@@ -157,15 +214,20 @@ suites/trajectory/*.yaml     ten cases on tool order, redundancy, efficiency
 suites/faults/*.yaml         eleven cases on injected tool and provider faults
 suites/memory/*.yaml         eleven multi-session recall cases
 suites/injection/*.yaml      sixteen cases, twelve attacks and four benign
+suites/groundedness/         52 EDGAR cases, their fixtures, and the golden set
+calibration/faithfulness/    120 human-labeled RAGTruth items
 gate.yaml                    thresholds, one row per metric
 baselines/*.json             the committed numbers the gate compares against
 results/*/latest.json        the published run per suite
+results/calibration/         per-judge kappa against the labeled set
 eval_platform/types.py       Step, Trajectory, Case, Expect, Grade, CaseResult, SuiteResult
 eval_platform/budget.py      Budget, BudgetExceeded, Ledger
 eval_platform/catalog/       pydantic schema and the loader
 eval_platform/targets/       scripted, agent-platform local, agent-platform HTTP, MCP, faults, conversion
 eval_platform/suites/        case loader, trajectory runner, Inspect public runner
-eval_platform/graders/       deterministic expectation grading
+eval_platform/graders/       deterministic grading, judge rubrics and cache, HHEM
+eval_platform/retrievers/    the EDGAR fixture MCP server
+eval_platform/calibration.py kappa, swap agreement, the report and its schema
 eval_platform/gate/          config, comparison, JUnit, markdown
 eval_platform/reports/       static HTML
 eval_platform/cli.py         evalplat catalog | run | gate | report
@@ -219,6 +281,12 @@ mitigation per finding: [docs/red-team-findings.md](docs/red-team-findings.md).
 - [ADR-0006](docs/adr/0006-fault-and-injection-suites-measure-the-platform-not-the-model.md):
   the fault and injection suites measure the platform's controls under a
   worst-case model, and findings go to the platform's own repository.
+- [ADR-0007](docs/adr/0007-uncalibrated-judges-cannot-block.md): a judge that
+  has not cleared the kappa and swap-agreement floors reports not_measured and
+  cannot fail a build.
+- [ADR-0008](docs/adr/0008-groundedness-against-the-golden-set-with-a-fixture-retriever.md):
+  groundedness runs against the SignalNodus golden set through a committed
+  EDGAR fixture retriever, with the live server as the optional path.
 
 Design spec: `docs/superpowers/specs/2026-09-07-ai-eval-platform-design.md`.
 
@@ -238,17 +306,25 @@ Design spec: `docs/superpowers/specs/2026-09-07-ai-eval-platform-design.md`.
   which is why `offline_core` is the fifth suite in CI. Spec
   section 4.9's OpenTelemetry instrumentation is wired through both runners,
   an `eval.suite` span per run and an `eval.case` span per case, no-ops
-  until a provider is configured; the spec's grader-call spans and judge
-  attributes arrive with Phase 3, since no grader calls a model yet. The
+  until a provider is configured. The grader-call spans arrived with Phase 3:
+  a judge verdict runs inside an `eval.grader` span carrying `eval.judge`,
+  `eval.case`, `eval.cache_hit`, and the label it settled on. The
   MCP target landed alongside it. The
   optional 20-task AgentDojo sample against a local model also ran, adding
   the model-side susceptibility number the built suites deliberately leave
   out: see "AgentDojo, local model" in
   [docs/results.md](docs/results.md).
-- **Phase 3, judges. Next.** Judge graders with a cache keyed on model version, a
-  calibration set of at least 50 labeled items, per-judge kappa from
+- **Phase 3, judges. Complete.** Judge graders with a cache keyed on model
+  version, 120 labeled calibration items from RAGTruth, per-judge kappa from
   `evalplat calibrate`, a swap-stability check against a second judge model,
-  and the groundedness suite on the EDGAR golden set.
-- **Phase 4, online.** Production sampling, a drift report, a dashboard
+  and the groundedness suite on the EDGAR golden set, all measured on a local
+  GPU for $0.00. The calibration rule then did the job it exists for: at kappa
+  0.08, 0.02, and 0.52 against a floor of 0.70, nothing this machine can run
+  earned a vote in the gate, and the judge row reports not_measured. A hosted
+  judge is a different `--judge` value and a key, with no other change to the
+  pipeline. What is still open is a judge that clears the floor, and an
+  absolute ceiling on `unsupported_rate` once the level has been measured on a
+  second answerer. Numbers in [docs/results.md](docs/results.md).
+- **Phase 4, online. Next.** Production sampling, a drift report, a dashboard
   section, and a promote-to-case flow, verified against a live compose stack of
   the agent platform.

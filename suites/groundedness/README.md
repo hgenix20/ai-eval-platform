@@ -134,9 +134,27 @@ should treat them as evidence.
 ```bash
 evalplat run mcp --suite-dir suites/groundedness \
     --mcp-command .venv/Scripts/python.exe \
-    --mcp-args -m eval_platform.retrievers.edgar_fixture_server \
-    --server-name edgar-fixture --model <your model>
+    --mcp-args eval_platform/retrievers/edgar_fixture_server.py \
+    --server-name edgar-fixture --model <your model> \
+    --max-steps 6 --budget-usd 0 --results results
 ```
+
+The server is launched by script path, not as `-m <module>`. `--mcp-args`
+takes `nargs="*"`, so argparse reads a leading `-m` as an option string of
+its own and the command exits 2 before the run starts. The module imports
+nothing package-relative and finds its fixtures from `__file__`, so both
+spellings serve the same three tools.
 
 Cases declare `target_requirements: [agent]` and `max_steps: 6`, which is
 room for a listing call, two searches, a paragraph fetch, and the answer.
+
+Grading the semantic half takes a second pass over the same run:
+
+```bash
+evalplat judge --suite-dir suites/groundedness --results results \
+    --judge hf/Qwen/Qwen2.5-3B-Instruct --hhem \
+    --model-args '{"device": "cuda:0", "dtype": "bfloat16", "do_sample": false}'
+```
+
+The measured numbers from the first full run are in
+[docs/results.md](../../docs/results.md).

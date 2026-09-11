@@ -123,9 +123,9 @@ def _calibration_table(cal: dict[str, Any]) -> str:
     as a "Judge calibration" section: one row per judge, then the swap
     agreement line when the report carries a pair.
 
-    The `calibrated` column is the verdict the gate reads, so it is printed
-    as the recorded yes or no plus the recorded reason rather than
-    recomputed here. A judge absent from the report's `calibrated` map
+    The `calibrated` column is the verdict the gate reads, so it prints the
+    recorded yes or no with the recorded reason, and nothing here recomputes
+    either one. A judge absent from the report's `calibrated` map
     renders as "no verdict recorded", which keeps a hand-edited file from
     taking the whole report down. Judge ids, versions, and reasons are
     escaped, since a judge id is a model name a caller supplied.
