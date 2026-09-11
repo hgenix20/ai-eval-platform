@@ -16,6 +16,7 @@ from inspect_ai.log import EvalLog
 
 from eval_platform.budget import Budget, BudgetExceeded
 from eval_platform.catalog import CatalogEntry
+from eval_platform.telemetry import span
 from eval_platform.types import CaseResult, Grade, SuiteResult
 
 
@@ -279,6 +280,11 @@ def run_public(
     empty mapping), while `meta["model_args"]` records the argument exactly
     as given, including None when not given, so a report can show whether a
     run used a specific local-model configuration.
+
+    The `inspect_eval` call and the log conversion run inside an
+    "eval.public" span carrying `suite`, `model`, and `limit` (-1 when
+    `limit` is None) attributes up front, with `eval.usd` and
+    `eval.samples` set from the converted result's metrics once it exists.
     """
     if not entry.runnable or entry.runner.kind != "inspect_evals" or not entry.runner.ref:
         raise ValueError(
@@ -309,30 +315,34 @@ def run_public(
         cost_kwargs["cost_limit"] = remaining
         cost_cap_mode = "per_sample_uncapped_count"
     eval_kwargs: dict[str, Any] = {**cost_kwargs, **(generate or {})}
-    try:
-        [log] = inspect_eval(
-            entry.runner.ref,
-            model=model,
-            limit=limit,
-            log_dir=str(log_dir),
-            display="none",
-            task_args=task_args or {},
-            model_args=model_args or {},
-            **eval_kwargs,
-        )
-    except PrerequisiteError as exc:
-        if "cost data" in str(exc):
-            raise ValueError(
-                f"model {model} has no cost data in Inspect; cannot enforce a spend cap"
-            ) from exc
-        raise
-    result = eval_log_to_suite_result(
-        log, suite=f"public_{entry.id.replace('-', '_')}", target=model
-    )
-    result.meta["cost_cap_mode"] = cost_cap_mode
-    result.meta["generate"] = generate
-    result.meta["model_args"] = model_args
-    if full:
-        result.meta["full_run"] = True
+    suite_name = f"public_{entry.id.replace('-', '_')}"
+    with span(
+        "eval.public", suite=suite_name, model=model, limit=limit if limit is not None else -1
+    ) as s:
+        try:
+            [log] = inspect_eval(
+                entry.runner.ref,
+                model=model,
+                limit=limit,
+                log_dir=str(log_dir),
+                display="none",
+                task_args=task_args or {},
+                model_args=model_args or {},
+                **eval_kwargs,
+            )
+        except PrerequisiteError as exc:
+            if "cost data" in str(exc):
+                raise ValueError(
+                    f"model {model} has no cost data in Inspect; cannot enforce a spend cap"
+                ) from exc
+            raise
+        result = eval_log_to_suite_result(log, suite=suite_name, target=model)
+        result.meta["cost_cap_mode"] = cost_cap_mode
+        result.meta["generate"] = generate
+        result.meta["model_args"] = model_args
+        if full:
+            result.meta["full_run"] = True
+        s.set_attribute("eval.usd", result.metrics["usd"])
+        s.set_attribute("eval.samples", result.metrics["samples_total"])
     budget.charge(result.metrics["usd"])
     return result

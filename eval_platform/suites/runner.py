@@ -8,6 +8,7 @@ from datetime import UTC, datetime
 from eval_platform.budget import Budget, BudgetExceeded
 from eval_platform.graders import grade_expect
 from eval_platform.targets.base import AgentTarget
+from eval_platform.telemetry import span
 from eval_platform.types import Case, CaseResult, Grade, SuiteResult, compute_metrics
 
 
@@ -28,18 +29,33 @@ def run_case(case: Case, target: AgentTarget) -> CaseResult:
     "run" rather than crashing the suite, because one bad target call
     must not abort every other case. A successful run is graded with
     `grade_expect` and passes only if every emitted Grade passes.
+
+    The target call and grading run inside an "eval.case" span carrying
+    `case` and `target` attributes up front, and `eval.status`,
+    `eval.cost_usd`, `eval.wall_ms`, `eval.passed` set once the outcome is
+    known; a target exception records `eval.status="target_error"` and
+    `eval.passed=False` instead of the trajectory fields, since there is no
+    trajectory to read them from.
     """
     missing = set(case.target_requirements) - set(target.capabilities)
     if missing:
         return CaseResult(
             case.name, False, (), None, skipped_reason=f"target lacks {sorted(missing)}"
         )
-    try:
-        trajectory = target.run(case)
-    except Exception as e:  # a target failure must become a failed case, never crash the suite
-        return CaseResult(case.name, False, (Grade("run", 0.0, False, repr(e)),), None)
-    grades = grade_expect(case, trajectory)
-    return CaseResult(case.name, all(g.passed for g in grades), tuple(grades), trajectory)
+    with span("eval.case", case=case.name, target=target.name) as s:
+        try:
+            trajectory = target.run(case)
+        except Exception as e:  # a target failure must become a failed case, never crash the suite
+            s.set_attribute("eval.status", "target_error")
+            s.set_attribute("eval.passed", False)
+            return CaseResult(case.name, False, (Grade("run", 0.0, False, repr(e)),), None)
+        grades = grade_expect(case, trajectory)
+        passed = all(g.passed for g in grades)
+        s.set_attribute("eval.status", trajectory.status)
+        s.set_attribute("eval.cost_usd", trajectory.cost_usd)
+        s.set_attribute("eval.wall_ms", trajectory.wall_ms)
+        s.set_attribute("eval.passed", passed)
+        return CaseResult(case.name, passed, tuple(grades), trajectory)
 
 
 def run_suite(
@@ -65,31 +81,38 @@ def run_suite(
     `meta["budget_exceeded"]` is set True. Metrics come from
     `compute_metrics`, so skipped cases count toward
     `cases_total`/`cases_skipped` but not `pass_rate`.
+
+    The whole loop runs inside an "eval.suite" span carrying `suite`,
+    `target`, and `cases` (the count) attributes, so every "eval.case"
+    span opened by `run_case` inside it is recorded as a child span.
     """
     started = _now()
     results: list[CaseResult] = []
     exceeded = False
-    for case in cases:
-        if exceeded:
-            results.append(CaseResult(case.name, False, (), None, skipped_reason="budget exceeded"))
-            continue
-        try:
-            budget.check()
-        except BudgetExceeded as e:
-            # The ceiling was already reached, so this case never ran.
-            exceeded = True
-            results.append(CaseResult(case.name, False, (), None, skipped_reason=str(e)))
-            continue
-        r = run_case(case, target)
-        # Record the result before charging for it. The work is done and
-        # graded by this point; the charge that trips the ceiling stops the
-        # cases after this one, and must not discard this one's evidence.
-        results.append(r)
-        if r.trajectory is not None:
+    with span("eval.suite", suite=suite, target=target.name, cases=len(cases)):
+        for case in cases:
+            if exceeded:
+                results.append(
+                    CaseResult(case.name, False, (), None, skipped_reason="budget exceeded")
+                )
+                continue
             try:
-                budget.charge(r.trajectory.cost_usd)
-            except BudgetExceeded:
+                budget.check()
+            except BudgetExceeded as e:
+                # The ceiling was already reached, so this case never ran.
                 exceeded = True
+                results.append(CaseResult(case.name, False, (), None, skipped_reason=str(e)))
+                continue
+            r = run_case(case, target)
+            # Record the result before charging for it. The work is done and
+            # graded by this point; the charge that trips the ceiling stops the
+            # cases after this one, and must not discard this one's evidence.
+            results.append(r)
+            if r.trajectory is not None:
+                try:
+                    budget.charge(r.trajectory.cost_usd)
+                except BudgetExceeded:
+                    exceeded = True
     return SuiteResult(
         suite=suite,
         target=target.name,
