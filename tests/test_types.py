@@ -71,6 +71,46 @@ def test_compute_metrics_with_no_trajectories_is_zero_not_error():
     assert m["pass_rate"] == 0.0 and m["wall_ms_p95"] == 0.0
 
 
+def _recovery_case(name, observed, expected, passed):
+    return CaseResult(
+        name=name,
+        passed=passed,
+        grades=(
+            Grade(dimension="recovered", value=observed, passed=passed, explanation=""),
+            Grade(dimension="recovery_expected", value=expected, passed=True, explanation=""),
+        ),
+        trajectory=_traj(),
+    )
+
+
+def test_recovery_rate_and_expectation_match_rate_measure_different_things():
+    """Four cases: two recover as expected, one was expected to recover and
+    did not, and one correctly predicted a run that cannot come back. Only
+    the first three count toward recovery_rate."""
+    cases = [
+        _recovery_case("a", observed=1.0, expected=1.0, passed=True),
+        _recovery_case("b", observed=1.0, expected=1.0, passed=True),
+        _recovery_case("c", observed=0.0, expected=1.0, passed=False),
+        _recovery_case("d", observed=0.0, expected=0.0, passed=True),
+    ]
+    m = compute_metrics(cases)
+    assert m["recovery_rate"] == pytest.approx(2 / 3)
+    assert m["expectation_match_rate"] == pytest.approx(3 / 4)
+
+
+def test_recovery_rate_is_omitted_when_no_case_expects_recovery():
+    """A suite whose every fault case predicts a non-recovery reports the
+    match rate and no recovery rate, since the mean would be over nothing."""
+    m = compute_metrics([_recovery_case("d", observed=0.0, expected=0.0, passed=True)])
+    assert "recovery_rate" not in m
+    assert m["expectation_match_rate"] == 1.0
+
+
+def test_neither_recovery_metric_appears_without_a_recovered_grade():
+    m = compute_metrics([CaseResult(name="a", passed=True, grades=(), trajectory=_traj())])
+    assert "recovery_rate" not in m and "expectation_match_rate" not in m
+
+
 def test_grade_value_is_in_unit_interval():
     with pytest.raises(ValueError):
         Grade(dimension="d", value=1.5, passed=True, explanation="")

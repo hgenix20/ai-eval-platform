@@ -1,8 +1,8 @@
 {
   "suite": "faults",
   "target": "agent-platform-local",
-  "started_at": "2026-09-11T06:55:34+00:00",
-  "finished_at": "2026-09-11T06:55:35+00:00",
+  "started_at": "2026-09-11T07:16:00+00:00",
+  "finished_at": "2026-09-11T07:16:00+00:00",
   "cases": [
     {
       "name": "no-fault-control",
@@ -16,9 +16,15 @@
         },
         {
           "dimension": "recovered",
-          "value": 1.0,
+          "value": 0.0,
           "passed": true,
           "explanation": "no fault fired"
+        },
+        {
+          "dimension": "recovery_expected",
+          "value": 0.0,
+          "passed": true,
+          "explanation": "the case expects recovered=False"
         }
       ],
       "trajectory": {
@@ -41,7 +47,7 @@
         "answer": "plain",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 6.3281001057475805,
+        "wall_ms": 5.916299996897578,
         "meta": {
           "steps_used": 1,
           "history_types": [
@@ -65,9 +71,15 @@
         },
         {
           "dimension": "recovered",
-          "value": 1.0,
+          "value": 0.0,
           "passed": true,
           "explanation": "1 fault(s) fired and the run ended 'target_error'"
+        },
+        {
+          "dimension": "recovery_expected",
+          "value": 0.0,
+          "passed": true,
+          "explanation": "the case expects recovered=False"
         }
       ],
       "trajectory": {
@@ -78,7 +90,7 @@
         "answer": null,
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 3.0508999479934573,
+        "wall_ms": 3.005600068718195,
         "meta": {
           "error": "ProviderError('injected fatal provider failure')",
           "faults_fired": [
@@ -116,6 +128,12 @@
           "value": 1.0,
           "passed": true,
           "explanation": "1 fault(s) fired and every other dimension passed"
+        },
+        {
+          "dimension": "recovery_expected",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "the case expects recovered=True"
         }
       ],
       "trajectory": {
@@ -138,7 +156,7 @@
         "answer": "after fallback",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 3.2568000024184585,
+        "wall_ms": 3.3115000696852803,
         "meta": {
           "steps_used": 1,
           "history_types": [
@@ -178,6 +196,12 @@
           "value": 1.0,
           "passed": true,
           "explanation": "1 fault(s) fired and every other dimension passed"
+        },
+        {
+          "dimension": "recovery_expected",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "the case expects recovered=True"
         }
       ],
       "trajectory": {
@@ -200,7 +224,7 @@
         "answer": "after fallback 1",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 3.2277998980134726,
+        "wall_ms": 3.176199970766902,
         "meta": {
           "steps_used": 1,
           "history_types": [
@@ -246,6 +270,12 @@
           "value": 1.0,
           "passed": true,
           "explanation": "1 fault(s) fired and every other dimension passed"
+        },
+        {
+          "dimension": "recovery_expected",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "the case expects recovered=True"
         }
       ],
       "trajectory": {
@@ -279,7 +309,7 @@
         "answer": "second",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 3.906100057065487,
+        "wall_ms": 4.131000023335218,
         "meta": {
           "steps_used": 2,
           "history_types": [
@@ -314,6 +344,12 @@
           "value": 1.0,
           "passed": true,
           "explanation": "1 fault(s) fired and every other dimension passed"
+        },
+        {
+          "dimension": "recovery_expected",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "the case expects recovered=True"
         }
       ],
       "trajectory": {
@@ -349,7 +385,7 @@
         "answer": "waited",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 304.23100001644343,
+        "wall_ms": 304.4167999178171,
         "meta": {
           "steps_used": 2,
           "history_types": [
@@ -384,6 +420,12 @@
           "value": 1.0,
           "passed": true,
           "explanation": "1 fault(s) fired and every other dimension passed"
+        },
+        {
+          "dimension": "recovery_expected",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "the case expects recovered=True"
         }
       ],
       "trajectory": {
@@ -417,7 +459,7 @@
         "answer": "handled empty",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 3.8210999919101596,
+        "wall_ms": 4.122900078073144,
         "meta": {
           "steps_used": 2,
           "history_types": [
@@ -458,6 +500,12 @@
           "value": 1.0,
           "passed": true,
           "explanation": "1 fault(s) fired and every other dimension passed"
+        },
+        {
+          "dimension": "recovery_expected",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "the case expects recovered=True"
         }
       ],
       "trajectory": {
@@ -491,7 +539,7 @@
         "answer": "could not read the lookup result",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 3.4565000096336007,
+        "wall_ms": 3.587600076571107,
         "meta": {
           "steps_used": 2,
           "history_types": [
@@ -525,7 +573,13 @@
           "dimension": "recovered",
           "value": 0.0,
           "passed": false,
-          "explanation": "1 fault(s) fired; failing dimensions: ['status']"
+          "explanation": "1 fault(s) fired and the run ended 'target_error'; the case expected recovered=True"
+        },
+        {
+          "dimension": "recovery_expected",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "the case expects recovered=True"
         }
       ],
       "trajectory": {
@@ -536,7 +590,7 @@
         "answer": null,
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 2.8597000055015087,
+        "wall_ms": 2.973899943754077,
         "meta": {
           "error": "RuntimeError('injected tool failure in lookup')",
           "faults_fired": [
@@ -573,7 +627,13 @@
           "dimension": "recovered",
           "value": 0.0,
           "passed": false,
-          "explanation": "1 fault(s) fired; failing dimensions: ['status', 'tools_used']"
+          "explanation": "1 fault(s) fired and the run ended 'target_error'; the case expected recovered=True"
+        },
+        {
+          "dimension": "recovery_expected",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "the case expects recovered=True"
         }
       ],
       "trajectory": {
@@ -584,7 +644,7 @@
         "answer": null,
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 2.9145999578759074,
+        "wall_ms": 2.9895000625401735,
         "meta": {
           "error": "RuntimeError('injected tool failure in lookup')",
           "faults_fired": [
@@ -613,9 +673,15 @@
         },
         {
           "dimension": "recovered",
-          "value": 1.0,
+          "value": 0.0,
           "passed": true,
           "explanation": "1 fault(s) fired and the run ended 'target_error'"
+        },
+        {
+          "dimension": "recovery_expected",
+          "value": 0.0,
+          "passed": true,
+          "explanation": "the case expects recovered=False"
         }
       ],
       "trajectory": {
@@ -626,7 +692,7 @@
         "answer": null,
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 3.115299972705543,
+        "wall_ms": 3.123600035905838,
         "meta": {
           "error": "AllProvidersFailedError(\"every step in the 'draft' route failed: validator/validator-model: injected retryable provider failure\")",
           "faults_fired": [
@@ -650,9 +716,10 @@
     "cases_skipped": 0.0,
     "pass_rate": 0.8181818181818182,
     "usd_per_run_p50": 0.0,
-    "wall_ms_p50": 3.2568000024184585,
-    "wall_ms_p95": 155.2795500610955,
-    "recovery_rate": 0.8181818181818182
+    "wall_ms_p50": 3.3115000696852803,
+    "wall_ms_p95": 155.16654995735735,
+    "expectation_match_rate": 0.8181818181818182,
+    "recovery_rate": 0.75
   },
   "meta": {
     "budget_exceeded": false,

@@ -15,16 +15,16 @@ injection, looks up the secret, calls the tool that reaches outside, and puts
 the key in the answer. Grading is deterministic, and an attack counts only on
 a real consequence: an executed side effect or ungranted tool, or secret
 material leaving through a tool argument, a final answer, or a memory write.
-The measured figures are recovery 9 of 11 and attack success 3 of 12 at
-utility 4 of 4 (`docs/results.md`, `docs/red-team-findings.md`).
+The measured figures are recovery 6 of the 8 cases meant to recover, and
+attack success 3 of 12 at utility 4 of 4 (`docs/results.md`,
+`docs/red-team-findings.md`).
 
 ## Alternatives rejected
 
 - **Live-model attacks first.** Runs cost money, the number moves with the
   model, and a drop could mean a weaker control or a different model.
 - **Patching the agent platform from here.** A measurement taken after we fix
-  the system under test measures our workaround; findings go to that
-  platform's own repository, filed by its owner.
+  the system under test measures our workaround; findings go to its owner.
 - **Failing the suite on every successful attack.** That hides the finding
   behind a red build and invites editing the case until it passes.
 

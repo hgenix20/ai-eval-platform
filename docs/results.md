@@ -10,8 +10,9 @@ Five offline suites run against the agent platform in process: `offline_core`
 from Phase 1, and the four gap suites `trajectory`, `faults`, `memory`, and
 `injection` from Phase 2. All five are free, all five run on every push, and
 each has its own section below. The five offline runs published here were
-taken on 2026-09-11 in one pass; the public-benchmark runs further down are
-from 2026-09-10.
+taken on 2026-09-11, four in one pass and the faults suite re-run later the
+same morning after its recovery metric was corrected; the public-benchmark
+runs further down are from 2026-09-10.
 
 ## Offline core suite
 
@@ -74,24 +75,30 @@ dollars is $0.00.
 evalplat run offline --suite-dir suites/faults --target agent-platform-local --results results
 ```
 
-Source: `results/faults/latest.json`, run 2026-09-11T06:55:34Z.
+Source: `results/faults/latest.json`, run 2026-09-11T07:16:00Z.
 
-| suite | cases | pass rate | recovery rate | p50 wall ms | p95 wall ms |
-|---|---|---|---|---|---|
-| faults | 11 | 0.82 (9 of 11) | 0.82 (9 of 11) | 3.257 | 155.280 |
+| suite | cases | pass rate | recovery rate | expectation match | p50 wall ms | p95 wall ms |
+|---|---|---|---|---|---|---|
+| faults | 11 | 0.82 (9 of 11) | 0.75 (6 of 8) | 0.82 (9 of 11) | 3.312 | 155.167 |
 
 Eleven cases inject a seeded fault at a named seam and grade whether the run
 came back from it: a tool handler that raises, malformed and empty tool
 output, a 300 ms tool delay, retryable and fatal provider errors, a truncated
-provider reply, and a validator-side provider error. `recovery_rate` is the
-pass rate of the `recovered` grade, so 9 of 11 means nine cases ended the way
-the case predicted. Read alongside the raw statuses: seven of the eleven runs
-completed and four ended in `target_error`.
+provider reply, and a validator-side provider error.
+
+Two metrics answer two questions. `recovery_rate` is the share of the eight
+cases that were supposed to recover and did, which is 6 of 8.
+`expectation_match_rate` is the share of all eleven that ended the way their
+case predicted, which is 9 of 11. Three cases predict a run the platform
+cannot come back from, and those three are excluded from the recovery
+denominator instead of being counted as recoveries. Across all eleven, seven
+runs completed and four ended in `target_error`.
 
 Two of those four aborts are predicted and pass. A fatal provider error is
 re-raised with no fallback attempt, and a validator fault has no fallback
 route at all, since the fallback this suite installs applies only to the
-planner route. Both are the platform behaving as designed.
+planner route. Both are the platform behaving as designed. The third
+predicted case, `no-fault-control`, fires no fault to come back from.
 
 The other two aborts are the finding, and both are tool-raise cases.
 `ToolExecutor.execute` in the agent platform does not catch an exception from
@@ -103,6 +110,10 @@ never reaches it. See [docs/red-team-findings.md](red-team-findings.md).
 p95 of 155 ms is the single 300 ms delay case showing through an eleven-case
 sample. At that sample size the percentile does one job: it confirms the delay
 fault registers in the timing the runner records.
+
+Only `recovery_rate` is gated. `expectation_match_rate` is published because
+it reports a different thing, how well the case files predict the platform. A
+drop there points at a case file that has gone out of date.
 
 ## Memory suite
 
@@ -201,8 +212,8 @@ against the committed baselines:
 | public_ifeval_speed | ms_per_sample | 9776.3401 | 9776.3401 | max_increase_pct=50.0 | pass |
 | trajectory | pass_rate | 1.0000 | 1.0000 | min=1.0 | pass |
 | trajectory_latency | wall_ms_p95 | 5.5222 | 5.5145 | max_increase_pct=50.0 | pass |
-| faults | recovery_rate | 0.8182 | 0.8182 | max_drop=0.0 | pass |
-| faults_latency | wall_ms_p95 | 155.1254 | 155.2796 | max_increase_pct=50.0 | pass |
+| faults | recovery_rate | 0.7500 | 0.7500 | max_drop=0.0 | pass |
+| faults_latency | wall_ms_p95 | 155.1254 | 155.1665 | max_increase_pct=50.0 | pass |
 | memory | pass_rate | 1.0000 | 1.0000 | min=1.0 | pass |
 | memory_latency | wall_ms_p95 | 7.5786 | 8.0705 | max_increase_pct=50.0 | pass |
 | injection | attack_success_rate | 0.2500 | 0.2500 | max_rise=0.0 | pass |
@@ -211,7 +222,7 @@ against the committed baselines:
 Overall verdict: PASS.
 
 Three of these rows carry a Phase 2 decision worth naming. `faults` compares
-`recovery_rate` with `max_drop: 0.0`, so the measured 0.8182 becomes a floor
+`recovery_rate` with `max_drop: 0.0`, so the measured 0.75 becomes a floor
 the platform may not slip below; the spec's 0.90 target was a guess made
 before anything was measured, and the measurement replaces it. `injection`
 compares `attack_success_rate` with `max_rise: 0.0`, so 0.25 is a ceiling and

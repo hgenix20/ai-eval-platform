@@ -90,12 +90,37 @@ def test_side_effects_fails_when_the_target_cannot_observe_them():
 
 
 def test_recovered_false_fails_when_a_fault_fired_but_the_run_still_completed():
-    """A fault that fires but does not stop the run from completing is the
-    one case `recovered: false` must reject: the case expected no
-    recovery to be needed, but a fault fired anyway."""
+    """A fault that fires without stopping the run from completing is the
+    one case `recovered: false` must reject: the case predicted a run that
+    could not come back, and the run came back."""
     traj = _traj(status="completed", meta={"faults_fired": [{"kind": "raise"}]})
-    [grade] = grade_expect(Case(name="c", goal="g", expect=Expect(recovered=False)), traj)
+    grade, expected = grade_expect(Case(name="c", goal="g", expect=Expect(recovered=False)), traj)
     assert grade.dimension == "recovered" and grade.passed is False
+    assert grade.value == 1.0  # the run did recover, whatever the case predicted
     assert grade.explanation == (
-        "1 fault(s) fired and the run still completed, but the case expected no recovery"
+        "1 fault(s) fired and every other dimension passed; the case expected recovered=False"
     )
+    assert expected.dimension == "recovery_expected"
+    assert expected.value == 0.0 and expected.passed is True
+
+
+def test_recovered_true_records_a_zero_value_when_the_run_aborted():
+    """An unrecovered run scores 0.0 on `recovered` even though the case
+    expected 1.0, so `recovery_rate` counts the failure."""
+    traj = _traj(status="target_error", meta={"faults_fired": [{"kind": "raise"}]})
+    grade, expected = grade_expect(Case(name="c", goal="g", expect=Expect(recovered=True)), traj)
+    assert grade.dimension == "recovered" and grade.passed is False and grade.value == 0.0
+    assert grade.explanation == (
+        "1 fault(s) fired and the run ended 'target_error'; the case expected recovered=True"
+    )
+    assert expected.value == 1.0 and expected.passed is True
+
+
+def test_recovered_false_passes_at_value_zero_on_a_predicted_abort():
+    """A case that correctly predicts an unrecoverable fault passes, and its
+    `recovered` value stays 0.0 so it never inflates `recovery_rate`. Its
+    `recovery_expected` value of 0.0 keeps it out of that mean entirely."""
+    traj = _traj(status="target_error", meta={"faults_fired": [{"kind": "fatal_error"}]})
+    grade, expected = grade_expect(Case(name="c", goal="g", expect=Expect(recovered=False)), traj)
+    assert grade.passed is True and grade.value == 0.0
+    assert expected.value == 0.0

@@ -137,10 +137,11 @@ content rule.
 ### F4. An exception from a tool handler aborts the whole run
 
 Severity: medium. Source: `tool-raise-run-survives` and
-`tool-raise-twice-then-succeeds`, the two cases behind the 9 of 11 recovery
-rate. That metric is the pass rate of the `recovered` grade, so it counts a
-predicted abort as a correct outcome; four of the eleven runs ended in
-`target_error`, and these two are the pair nobody designed for.
+`tool-raise-twice-then-succeeds`, the two cases that drop the recovery rate to
+6 of 8. Eight of the suite's eleven cases are meant to recover, and these two
+are the pair that cannot. Four runs in total end in `target_error`; the other
+two aborts are designed behavior that their cases predict (F5, and a fatal
+provider error), and they sit outside the recovery denominator.
 
 `ToolExecutor.execute` does not catch exceptions raised by a tool handler.
 The orchestrator's plan node catches `ToolAuthorizationError` and

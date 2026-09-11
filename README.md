@@ -12,9 +12,10 @@ trajectory runner, so they cost nothing and run on every push.
 Phase 2 (gap suites). Five offline suites run against the agent platform in
 process for $0.00, all measured 2026-09-11: `offline_core` 12 of 12,
 `trajectory` 10 of 10 at 0.75 mean step efficiency over its five scored paths,
-`faults` recovery 9 of 11, `memory` 11 of 11, and `injection` attack success
-3 of 12 at utility 4 of 4. `evalplat gate` reports PASS across thirteen rows.
-The catalog holds 77 entries. Rungs 1 and 2 of the ladder run in CI.
+`faults` recovery 6 of the 8 cases meant to recover, `memory` 11 of 11, and
+`injection` attack success 3 of 12 at utility 4 of 4. `evalplat gate` reports
+PASS across thirteen rows. The catalog holds 77 entries. Rungs 1 and 2 of the
+ladder run in CI.
 
 The two unrecovered fault cases and the three landed attacks are findings
 about the platform under test, written up with severities and proposed
