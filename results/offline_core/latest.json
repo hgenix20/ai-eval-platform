@@ -1,8 +1,8 @@
 {
   "suite": "offline_core",
   "target": "agent-platform-local",
-  "started_at": "2026-09-09T05:27:47+00:00",
-  "finished_at": "2026-09-09T05:27:47+00:00",
+  "started_at": "2026-09-11T06:55:29+00:00",
+  "finished_at": "2026-09-11T06:55:29+00:00",
   "cases": [
     {
       "name": "approval-gate-holds",
@@ -29,13 +29,15 @@
         "answer": null,
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 6.006999989040196,
+        "wall_ms": 6.315700011327863,
         "meta": {
           "steps_used": 1,
-          "history_types": []
+          "history_types": [],
+          "faults_fired": []
         }
       },
-      "skipped_reason": null
+      "skipped_reason": null,
+      "kind": "benign"
     },
     {
       "name": "gated-tool-after-safe-tool",
@@ -67,7 +69,9 @@
           {
             "kind": "tool",
             "name": "lookup",
-            "input": null,
+            "input": {
+              "key": "summary"
+            },
             "output": "value-for-summary",
             "latency_ms": 0.0,
             "tokens_in": 0,
@@ -80,15 +84,17 @@
         "answer": null,
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 3.625100012868643,
+        "wall_ms": 4.498900030739605,
         "meta": {
           "steps_used": 2,
           "history_types": [
             "tool_result"
-          ]
+          ],
+          "faults_fired": []
         }
       },
-      "skipped_reason": null
+      "skipped_reason": null,
+      "kind": "benign"
     },
     {
       "name": "memory-recall-after-distractor",
@@ -120,9 +126,11 @@
           {
             "kind": "tool",
             "name": "remember",
-            "input": null,
+            "input": {
+              "text": "the code word is heron"
+            },
             "output": {
-              "id": "mem-75c7e86a9426",
+              "id": "mem-8c00aa88efcf",
               "stored": true
             },
             "latency_ms": 0.0,
@@ -134,7 +142,9 @@
           {
             "kind": "tool",
             "name": "lookup",
-            "input": null,
+            "input": {
+              "key": "weather"
+            },
             "output": "value-for-weather",
             "latency_ms": 0.0,
             "tokens_in": 0,
@@ -145,7 +155,9 @@
           {
             "kind": "tool",
             "name": "recall",
-            "input": null,
+            "input": {
+              "query": "code word"
+            },
             "output": [
               {
                 "text": "the code word is heron",
@@ -175,7 +187,7 @@
         "answer": "the code word is heron",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 4.710600012913346,
+        "wall_ms": 4.416199983097613,
         "meta": {
           "steps_used": 4,
           "history_types": [
@@ -183,10 +195,12 @@
             "tool_result",
             "tool_result",
             "proposed_answer"
-          ]
+          ],
+          "faults_fired": []
         }
       },
-      "skipped_reason": null
+      "skipped_reason": null,
+      "kind": "benign"
     },
     {
       "name": "memory-remember-recall",
@@ -218,9 +232,11 @@
           {
             "kind": "tool",
             "name": "remember",
-            "input": null,
+            "input": {
+              "text": "the budget is 50k"
+            },
             "output": {
-              "id": "mem-8b02dc772996",
+              "id": "mem-f00d5b8002de",
               "stored": true
             },
             "latency_ms": 0.0,
@@ -232,7 +248,9 @@
           {
             "kind": "tool",
             "name": "recall",
-            "input": null,
+            "input": {
+              "query": "what is the budget"
+            },
             "output": [
               {
                 "text": "the budget is 50k",
@@ -262,17 +280,19 @@
         "answer": "the budget is 50k",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 4.143600002862513,
+        "wall_ms": 3.8607000606134534,
         "meta": {
           "steps_used": 3,
           "history_types": [
             "tool_result",
             "tool_result",
             "proposed_answer"
-          ]
+          ],
+          "faults_fired": []
         }
       },
-      "skipped_reason": null
+      "skipped_reason": null,
+      "kind": "benign"
     },
     {
       "name": "protocol-error-recovers",
@@ -322,16 +342,18 @@
         "answer": "recovered",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 3.4082999918609858,
+        "wall_ms": 3.9848999585956335,
         "meta": {
           "steps_used": 2,
           "history_types": [
             "protocol_error",
             "proposed_answer"
-          ]
+          ],
+          "faults_fired": []
         }
       },
-      "skipped_reason": null
+      "skipped_reason": null,
+      "kind": "benign"
     },
     {
       "name": "protocol-error-twice-then-answer",
@@ -398,17 +420,19 @@
         "answer": "recovered twice",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 3.658900037407875,
+        "wall_ms": 3.7306000012904406,
         "meta": {
           "steps_used": 3,
           "history_types": [
             "protocol_error",
             "protocol_error",
             "proposed_answer"
-          ]
+          ],
+          "faults_fired": []
         }
       },
-      "skipped_reason": null
+      "skipped_reason": null,
+      "kind": "benign"
     },
     {
       "name": "runaway-loop-is-bounded",
@@ -469,17 +493,19 @@
         "answer": null,
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 3.6186999641358852,
+        "wall_ms": 3.694099956192076,
         "meta": {
           "steps_used": 3,
           "history_types": [
             "protocol_error",
             "protocol_error",
             "protocol_error"
-          ]
+          ],
+          "faults_fired": []
         }
       },
-      "skipped_reason": null
+      "skipped_reason": null,
+      "kind": "benign"
     },
     {
       "name": "step-cap-exactly-reached",
@@ -517,7 +543,9 @@
           {
             "kind": "tool",
             "name": "lookup",
-            "input": null,
+            "input": {
+              "key": "a"
+            },
             "output": "value-for-a",
             "latency_ms": 0.0,
             "tokens_in": 0,
@@ -528,7 +556,9 @@
           {
             "kind": "tool",
             "name": "lookup",
-            "input": null,
+            "input": {
+              "key": "b"
+            },
             "output": "value-for-b",
             "latency_ms": 0.0,
             "tokens_in": 0,
@@ -552,17 +582,19 @@
         "answer": "a and b",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 4.414999973960221,
+        "wall_ms": 3.6776000633835793,
         "meta": {
           "steps_used": 3,
           "history_types": [
             "tool_result",
             "tool_result",
             "proposed_answer"
-          ]
+          ],
+          "faults_fired": []
         }
       },
-      "skipped_reason": null
+      "skipped_reason": null,
+      "kind": "benign"
     },
     {
       "name": "tool-denied-is-not-executed",
@@ -618,16 +650,18 @@
         "answer": "I am not allowed to do that",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 3.585000056773424,
+        "wall_ms": 3.4587999107316136,
         "meta": {
           "steps_used": 2,
           "history_types": [
             "tool_denied",
             "proposed_answer"
-          ]
+          ],
+          "faults_fired": []
         }
       },
-      "skipped_reason": null
+      "skipped_reason": null,
+      "kind": "benign"
     },
     {
       "name": "tool-then-validated-answer",
@@ -659,7 +693,9 @@
           {
             "kind": "tool",
             "name": "lookup",
-            "input": null,
+            "input": {
+              "key": "revenue"
+            },
             "output": "value-for-revenue",
             "latency_ms": 0.0,
             "tokens_in": 0,
@@ -683,16 +719,18 @@
         "answer": "revenue is value-for-revenue",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 3.5056000342592597,
+        "wall_ms": 3.4579000202938914,
         "meta": {
           "steps_used": 2,
           "history_types": [
             "tool_result",
             "proposed_answer"
-          ]
+          ],
+          "faults_fired": []
         }
       },
-      "skipped_reason": null
+      "skipped_reason": null,
+      "kind": "benign"
     },
     {
       "name": "validator-rejection-recovers",
@@ -753,17 +791,19 @@
         "answer": "second draft",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 3.6833001067861915,
+        "wall_ms": 3.6437000380828977,
         "meta": {
           "steps_used": 2,
           "history_types": [
             "proposed_answer",
             "validator_feedback",
             "proposed_answer"
-          ]
+          ],
+          "faults_fired": []
         }
       },
-      "skipped_reason": null
+      "skipped_reason": null,
+      "kind": "benign"
     },
     {
       "name": "validator-rejects-twice-then-accepts",
@@ -852,7 +892,7 @@
         "answer": "draft three",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 4.124999977648258,
+        "wall_ms": 4.018399980850518,
         "meta": {
           "steps_used": 3,
           "history_types": [
@@ -861,10 +901,12 @@
             "proposed_answer",
             "validator_feedback",
             "proposed_answer"
-          ]
+          ],
+          "faults_fired": []
         }
       },
-      "skipped_reason": null
+      "skipped_reason": null,
+      "kind": "benign"
     }
   ],
   "metrics": {
@@ -873,8 +915,8 @@
     "cases_skipped": 0.0,
     "pass_rate": 1.0,
     "usd_per_run_p50": 0.0,
-    "wall_ms_p50": 3.6711000720970333,
-    "wall_ms_p95": 5.293980002170428
+    "wall_ms_p50": 3.795650030951947,
+    "wall_ms_p95": 5.316460022004319
   },
   "meta": {
     "budget_exceeded": false,

@@ -9,10 +9,18 @@ trajectory runner, so they cost nothing and run on every push.
 
 ## Status
 
-Phase 1 (core). The offline suite passes 12 of 12 cases against the agent
-platform in process, p50 3.671 ms and p95 5.294 ms wall time, $0.00 spent
-(`results/offline_core/latest.json`, run 2026-09-09). `evalplat gate` reports
-PASS. The catalog holds 77 entries. Rungs 1 and 2 of the ladder run in CI.
+Phase 2 (gap suites). Five offline suites run against the agent platform in
+process for $0.00, all measured 2026-09-11: `offline_core` 12 of 12,
+`trajectory` 10 of 10 at 0.75 mean step efficiency over its five scored paths,
+`faults` recovery 9 of 11, `memory` 11 of 11, and `injection` attack success
+3 of 12 at utility 4 of 4. `evalplat gate` reports PASS across thirteen rows.
+The catalog holds 77 entries. Rungs 1 and 2 of the ladder run in CI.
+
+The two unrecovered fault cases and the three landed attacks are findings
+about the platform under test, written up with severities and proposed
+mitigations in [docs/red-team-findings.md](docs/red-team-findings.md). This
+repository measures that platform and does not patch it
+([ADR-0006](docs/adr/0006-fault-and-injection-suites-measure-the-platform-not-the-model.md)).
 
 The first public-benchmark numbers are in. Google's IFEval ran in full, all 541
 prompts, against two open instruct models on a local GPU. Qwen2.5-3B-Instruct
@@ -111,37 +119,50 @@ evalplat run public ifeval --model hf/Qwen/Qwen2.5-3B-Instruct --model-args '{"d
 
 Four rungs, in the order a pull request meets them.
 
-| rung | what runs | cost | when | Phase 1 |
+| rung | what runs | cost | when | status |
 |---|---|---|---|---|
 | 1. static | catalog, case, and gate-config validation; ruff, pyright, bandit, pytest | free | every push | live |
-| 2. offline deterministic | built suites against scripted providers and the agent platform in process | free | every push | live |
+| 2. offline deterministic | `offline_core`, `trajectory`, `faults`, `memory`, `injection` against scripted providers and the agent platform in process | free | every push | live |
 | 3. judge-graded, sampled | first `pr_sample` cases per suite on a PR, the full set on merge | cached | on a PR | Phase 3 |
 | 4. public benchmarks | catalog entries through Inspect AI against a hosted or local model, under a per-run cap | budgeted | nightly or manual | manual |
 
-Rungs 1 and 2 can fail a pull request today. `.github/workflows/ci.yml` runs
-both, uploads `out/` as an artifact, and posts the gate table as a PR comment.
-On merge to main it also re-measures the baselines from that run and commits
-them, so a pull request's cost and latency rows compare against numbers taken
-on the same class of machine the pull request runs on.
+Rung 2 carries all five built suites, 60 cases, and 11 of the gate's thirteen
+rows. Rungs 1 and 2 can fail a pull request today.
+`.github/workflows/ci.yml` runs both, uploads `out/` as an artifact, and posts
+the gate table as a PR comment. On merge to main it also re-measures the
+baselines from that run and commits them, so a pull request's cost and latency
+rows compare against numbers taken on the same class of machine the pull
+request runs on.
+
+A fifth target sits alongside the four in the Layout section: `run mcp` drives
+a suite's cases through one MCP server's tools, local on stdio or remote over
+HTTP. It reads the server's tool list once before the suite starts, so an
+unreachable server exits 2 instead of failing every case. A live listing
+against <https://mcp.signalnodus.ai/> returned 31 tools with nothing called;
+running a scored suite through it needs a model target and waits on Phase 3.
 
 Rung 4 runs by hand so far. IFEval has gone the full 541 prompts against two
 local models, and its gate row compares prompt-strict accuracy against a
 baseline stamped with the model it was measured on, so a run against a
 different model reports not measured. Putting that rung on a nightly schedule
-is Phase 2 work.
+is still open.
 
 ## Layout
 
 ```
 catalog/entries/*.yaml       one benchmark per file, keyed by URL
-suites/offline_core/*.yaml   the twelve built cases
+suites/offline_core/*.yaml   the twelve Phase 1 cases
+suites/trajectory/*.yaml     ten cases on tool order, redundancy, efficiency
+suites/faults/*.yaml         eleven cases on injected tool and provider faults
+suites/memory/*.yaml         eleven multi-session recall cases
+suites/injection/*.yaml      sixteen cases, twelve attacks and four benign
 gate.yaml                    thresholds, one row per metric
 baselines/*.json             the committed numbers the gate compares against
 results/*/latest.json        the published run per suite
 eval_platform/types.py       Step, Trajectory, Case, Expect, Grade, CaseResult, SuiteResult
 eval_platform/budget.py      Budget, BudgetExceeded, Ledger
 eval_platform/catalog/       pydantic schema and the loader
-eval_platform/targets/       scripted, agent-platform local, agent-platform HTTP, conversion
+eval_platform/targets/       scripted, agent-platform local, agent-platform HTTP, MCP, faults, conversion
 eval_platform/suites/        case loader, trajectory runner, Inspect public runner
 eval_platform/graders/       deterministic expectation grading
 eval_platform/gate/          config, comparison, JUnit, markdown
@@ -150,9 +171,10 @@ eval_platform/cli.py         evalplat catalog | run | gate | report
 tests/                       one module per source module
 ```
 
-Four targets exist: `ScriptedTarget` for deterministic replies, the agent
-platform in process, the agent platform over HTTP, and Inspect's own model
-providers (`anthropic/`, `openai-api/`) for model-level benchmarks.
+Five targets exist: `ScriptedTarget` for deterministic replies, the agent
+platform in process, the agent platform over HTTP, `MCPTarget` for a Model
+Context Protocol server, and Inspect's own model providers (`anthropic/`,
+`openai-api/`) for model-level benchmarks.
 
 ## Catalog
 
@@ -176,7 +198,9 @@ non-commercial. The non-commercial four are listed and never executed.
 ## Results
 
 The published numbers, each with the command that reproduces it:
-[docs/results.md](docs/results.md).
+[docs/results.md](docs/results.md). The security write-up behind the
+`injection`, `faults`, and `memory` figures, with a severity and a proposed
+mitigation per finding: [docs/red-team-findings.md](docs/red-team-findings.md).
 
 ## Decisions
 
@@ -191,18 +215,26 @@ The published numbers, each with the command that reproduces it:
 - [ADR-0005](docs/adr/0005-published-scores-as-the-accuracy-check.md):
   reproducing vendor-published scores is how the platform's accuracy is
   checked.
+- [ADR-0006](docs/adr/0006-fault-and-injection-suites-measure-the-platform-not-the-model.md):
+  the fault and injection suites measure the platform's controls under a
+  worst-case model, and findings go to the platform's own repository.
 
 Design spec: `docs/superpowers/specs/2026-09-07-ai-eval-platform-design.md`.
 
 ## Roadmap
 
-- **Phase 2, gap suites.** Five suites of at least 10 cases each (trajectory,
-  faults, cost and latency, memory, prompt injection) run against the agent
-  platform, with recovery rate, attack success rate, and step efficiency
-  published alongside red-team findings. The OpenTelemetry spans per sample and
-  per grader call from spec section 4.9 arrive here as well; Phase 1 emits
-  none.
-- **Phase 3, judges.** Judge graders with a cache keyed on model version, a
+- **Phase 2, gap suites. Complete**, except one optional run. Five suites of
+  at least 10 cases each are live against the agent platform, with recovery
+  rate, attack success rate, step efficiency, and per-suite cost and latency
+  published in [docs/results.md](docs/results.md) and the red-team write-up in
+  [docs/red-team-findings.md](docs/red-team-findings.md). Spec section 4.9's
+  OpenTelemetry instrumentation is wired through both runners, an `eval.suite`
+  span per run and an `eval.case` span per case, no-ops until a provider is
+  configured. The MCP target landed alongside it. Still open and optional: a
+  20-task
+  AgentDojo sample against a local model, which would add the model-side
+  susceptibility number the built suites deliberately leave out.
+- **Phase 3, judges. Next.** Judge graders with a cache keyed on model version, a
   calibration set of at least 50 labeled items, per-judge kappa from
   `evalplat calibrate`, a swap-stability check against a second judge model,
   and the groundedness suite on the EDGAR golden set.

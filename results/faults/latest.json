@@ -1,8 +1,8 @@
 {
   "suite": "faults",
   "target": "agent-platform-local",
-  "started_at": "2026-09-11T06:17:48+00:00",
-  "finished_at": "2026-09-11T06:17:48+00:00",
+  "started_at": "2026-09-11T06:55:34+00:00",
+  "finished_at": "2026-09-11T06:55:35+00:00",
   "cases": [
     {
       "name": "no-fault-control",
@@ -41,7 +41,7 @@
         "answer": "plain",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 6.095100077800453,
+        "wall_ms": 6.3281001057475805,
         "meta": {
           "steps_used": 1,
           "history_types": [
@@ -78,7 +78,7 @@
         "answer": null,
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 3.0049000633880496,
+        "wall_ms": 3.0508999479934573,
         "meta": {
           "error": "ProviderError('injected fatal provider failure')",
           "faults_fired": [
@@ -138,7 +138,7 @@
         "answer": "after fallback",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 3.24899994302541,
+        "wall_ms": 3.2568000024184585,
         "meta": {
           "steps_used": 1,
           "history_types": [
@@ -200,7 +200,7 @@
         "answer": "after fallback 1",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 3.1798999989405274,
+        "wall_ms": 3.2277998980134726,
         "meta": {
           "steps_used": 1,
           "history_types": [
@@ -279,7 +279,7 @@
         "answer": "second",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 3.437699982896447,
+        "wall_ms": 3.906100057065487,
         "meta": {
           "steps_used": 2,
           "history_types": [
@@ -349,7 +349,7 @@
         "answer": "waited",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 304.15560002438724,
+        "wall_ms": 304.23100001644343,
         "meta": {
           "steps_used": 2,
           "history_types": [
@@ -417,7 +417,7 @@
         "answer": "handled empty",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 4.4568999437615275,
+        "wall_ms": 3.8210999919101596,
         "meta": {
           "steps_used": 2,
           "history_types": [
@@ -491,7 +491,7 @@
         "answer": "could not read the lookup result",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 3.4212000900879502,
+        "wall_ms": 3.4565000096336007,
         "meta": {
           "steps_used": 2,
           "history_types": [
@@ -536,7 +536,7 @@
         "answer": null,
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 3.5397999454289675,
+        "wall_ms": 2.8597000055015087,
         "meta": {
           "error": "RuntimeError('injected tool failure in lookup')",
           "faults_fired": [
@@ -584,7 +584,7 @@
         "answer": null,
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 3.512199968099594,
+        "wall_ms": 2.9145999578759074,
         "meta": {
           "error": "RuntimeError('injected tool failure in lookup')",
           "faults_fired": [
@@ -626,7 +626,7 @@
         "answer": null,
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 3.640800016000867,
+        "wall_ms": 3.115299972705543,
         "meta": {
           "error": "AllProvidersFailedError(\"every step in the 'draft' route failed: validator/validator-model: injected retryable provider failure\")",
           "faults_fired": [
@@ -650,8 +650,8 @@
     "cases_skipped": 0.0,
     "pass_rate": 0.8181818181818182,
     "usd_per_run_p50": 0.0,
-    "wall_ms_p50": 3.512199968099594,
-    "wall_ms_p95": 155.12535005109385,
+    "wall_ms_p50": 3.2568000024184585,
+    "wall_ms_p95": 155.2795500610955,
     "recovery_rate": 0.8181818181818182
   },
   "meta": {

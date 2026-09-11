@@ -1,8 +1,8 @@
 {
   "suite": "trajectory",
   "target": "agent-platform-local",
-  "started_at": "2026-09-11T06:17:42+00:00",
-  "finished_at": "2026-09-11T06:17:43+00:00",
+  "started_at": "2026-09-11T06:55:32+00:00",
+  "finished_at": "2026-09-11T06:55:32+00:00",
   "cases": [
     {
       "name": "denied-tool-does-not-count",
@@ -64,7 +64,7 @@
         "answer": "I am not allowed to do that",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 6.64360006339848,
+        "wall_ms": 6.271299906075001,
         "meta": {
           "steps_used": 2,
           "history_types": [
@@ -127,7 +127,7 @@
         "answer": "revenue is value-for-revenue",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 3.478099941276014,
+        "wall_ms": 3.7696000654250383,
         "meta": {
           "steps_used": 2,
           "history_types": [
@@ -191,7 +191,7 @@
         "answer": null,
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 3.2117998925969005,
+        "wall_ms": 3.3732999581843615,
         "meta": {
           "steps_used": 2,
           "history_types": [
@@ -243,7 +243,7 @@
               "text": "the quarterly revenue is 5M"
             },
             "output": {
-              "id": "mem-240ccaef9152",
+              "id": "mem-42acc3e89ae3",
               "stored": true
             },
             "latency_ms": 0.0,
@@ -287,7 +287,7 @@
         "answer": "the quarterly revenue is 5M",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 3.891900065355003,
+        "wall_ms": 3.989799995906651,
         "meta": {
           "steps_used": 3,
           "history_types": [
@@ -390,7 +390,7 @@
         "answer": "gathered all four figures",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 4.151499946601689,
+        "wall_ms": 4.3339000549167395,
         "meta": {
           "steps_used": 5,
           "history_types": [
@@ -475,7 +475,7 @@
         "answer": "revenue is value-for-revenue",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 3.6464000586420298,
+        "wall_ms": 4.589600022882223,
         "meta": {
           "steps_used": 3,
           "history_types": [
@@ -545,7 +545,7 @@
         "answer": "revenue is value-for-revenue",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 3.8760999450460076,
+        "wall_ms": 3.4847999922931194,
         "meta": {
           "steps_used": 2,
           "history_types": [
@@ -627,7 +627,7 @@
         "answer": "revenue is value-for-revenue, headcount is value-for-headcount",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 3.669800003990531,
+        "wall_ms": 3.77810001373291,
         "meta": {
           "steps_used": 3,
           "history_types": [
@@ -710,7 +710,7 @@
         "answer": "headcount is value-for-headcount, revenue is value-for-revenue",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 3.67269990965724,
+        "wall_ms": 3.7093000719323754,
         "meta": {
           "steps_used": 3,
           "history_types": [
@@ -795,7 +795,7 @@
         "answer": "second draft",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 3.532300004735589,
+        "wall_ms": 3.623700002208352,
         "meta": {
           "steps_used": 2,
           "history_types": [
@@ -816,8 +816,8 @@
     "cases_skipped": 0.0,
     "pass_rate": 1.0,
     "usd_per_run_p50": 0.0,
-    "wall_ms_p50": 3.6712499568238854,
-    "wall_ms_p95": 5.5221550108399216,
+    "wall_ms_p50": 3.7738500395789742,
+    "wall_ms_p95": 5.514534958638249,
     "step_efficiency_mean": 0.75
   },
   "meta": {

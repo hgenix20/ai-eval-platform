@@ -1,8 +1,8 @@
 {
   "suite": "memory",
   "target": "agent-platform-local",
-  "started_at": "2026-09-11T06:18:00+00:00",
-  "finished_at": "2026-09-11T06:18:00+00:00",
+  "started_at": "2026-09-11T06:55:37+00:00",
+  "finished_at": "2026-09-11T06:55:37+00:00",
   "cases": [
     {
       "name": "conflict-newest-value-wins",
@@ -71,7 +71,7 @@
         "answer": "75k",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 8.439600002020597,
+        "wall_ms": 9.616600000299513,
         "meta": {
           "steps_used": 2,
           "history_types": [
@@ -169,7 +169,7 @@
         "answer": "cannot forget, no forget tool available",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 4.521700087934732,
+        "wall_ms": 4.67289995867759,
         "meta": {
           "steps_used": 2,
           "history_types": [
@@ -257,7 +257,7 @@
         "answer": "found it",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 4.4565999414771795,
+        "wall_ms": 4.571600002236664,
         "meta": {
           "steps_used": 2,
           "history_types": [
@@ -374,7 +374,7 @@
         "answer": "five",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 5.771799944341183,
+        "wall_ms": 6.524499971419573,
         "meta": {
           "steps_used": 2,
           "history_types": [
@@ -479,7 +479,7 @@
         "answer": "October 3rd",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 6.717500044032931,
+        "wall_ms": 6.3934000208973885,
         "meta": {
           "steps_used": 2,
           "history_types": [
@@ -593,7 +593,7 @@
         "answer": "recalled",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 5.4923000279814005,
+        "wall_ms": 5.53680001758039,
         "meta": {
           "steps_used": 2,
           "history_types": [
@@ -699,7 +699,7 @@
         "answer": "heron",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 4.571199999190867,
+        "wall_ms": 4.737699986435473,
         "meta": {
           "steps_used": 2,
           "history_types": [
@@ -796,7 +796,7 @@
         "answer": "Tuesday",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 5.466799950227141,
+        "wall_ms": 5.581100005656481,
         "meta": {
           "steps_used": 2,
           "history_types": [
@@ -890,7 +890,7 @@
         "answer": "nothing found",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 3.727999981492758,
+        "wall_ms": 3.535900032147765,
         "meta": {
           "steps_used": 2,
           "history_types": [
@@ -965,7 +965,7 @@
         "answer": "the password is orchid",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 4.586499999277294,
+        "wall_ms": 4.521699971519411,
         "meta": {
           "steps_used": 2,
           "history_types": [
@@ -1034,7 +1034,7 @@
               "text": "the mascot is otter"
             },
             "output": {
-              "id": "mem-2fcf757101e6",
+              "id": "mem-ab1804787ac9",
               "stored": true
             },
             "latency_ms": 0.0,
@@ -1050,7 +1050,7 @@
               "text": "the anthem is thunder"
             },
             "output": {
-              "id": "mem-02d1bc2085cf",
+              "id": "mem-54aa57888c16",
               "stored": true
             },
             "latency_ms": 0.0,
@@ -1123,7 +1123,7 @@
         "answer": "the mascot is otter and the anthem is thunder",
         "side_effects": [],
         "cost_usd": 0.0,
-        "wall_ms": 4.6446999767795205,
+        "wall_ms": 4.536899970844388,
         "meta": {
           "steps_used": 5,
           "history_types": [
@@ -1146,8 +1146,8 @@
     "cases_skipped": 0.0,
     "pass_rate": 1.0,
     "usd_per_run_p50": 0.0,
-    "wall_ms_p50": 4.6446999767795205,
-    "wall_ms_p95": 7.578550023026764,
+    "wall_ms_p50": 4.737699986435473,
+    "wall_ms_p95": 8.070549985859543,
     "step_efficiency_mean": 1.0
   },
   "meta": {
