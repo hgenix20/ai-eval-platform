@@ -6,6 +6,7 @@ built suites produce, so the gate and report treat both alike."""
 from __future__ import annotations
 
 import math
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -55,6 +56,19 @@ def _headline(log: EvalLog) -> float:
     return float(first.value) if first is not None else 0.0
 
 
+def _wall_ms_total(started_at: str, finished_at: str) -> float:
+    """Milliseconds between `started_at` and `finished_at`, both ISO 8601
+    timestamps as Inspect writes them in `log.stats`. Returns 0.0 if either
+    is the empty string (Inspect's sentinel for a run interrupted before
+    that timestamp was set), rather than raising, since a public summary
+    must still carry this key even for an incomplete run.
+    """
+    if not started_at or not finished_at:
+        return 0.0
+    delta = datetime.fromisoformat(finished_at) - datetime.fromisoformat(started_at)
+    return delta.total_seconds() * 1000.0
+
+
 def _usage(log: EvalLog) -> tuple[int, int, float]:
     """Sum input tokens, output tokens, and dollar cost across every model
     Inspect recorded usage for. `log.stats` is always present (Inspect
@@ -86,7 +100,12 @@ def eval_log_to_suite_result(log: EvalLog, *, suite: str, target: str) -> SuiteR
     always present, 0.0 when none); `usd` is 0.0 when Inspect recorded no
     cost. Missing `log.results` (an incomplete or errored run) degrades
     `samples_total`/`samples_completed` to the sample count from
-    `log.samples` rather than raising.
+    `log.samples` rather than raising. `metrics["wall_ms_total"]` is the
+    run's wall-clock duration in milliseconds, `log.stats.completed_at`
+    minus `log.stats.started_at` (0.0 if either is the empty string, e.g.
+    a run interrupted before that timestamp was set).
+    `metrics["ms_per_sample"]` is `wall_ms_total / max(samples_completed, 1)`,
+    so it stays defined even for a run that completed zero samples.
 
     An errored Inspect run (`log.status != "success"`, e.g. a provider ran
     out of credits mid-run) is a record of what happened, not a completed
@@ -153,15 +172,19 @@ def eval_log_to_suite_result(log: EvalLog, *, suite: str, target: str) -> SuiteR
     tin, tout, usd = _usage(log)
     samples_unscored = sum(1 for c in cases if c.skipped_reason == "unscored")
     samples_errored = sum(1 for s in log.samples or () if s.error is not None)
+    samples_completed = float(log.results.completed_samples if log.results else len(cases))
+    wall_ms_total = _wall_ms_total(log.stats.started_at, log.stats.completed_at)
     metrics: dict[str, float] = {
         "accuracy": _headline(log),
         "samples_total": float(log.results.total_samples if log.results else len(cases)),
-        "samples_completed": float(log.results.completed_samples if log.results else len(cases)),
+        "samples_completed": samples_completed,
         "input_tokens": float(tin),
         "output_tokens": float(tout),
         "usd": usd,
         "samples_unscored": float(samples_unscored),
         "samples_errored": float(samples_errored),
+        "wall_ms_total": wall_ms_total,
+        "ms_per_sample": wall_ms_total / max(samples_completed, 1.0),
     }
     for score in log.results.scores if log.results else ():
         for metric_name, metric in score.metrics.items():

@@ -7588,6 +7588,8 @@
     "usd": 0.0,
     "samples_unscored": 0.0,
     "samples_errored": 0.0,
+    "wall_ms_total": 5289000.0,
+    "ms_per_sample": 9776.34011090573,
     "instruction_following.prompt_strict_acc": 0.5933456561922366,
     "instruction_following.prompt_strict_stderr": 0.021138283177336344,
     "instruction_following.prompt_loose_acc": 0.6210720887245841,

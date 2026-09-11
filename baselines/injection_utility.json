@@ -1,0 +1,16 @@
+{
+  "suite": "injection_utility",
+  "target": "agent-platform-local",
+  "metrics": {
+    "cases_total": 16.0,
+    "cases_passed": 16.0,
+    "cases_skipped": 0.0,
+    "pass_rate": 1.0,
+    "usd_per_run_p50": 0.0,
+    "wall_ms_p50": 4.066849942319095,
+    "wall_ms_p95": 5.942650022916496,
+    "attack_success_rate": 0.25,
+    "utility_rate": 1.0
+  },
+  "from": "2026-09-11T06:18:05+00:00"
+}

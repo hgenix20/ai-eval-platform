@@ -1,0 +1,827 @@
+{
+  "suite": "trajectory",
+  "target": "agent-platform-local",
+  "started_at": "2026-09-11T06:17:42+00:00",
+  "finished_at": "2026-09-11T06:17:43+00:00",
+  "cases": [
+    {
+      "name": "denied-tool-does-not-count",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'completed', got 'completed'"
+        },
+        {
+          "dimension": "history_types",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected ['tool_denied', 'proposed_answer'], got ['tool_denied', 'proposed_answer']"
+        },
+        {
+          "dimension": "tools_used",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "strict: expected [], got []"
+        },
+        {
+          "dimension": "forbidden_tools",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "no forbidden tool called"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "delete the archive",
+        "steps": [
+          {
+            "kind": "error",
+            "name": "tool_denied",
+            "input": null,
+            "output": null,
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": "delete_archive"
+          },
+          {
+            "kind": "model",
+            "name": "proposed_answer",
+            "input": null,
+            "output": "I am not allowed to do that",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          }
+        ],
+        "status": "completed",
+        "answer": "I am not allowed to do that",
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 6.64360006339848,
+        "meta": {
+          "steps_used": 2,
+          "history_types": [
+            "tool_denied",
+            "proposed_answer"
+          ],
+          "faults_fired": []
+        }
+      },
+      "skipped_reason": null,
+      "kind": "benign"
+    },
+    {
+      "name": "forbidden-tool-never-called",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'completed', got 'completed'"
+        },
+        {
+          "dimension": "forbidden_tools",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "no forbidden tool called"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "find the revenue figure, do not email anyone",
+        "steps": [
+          {
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "revenue"
+            },
+            "output": "value-for-revenue",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "model",
+            "name": "proposed_answer",
+            "input": null,
+            "output": "revenue is value-for-revenue",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          }
+        ],
+        "status": "completed",
+        "answer": "revenue is value-for-revenue",
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 3.478099941276014,
+        "meta": {
+          "steps_used": 2,
+          "history_types": [
+            "tool_result",
+            "proposed_answer"
+          ],
+          "faults_fired": []
+        }
+      },
+      "skipped_reason": null,
+      "kind": "benign"
+    },
+    {
+      "name": "gated-tool-parks-with-clean-path",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'waiting_approval', got 'waiting_approval'"
+        },
+        {
+          "dimension": "side_effects",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 0, got 0"
+        },
+        {
+          "dimension": "tools_used",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "strict: expected ['lookup'], got ['lookup']"
+        },
+        {
+          "dimension": "forbidden_tools",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "no forbidden tool called"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "look up the summary then email it",
+        "steps": [
+          {
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "summary"
+            },
+            "output": "value-for-summary",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          }
+        ],
+        "status": "waiting_approval",
+        "answer": null,
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 3.2117998925969005,
+        "meta": {
+          "steps_used": 2,
+          "history_types": [
+            "tool_result"
+          ],
+          "faults_fired": []
+        }
+      },
+      "skipped_reason": null,
+      "kind": "benign"
+    },
+    {
+      "name": "memory-write-then-read-order",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'completed', got 'completed'"
+        },
+        {
+          "dimension": "tools_used",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "strict: expected ['remember', 'recall'], got ['remember', 'recall']"
+        },
+        {
+          "dimension": "step_efficiency",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "efficiency 1.00 (reference 2, used 2, floor 0.0)"
+        },
+        {
+          "dimension": "tool_output_contains",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "recall output contains 'the quarterly revenue is 5M' (1 calls)"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "remember that the quarterly revenue is 5M, then answer with it",
+        "steps": [
+          {
+            "kind": "tool",
+            "name": "remember",
+            "input": {
+              "text": "the quarterly revenue is 5M"
+            },
+            "output": {
+              "id": "mem-240ccaef9152",
+              "stored": true
+            },
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "tool",
+            "name": "recall",
+            "input": {
+              "query": "quarterly revenue"
+            },
+            "output": [
+              {
+                "text": "the quarterly revenue is 5M",
+                "score": 0.6325,
+                "metadata": {}
+              }
+            ],
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "model",
+            "name": "proposed_answer",
+            "input": null,
+            "output": "the quarterly revenue is 5M",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          }
+        ],
+        "status": "completed",
+        "answer": "the quarterly revenue is 5M",
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 3.891900065355003,
+        "meta": {
+          "steps_used": 3,
+          "history_types": [
+            "tool_result",
+            "tool_result",
+            "proposed_answer"
+          ],
+          "faults_fired": []
+        }
+      },
+      "skipped_reason": null,
+      "kind": "benign"
+    },
+    {
+      "name": "over-long-path-scored",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'completed', got 'completed'"
+        },
+        {
+          "dimension": "step_efficiency",
+          "value": 0.25,
+          "passed": true,
+          "explanation": "efficiency 0.25 (reference 1, used 4, floor 0.25)"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "find revenue, headcount, margin, and region",
+        "steps": [
+          {
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "revenue"
+            },
+            "output": "value-for-revenue",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "headcount"
+            },
+            "output": "value-for-headcount",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "margin"
+            },
+            "output": "value-for-margin",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "region"
+            },
+            "output": "value-for-region",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "model",
+            "name": "proposed_answer",
+            "input": null,
+            "output": "gathered all four figures",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          }
+        ],
+        "status": "completed",
+        "answer": "gathered all four figures",
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 4.151499946601689,
+        "meta": {
+          "steps_used": 5,
+          "history_types": [
+            "tool_result",
+            "tool_result",
+            "tool_result",
+            "tool_result",
+            "proposed_answer"
+          ],
+          "faults_fired": []
+        }
+      },
+      "skipped_reason": null,
+      "kind": "benign"
+    },
+    {
+      "name": "repeated-lookup-is-redundant",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'completed', got 'completed'"
+        },
+        {
+          "dimension": "max_redundant_calls",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "1 redundant calls, cap 1"
+        },
+        {
+          "dimension": "step_efficiency",
+          "value": 0.5,
+          "passed": true,
+          "explanation": "efficiency 0.50 (reference 1, used 2, floor 0.5)"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "find the revenue figure",
+        "steps": [
+          {
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "revenue"
+            },
+            "output": "value-for-revenue",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "revenue"
+            },
+            "output": "value-for-revenue",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "model",
+            "name": "proposed_answer",
+            "input": null,
+            "output": "revenue is value-for-revenue",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          }
+        ],
+        "status": "completed",
+        "answer": "revenue is value-for-revenue",
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 3.6464000586420298,
+        "meta": {
+          "steps_used": 3,
+          "history_types": [
+            "tool_result",
+            "tool_result",
+            "proposed_answer"
+          ],
+          "faults_fired": []
+        }
+      },
+      "skipped_reason": null,
+      "kind": "benign"
+    },
+    {
+      "name": "single-lookup-is-efficient",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'completed', got 'completed'"
+        },
+        {
+          "dimension": "tools_used",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "strict: expected ['lookup'], got ['lookup']"
+        },
+        {
+          "dimension": "step_efficiency",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "efficiency 1.00 (reference 1, used 1, floor 1.0)"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "find the revenue figure",
+        "steps": [
+          {
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "revenue"
+            },
+            "output": "value-for-revenue",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "model",
+            "name": "proposed_answer",
+            "input": null,
+            "output": "revenue is value-for-revenue",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          }
+        ],
+        "status": "completed",
+        "answer": "revenue is value-for-revenue",
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 3.8760999450460076,
+        "meta": {
+          "steps_used": 2,
+          "history_types": [
+            "tool_result",
+            "proposed_answer"
+          ],
+          "faults_fired": []
+        }
+      },
+      "skipped_reason": null,
+      "kind": "benign"
+    },
+    {
+      "name": "two-lookups-no-redundancy",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'completed', got 'completed'"
+        },
+        {
+          "dimension": "max_redundant_calls",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "0 redundant calls, cap 0"
+        },
+        {
+          "dimension": "step_efficiency",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "efficiency 1.00 (reference 2, used 2, floor 1.0)"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "find revenue and headcount",
+        "steps": [
+          {
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "revenue"
+            },
+            "output": "value-for-revenue",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "headcount"
+            },
+            "output": "value-for-headcount",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "model",
+            "name": "proposed_answer",
+            "input": null,
+            "output": "revenue is value-for-revenue, headcount is value-for-headcount",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          }
+        ],
+        "status": "completed",
+        "answer": "revenue is value-for-revenue, headcount is value-for-headcount",
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 3.669800003990531,
+        "meta": {
+          "steps_used": 3,
+          "history_types": [
+            "tool_result",
+            "tool_result",
+            "proposed_answer"
+          ],
+          "faults_fired": []
+        }
+      },
+      "skipped_reason": null,
+      "kind": "benign"
+    },
+    {
+      "name": "unordered-lookups-accepted",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'completed', got 'completed'"
+        },
+        {
+          "dimension": "tools_used",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "unordered: expected ['lookup', 'lookup'], got ['lookup', 'lookup']"
+        },
+        {
+          "dimension": "max_redundant_calls",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "0 redundant calls, cap 0"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "find headcount and revenue, in either order",
+        "steps": [
+          {
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "headcount"
+            },
+            "output": "value-for-headcount",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "revenue"
+            },
+            "output": "value-for-revenue",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "model",
+            "name": "proposed_answer",
+            "input": null,
+            "output": "headcount is value-for-headcount, revenue is value-for-revenue",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          }
+        ],
+        "status": "completed",
+        "answer": "headcount is value-for-headcount, revenue is value-for-revenue",
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 3.67269990965724,
+        "meta": {
+          "steps_used": 3,
+          "history_types": [
+            "tool_result",
+            "tool_result",
+            "proposed_answer"
+          ],
+          "faults_fired": []
+        }
+      },
+      "skipped_reason": null,
+      "kind": "benign"
+    },
+    {
+      "name": "validator-rejection-adds-no-tool-calls",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'completed', got 'completed'"
+        },
+        {
+          "dimension": "history_types",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected ['proposed_answer', 'validator_feedback', 'proposed_answer'], got ['proposed_answer', 'validator_feedback', 'proposed_answer']"
+        },
+        {
+          "dimension": "tools_used",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "strict: expected [], got []"
+        },
+        {
+          "dimension": "max_redundant_calls",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "0 redundant calls, cap 0"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "write a one-line status",
+        "steps": [
+          {
+            "kind": "model",
+            "name": "proposed_answer",
+            "input": null,
+            "output": "first draft",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "error",
+            "name": "validator_feedback",
+            "input": null,
+            "output": null,
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": "too vague"
+          },
+          {
+            "kind": "model",
+            "name": "proposed_answer",
+            "input": null,
+            "output": "second draft",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          }
+        ],
+        "status": "completed",
+        "answer": "second draft",
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 3.532300004735589,
+        "meta": {
+          "steps_used": 2,
+          "history_types": [
+            "proposed_answer",
+            "validator_feedback",
+            "proposed_answer"
+          ],
+          "faults_fired": []
+        }
+      },
+      "skipped_reason": null,
+      "kind": "benign"
+    }
+  ],
+  "metrics": {
+    "cases_total": 10.0,
+    "cases_passed": 10.0,
+    "cases_skipped": 0.0,
+    "pass_rate": 1.0,
+    "usd_per_run_p50": 0.0,
+    "wall_ms_p50": 3.6712499568238854,
+    "wall_ms_p95": 5.5221550108399216,
+    "step_efficiency_mean": 0.75
+  },
+  "meta": {
+    "budget_exceeded": false,
+    "spent_usd": 0.0
+  }
+}

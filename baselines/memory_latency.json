@@ -1,0 +1,15 @@
+{
+  "suite": "memory_latency",
+  "target": "agent-platform-local",
+  "metrics": {
+    "cases_total": 11.0,
+    "cases_passed": 11.0,
+    "cases_skipped": 0.0,
+    "pass_rate": 1.0,
+    "usd_per_run_p50": 0.0,
+    "wall_ms_p50": 4.6446999767795205,
+    "wall_ms_p95": 7.578550023026764,
+    "step_efficiency_mean": 1.0
+  },
+  "from": "2026-09-11T06:18:00+00:00"
+}

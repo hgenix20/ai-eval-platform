@@ -1,0 +1,15 @@
+{
+  "suite": "trajectory",
+  "target": "agent-platform-local",
+  "metrics": {
+    "cases_total": 10.0,
+    "cases_passed": 10.0,
+    "cases_skipped": 0.0,
+    "pass_rate": 1.0,
+    "usd_per_run_p50": 0.0,
+    "wall_ms_p50": 3.6712499568238854,
+    "wall_ms_p95": 5.5221550108399216,
+    "step_efficiency_mean": 0.75
+  },
+  "from": "2026-09-11T06:17:42+00:00"
+}

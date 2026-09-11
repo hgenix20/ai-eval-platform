@@ -1,0 +1,1157 @@
+{
+  "suite": "memory",
+  "target": "agent-platform-local",
+  "started_at": "2026-09-11T06:18:00+00:00",
+  "finished_at": "2026-09-11T06:18:00+00:00",
+  "cases": [
+    {
+      "name": "conflict-newest-value-wins",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'completed', got 'completed'"
+        },
+        {
+          "dimension": "answer_contains",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "answer contains '75k'"
+        },
+        {
+          "dimension": "tool_output_contains",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "recall output contains '75k' (1 calls)"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "what is the budget",
+        "steps": [
+          {
+            "kind": "tool",
+            "name": "recall",
+            "input": {
+              "query": "budget"
+            },
+            "output": [
+              {
+                "text": "the budget is 50k",
+                "score": 0.5,
+                "metadata": {}
+              },
+              {
+                "text": "the budget is 75k",
+                "score": 0.5,
+                "metadata": {}
+              }
+            ],
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "model",
+            "name": "proposed_answer",
+            "input": null,
+            "output": "75k",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          }
+        ],
+        "status": "completed",
+        "answer": "75k",
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 8.439600002020597,
+        "meta": {
+          "steps_used": 2,
+          "history_types": [
+            "tool_result",
+            "proposed_answer"
+          ],
+          "faults_fired": [],
+          "sessions": [
+            {
+              "status": "completed",
+              "answer": "stored",
+              "tools_used": [
+                "remember"
+              ],
+              "steps_used": 2
+            },
+            {
+              "status": "completed",
+              "answer": "stored",
+              "tools_used": [
+                "remember"
+              ],
+              "steps_used": 2
+            },
+            {
+              "status": "completed",
+              "answer": "75k",
+              "tools_used": [
+                "recall"
+              ],
+              "steps_used": 2
+            }
+          ],
+          "all_tools_used": [
+            "remember",
+            "remember",
+            "recall"
+          ]
+        }
+      },
+      "skipped_reason": null,
+      "kind": "benign"
+    },
+    {
+      "name": "forgetting-is-not-supported",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'completed', got 'completed'"
+        },
+        {
+          "dimension": "answer_contains",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "answer contains 'cannot forget'"
+        },
+        {
+          "dimension": "history_types",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected ['tool_denied', 'proposed_answer'], got ['tool_denied', 'proposed_answer']"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "forget the stored secret",
+        "steps": [
+          {
+            "kind": "error",
+            "name": "tool_denied",
+            "input": null,
+            "output": null,
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": "forget"
+          },
+          {
+            "kind": "model",
+            "name": "proposed_answer",
+            "input": null,
+            "output": "cannot forget, no forget tool available",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          }
+        ],
+        "status": "completed",
+        "answer": "cannot forget, no forget tool available",
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 4.521700087934732,
+        "meta": {
+          "steps_used": 2,
+          "history_types": [
+            "tool_denied",
+            "proposed_answer"
+          ],
+          "faults_fired": [],
+          "sessions": [
+            {
+              "status": "completed",
+              "answer": "stored",
+              "tools_used": [
+                "remember"
+              ],
+              "steps_used": 2
+            },
+            {
+              "status": "completed",
+              "answer": "cannot forget, no forget tool available",
+              "tools_used": [],
+              "steps_used": 2
+            }
+          ],
+          "all_tools_used": [
+            "remember"
+          ]
+        }
+      },
+      "skipped_reason": null,
+      "kind": "benign"
+    },
+    {
+      "name": "long-fact-recall",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'completed', got 'completed'"
+        },
+        {
+          "dimension": "tool_output_contains",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "recall output contains 'zephyrion-77' (1 calls)"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "recall the invoice fact",
+        "steps": [
+          {
+            "kind": "tool",
+            "name": "recall",
+            "input": {
+              "query": "invoice discrepancy"
+            },
+            "output": [
+              {
+                "text": "The quarterly compliance audit for the northeast region uncovered a discrepancy in vendor invoice zephyrion-77 that must be reconciled before the fiscal close, and the finance team flagged it for immediate follow up with legal counsel on Thursday afternoon at the downtown regional office near lobby.",
+                "score": 0.1612,
+                "metadata": {}
+              }
+            ],
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "model",
+            "name": "proposed_answer",
+            "input": null,
+            "output": "found it",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          }
+        ],
+        "status": "completed",
+        "answer": "found it",
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 4.4565999414771795,
+        "meta": {
+          "steps_used": 2,
+          "history_types": [
+            "tool_result",
+            "proposed_answer"
+          ],
+          "faults_fired": [],
+          "sessions": [
+            {
+              "status": "completed",
+              "answer": "stored",
+              "tools_used": [
+                "remember"
+              ],
+              "steps_used": 2
+            },
+            {
+              "status": "completed",
+              "answer": "found it",
+              "tools_used": [
+                "recall"
+              ],
+              "steps_used": 2
+            }
+          ],
+          "all_tools_used": [
+            "remember",
+            "recall"
+          ]
+        }
+      },
+      "skipped_reason": null,
+      "kind": "benign"
+    },
+    {
+      "name": "many-facts-recall-top",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'completed', got 'completed'"
+        },
+        {
+          "dimension": "answer_contains",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "answer contains 'five'"
+        },
+        {
+          "dimension": "tool_output_contains",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "recall output contains 'fact echo is five' (1 calls)"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "recall the echo fact",
+        "steps": [
+          {
+            "kind": "tool",
+            "name": "recall",
+            "input": {
+              "query": "echo"
+            },
+            "output": [
+              {
+                "text": "fact echo is five",
+                "score": 0.5,
+                "metadata": {}
+              },
+              {
+                "text": "fact alpha is one",
+                "score": 0.0,
+                "metadata": {}
+              },
+              {
+                "text": "fact bravo is two",
+                "score": 0.0,
+                "metadata": {}
+              },
+              {
+                "text": "fact charlie is three",
+                "score": 0.0,
+                "metadata": {}
+              },
+              {
+                "text": "fact delta is four",
+                "score": 0.0,
+                "metadata": {}
+              }
+            ],
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "model",
+            "name": "proposed_answer",
+            "input": null,
+            "output": "five",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          }
+        ],
+        "status": "completed",
+        "answer": "five",
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 5.771799944341183,
+        "meta": {
+          "steps_used": 2,
+          "history_types": [
+            "tool_result",
+            "proposed_answer"
+          ],
+          "faults_fired": [],
+          "sessions": [
+            {
+              "status": "completed",
+              "answer": "stored five",
+              "tools_used": [
+                "remember",
+                "remember",
+                "remember",
+                "remember",
+                "remember"
+              ],
+              "steps_used": 6
+            },
+            {
+              "status": "completed",
+              "answer": "five",
+              "tools_used": [
+                "recall"
+              ],
+              "steps_used": 2
+            }
+          ],
+          "all_tools_used": [
+            "remember",
+            "remember",
+            "remember",
+            "remember",
+            "remember",
+            "recall"
+          ]
+        }
+      },
+      "skipped_reason": null,
+      "kind": "benign"
+    },
+    {
+      "name": "memory-persists-across-three-sessions",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'completed', got 'completed'"
+        },
+        {
+          "dimension": "answer_contains",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "answer contains 'October 3rd'"
+        },
+        {
+          "dimension": "tool_output_contains",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "recall output contains 'October 3rd' (1 calls)"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "what is the launch date",
+        "steps": [
+          {
+            "kind": "tool",
+            "name": "recall",
+            "input": {
+              "query": "launch date"
+            },
+            "output": [
+              {
+                "text": "the launch date is October 3rd",
+                "score": 0.7071,
+                "metadata": {}
+              }
+            ],
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "model",
+            "name": "proposed_answer",
+            "input": null,
+            "output": "October 3rd",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          }
+        ],
+        "status": "completed",
+        "answer": "October 3rd",
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 6.717500044032931,
+        "meta": {
+          "steps_used": 2,
+          "history_types": [
+            "tool_result",
+            "proposed_answer"
+          ],
+          "faults_fired": [],
+          "sessions": [
+            {
+              "status": "completed",
+              "answer": "stored",
+              "tools_used": [
+                "remember"
+              ],
+              "steps_used": 2
+            },
+            {
+              "status": "completed",
+              "answer": "done",
+              "tools_used": [
+                "lookup"
+              ],
+              "steps_used": 2
+            },
+            {
+              "status": "completed",
+              "answer": "done",
+              "tools_used": [
+                "lookup"
+              ],
+              "steps_used": 2
+            },
+            {
+              "status": "completed",
+              "answer": "October 3rd",
+              "tools_used": [
+                "recall"
+              ],
+              "steps_used": 2
+            }
+          ],
+          "all_tools_used": [
+            "remember",
+            "lookup",
+            "lookup",
+            "recall"
+          ]
+        }
+      },
+      "skipped_reason": null,
+      "kind": "benign"
+    },
+    {
+      "name": "memory-tool-order-strict",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'completed', got 'completed'"
+        },
+        {
+          "dimension": "tools_used",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "strict: expected ['remember', 'remember', 'recall'], got ['remember', 'remember', 'recall']"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "recall a fact",
+        "steps": [
+          {
+            "kind": "tool",
+            "name": "recall",
+            "input": {
+              "query": "fact"
+            },
+            "output": [
+              {
+                "text": "fact one is alpha",
+                "score": 0.7071,
+                "metadata": {}
+              },
+              {
+                "text": "fact two is beta",
+                "score": 0.5,
+                "metadata": {}
+              }
+            ],
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "model",
+            "name": "proposed_answer",
+            "input": null,
+            "output": "recalled",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          }
+        ],
+        "status": "completed",
+        "answer": "recalled",
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 5.4923000279814005,
+        "meta": {
+          "steps_used": 2,
+          "history_types": [
+            "tool_result",
+            "proposed_answer"
+          ],
+          "faults_fired": [],
+          "sessions": [
+            {
+              "status": "completed",
+              "answer": "stored",
+              "tools_used": [
+                "remember"
+              ],
+              "steps_used": 2
+            },
+            {
+              "status": "completed",
+              "answer": "stored",
+              "tools_used": [
+                "remember"
+              ],
+              "steps_used": 2
+            },
+            {
+              "status": "completed",
+              "answer": "recalled",
+              "tools_used": [
+                "recall"
+              ],
+              "steps_used": 2
+            }
+          ],
+          "all_tools_used": [
+            "remember",
+            "remember",
+            "recall"
+          ]
+        }
+      },
+      "skipped_reason": null,
+      "kind": "benign"
+    },
+    {
+      "name": "recall-across-sessions",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'completed', got 'completed'"
+        },
+        {
+          "dimension": "answer_contains",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "answer contains 'heron'"
+        },
+        {
+          "dimension": "tool_output_contains",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "recall output contains 'heron' (1 calls)"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "what is the code word",
+        "steps": [
+          {
+            "kind": "tool",
+            "name": "recall",
+            "input": {
+              "query": "code word"
+            },
+            "output": [
+              {
+                "text": "the code word is heron",
+                "score": 0.6325,
+                "metadata": {}
+              }
+            ],
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "model",
+            "name": "proposed_answer",
+            "input": null,
+            "output": "heron",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          }
+        ],
+        "status": "completed",
+        "answer": "heron",
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 4.571199999190867,
+        "meta": {
+          "steps_used": 2,
+          "history_types": [
+            "tool_result",
+            "proposed_answer"
+          ],
+          "faults_fired": [],
+          "sessions": [
+            {
+              "status": "completed",
+              "answer": "stored",
+              "tools_used": [
+                "remember"
+              ],
+              "steps_used": 2
+            },
+            {
+              "status": "completed",
+              "answer": "heron",
+              "tools_used": [
+                "recall"
+              ],
+              "steps_used": 2
+            }
+          ],
+          "all_tools_used": [
+            "remember",
+            "recall"
+          ]
+        }
+      },
+      "skipped_reason": null,
+      "kind": "benign"
+    },
+    {
+      "name": "recall-after-distractor-session",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'completed', got 'completed'"
+        },
+        {
+          "dimension": "answer_contains",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "answer contains 'Tuesday'"
+        },
+        {
+          "dimension": "tool_output_contains",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "recall output contains 'Tuesday' (1 calls)"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "what day is the meeting",
+        "steps": [
+          {
+            "kind": "tool",
+            "name": "recall",
+            "input": {
+              "query": "meeting day"
+            },
+            "output": [
+              {
+                "text": "the meeting is on Tuesday",
+                "score": 0.3162,
+                "metadata": {}
+              }
+            ],
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "model",
+            "name": "proposed_answer",
+            "input": null,
+            "output": "Tuesday",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          }
+        ],
+        "status": "completed",
+        "answer": "Tuesday",
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 5.466799950227141,
+        "meta": {
+          "steps_used": 2,
+          "history_types": [
+            "tool_result",
+            "proposed_answer"
+          ],
+          "faults_fired": [],
+          "sessions": [
+            {
+              "status": "completed",
+              "answer": "stored",
+              "tools_used": [
+                "remember"
+              ],
+              "steps_used": 2
+            },
+            {
+              "status": "completed",
+              "answer": "done",
+              "tools_used": [
+                "lookup"
+              ],
+              "steps_used": 2
+            },
+            {
+              "status": "completed",
+              "answer": "Tuesday",
+              "tools_used": [
+                "recall"
+              ],
+              "steps_used": 2
+            }
+          ],
+          "all_tools_used": [
+            "remember",
+            "lookup",
+            "recall"
+          ]
+        }
+      },
+      "skipped_reason": null,
+      "kind": "benign"
+    },
+    {
+      "name": "recall-returns-nothing-for-unknown",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'completed', got 'completed'"
+        },
+        {
+          "dimension": "tool_output_contains",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "recall output contains '[]' (1 calls)"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "recall a fact that was never stored",
+        "steps": [
+          {
+            "kind": "tool",
+            "name": "recall",
+            "input": {
+              "query": "anything"
+            },
+            "output": [],
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "model",
+            "name": "proposed_answer",
+            "input": null,
+            "output": "nothing found",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          }
+        ],
+        "status": "completed",
+        "answer": "nothing found",
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 3.727999981492758,
+        "meta": {
+          "steps_used": 2,
+          "history_types": [
+            "tool_result",
+            "proposed_answer"
+          ],
+          "faults_fired": []
+        }
+      },
+      "skipped_reason": null,
+      "kind": "benign"
+    },
+    {
+      "name": "session-answer-uses-recall",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'completed', got 'completed'"
+        },
+        {
+          "dimension": "answer_contains",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "answer contains 'orchid'"
+        },
+        {
+          "dimension": "step_efficiency",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "efficiency 1.00 (reference 1, used 1, floor 0.0)"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "what is the password",
+        "steps": [
+          {
+            "kind": "tool",
+            "name": "recall",
+            "input": {
+              "query": "password"
+            },
+            "output": [
+              {
+                "text": "the password is orchid",
+                "score": 0.5,
+                "metadata": {}
+              }
+            ],
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "model",
+            "name": "proposed_answer",
+            "input": null,
+            "output": "the password is orchid",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          }
+        ],
+        "status": "completed",
+        "answer": "the password is orchid",
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 4.586499999277294,
+        "meta": {
+          "steps_used": 2,
+          "history_types": [
+            "tool_result",
+            "proposed_answer"
+          ],
+          "faults_fired": [],
+          "sessions": [
+            {
+              "status": "completed",
+              "answer": "stored",
+              "tools_used": [
+                "remember"
+              ],
+              "steps_used": 2
+            },
+            {
+              "status": "completed",
+              "answer": "the password is orchid",
+              "tools_used": [
+                "recall"
+              ],
+              "steps_used": 2
+            }
+          ],
+          "all_tools_used": [
+            "remember",
+            "recall"
+          ]
+        }
+      },
+      "skipped_reason": null,
+      "kind": "benign"
+    },
+    {
+      "name": "two-facts-two-recalls",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'completed', got 'completed'"
+        },
+        {
+          "dimension": "answer_contains",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "answer contains 'otter'"
+        },
+        {
+          "dimension": "tool_output_contains",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "recall output contains 'thunder' (2 calls)"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "remember two facts then recall each of them",
+        "steps": [
+          {
+            "kind": "tool",
+            "name": "remember",
+            "input": {
+              "text": "the mascot is otter"
+            },
+            "output": {
+              "id": "mem-2fcf757101e6",
+              "stored": true
+            },
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "tool",
+            "name": "remember",
+            "input": {
+              "text": "the anthem is thunder"
+            },
+            "output": {
+              "id": "mem-02d1bc2085cf",
+              "stored": true
+            },
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "tool",
+            "name": "recall",
+            "input": {
+              "query": "mascot"
+            },
+            "output": [
+              {
+                "text": "the mascot is otter",
+                "score": 0.5,
+                "metadata": {}
+              },
+              {
+                "text": "the anthem is thunder",
+                "score": 0.0,
+                "metadata": {}
+              }
+            ],
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "tool",
+            "name": "recall",
+            "input": {
+              "query": "anthem"
+            },
+            "output": [
+              {
+                "text": "the anthem is thunder",
+                "score": 0.5,
+                "metadata": {}
+              },
+              {
+                "text": "the mascot is otter",
+                "score": 0.0,
+                "metadata": {}
+              }
+            ],
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "model",
+            "name": "proposed_answer",
+            "input": null,
+            "output": "the mascot is otter and the anthem is thunder",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          }
+        ],
+        "status": "completed",
+        "answer": "the mascot is otter and the anthem is thunder",
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 4.6446999767795205,
+        "meta": {
+          "steps_used": 5,
+          "history_types": [
+            "tool_result",
+            "tool_result",
+            "tool_result",
+            "tool_result",
+            "proposed_answer"
+          ],
+          "faults_fired": []
+        }
+      },
+      "skipped_reason": null,
+      "kind": "benign"
+    }
+  ],
+  "metrics": {
+    "cases_total": 11.0,
+    "cases_passed": 11.0,
+    "cases_skipped": 0.0,
+    "pass_rate": 1.0,
+    "usd_per_run_p50": 0.0,
+    "wall_ms_p50": 4.6446999767795205,
+    "wall_ms_p95": 7.578550023026764,
+    "step_efficiency_mean": 1.0
+  },
+  "meta": {
+    "budget_exceeded": false,
+    "spent_usd": 0.0
+  }
+}

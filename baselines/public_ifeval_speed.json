@@ -1,5 +1,5 @@
 {
-  "suite": "public_ifeval",
+  "suite": "public_ifeval_speed",
   "target": "hf/Qwen/Qwen2.5-3B-Instruct",
   "metrics": {
     "accuracy": 0.5933456561922366,

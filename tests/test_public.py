@@ -73,6 +73,8 @@ def test_eval_log_skips_unscored_samples(tmp_path: Path):
         "usd",
         "samples_unscored",
         "samples_errored",
+        "wall_ms_total",
+        "ms_per_sample",
         "match.accuracy",
         "match.stderr",
     }
@@ -131,6 +133,37 @@ def test_eval_log_samples_errored_is_zero_with_no_errors(tmp_path: Path):
     r = eval_log_to_suite_result(log, suite="public_ifeval", target="mockllm/model")
     assert r.metrics["samples_errored"] == 0.0
     assert "error" not in r.meta
+
+
+def test_eval_log_reports_wall_ms_total_and_ms_per_sample(tmp_path: Path):
+    """Both timing metrics are present, and ms_per_sample is positive for a
+    run that completed at least one sample. Inspect's `started_at`/
+    `completed_at` timestamps carry only second precision, so a real
+    mockllm run finishing inside the same wall-clock second as it started
+    would measure 0ms here on a fast machine; the log's own stats are set
+    to known values first so the assertion is deterministic rather than a
+    race against the clock."""
+    log = _tiny_log(tmp_path)
+    log.stats.started_at = "2026-01-01T00:00:00+00:00"
+    log.stats.completed_at = "2026-01-01T00:00:05+00:00"
+    r = eval_log_to_suite_result(log, suite="public_tiny", target="mockllm/model")
+    assert "wall_ms_total" in r.metrics and "ms_per_sample" in r.metrics
+    assert r.metrics["wall_ms_total"] == pytest.approx(5000.0)
+    assert r.metrics["ms_per_sample"] > 0
+    assert r.metrics["ms_per_sample"] == pytest.approx(
+        r.metrics["wall_ms_total"] / r.metrics["samples_completed"]
+    )
+
+
+def test_wall_ms_total_is_zero_when_a_timestamp_is_the_empty_string(tmp_path: Path):
+    """Inspect writes the empty string for a timestamp not yet set (a run
+    interrupted before start or completion); wall_ms_total must not raise
+    on that, and degrades to 0.0 instead."""
+    log = _tiny_log(tmp_path)
+    log.stats.started_at = ""
+    r = eval_log_to_suite_result(log, suite="public_tiny", target="mockllm/model")
+    assert r.metrics["wall_ms_total"] == 0.0
+    assert r.metrics["ms_per_sample"] == 0.0
 
 
 def test_eval_log_copies_every_scorer_metric(tmp_path: Path):

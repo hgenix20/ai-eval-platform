@@ -1,0 +1,661 @@
+{
+  "suite": "faults",
+  "target": "agent-platform-local",
+  "started_at": "2026-09-11T06:17:48+00:00",
+  "finished_at": "2026-09-11T06:17:48+00:00",
+  "cases": [
+    {
+      "name": "no-fault-control",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'completed', got 'completed'"
+        },
+        {
+          "dimension": "recovered",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "no fault fired"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "answer the goal",
+        "steps": [
+          {
+            "kind": "model",
+            "name": "proposed_answer",
+            "input": null,
+            "output": "plain",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          }
+        ],
+        "status": "completed",
+        "answer": "plain",
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 6.095100077800453,
+        "meta": {
+          "steps_used": 1,
+          "history_types": [
+            "proposed_answer"
+          ],
+          "faults_fired": []
+        }
+      },
+      "skipped_reason": null,
+      "kind": "benign"
+    },
+    {
+      "name": "provider-fatal-error-fails-cleanly",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'target_error', got 'target_error'"
+        },
+        {
+          "dimension": "recovered",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "1 fault(s) fired and the run ended 'target_error'"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "answer the goal",
+        "steps": [],
+        "status": "target_error",
+        "answer": null,
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 3.0049000633880496,
+        "meta": {
+          "error": "ProviderError('injected fatal provider failure')",
+          "faults_fired": [
+            {
+              "at": "provider",
+              "name": "planner",
+              "kind": "fatal_error",
+              "call_index": 0
+            }
+          ],
+          "history_types": []
+        }
+      },
+      "skipped_reason": null,
+      "kind": "benign"
+    },
+    {
+      "name": "provider-retryable-falls-back",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'completed', got 'completed'"
+        },
+        {
+          "dimension": "answer_contains",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "answer contains 'after fallback'"
+        },
+        {
+          "dimension": "recovered",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "1 fault(s) fired and every other dimension passed"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "answer the goal",
+        "steps": [
+          {
+            "kind": "model",
+            "name": "proposed_answer",
+            "input": null,
+            "output": "after fallback",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          }
+        ],
+        "status": "completed",
+        "answer": "after fallback",
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 3.24899994302541,
+        "meta": {
+          "steps_used": 1,
+          "history_types": [
+            "proposed_answer"
+          ],
+          "faults_fired": [
+            {
+              "at": "provider",
+              "name": "planner",
+              "kind": "retryable_error",
+              "call_index": 0
+            }
+          ]
+        }
+      },
+      "skipped_reason": null,
+      "kind": "benign"
+    },
+    {
+      "name": "provider-retryable-twice-exhausts-fallback",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'completed', got 'completed'"
+        },
+        {
+          "dimension": "answer_contains",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "answer contains 'after fallback 1'"
+        },
+        {
+          "dimension": "recovered",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "1 fault(s) fired and every other dimension passed"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "answer the goal",
+        "steps": [
+          {
+            "kind": "model",
+            "name": "proposed_answer",
+            "input": null,
+            "output": "after fallback 1",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          }
+        ],
+        "status": "completed",
+        "answer": "after fallback 1",
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 3.1798999989405274,
+        "meta": {
+          "steps_used": 1,
+          "history_types": [
+            "proposed_answer"
+          ],
+          "faults_fired": [
+            {
+              "at": "provider",
+              "name": "planner",
+              "kind": "retryable_error",
+              "call_index": 0
+            }
+          ]
+        }
+      },
+      "skipped_reason": null,
+      "kind": "benign"
+    },
+    {
+      "name": "provider-truncated-reply-recovers",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'completed', got 'completed'"
+        },
+        {
+          "dimension": "answer_contains",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "answer contains 'second'"
+        },
+        {
+          "dimension": "history_types",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected ['protocol_error', 'proposed_answer'], got ['protocol_error', 'proposed_answer']"
+        },
+        {
+          "dimension": "recovered",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "1 fault(s) fired and every other dimension passed"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "answer the goal",
+        "steps": [
+          {
+            "kind": "error",
+            "name": "protocol_error",
+            "input": null,
+            "output": null,
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": "reply was not a valid action object"
+          },
+          {
+            "kind": "model",
+            "name": "proposed_answer",
+            "input": null,
+            "output": "second",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          }
+        ],
+        "status": "completed",
+        "answer": "second",
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 3.437699982896447,
+        "meta": {
+          "steps_used": 2,
+          "history_types": [
+            "protocol_error",
+            "proposed_answer"
+          ],
+          "faults_fired": [
+            {
+              "at": "provider",
+              "name": "planner",
+              "kind": "truncated",
+              "call_index": 0
+            }
+          ]
+        }
+      },
+      "skipped_reason": null,
+      "kind": "benign"
+    },
+    {
+      "name": "tool-delay-within-budget",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'completed', got 'completed'"
+        },
+        {
+          "dimension": "recovered",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "1 fault(s) fired and every other dimension passed"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "look up a fact and answer",
+        "steps": [
+          {
+            "kind": "tool",
+            "name": "lookup",
+            "input": {
+              "key": "x"
+            },
+            "output": "value-for-x",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "model",
+            "name": "proposed_answer",
+            "input": null,
+            "output": "waited",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          }
+        ],
+        "status": "completed",
+        "answer": "waited",
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 304.15560002438724,
+        "meta": {
+          "steps_used": 2,
+          "history_types": [
+            "tool_result",
+            "proposed_answer"
+          ],
+          "faults_fired": [
+            {
+              "at": "tool",
+              "name": "lookup",
+              "kind": "delay",
+              "call_index": 0
+            }
+          ]
+        }
+      },
+      "skipped_reason": null,
+      "kind": "benign"
+    },
+    {
+      "name": "tool-empty-output",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'completed', got 'completed'"
+        },
+        {
+          "dimension": "recovered",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "1 fault(s) fired and every other dimension passed"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "look up a fact and answer",
+        "steps": [
+          {
+            "kind": "tool",
+            "name": "lookup",
+            "input": null,
+            "output": "",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "model",
+            "name": "proposed_answer",
+            "input": null,
+            "output": "handled empty",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          }
+        ],
+        "status": "completed",
+        "answer": "handled empty",
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 4.4568999437615275,
+        "meta": {
+          "steps_used": 2,
+          "history_types": [
+            "tool_result",
+            "proposed_answer"
+          ],
+          "faults_fired": [
+            {
+              "at": "tool",
+              "name": "lookup",
+              "kind": "empty",
+              "call_index": 0
+            }
+          ]
+        }
+      },
+      "skipped_reason": null,
+      "kind": "benign"
+    },
+    {
+      "name": "tool-malformed-output-answer-still-grounded",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'completed', got 'completed'"
+        },
+        {
+          "dimension": "answer_contains",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "answer contains 'could not read'"
+        },
+        {
+          "dimension": "recovered",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "1 fault(s) fired and every other dimension passed"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "look up the summary and answer",
+        "steps": [
+          {
+            "kind": "tool",
+            "name": "lookup",
+            "input": null,
+            "output": "<<malformed>>",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          },
+          {
+            "kind": "model",
+            "name": "proposed_answer",
+            "input": null,
+            "output": "could not read the lookup result",
+            "latency_ms": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_usd": 0.0,
+            "error": null
+          }
+        ],
+        "status": "completed",
+        "answer": "could not read the lookup result",
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 3.4212000900879502,
+        "meta": {
+          "steps_used": 2,
+          "history_types": [
+            "tool_result",
+            "proposed_answer"
+          ],
+          "faults_fired": [
+            {
+              "at": "tool",
+              "name": "lookup",
+              "kind": "malformed",
+              "call_index": 0
+            }
+          ]
+        }
+      },
+      "skipped_reason": null,
+      "kind": "benign"
+    },
+    {
+      "name": "tool-raise-run-survives",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "expected 'completed', got 'target_error'"
+        },
+        {
+          "dimension": "recovered",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "1 fault(s) fired; failing dimensions: ['status']"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "look up revenue and answer",
+        "steps": [],
+        "status": "target_error",
+        "answer": null,
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 3.5397999454289675,
+        "meta": {
+          "error": "RuntimeError('injected tool failure in lookup')",
+          "faults_fired": [
+            {
+              "at": "tool",
+              "name": "lookup",
+              "kind": "raise",
+              "call_index": 0
+            }
+          ],
+          "history_types": []
+        }
+      },
+      "skipped_reason": null,
+      "kind": "benign"
+    },
+    {
+      "name": "tool-raise-twice-then-succeeds",
+      "passed": false,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "expected 'completed', got 'target_error'"
+        },
+        {
+          "dimension": "tools_used",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "strict: expected ['lookup', 'lookup', 'lookup'], got []"
+        },
+        {
+          "dimension": "recovered",
+          "value": 0.0,
+          "passed": false,
+          "explanation": "1 fault(s) fired; failing dimensions: ['status', 'tools_used']"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "look up two things and answer",
+        "steps": [],
+        "status": "target_error",
+        "answer": null,
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 3.512199968099594,
+        "meta": {
+          "error": "RuntimeError('injected tool failure in lookup')",
+          "faults_fired": [
+            {
+              "at": "tool",
+              "name": "lookup",
+              "kind": "raise",
+              "call_index": 0
+            }
+          ],
+          "history_types": []
+        }
+      },
+      "skipped_reason": null,
+      "kind": "benign"
+    },
+    {
+      "name": "validator-retryable-falls-back",
+      "passed": true,
+      "grades": [
+        {
+          "dimension": "status",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "expected 'target_error', got 'target_error'"
+        },
+        {
+          "dimension": "recovered",
+          "value": 1.0,
+          "passed": true,
+          "explanation": "1 fault(s) fired and the run ended 'target_error'"
+        }
+      ],
+      "trajectory": {
+        "target": "agent-platform-local",
+        "goal": "answer the goal",
+        "steps": [],
+        "status": "target_error",
+        "answer": null,
+        "side_effects": [],
+        "cost_usd": 0.0,
+        "wall_ms": 3.640800016000867,
+        "meta": {
+          "error": "AllProvidersFailedError(\"every step in the 'draft' route failed: validator/validator-model: injected retryable provider failure\")",
+          "faults_fired": [
+            {
+              "at": "provider",
+              "name": "validator",
+              "kind": "retryable_error",
+              "call_index": 0
+            }
+          ],
+          "history_types": []
+        }
+      },
+      "skipped_reason": null,
+      "kind": "benign"
+    }
+  ],
+  "metrics": {
+    "cases_total": 11.0,
+    "cases_passed": 9.0,
+    "cases_skipped": 0.0,
+    "pass_rate": 0.8181818181818182,
+    "usd_per_run_p50": 0.0,
+    "wall_ms_p50": 3.512199968099594,
+    "wall_ms_p95": 155.12535005109385,
+    "recovery_rate": 0.8181818181818182
+  },
+  "meta": {
+    "budget_exceeded": false,
+    "spent_usd": 0.0
+  }
+}

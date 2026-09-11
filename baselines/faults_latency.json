@@ -1,0 +1,15 @@
+{
+  "suite": "faults_latency",
+  "target": "agent-platform-local",
+  "metrics": {
+    "cases_total": 11.0,
+    "cases_passed": 9.0,
+    "cases_skipped": 0.0,
+    "pass_rate": 0.8181818181818182,
+    "usd_per_run_p50": 0.0,
+    "wall_ms_p50": 3.512199968099594,
+    "wall_ms_p95": 155.12535005109385,
+    "recovery_rate": 0.8181818181818182
+  },
+  "from": "2026-09-11T06:17:48+00:00"
+}

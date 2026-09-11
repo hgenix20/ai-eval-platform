@@ -25,8 +25,12 @@ jobs:
       - run: pyright
       - run: bandit -q -r eval_platform
       - run: pytest -m "not network and not live"
-      # rung 2: offline deterministic suite against the published agent platform, in process
+      # rung 2: offline deterministic suites against the published agent platform, in process
       - run: evalplat run offline --suite-dir suites/offline_core --target agent-platform-local --results results
+      - run: evalplat run offline --suite-dir suites/trajectory --target agent-platform-local --results results
+      - run: evalplat run offline --suite-dir suites/faults --target agent-platform-local --results results
+      - run: evalplat run offline --suite-dir suites/memory --target agent-platform-local --results results
+      - run: evalplat run offline --suite-dir suites/injection --target agent-platform-local --results results
       # Two paths through the gate, because the committed baseline was
       # measured on a laptop and a runner is different hardware.
       #
