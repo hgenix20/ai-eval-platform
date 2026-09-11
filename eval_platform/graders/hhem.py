@@ -80,10 +80,14 @@ class HHEMScorer:
         # Imports stay local so this module (and eval_platform.graders) is
         # importable without the `local` extra installed; only a grade()
         # call that actually needs the model pays for torch/transformers.
-        import torch  # noqa: PLC0415
+        # The pyright ignores exist because CI type-checks without that
+        # extra, so these names resolve only on a machine that runs models.
+        import torch  # noqa: PLC0415  # pyright: ignore[reportMissingImports]
         from huggingface_hub import hf_hub_download  # noqa: PLC0415
-        from safetensors.torch import load_file  # noqa: PLC0415
-        from transformers import (  # noqa: PLC0415
+        from safetensors.torch import (
+            load_file,  # pyright: ignore[reportMissingImports]
+        )
+        from transformers import (  # noqa: PLC0415  # pyright: ignore[reportMissingImports]
             AutoConfig,
             AutoTokenizer,
             T5Config,

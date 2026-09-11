@@ -118,7 +118,8 @@ class JudgeGrader:
         self._handle = None
         if "torch" not in sys.modules:
             return
-        import torch  # noqa: PLC0415
+        # CI type-checks without the `local` extra, hence the pyright ignore.
+        import torch  # noqa: PLC0415  # pyright: ignore[reportMissingImports]
 
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
