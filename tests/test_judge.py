@@ -110,6 +110,17 @@ def test_correctness_prompt_uses_reference():
     assert "42" in text and "It is 42." in text
 
 
+def test_release_drops_the_model_handle(tmp_path: Path):
+    """release() lets go of the loaded model so the next judge can have the
+    GPU; the cached verdict still answers a repeat call with no handle."""
+    g = _grader(tmp_path, ["VERDICT: SUPPORTED"])  # exactly one scripted output
+    g.judge(_case(), _traj("Paris."))
+    g.release()
+    assert g._handle is None
+    again = g.judge(_case(), _traj("Paris."))
+    assert again.cached is True and again.label == "SUPPORTED"
+
+
 def test_empty_answer_is_unknown_without_a_call(tmp_path: Path):
     g = _grader(tmp_path, [])  # no scripted outputs: any call would fail
     r = g.judge(_case(), _traj(""))
