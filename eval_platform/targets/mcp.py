@@ -255,7 +255,11 @@ class MCPTarget:
         authorization refused). The transport raises a wide range of
         exception types through several layers, including exception groups,
         so every non-exiting exception from the connection itself is treated
-        as unreachable and the original is attached as the cause.
+        as unreachable and the original is attached as the cause. That
+        boundary covers the connection and the `tools/list` call only:
+        turning the returned tools into names happens outside it, so a
+        conversion failure propagates as itself and is not reported as an
+        unreachable server.
         """
         try:
             asyncio.get_running_loop()
@@ -268,13 +272,14 @@ class MCPTarget:
             )
 
         async def _names() -> list[str]:
-            async with self._server as session:
-                return [ToolDef(t).name for t in await session.tools()]
+            try:
+                async with self._server as session:
+                    tools = await session.tools()
+            except Exception as e:
+                raise TargetUnavailable(f"{self.name} not reachable: {e}") from e
+            return [ToolDef(t).name for t in tools]
 
-        try:
-            return asyncio.run(_names())
-        except Exception as e:
-            raise TargetUnavailable(f"{self.name} not reachable: {e}") from e
+        return asyncio.run(_names())
 
     def run(self, case: Case) -> Trajectory:
         """Run `case.goal` as an Inspect ReAct agent over this server's tools.

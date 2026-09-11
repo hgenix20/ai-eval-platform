@@ -11,10 +11,15 @@ from collections.abc import Sequence
 from dataclasses import asdict, dataclass, field
 from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict, field_validator
+from pydantic import BaseModel, ConfigDict, field_validator, model_validator
 
 StepKind = Literal["model", "tool", "approval", "error"]
 TOOLS_USED_MODES = ("strict", "subset_of", "unordered")
+# Which `Fault.kind` values mean anything at which `Fault.at` seam. `delay`
+# is the only kind both seams implement; every other kind is handled by one
+# wrapper in `eval_platform.targets.faults` and ignored by the other.
+TOOL_FAULT_KINDS = ("raise", "malformed", "empty", "delay")
+PROVIDER_FAULT_KINDS = ("retryable_error", "fatal_error", "truncated", "delay")
 
 
 @dataclass(frozen=True)
@@ -148,6 +153,11 @@ class Fault(BaseModel):
     - truncated: the provider's real reply is cut to its first 12
       characters before being returned. Providers only.
 
+    `at` and `kind` are validated as a pair (`TOOL_FAULT_KINDS`,
+    `PROVIDER_FAULT_KINDS`): a kind the seam's wrapper does not implement is
+    rejected at load time, since it would otherwise be accepted, wired in,
+    and then do nothing at all while the case still reads as fault-injecting.
+
     `times` counts calls to this fault's own seam, never calls to a
     fallback the platform substitutes for it. `seed` is recorded on every
     firing but not otherwise used; it is reserved for a future randomized
@@ -163,6 +173,17 @@ class Fault(BaseModel):
     times: int = 1
     seed: int = 0
     delay_ms: int = 0
+
+    @model_validator(mode="after")
+    def _kind_fits_the_seam(self) -> Fault:
+        """`kind` must be one the `at` seam actually implements."""
+        allowed = TOOL_FAULT_KINDS if self.at == "tool" else PROVIDER_FAULT_KINDS
+        if self.kind not in allowed:
+            raise ValueError(
+                f"fault kind {self.kind!r} does not apply at {self.at!r}; "
+                f"{self.at!r} accepts {list(allowed)}"
+            )
+        return self
 
 
 class Session(BaseModel):
@@ -309,11 +330,14 @@ def compute_metrics(cases: Sequence[CaseResult]) -> dict[str, float]:
     `attack_success_rate` is the mean of the `attack_succeeded` grade's
     value (1.0 when the attacker's consequence happened, 0.0 otherwise)
     over scored cases with `kind == "attack"`. `utility_rate` is pass_rate
-    restricted to scored cases with `kind == "benign"`. Both are gated on
-    the same condition, whether the suite has at least one scored attack
-    case, and both are omitted otherwise: a suite made entirely of
-    `kind == "benign"` cases (the default) is not a red-team suite, and
-    `utility_rate` would just duplicate `pass_rate` there."""
+    restricted to scored cases with `kind == "benign"`. Both need at least
+    one scored attack case and are omitted otherwise: a suite made entirely
+    of `kind == "benign"` cases (the default) is not a red-team suite, and
+    `utility_rate` would just duplicate `pass_rate` there.
+    `attack_success_rate` is omitted as well when the attack cases carry no
+    `attack_succeeded` grade, the same shape as `recovery_rate`, so a suite
+    whose attack cases were never graded on the dimension does not publish a
+    0.0 that reads as nine of nine attacks stopped."""
     scored = [c for c in cases if c.skipped_reason is None]
     trajs = [c.trajectory for c in scored if c.trajectory is not None]
     costs = [t.cost_usd for t in trajs]
@@ -353,11 +377,10 @@ def compute_metrics(cases: Sequence[CaseResult]) -> dict[str, float]:
         attack_succeeded_values = [
             g.value for c in attack_cases for g in c.grades if g.dimension == "attack_succeeded"
         ]
-        metrics["attack_success_rate"] = (
-            sum(attack_succeeded_values) / len(attack_succeeded_values)
-            if attack_succeeded_values
-            else 0.0
-        )
+        if attack_succeeded_values:
+            metrics["attack_success_rate"] = sum(attack_succeeded_values) / len(
+                attack_succeeded_values
+            )
         metrics["utility_rate"] = (
             sum(c.passed for c in benign_cases) / len(benign_cases) if benign_cases else 0.0
         )

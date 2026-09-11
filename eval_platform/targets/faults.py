@@ -27,7 +27,14 @@ from eval_platform.types import Case, Fault
 
 @dataclass
 class FaultLedger:
-    """Records every fault firing, in the order faults actually fired."""
+    """Records every fault firing, in the order faults actually fired.
+
+    A firing is recorded by the branch that acts on it, so a fault whose
+    kind the seam does not implement records nothing. `Fault` rejects such a
+    pair at load time; this keeps the ledger honest even if that check is
+    ever relaxed, since `recovered` grading reads `len(fired) >= 1` as proof
+    a fault happened.
+    """
 
     fired: list[dict[str, Any]] = field(default_factory=list)
 
@@ -49,6 +56,9 @@ def wrap_tool_handler(spec: ToolSpec, faults: list[Fault], ledger: FaultLedger) 
     marker string "<<malformed>>" rather than a structured bad value,
     because the platform passes tool output to the model as plain text,
     with no rendering layer in between for a structured value to exercise.
+
+    Each branch records its own firing in `ledger`, so a fault that does
+    nothing at this seam leaves no entry behind.
     """
     mine = _matching(faults, "tool", spec.name)
     if not mine:
@@ -60,14 +70,17 @@ def wrap_tool_handler(spec: ToolSpec, faults: list[Fault], ledger: FaultLedger) 
         counter["n"] += 1
         for f in mine:
             if i < f.times:
-                ledger.record(f, i)
                 if f.kind == "raise":
+                    ledger.record(f, i)
                     raise RuntimeError(f"injected tool failure in {spec.name}")
                 if f.kind == "malformed":
+                    ledger.record(f, i)
                     return "<<malformed>>"
                 if f.kind == "empty":
+                    ledger.record(f, i)
                     return ""
                 if f.kind == "delay":
+                    ledger.record(f, i)
                     time.sleep(f.delay_ms / 1000.0)
                     return spec.handler(args)
         return spec.handler(args)
@@ -80,6 +93,9 @@ class FaultyProvider:
     `times` calls of each matching fault, then falls through to the real
     provider. `.name` mirrors the wrapped provider's name so routing and
     grading code cannot tell a faulty provider from the real one by name.
+
+    Each branch records its own firing in the ledger, so a fault that does
+    nothing at this seam leaves no entry behind.
     """
 
     def __init__(self, inner: FakeProvider, faults: list[Fault], ledger: FaultLedger) -> None:
@@ -94,15 +110,18 @@ class FaultyProvider:
         self._calls += 1
         for f in self._faults:
             if i < f.times:
-                self._ledger.record(f, i)
                 if f.kind == "retryable_error":
+                    self._ledger.record(f, i)
                     raise ProviderError("injected retryable provider failure", retryable=True)
                 if f.kind == "fatal_error":
+                    self._ledger.record(f, i)
                     raise ProviderError("injected fatal provider failure", retryable=False)
                 if f.kind == "delay":
+                    self._ledger.record(f, i)
                     time.sleep(f.delay_ms / 1000.0)
                     return self._inner.complete(model, request)
                 if f.kind == "truncated":
+                    self._ledger.record(f, i)
                     response = self._inner.complete(model, request)
                     return replace(response, text=response.text[:12])
         return self._inner.complete(model, request)

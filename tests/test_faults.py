@@ -30,7 +30,11 @@ def test_tool_raise_is_recorded_and_run_outcome_reported():
     )
     t = AgentPlatformLocalTarget().run(case)
     assert t.meta["faults_fired"] and t.meta["faults_fired"][0]["kind"] == "raise"
-    assert t.status in {"completed", "failed", "target_error"}
+    # F4 in docs/red-team-findings.md: ToolExecutor.execute does not catch a
+    # handler exception, so the run aborts and the local target's exception
+    # boundary reports target_error. Pinned exactly, so a platform fix that
+    # lets the model see a tool_error shows up here as a failure to update.
+    assert t.status == "target_error"
 
 
 def test_malformed_tool_output_reaches_the_model_as_text():
@@ -63,6 +67,24 @@ def test_fatal_provider_error_ends_the_run():
     )
     t = AgentPlatformLocalTarget().run(case)
     assert t.status != "completed"
+
+
+def test_a_masking_fault_leaves_later_arguments_on_their_own_step():
+    """The recorder wraps the fault wrapper, so a fault that returns before
+    the real handler still records its own call. With the two nested the
+    other way round, the malformed first call recorded nothing and the
+    second call's arguments slid onto the first tool step."""
+    case = _case(
+        [Fault(at="tool", name="lookup", kind="malformed", times=1)],
+        [
+            '{"action": "tool", "tool": "lookup", "arguments": {"key": "a"}}',
+            '{"action": "tool", "tool": "lookup", "arguments": {"key": "b"}}',
+            '{"action": "final", "answer": "done"}',
+        ],
+    )
+    t = AgentPlatformLocalTarget().run(case)
+    tool_steps = [s for s in t.steps if s.kind == "tool"]
+    assert [s.input for s in tool_steps] == [{"key": "a"}, {"key": "b"}]
 
 
 def test_truncated_reply_becomes_protocol_error_then_recovers():

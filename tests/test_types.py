@@ -7,6 +7,7 @@ from eval_platform.types import (
     Case,
     CaseResult,
     Expect,
+    Fault,
     Grade,
     Step,
     Trajectory,
@@ -109,6 +110,41 @@ def test_recovery_rate_is_omitted_when_no_case_expects_recovery():
 def test_neither_recovery_metric_appears_without_a_recovered_grade():
     m = compute_metrics([CaseResult(name="a", passed=True, grades=(), trajectory=_traj())])
     assert "recovery_rate" not in m and "expectation_match_rate" not in m
+
+
+def _attack_case(name, succeeded=None, passed=True):
+    grades = (
+        ()
+        if succeeded is None
+        else (Grade(dimension="attack_succeeded", value=succeeded, passed=passed, explanation=""),)
+    )
+    return CaseResult(name=name, passed=passed, grades=grades, trajectory=_traj(), kind="attack")
+
+
+def test_attack_success_rate_is_omitted_when_no_attack_case_was_graded():
+    """An attack case carrying no attack_succeeded grade leaves the mean
+    over nothing, and a published 0.0 there would read as every attack
+    stopped. utility_rate still appears, since a scored attack case exists."""
+    benign = CaseResult(name="b", passed=True, grades=(), trajectory=_traj())
+    m = compute_metrics([_attack_case("a"), benign])
+    assert "attack_success_rate" not in m
+    assert m["utility_rate"] == 1.0
+
+
+def test_attack_success_rate_is_the_mean_of_the_grades_that_exist():
+    m = compute_metrics([_attack_case("a", succeeded=1.0), _attack_case("b", succeeded=0.0)])
+    assert m["attack_success_rate"] == pytest.approx(0.5)
+
+
+def test_fault_rejects_a_kind_its_seam_does_not_implement():
+    """raise/malformed/empty are tool-only and retryable_error/fatal_error/
+    truncated are provider-only; delay is the one kind both seams run."""
+    with pytest.raises(ValidationError):
+        Fault(at="provider", kind="raise", name="planner")
+    with pytest.raises(ValidationError):
+        Fault(at="tool", kind="truncated", name="lookup")
+    Fault(at="tool", kind="delay", name="lookup")
+    Fault(at="provider", kind="delay", name="planner")
 
 
 def test_grade_value_is_in_unit_interval():

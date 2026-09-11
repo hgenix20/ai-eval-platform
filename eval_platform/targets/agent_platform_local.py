@@ -110,12 +110,18 @@ def build_world(
     A gated tool (`send_email`) that parks waiting for approval never
     reaches its handler, so it leaves no entry in `calls`; the converter
     reads this list to fill in `Step.input` for the trajectory's tool steps.
-    `recorded` runs first, so a tool call that a fault turns into a raised
-    exception is still recorded as having been called.
+    `recorded` is the outermost wrapper, sitting over the fault wrapper, so
+    it records the call before any fault can return early. A fault that
+    raises, or that masks the output as malformed or empty, still leaves its
+    own arguments in `calls`, which is what keeps every later call's
+    arguments on its own tool step: `convert` matches the i-th `tool_result`
+    for a tool name to the i-th recorded call for that name, so one missing
+    record shifts every argument after it by one step.
 
-    `case.faults` are wired in last, over the recorded tool specs and the
-    scripted providers, through the shared `FaultLedger` returned as the
-    sixth element. When any fault is a retryable provider fault, the
+    `case.faults` are wired into the tool handlers underneath `recorded`,
+    and over the scripted providers, through the shared `FaultLedger`
+    returned as the sixth element. When any fault is a retryable provider
+    fault, the
     "reason" route (the planner's route) gains a second step to a
     "fallback" provider that replays the same scripted planner responses;
     a retryable fault on the validator has no fallback.
@@ -140,7 +146,7 @@ def build_world(
         return replace(spec, handler=handler)
 
     def registered(spec: ToolSpec) -> ToolSpec:
-        return wrap_tool_handler(recorded(spec), case.faults, ledger)
+        return recorded(wrap_tool_handler(spec, case.faults, ledger))
 
     registry = ToolRegistry()
     registry.register(
