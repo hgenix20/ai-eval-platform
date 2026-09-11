@@ -39,6 +39,17 @@ def test_cache_round_trip(tmp_path: Path):
     assert (tmp_path / "judge" / ("a" * 64 + ".json")).exists()
 
 
+def test_cache_treats_a_truncated_entry_as_a_miss(tmp_path: Path):
+    c = JudgeCache(tmp_path / "judge")
+    (tmp_path / "judge").mkdir()
+    cut_short = tmp_path / "judge" / ("b" * 64 + ".json")
+    cut_short.write_text('{"label": "SUPPORTED", "ra', encoding="utf-8")
+    assert c.get("b" * 64) is None
+    no_raw = tmp_path / "judge" / ("c" * 64 + ".json")
+    no_raw.write_text('{"label": "SUPPORTED"}', encoding="utf-8")
+    assert c.get("c" * 64) is None
+
+
 def test_cache_rejects_bad_key(tmp_path: Path):
     c = JudgeCache(tmp_path)
     with pytest.raises(ValueError):

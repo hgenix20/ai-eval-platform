@@ -9,8 +9,8 @@ recomputed case verdicts, and recomputed metrics. The run window
 judge pass measures that run, it is not a new one.
 
 Graders run one at a time over every case, then the next grader, and each
-grader that offers `release()` is released before the next one loads, so
-two local judge models never sit in GPU memory together.
+grader satisfying `graders.base.Releasable` is released before the next one
+loads, so two local judge models never sit in GPU memory together.
 """
 
 from __future__ import annotations
@@ -18,9 +18,9 @@ from __future__ import annotations
 from collections.abc import Sequence
 from dataclasses import replace
 from datetime import UTC, datetime
-from typing import Any
+from typing import Any, cast
 
-from eval_platform.graders.base import Grader
+from eval_platform.graders.base import Grader, Releasable
 from eval_platform.types import (
     JUDGE_DIMENSION_PREFIX,
     JUDGE_UNKNOWN_VALUE,
@@ -63,10 +63,27 @@ def _place(grades: list[Grade], grade: Grade) -> None:
 
 
 def _release(grader: Grader) -> None:
-    """Let go of whatever `grader` loaded, when it offers `release()`."""
-    release = getattr(grader, "release", None)
-    if callable(release):
-        release()
+    """Let go of whatever `grader` loaded, when it satisfies `Releasable`.
+    A grader with no `release()` loaded nothing worth dropping and is passed
+    over."""
+    if isinstance(grader, Releasable):
+        grader.release()
+
+
+def _pass_records(meta: dict[str, Any]) -> list[dict[str, Any]]:
+    """The judge-pass history already in `meta`, as a list.
+
+    A run graded before this was a list carries a single record as a dict;
+    it is wrapped into a one-item list here, so a reader written against the
+    list shape reads every file. Anything else (no key, or a value of some
+    other type) starts an empty history.
+    """
+    existing = meta.get("judge_pass")
+    if isinstance(existing, dict):
+        return [cast("dict[str, Any]", existing)]
+    if isinstance(existing, list):
+        return list(cast("list[dict[str, Any]]", existing))
+    return []
 
 
 def apply(
@@ -87,9 +104,22 @@ def apply(
     Each grader produces one Grade per graded case, replacing any earlier
     grade on the same dimension, so running this twice leaves one grade per
     dimension. Each graded case's `passed` is recomputed by `case_passed`
-    over its full grade list, and the suite's metrics by `compute_metrics`.
-    `meta["judge_pass"]` records which graders ran, at which versions, when,
-    and the sample size.
+    over its full grade list.
+
+    Metrics are the run's own, updated with everything `compute_metrics`
+    produces from the regraded cases: the judge and semantic keys this pass
+    added, and the deterministic rates and cost and latency figures, which
+    are recomputed from the same cases and come back unchanged. Every other
+    key the run carried is carried forward untouched, since a judge pass has
+    no view of where it came from. A public-benchmark key such as
+    `instruction_following.prompt_strict_acc` is written by the runner that
+    scored the benchmark, and a judge pass over that run must not drop it.
+
+    `meta["judge_pass"]` is the list of pass records, oldest first, one per
+    call: the graders that ran, their versions, when, and the sample size. A
+    run graded before this field was a list carries one record as a dict, and
+    that dict is wrapped into the list here, so a reader can be written
+    against the list shape alone.
 
     Failure mode: raises ValueError naming every case that is not in
     `cases_by_name`, before any grader runs. A judge needs the case's own
@@ -118,18 +148,21 @@ def apply(
         for i, c in enumerate(result.cases)
     )
     meta: dict[str, Any] = dict(result.meta)
-    meta["judge_pass"] = {
-        "graders": [g.id for g in graders],
-        "versions": {g.id: g.version for g in graders},
-        "at": datetime.now(UTC).isoformat(timespec="seconds"),
-        "sample": sample,
-    }
+    meta["judge_pass"] = [
+        *_pass_records(meta),
+        {
+            "graders": [g.id for g in graders],
+            "versions": {g.id: g.version for g in graders},
+            "at": datetime.now(UTC).isoformat(timespec="seconds"),
+            "sample": sample,
+        },
+    ]
     return SuiteResult(
         suite=result.suite,
         target=result.target,
         started_at=result.started_at,
         finished_at=result.finished_at,
         cases=cases,
-        metrics=compute_metrics(cases),
+        metrics={**result.metrics, **compute_metrics(cases)},
         meta=meta,
     )

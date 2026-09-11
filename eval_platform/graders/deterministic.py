@@ -50,7 +50,13 @@ def _tool_text(t: Trajectory) -> str:
     """Every tool step's output, in order, joined by blank lines. Uncapped on
     purpose: a truncated haystack would fail an answer that quoted the tool
     correctly. `context_from` in the rubrics caps instead, because a judge
-    prompt has a context window and this comparison does not."""
+    prompt has a context window and this comparison does not.
+
+    Each result is joined as it was rendered, so a quoted span that runs
+    across two results, or across two paragraphs inside one rendered result,
+    is not found here: the joining text sits between the two halves and the
+    span never appears as one run of characters.
+    """
     return "\n\n".join(str(s.output) for s in t.steps if s.kind == "tool" and s.output is not None)
 
 

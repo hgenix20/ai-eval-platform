@@ -440,10 +440,31 @@ def cmd_gate(a: argparse.Namespace) -> int:
     return 0 if report.passed else 1
 
 
+def _missing_snapshot(e: FileNotFoundError) -> str:
+    """What to print when building a judge failed because its weights are not
+    on this machine.
+
+    `JudgeGrader.__init__` reads the model's version out of the local Hugging
+    Face cache, so an `hf/` judge that was never downloaded raises
+    FileNotFoundError naming the model and the `refs/main` path it looked
+    for. The message repeats that and says how to get the weights, since a
+    clean clone hits this before anything else the command would do.
+    """
+    return (
+        f"{e}\n"
+        "Download the weights before judging: any Inspect run of that model "
+        "fetches them, or `huggingface-cli download <repo>`, where <repo> is "
+        "the part of the model id after `hf/`."
+    )
+
+
 def _judge_graders(a: argparse.Namespace, model_args: dict[str, Any] | None) -> list[Grader]:
     """One JudgeGrader per `--judge`, all on `--rubric` and all sharing
     `model_args`, plus HHEM when `--hhem` was given. Each judge gets its own
-    directory under `--cache`, so two judges never share cache entries."""
+    directory under `--cache`, so two judges never share cache entries.
+
+    Failure mode: raises FileNotFoundError when an `hf/` judge has no local
+    snapshot, from the version lookup in `JudgeGrader.__init__`."""
     cache_root = Path(a.cache)
     graders: list[Grader] = [
         JudgeGrader(
@@ -475,10 +496,11 @@ def cmd_judge(a: argparse.Namespace) -> int:
     with a `-2` (or `-3`, ...) suffix.
 
     Returns 2, with the reason on stderr, when that suite has no stored run,
-    when neither `--judge` nor `--hhem` asked for a grader, or when
-    `--model-args` is not a JSON object. Returns 0 on a completed pass,
-    however many cases the judges failed: this command records verdicts, and
-    the gate decides what they mean.
+    when neither `--judge` nor `--hhem` asked for a grader, when `--sample`
+    is below 1, when `--model-args` is not a JSON object, or when an `hf/`
+    judge has no local snapshot to read a version from. Returns 0 on a
+    completed pass, however many cases the judges failed: this command
+    records verdicts, and the gate decides what they mean.
     """
     suite_dir, results = Path(a.suite_dir), Path(a.results)
     summary = latest_summary(results, suite_dir.name)
@@ -488,12 +510,19 @@ def cmd_judge(a: argparse.Namespace) -> int:
     if not a.judge and not a.hhem:
         print("no grader requested: pass --judge <model> or --hhem", file=sys.stderr)
         return 2
+    if a.sample is not None and a.sample < 1:
+        print(f"--sample must be at least 1, got {a.sample}", file=sys.stderr)
+        return 2
     try:
         model_args = _model_args(a)
     except (json.JSONDecodeError, ValueError) as e:
         print(f"invalid --model-args JSON: {e}", file=sys.stderr)
         return 2
-    graders = _judge_graders(a, model_args)
+    try:
+        graders = _judge_graders(a, model_args)
+    except FileNotFoundError as e:
+        print(_missing_snapshot(e), file=sys.stderr)
+        return 2
     result = apply_judge_pass(
         summary_to_result(summary),
         {c.name: c for c in load_cases(suite_dir)},
@@ -619,8 +648,9 @@ def cmd_calibrate(a: argparse.Namespace) -> int:
 
     Returns 2 if `--items` or `--judge` is absent without `--check`, if
     `--items` cannot be loaded (missing directory, invalid row, duplicate
-    id), or if `--model-args` is not valid JSON; the message goes to stderr
-    in every case. Returns 0 otherwise.
+    id), if `--model-args` is not valid JSON, or if an `hf/` judge has no
+    local snapshot to read a version from; the message goes to stderr in
+    every case. Returns 0 otherwise.
     """
     if a.check:
         return _check_calibration_report(Path(a.check))
@@ -640,15 +670,19 @@ def cmd_calibrate(a: argparse.Namespace) -> int:
     if a.limit is not None:
         items = items[: a.limit]
     cache_root = Path(a.cache)
-    judges = [
-        JudgeGrader(
-            model=m,
-            rubric=RUBRICS["faithfulness"],
-            cache=JudgeCache(cache_root / m.replace("/", "_")),
-            model_args=model_args,
-        )
-        for m in a.judge
-    ]
+    try:
+        judges = [
+            JudgeGrader(
+                model=m,
+                rubric=RUBRICS["faithfulness"],
+                cache=JudgeCache(cache_root / m.replace("/", "_")),
+                model_args=model_args,
+            )
+            for m in a.judge
+        ]
+    except FileNotFoundError as e:
+        print(_missing_snapshot(e), file=sys.stderr)
+        return 2
     hhem = HHEMGrader() if a.hhem else None
     report = calibrate(
         items,
@@ -727,7 +761,9 @@ def _add_judge(sub: argparse._SubParsersAction) -> None:
     )
     jud.add_argument("--results", default="results")
     jud.add_argument("--cache", default=".cache/judge")
-    jud.add_argument("--sample", type=int, help="Grade only the first N scored cases.")
+    jud.add_argument(
+        "--sample", type=int, help="Grade only the first N scored cases; N must be at least 1."
+    )
     jud.set_defaults(fn=cmd_judge)
 
 

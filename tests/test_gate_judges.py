@@ -42,7 +42,7 @@ def test_judge_row_uncalibrated_judge_is_not_measured():
 
 
 def test_judge_row_calibrated_judge_is_judged():
-    r = compare(_cfg(), {}, _cur(pass_rate=0.3), calibration=_cal())
+    r = compare(_cfg(), {}, _cur(pass_rate=0.3, swap=0.95), calibration=_cal())
     g = next(v for v in r.verdicts if v.suite == "g")
     assert g.verdict == "fail"
 
@@ -51,6 +51,39 @@ def test_swap_disagreement_is_unstable():
     r = compare(_cfg(require_swap_agreement=True), {}, _cur(swap=0.6), calibration=_cal())
     g = next(v for v in r.verdicts if v.suite == "g")
     assert g.verdict == "unstable" and not r.passed
+
+
+def test_required_swap_agreement_absent_is_not_measured():
+    """One judge graded the run, so the required check could not be run."""
+    r = compare(_cfg(require_swap_agreement=True), {}, _cur(), calibration=_cal())
+    g = next(v for v in r.verdicts if v.suite == "g")
+    assert g.verdict == "not_measured" and g.detail == "swap agreement not measured"
+
+
+def test_swap_agreement_absent_and_not_required_is_judged():
+    r = compare(_cfg(require_swap_agreement=False), {}, _cur(pass_rate=0.3), calibration=_cal())
+    g = next(v for v in r.verdicts if v.suite == "g")
+    assert g.verdict == "fail"
+
+
+def test_pair_metric_row_names_itself_as_a_pair():
+    cfg = GateConfig(
+        suites={"p": Threshold(metric="judge.faithfulness.swap_agreement", min=0.9)},
+        judges=JudgeRules(),
+    )
+    r = compare(cfg, {}, {"p": {"metrics": {"judge.faithfulness.swap_agreement": 0.95}}})
+    (p,) = r.verdicts
+    assert p.verdict == "not_measured" and p.detail == "pair metric, no single judge"
+
+
+def test_unknown_rubric_row_names_the_rubric():
+    cfg = GateConfig(
+        suites={"x": Threshold(metric="judge.nosuch.hf/x.pass_rate", min=0.5)},
+        judges=JudgeRules(),
+    )
+    r = compare(cfg, {}, {"x": {"metrics": {"judge.nosuch.hf/x.pass_rate": 0.9}}})
+    (x,) = r.verdicts
+    assert x.verdict == "not_measured" and x.detail == "unknown rubric nosuch"
 
 
 def test_non_judge_rows_ignore_calibration():

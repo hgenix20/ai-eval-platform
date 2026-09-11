@@ -81,10 +81,24 @@ class JudgeCache:
         return self.root / f"{key}.json"
 
     def get(self, key: str) -> dict[str, Any] | None:
+        """The stored verdict for `key`, or None for a miss.
+
+        A file that does not parse, or that does not carry both `label` and
+        `raw`, is a miss. A write cut short (an interrupted run, a full disk)
+        leaves exactly that, and the caller's next model call rewrites the
+        entry; reading it as a hit would hand `judge()` a payload with no
+        label in it. Raises ValueError when `key` is not a sha256 digest.
+        """
         p = self._path(key)
         if not p.exists():
             return None
-        return json.loads(p.read_text(encoding="utf-8"))
+        try:
+            payload = json.loads(p.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            return None
+        if not isinstance(payload, dict) or "label" not in payload or "raw" not in payload:
+            return None
+        return payload
 
     def put(self, key: str, payload: dict[str, Any]) -> None:
         p = self._path(key)

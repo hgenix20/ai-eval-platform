@@ -6,6 +6,7 @@ from inspect_ai.model import ModelOutput, get_model
 
 from eval_platform.calibration import (
     CalibrationItem,
+    CalibrationReport,
     CalibrationReportFile,
     agreement,
     calibrate,
@@ -115,6 +116,23 @@ def test_calibrate_unknowns_are_excluded_from_kappa(tmp_path: Path):
     )
 
 
+def test_write_report_names_the_file_like_a_run_file(tmp_path: Path):
+    """The stem drops the colons and the UTC offset, as `results._safe` does
+    for a run file. The one report committed before this order was fixed
+    keeps its `+0000` name."""
+    report = CalibrationReport(
+        started_at="2026-09-11T15:18:41+00:00",
+        finished_at="2026-09-11T15:20:02+00:00",
+        items=0,
+        judges=(),
+        swap_agreement=None,
+        swap_pair=None,
+        kappa_floor=0.70,
+        min_swap_agreement=0.90,
+    )
+    assert write_report(report, tmp_path / "results").stem == "2026-09-11T151841Z"
+
+
 def test_write_report_promotes_latest(tmp_path: Path):
     outs = ["VERDICT: SUPPORTED" if n % 2 == 0 else "VERDICT: UNSUPPORTED" for n in range(8)]
     report = calibrate(_items(), [_judge(tmp_path, "a", outs)])
@@ -145,6 +163,31 @@ def test_cli_calibrate_runs_on_mock(tmp_path: Path, capsys):
     assert code == 0
     out = capsys.readouterr().out
     assert "kappa" in out and (tmp_path / "r" / "calibration" / "latest.json").exists()
+
+
+def test_cli_calibrate_exits_2_when_the_judge_has_no_local_snapshot(
+    tmp_path: Path, capsys, monkeypatch
+):
+    items_dir = tmp_path / "cal"
+    items_dir.mkdir()
+    (items_dir / "t.jsonl").write_text(_items()[0].model_dump_json() + "\n", encoding="utf-8")
+    monkeypatch.setenv("HF_HUB_CACHE", str(tmp_path / "empty-hub"))
+    code = main(
+        [
+            "calibrate",
+            "--items",
+            str(items_dir),
+            "--judge",
+            "hf/Org/Missing",
+            "--results",
+            str(tmp_path / "r"),
+            "--cache",
+            str(tmp_path / "c"),
+        ]
+    )
+    err = capsys.readouterr().err
+    assert code == 2
+    assert "no local snapshot for hf/Org/Missing" in err and "huggingface-cli download" in err
 
 
 COMMITTED_REPORT = ROOT / "results" / "calibration" / "latest.json"

@@ -43,6 +43,9 @@ MIN_TERM_CHARS = 3
 # curly quotes are given by code point so a look-alike cannot be substituted
 # for one of them unnoticed.
 TRIM_CHARS = ".,;:()[]\"'" + "".join(chr(c) for c in (0x201C, 0x201D, 0x2018, 0x2019))
+# Curly apostrophes, by code point for the same reason, mapped to the ASCII
+# one on both sides of every comparison.
+APOSTROPHES = str.maketrans({chr(0x2018): "'", chr(0x2019): "'"})
 # Terms that appear in nearly every paragraph of a filing and so rank
 # nothing. Kept small and fixed: a longer list would start dropping words a
 # question is actually about.
@@ -80,11 +83,20 @@ def load_fixtures(directory: Path) -> dict[tuple[str, str], dict[str, Any]]:
     return out
 
 
+def _normalize(text: str) -> str:
+    """Lower-cased text with curly apostrophes turned straight. Applied to
+    the query terms and to the paragraph they are matched against, so the
+    two spellings of an apostrophe cannot part a term from the word it
+    names."""
+    return text.translate(APOSTROPHES).lower()
+
+
 def _terms(query: str) -> set[str]:
     """Distinct lower-cased query terms of at least MIN_TERM_CHARS that are
     not stop words. Punctuation is kept inside a term, so a search for
-    "company's" still matches the filing's own spelling."""
-    words = {w.strip(TRIM_CHARS).lower() for w in query.split()}
+    "company's" still matches the filing's own spelling, whichever
+    apostrophe each side used (see `_normalize`)."""
+    words = {_normalize(w.strip(TRIM_CHARS)) for w in query.split()}
     return {w for w in words if len(w) >= MIN_TERM_CHARS and w not in STOP_WORDS}
 
 
@@ -129,7 +141,9 @@ class FixtureIndex:
         ties broken by paragraph id, so the ranking is deterministic. A
         paragraph matching no term is not a result, so a query about
         something the section does not discuss returns an empty list rather
-        than the section's first `k` paragraphs.
+        than the section's first `k` paragraphs. Both sides are matched
+        through `_normalize`; the text returned is the filing's own, curly
+        punctuation and all.
         """
         paragraphs = self._paragraphs(accession, item)
         if isinstance(paragraphs, str):
@@ -140,7 +154,7 @@ class FixtureIndex:
         scored: list[tuple[int, int, str]] = []
         for p in paragraphs:
             text = str(p.get("text", ""))
-            lowered = text.lower()
+            lowered = _normalize(text)
             score = sum(1 for t in terms if t in lowered)
             if score:
                 scored.append((score, int(p.get("id", 0)), text))

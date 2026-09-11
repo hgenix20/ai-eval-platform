@@ -163,7 +163,9 @@ def judge_id_for(metric: str) -> str | None:
     calibration run is repeated. The model segment is everything between the
     rubric and the trailing statistic, since model ids carry dots
     ("judge.faithfulness.hf/org/m-3.2.pass_rate"). `judge.<rubric>.swap_agreement`
-    belongs to a pair of judges, not one, and returns None.
+    belongs to a pair of judges, not one, and returns None; so does a metric
+    naming a rubric this build does not define. `_no_single_judge_detail`
+    tells those two cases apart for the gate report.
     """
     parts = metric.split(".")
     if len(parts) < 4 or parts[0] != "judge":
@@ -172,6 +174,23 @@ def judge_id_for(metric: str) -> str | None:
     if rubric is None:
         return None
     return f"{parts[1]}@{rubric.version}:{'.'.join(parts[2:-1])}"
+
+
+def _no_single_judge_detail(metric: str) -> str:
+    """Why `judge_id_for` found no single judge behind `metric`, in the terms
+    that tell someone reading the gate report what to do about it.
+
+    A `judge.<rubric>.swap_agreement` row is a measurement between two judges,
+    so no one judge's calibration could decide it. An unknown rubric is a
+    misspelling in `gate.yaml`, or a rubric that was renamed or removed since
+    the row was written, and the detail names the rubric so it can be found.
+    """
+    parts = metric.split(".")
+    if len(parts) == 3 and parts[2] == "swap_agreement":
+        return "pair metric, no single judge"
+    if len(parts) >= 4 and parts[1] not in RUBRICS:
+        return f"unknown rubric {parts[1]}"
+    return f"no single judge behind metric {metric}"
 
 
 def _reported_kappa(judge_id: str, calibration: dict[str, Any] | None) -> float | None:
@@ -223,11 +242,17 @@ def _judge_row_verdict(
     reaches the swap check, and only when `require_swap_agreement` is on:
     two calibrated judges that disagreed on this run's own cases produce a
     number nobody should act on, so the row is unstable, which does block.
-    A run with one judge carries no swap agreement and skips that check.
+
+    With `require_swap_agreement` on and the run carrying no
+    `judge.<rubric>.swap_agreement` (a pass graded by one judge), the check
+    the config asked for could not be run, and the row is not_measured with
+    detail "swap agreement not measured". Requiring stability and then
+    accepting a row whose stability nobody measured would be the setting
+    doing nothing.
     """
     judge_id = judge_id_for(metric)
     if judge_id is None:
-        return "not_measured", f"no single judge behind metric {metric}"
+        return "not_measured", _no_single_judge_detail(metric)
     ok, reason = _calibration_verdict(judge_id, calibration)
     if not ok:
         return "not_measured", _uncalibrated_detail(judge_id, reason, calibration, rules)
@@ -235,7 +260,9 @@ def _judge_row_verdict(
         return None
     rubric = metric.split(".")[1]
     swap = _metric(cur_summary, suite, f"{JUDGE_METRIC_PREFIX}{rubric}.swap_agreement")
-    if swap is not None and swap < rules.min_swap_agreement:
+    if swap is None:
+        return "not_measured", "swap agreement not measured"
+    if swap < rules.min_swap_agreement:
         return "unstable", f"swap agreement {swap:.2f} < {rules.min_swap_agreement:.2f}"
     return None
 
@@ -316,8 +343,10 @@ def compare(
     ordinary threshold comparison, except that
     `config.judges.require_swap_agreement` first checks the run's own
     `judge.<rubric>.swap_agreement`: below `min_swap_agreement` the two
-    judges disagreed on these cases, and the row is unstable, which blocks.
-    See `_judge_row_verdict`.
+    judges disagreed on these cases, and the row is unstable, which blocks;
+    with the metric absent, the run was graded by one judge, the required
+    check could not be run, and the row is not_measured. See
+    `_judge_row_verdict`.
 
     Failure mode: raises ValueError if a metric value in `baseline` or
     `current` is present but not numeric (see `_metric`).

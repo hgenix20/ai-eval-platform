@@ -51,6 +51,14 @@ def test_unsupported_share_no_sentences_is_zero():
     assert share == 0.0 and detail == []
 
 
+def test_unsupported_share_empty_context_and_empty_answer_is_zero():
+    """Nothing was claimed, so nothing is unsupported; the answer is read
+    before the context."""
+    s = StubScorer()
+    share, detail = unsupported_share("", "", s)
+    assert share == 0.0 and detail == [] and s.calls == 0
+
+
 def test_grader_grade_shape():
     t = Trajectory(
         target="t",

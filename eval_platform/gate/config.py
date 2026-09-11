@@ -40,7 +40,10 @@ class JudgeRules(BaseModel):
     second check at gate time: when the run's own summary carries a swap
     agreement below `min_swap_agreement`, the two judges disagreed on this
     set of cases whatever the calibration set said, and the row is unstable.
-    Unknown fields are rejected (extra="forbid").
+    A run graded by one judge carries no swap agreement at all, and with this
+    setting on its judge rows are not_measured, since the check the setting
+    asked for could not be run; turn it off to have such a run judged on its
+    threshold alone. Unknown fields are rejected (extra="forbid").
     """
 
     model_config = ConfigDict(extra="forbid")

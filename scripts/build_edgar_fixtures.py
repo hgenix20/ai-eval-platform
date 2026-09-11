@@ -19,8 +19,9 @@ be recorded in the suite README.
 
 Network use: one GET per distinct document, 0.5 s apart, 60 s timeout, with
 the User-Agent sec.gov asks automated readers to send. A 403 or 429 backs
-off 10 s and retries up to three times before the case is skipped. Nothing
-is fetched again once it is in the cache, so a rebuild is offline.
+off 10 s and the document gets three attempts in all before the case is
+skipped. Nothing is fetched again once it is in the cache, so a rebuild is
+offline.
 """
 
 from __future__ import annotations
@@ -32,6 +33,7 @@ import re
 import sys
 import textwrap
 import time
+from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
 
@@ -224,8 +226,16 @@ def window_ids(offsets: list[int], size: int, window: int) -> list[int]:
     return sorted(keep)
 
 
-def build_fixture(golden: dict[str, Any], raw_html: str, window: int) -> dict[str, Any]:
-    """The fixture for one golden case, or SkipCaseError with the reason."""
+def build_fixture(
+    golden: dict[str, Any], raw_html: str, window: int
+) -> tuple[dict[str, Any], list[str]]:
+    """The fixture for one golden case and its anchor phrases in the filing's
+    own casing, or SkipCaseError with the reason.
+
+    The cased phrases are returned beside the fixture instead of inside it:
+    they are what `case_yaml` asserts on, and the fixture is written to disk
+    exactly as returned.
+    """
     paragraphs = to_paragraphs(raw_html)
     item = golden["item"]
     phrases = list(golden["anchors"]["must_contain"])
@@ -235,7 +245,7 @@ def build_fixture(golden: dict[str, Any], raw_html: str, window: int) -> dict[st
         raise SkipCaseError(f"item {item} section holds {len(section)} paragraphs")
     anchors = [_find_anchor(section, p) for p in phrases]
     kept = window_ids([a["offset"] for a in anchors], len(section), window)
-    return {
+    fixture = {
         "accession": golden["accession"],
         "company": golden["company"],
         "form": golden["form"],
@@ -249,17 +259,18 @@ def build_fixture(golden: dict[str, Any], raw_html: str, window: int) -> dict[st
             {"phrase": a["phrase"], "paragraph_id": a["offset"], "sentence": a["sentence"]}
             for a in anchors
         ],
-        # Not written to the fixture; the case writer reads it from here.
-        "_cased": [a["cased_phrase"] for a in anchors],
     }
+    return fixture, [str(a["cased_phrase"]) for a in anchors]
 
 
-def case_yaml(fixture: dict[str, Any], index: int) -> tuple[str, str]:
+def case_yaml(fixture: dict[str, Any], cased_phrases: Sequence[str], index: int) -> tuple[str, str]:
     """The file name and text of one case: the `index`-th anchor of a
-    fixture, asked as a question whose answer is checkable two ways."""
+    fixture, asked as a question whose answer is checkable two ways.
+    `cased_phrases` is `build_fixture`'s second return value, in the same
+    order as the fixture's anchors."""
     name = f"{fixture['golden_id']}-a{index + 1}"
     phrase = fixture["anchors"][index]["phrase"]
-    cased = fixture["_cased"][index]
+    cased = cased_phrases[index]
     title = ITEM_TITLES.get(fixture["item"], "")
     goal = (
         f"Use the filing tools. In Item {fixture['item']} ({title}) of the {fixture['form']} "
@@ -285,10 +296,10 @@ def fetch(url: str, cache: Path, name: str, *, state: dict[str, float]) -> str:
     """The document at `url`, from `cache/name` when it is already there.
 
     A fetch waits REQUEST_SPACING_S after the previous one, sends the SEC's
-    requested User-Agent, and retries a 403 or 429 after BACKOFF_S, up to
-    MAX_ATTEMPTS times. Raises SkipCaseError when every attempt is refused or the
-    transport fails, so one unreachable document skips its case instead of
-    ending the build.
+    requested User-Agent, and retries a 403 or 429 after BACKOFF_S, for
+    MAX_ATTEMPTS attempts in all. Raises SkipCaseError when every attempt is
+    refused or the transport fails, so one unreachable document skips its
+    case instead of ending the build.
     """
     cached = cache / name
     if cached.exists():
@@ -354,17 +365,15 @@ def build(golden_path: Path, out: Path, cache: Path, *, window: int, only: str |
                 f"{golden['accession']}-{golden['primaryDocument']}",
                 state=state,
             )
-            fixture = build_fixture(golden, raw, window)
+            fixture, cased = build_fixture(golden, raw, window)
         except SkipCaseError as e:
             print(f"    skipped: {e}")
             skipped.append((golden["id"], str(e)))
             continue
-        cased = fixture.pop("_cased")
         path = fixtures_dir / f"{fixture['accession']}-{fixture['item']}.json"
         path.write_text(json.dumps(fixture, indent=1, ensure_ascii=False), encoding="utf-8")
-        fixture["_cased"] = cased
         for i in range(len(fixture["anchors"])):
-            file_name, text = case_yaml(fixture, i)
+            file_name, text = case_yaml(fixture, cased, i)
             (out / file_name).write_text(text, encoding="utf-8")
             written += 1
         print(f"    {len(fixture['paragraphs'])} paragraphs, {len(cased)} cases")

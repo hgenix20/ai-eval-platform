@@ -140,7 +140,13 @@ def unsupported_share(
     """Share of the answer's sentences (first `max_sentences`) whose HHEM
     score against `context` is below `threshold`, plus every sentence with
     its score. An empty context makes every sentence unsupported (score
-    0.0) with no scorer call; an answer with no sentence yields 0.0."""
+    0.0) with no scorer call; an answer with no sentence yields 0.0.
+
+    The answer is read first, so an empty context with an empty answer is
+    0.0, not 1.0: the answer claimed nothing, and nothing claimed cannot be
+    unsupported. That case is a run whose target produced no answer, and
+    `compute_metrics` counts it through the case's own status instead.
+    """
     sentences = split_sentences(answer)[:max_sentences]
     if not sentences:
         return 0.0, []

@@ -43,6 +43,15 @@ class JudgeResult:
     cached: bool
 
 
+def _grade_value(verdict: Verdict) -> float:
+    """A verdict as a Grade value: 1.0 for a pass, 0.0 for a fail, and 0.5
+    for unknown, which sits between the two because the judge declined to
+    label the case rather than finding against it."""
+    if verdict == "pass":
+        return 1.0
+    return 0.0 if verdict == "fail" else 0.5
+
+
 def parse_verdict(text: str, labels: tuple[str, ...]) -> str:
     """The label on the LAST `VERDICT: <label>` line in `text`, upper-cased,
     when it is one of `labels`; otherwise the rubric's last label (the
@@ -169,9 +178,7 @@ class JudgeGrader:
 
     def grade(self, case: Case, trajectory: Trajectory) -> Grade:
         r = self.judge(case, trajectory)
-        # "pass" here is a Verdict literal, not a credential; bandit's B105
-        # heuristic matches the dict key string regardless.
-        value = {"pass": 1.0, "fail": 0.0, "unknown": 0.5}[r.verdict]  # nosec B105
+        value = _grade_value(r.verdict)
         return Grade(
             dimension=f"judge:{self.rubric.id}:{self.model}",
             value=value,

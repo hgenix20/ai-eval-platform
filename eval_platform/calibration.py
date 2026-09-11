@@ -151,6 +151,17 @@ def _as_case(item: CalibrationItem) -> tuple[Case, Trajectory]:
     return case, traj
 
 
+def _label_for(verdict: str) -> str:
+    """A judge verdict as a calibration label. Anything that is neither a
+    pass nor a fail is "unknown", which `_score` excludes from kappa and
+    counts separately."""
+    if verdict == "pass":
+        return "supported"
+    if verdict == "fail":
+        return "unsupported"
+    return "unknown"
+
+
 def _labels_for(judge: JudgeGrader | HHEMGrader, items: Sequence[CalibrationItem]) -> list[str]:
     out: list[str] = []
     for item in items:
@@ -159,10 +170,7 @@ def _labels_for(judge: JudgeGrader | HHEMGrader, items: Sequence[CalibrationItem
             g = judge.grade(case, traj)
             out.append("supported" if g.passed else "unsupported")
             continue
-        r = judge.judge(case, traj)
-        # "pass" here is a Verdict literal, not a credential; bandit's B105
-        # heuristic matches the dict key string regardless (see judge.py).
-        out.append({"pass": "supported", "fail": "unsupported"}.get(r.verdict, "unknown"))  # nosec B105
+        out.append(_label_for(judge.judge(case, traj).verdict))
     return out
 
 
@@ -296,10 +304,17 @@ def load_report(path: Path) -> CalibrationReportFile:
 
 def write_report(report: CalibrationReport, results_dir: Path) -> Path:
     """Write `results/calibration/<started_at-safe>.json` and copy it to
-    `latest.json`. Returns the timestamped path."""
+    `latest.json`. Returns the timestamped path.
+
+    The stem is the ISO start time with the UTC offset replaced by `Z` and
+    the colons removed, in that order, which is how `results._safe` names a
+    run file: `2026-09-11T15:18:41+00:00` becomes `2026-09-11T151841Z`.
+    Removing the colons first would leave `+0000` behind, which is the
+    spelling of the one report committed before this order was fixed.
+    """
     out = results_dir / "calibration"
     out.mkdir(parents=True, exist_ok=True)
-    stem = report.started_at.replace(":", "").replace("+00:00", "Z")
+    stem = report.started_at.replace("+00:00", "Z").replace(":", "")
     path = out / f"{stem}.json"
     text = json.dumps(report.to_dict(), indent=2) + "\n"
     path.write_text(text, encoding="utf-8")

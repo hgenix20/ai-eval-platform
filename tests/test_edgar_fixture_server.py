@@ -124,6 +124,22 @@ def test_search_drops_short_terms_and_stop_words(index: FixtureIndex):
     assert [h["paragraph_id"] for h in hits] == [2, 3]
 
 
+def test_search_matches_across_the_two_apostrophes():
+    """The filing writes U+2019, the question is typed with U+0027, and the
+    term is the same word either way."""
+    curly = chr(0x2019)
+    fixture = {
+        **ALPHA,
+        "accession": "0000000000-25-000003",
+        "paragraphs": [{"id": 0, "text": f"The company{curly}s liquidity depends on credit."}],
+    }
+    one = FixtureIndex({("0000000000-25-000003", "1A"): fixture})
+    hits = one.search_filing("0000000000-25-000003", "1A", "company's liquidity")
+    assert [h["paragraph_id"] for h in hits] == [0]
+    assert curly in hits[0]["text"]
+    assert one.search_filing("0000000000-25-000003", "1A", f"company{curly}s liquidity") == hits
+
+
 def test_search_returns_nothing_when_no_term_matches(index: FixtureIndex):
     assert index.search_filing("0000000000-25-000001", "1A", "cryptocurrency mining") == []
 
