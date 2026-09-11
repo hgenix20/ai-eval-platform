@@ -1,4 +1,4 @@
-"""evalplat: catalog, run offline, public and mcp, gate, report."""
+"""evalplat: catalog, run offline, public and mcp, calibrate, gate, report."""
 
 from __future__ import annotations
 
@@ -9,8 +9,13 @@ from pathlib import Path
 from typing import Any
 
 from eval_platform.budget import Budget, BudgetExceeded, Ledger
+from eval_platform.calibration import calibrate, load_items, write_report
 from eval_platform.catalog import filter_entries, load_catalog
 from eval_platform.gate import compare, load_gate_config, to_junit, to_markdown
+from eval_platform.graders.hhem import HHEMGrader
+from eval_platform.graders.judge import JudgeGrader
+from eval_platform.graders.judge_cache import JudgeCache
+from eval_platform.graders.rubrics import RUBRICS
 from eval_platform.reports import render_html
 from eval_platform.results import latest_summary, read_summary, write_summary
 from eval_platform.suites import load_cases, run_public, run_suite
@@ -440,6 +445,100 @@ def cmd_report(a: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_calibrate(a: argparse.Namespace) -> int:
+    """Score every `--judge` (and HHEM, with `--hhem`) against the labeled
+    items under `--items`, using the faithfulness rubric, and write the
+    report under `--results`.
+
+    `--limit` keeps only the first N items after loading (sorted file
+    order), for a fast smoke run. `--model-args` is a JSON object of
+    Inspect model constructor keyword arguments, applied to every
+    `--judge`. Each judge gets its own cache directory under `--cache`, so
+    two judges never share cache entries.
+
+    Prints one line per judge (kappa, accuracy, unknown count, whether it
+    is calibrated and why), then the swap-agreement line when two or more
+    judges were given, then the report path.
+
+    Returns 2 if `--items` cannot be loaded (missing directory, invalid
+    row, duplicate id) or `--model-args` is not valid JSON; the message
+    goes to stderr in either case. Returns 0 otherwise.
+    """
+    try:
+        model_args = _model_args(a)
+    except (json.JSONDecodeError, ValueError) as e:
+        print(f"invalid --model-args JSON: {e}", file=sys.stderr)
+        return 2
+    try:
+        items = load_items(Path(a.items))
+    except (FileNotFoundError, ValueError) as e:
+        print(f"could not load calibration items: {e}", file=sys.stderr)
+        return 2
+    if a.limit is not None:
+        items = items[: a.limit]
+    cache_root = Path(a.cache)
+    judges = [
+        JudgeGrader(
+            model=m,
+            rubric=RUBRICS["faithfulness"],
+            cache=JudgeCache(cache_root / m.replace("/", "_")),
+            model_args=model_args,
+        )
+        for m in a.judge
+    ]
+    hhem = HHEMGrader() if a.hhem else None
+    report = calibrate(
+        items,
+        judges,
+        kappa_floor=a.kappa_floor,
+        min_swap_agreement=a.min_swap_agreement,
+        hhem=hhem,
+    )
+    path = write_report(report, Path(a.results))
+    for j in report.judges:
+        ok, reason = report.calibrated(j.judge)
+        print(
+            f"{j.judge} kappa={j.kappa:.2f} acc={j.accuracy:.2f} "
+            f"unknown={j.unknown}/{j.items} calibrated={'yes' if ok else 'no'}: {reason}"
+        )
+    if report.swap_agreement is not None and report.swap_pair is not None:
+        first, second = report.swap_pair
+        print(f"swap agreement {report.swap_agreement:.2f} between {first} and {second}")
+    print(f"-> {path}")
+    return 0
+
+
+def _add_calibrate(sub: argparse._SubParsersAction) -> None:
+    """Wire the `calibrate` subcommand onto the top-level parser.
+
+    Split out of `build_parser` for the same reason `run mcp` has
+    `_add_run_mcp`: keeping that function under the linter's statement
+    ceiling. `--judge` is repeatable; a second `--judge` is what makes
+    swap agreement measurable.
+    """
+    cal = sub.add_parser("calibrate")
+    cal.add_argument("--items", required=True, help="Directory of *.jsonl calibration items.")
+    cal.add_argument(
+        "--judge",
+        action="append",
+        required=True,
+        help="Judge model id; repeat for a second judge, which enables swap agreement.",
+    )
+    cal.add_argument(
+        "--model-args",
+        help="JSON object of Inspect model constructor kwargs, applied to every --judge.",
+    )
+    cal.add_argument(
+        "--hhem", action="store_true", help="Also score HHEM-2.1-open against the same items."
+    )
+    cal.add_argument("--results", default="results")
+    cal.add_argument("--cache", default=".cache/judge")
+    cal.add_argument("--kappa-floor", type=float, default=0.70)
+    cal.add_argument("--min-swap-agreement", type=float, default=0.90)
+    cal.add_argument("--limit", type=int, help="Score only the first N items, for a smoke run.")
+    cal.set_defaults(fn=cmd_calibrate)
+
+
 def _add_run_mcp(run: argparse._SubParsersAction) -> None:
     """Wire the `run mcp` subcommand onto the `run` subparser group.
 
@@ -475,8 +574,8 @@ def _add_run_mcp(run: argparse._SubParsersAction) -> None:
 
 def build_parser() -> argparse.ArgumentParser:
     """Assemble the `evalplat` argument parser: `catalog list`,
-    `run offline`, `run public`, `run mcp`, `gate`, and `report`, each
-    wired to its `cmd_*` function via `set_defaults(fn=...)`.
+    `run offline`, `run public`, `run mcp`, `calibrate`, `gate`, and
+    `report`, each wired to its `cmd_*` function via `set_defaults(fn=...)`.
     """
     p = argparse.ArgumentParser(prog="evalplat")
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -537,6 +636,7 @@ def build_parser() -> argparse.ArgumentParser:
     pub.set_defaults(fn=cmd_run_public)
 
     _add_run_mcp(run)
+    _add_calibrate(sub)
 
     gate = sub.add_parser("gate")
     gate.add_argument("--config", default="gate.yaml")
