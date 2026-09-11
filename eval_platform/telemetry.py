@@ -27,19 +27,31 @@ def get_tracer() -> trace.Tracer:
     return trace.get_tracer(TRACER_NAME)
 
 
+def set_attributes(span: Span, **values: object) -> None:
+    """Set every value in `values` onto `span`, one `set_attribute` call each.
+
+    Contract: an OpenTelemetry attribute value must be str, int, float, or
+    bool; anything else in `values` is coerced with str() so a stray value
+    (a list, a dataclass, None) never raises out of instrumentation code.
+    Works on any Span, not only one opened through this module's `span()`.
+    """
+    for key, value in values.items():
+        span.set_attribute(
+            key, value if isinstance(value, str | int | float | bool) else str(value)
+        )
+
+
 @contextmanager
 def span(name: str, **attributes: str | int | float | bool) -> Iterator[Span]:
     """Open a span named `name` with `attributes` set before the body runs.
 
     Contract: attribute values must be str, int, float, or bool (the
     OpenTelemetry primitive types); anything else is coerced with str() so
-    a stray value never breaks tracing. The span ends when the `with`
-    block exits, including on an exception raised inside it; this context
-    manager itself never raises beyond what the body raises.
+    a stray value never breaks tracing (see `set_attributes`). The span
+    ends when the `with` block exits, including on an exception raised
+    inside it; this context manager itself never raises beyond what the
+    body raises.
     """
     with get_tracer().start_as_current_span(name) as s:
-        for key, value in attributes.items():
-            s.set_attribute(
-                key, value if isinstance(value, str | int | float | bool) else str(value)
-            )
+        set_attributes(s, **attributes)
         yield s

@@ -16,7 +16,7 @@ from inspect_ai.log import EvalLog
 
 from eval_platform.budget import Budget, BudgetExceeded
 from eval_platform.catalog import CatalogEntry
-from eval_platform.telemetry import span
+from eval_platform.telemetry import set_attributes, span
 from eval_platform.types import CaseResult, Grade, SuiteResult
 
 
@@ -342,7 +342,9 @@ def run_public(
         result.meta["model_args"] = model_args
         if full:
             result.meta["full_run"] = True
-        s.set_attribute("eval.usd", result.metrics["usd"])
-        s.set_attribute("eval.samples", result.metrics["samples_total"])
+        set_attributes(
+            s,
+            **{"eval.usd": result.metrics["usd"], "eval.samples": result.metrics["samples_total"]},
+        )
     budget.charge(result.metrics["usd"])
     return result

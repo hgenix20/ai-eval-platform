@@ -8,7 +8,7 @@ from datetime import UTC, datetime
 from eval_platform.budget import Budget, BudgetExceeded
 from eval_platform.graders import grade_expect
 from eval_platform.targets.base import AgentTarget
-from eval_platform.telemetry import span
+from eval_platform.telemetry import set_attributes, span
 from eval_platform.types import Case, CaseResult, Grade, SuiteResult, compute_metrics
 
 
@@ -46,15 +46,19 @@ def run_case(case: Case, target: AgentTarget) -> CaseResult:
         try:
             trajectory = target.run(case)
         except Exception as e:  # a target failure must become a failed case, never crash the suite
-            s.set_attribute("eval.status", "target_error")
-            s.set_attribute("eval.passed", False)
+            set_attributes(s, **{"eval.status": "target_error", "eval.passed": False})
             return CaseResult(case.name, False, (Grade("run", 0.0, False, repr(e)),), None)
         grades = grade_expect(case, trajectory)
         passed = all(g.passed for g in grades)
-        s.set_attribute("eval.status", trajectory.status)
-        s.set_attribute("eval.cost_usd", trajectory.cost_usd)
-        s.set_attribute("eval.wall_ms", trajectory.wall_ms)
-        s.set_attribute("eval.passed", passed)
+        set_attributes(
+            s,
+            **{
+                "eval.status": trajectory.status,
+                "eval.cost_usd": trajectory.cost_usd,
+                "eval.wall_ms": trajectory.wall_ms,
+                "eval.passed": passed,
+            },
+        )
         return CaseResult(case.name, passed, tuple(grades), trajectory)
 
 
