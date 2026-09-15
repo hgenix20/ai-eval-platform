@@ -7,10 +7,10 @@
     "cases_skipped": 0.0,
     "pass_rate": 1.0,
     "usd_per_run_p50": 0.0,
-    "wall_ms_p50": 5.66040249999844,
-    "wall_ms_p95": 6.82620950000512,
+    "wall_ms_p50": 5.3845664999983,
+    "wall_ms_p95": 6.436451249996367,
     "attack_success_rate": 0.25,
     "utility_rate": 1.0
   },
-  "from": "2026-09-11T17:08:05+00:00"
+  "from": "2026-09-15T14:03:12+00:00"
 }
