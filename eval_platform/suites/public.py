@@ -6,6 +6,11 @@ built suites produce, so the gate and report treat both alike."""
 from __future__ import annotations
 
 import math
+import os
+import re
+import shutil
+import subprocess  # nosec B404  # the one call below runs a fixed docker argv
+from collections.abc import Callable, Mapping
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -211,6 +216,98 @@ def eval_log_to_suite_result(log: EvalLog, *, suite: str, target: str) -> SuiteR
     )
 
 
+# Every value a catalog entry may list under `requires`, with what the
+# preflight does about it. Blocking tags stop a run before Inspect loads
+# anything; advisory tags only print a note, since they describe a resource
+# the platform cannot check from here.
+BLOCKING_REQUIREMENTS = ("docker", "api:judge", "hf-gated")
+ADVISORY_REQUIREMENTS = {
+    "gpu": "loads a model locally; needs the local extra and a GPU with room for it",
+    "live-web": "reaches the live web during the run, so results move with the web",
+    "api:user-sim": "drives a simulated user with a second model; Inspect's user role "
+    "falls back to --model when no other is configured",
+    "vm": "needs a virtual machine image the task builds or downloads",
+}
+KNOWN_REQUIREMENTS = frozenset(BLOCKING_REQUIREMENTS) | frozenset(ADVISORY_REQUIREMENTS)
+_RICH_MARKUP = re.compile(r"\[/?[a-z ]+\]")
+
+
+def docker_engine_reachable(timeout_s: float = 20.0) -> bool:
+    """Whether `docker version` succeeds within `timeout_s`. False when the
+    docker binary is absent, the engine is down, or the call times out.
+    Never raises: this is a preflight, and its only job is a verdict."""
+    binary = shutil.which("docker")
+    if binary is None:
+        return False
+    try:
+        # Fixed argv, no shell, no user input: the only variable is the
+        # resolved path of the docker binary itself.
+        done = subprocess.run(  # noqa: S603  # nosec B603
+            [binary, "version", "--format", "json"],
+            capture_output=True,
+            timeout=timeout_s,
+            check=False,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return False
+    return done.returncode == 0
+
+
+def preflight(
+    entry: CatalogEntry,
+    *,
+    grader_model: str | None,
+    env: Mapping[str, str] | None = None,
+    docker_check: Callable[[], bool] = docker_engine_reachable,
+) -> tuple[list[str], list[str]]:
+    """Check an entry's `requires` list before anything is loaded.
+
+    Returns `(blocking, advisory)`: `blocking` holds one message per
+    requirement that is not met and would make the run fail (a Docker
+    engine that is not reachable, a task that grades with a model but no
+    `grader_model` was given, a gated dataset with no `HF_TOKEN` in `env`);
+    `advisory` holds one note per requirement the platform cannot verify
+    from here. A tag outside `KNOWN_REQUIREMENTS` is reported as blocking,
+    because a requirement nobody can check is a catalog error, not a pass.
+    `env` defaults to the process environment; `docker_check` is injectable
+    so tests never spawn docker.
+    """
+    environment = os.environ if env is None else env
+    blocking: list[str] = []
+    advisory: list[str] = []
+    for tag in entry.requires:
+        if tag == "docker":
+            if not docker_check():
+                blocking.append(
+                    "docker: the Docker engine is not reachable (`docker version` failed); "
+                    "start Docker Desktop or the engine and retry"
+                )
+        elif tag == "api:judge":
+            if not grader_model:
+                blocking.append(
+                    "api:judge: this task grades answers with a model; pass "
+                    "--grader-model <inspect model id> (Inspect's grader role)"
+                )
+        elif tag == "hf-gated":
+            if not environment.get("HF_TOKEN"):
+                blocking.append(
+                    "hf-gated: the dataset is gated on Hugging Face; set HF_TOKEN to a token "
+                    "whose account has accepted the dataset's terms"
+                )
+        elif tag in ADVISORY_REQUIREMENTS:
+            advisory.append(f"{tag}: {ADVISORY_REQUIREMENTS[tag]}")
+        else:
+            blocking.append(f"{tag}: unknown requirement tag in the catalog entry {entry.id}")
+    return blocking, advisory
+
+
+def prerequisite_message(exc: PrerequisiteError) -> str:
+    """Inspect's PrerequisiteError text with its console markup removed and
+    the leading "ERROR:" dropped, so it reads as one plain message."""
+    text = _RICH_MARKUP.sub("", str(exc)).strip()
+    return text.removeprefix("ERROR:").strip()
+
+
 def run_public(
     entry: CatalogEntry,
     *,
@@ -223,6 +320,8 @@ def run_public(
     full: bool = False,
     generate: dict[str, Any] | None = None,
     model_args: dict[str, Any] | None = None,
+    grader_model: str | None = None,
+    epochs: int | None = None,
 ) -> SuiteResult:
     """Run one catalog entry's public benchmark through Inspect AI and
     return it as a SuiteResult named `public_<id with - as _>`.
@@ -304,6 +403,22 @@ def run_public(
     as given, including None when not given, so a report can show whether a
     run used a specific local-model configuration.
 
+    `grader_model`, when given, is passed to Inspect as
+    `model_roles={"grader": grader_model}`: every task whose scorer calls
+    `get_model(role="grader")` (SimpleQA Verified, CyberSecEval 4's
+    prompt-injection task, and the other `api:judge` entries) then grades
+    with that model instead of its own default, which for several tasks is
+    a hosted OpenAI model. `epochs`, when given, overrides the task's
+    default repeat count (GPQA Diamond and CyberSecEval 4 run four epochs
+    by default, so `limit` samples become four times as many generate
+    calls); both are recorded in `meta["grader_model"]` and
+    `meta["epochs"]` as given, including None. Neither is validated here:
+    the CLI rejects an `epochs` below 1 before calling.
+
+    This function runs no preflight; `preflight` is a separate step the
+    CLI takes first, so tests can exercise the run path without docker or
+    a token.
+
     The `inspect_eval` call and the log conversion run inside an
     "eval.public" span carrying `suite`, `model`, and `limit` (-1 when
     `limit` is None) attributes up front, with `eval.usd` and
@@ -338,6 +453,10 @@ def run_public(
         cost_kwargs["cost_limit"] = remaining
         cost_cap_mode = "per_sample_uncapped_count"
     eval_kwargs: dict[str, Any] = {**cost_kwargs, **(generate or {})}
+    if grader_model is not None:
+        eval_kwargs["model_roles"] = {"grader": grader_model}
+    if epochs is not None:
+        eval_kwargs["epochs"] = epochs
     suite_name = f"public_{entry.id.replace('-', '_')}"
     with span(
         "eval.public", suite=suite_name, model=model, limit=limit if limit is not None else -1
@@ -363,6 +482,8 @@ def run_public(
         result.meta["cost_cap_mode"] = cost_cap_mode
         result.meta["generate"] = generate
         result.meta["model_args"] = model_args
+        result.meta["grader_model"] = grader_model
+        result.meta["epochs"] = epochs
         if full:
             result.meta["full_run"] = True
         set_attributes(

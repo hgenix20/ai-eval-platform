@@ -8,6 +8,9 @@ import sys
 from pathlib import Path
 from typing import Any, cast
 
+# PrerequisiteError has no public import path in Inspect 0.3.263.
+from inspect_ai._util.error import PrerequisiteError
+
 from eval_platform.budget import Budget, BudgetExceeded, Ledger
 from eval_platform.calibration import (
     CalibrationReport,
@@ -17,7 +20,7 @@ from eval_platform.calibration import (
     load_report,
     write_report,
 )
-from eval_platform.catalog import filter_entries, load_catalog
+from eval_platform.catalog import CatalogEntry, filter_entries, load_catalog
 from eval_platform.gate import compare, load_gate_config, to_junit, to_markdown
 from eval_platform.graders.base import Grader
 from eval_platform.graders.hhem import HHEMGrader
@@ -28,6 +31,7 @@ from eval_platform.judge_pass import apply as apply_judge_pass
 from eval_platform.reports import render_html
 from eval_platform.results import latest_summary, read_summary, summary_to_result, write_summary
 from eval_platform.suites import load_cases, run_public, run_suite
+from eval_platform.suites.public import preflight, prerequisite_message
 from eval_platform.targets import (
     AgentPlatformHttpTarget,
     AgentPlatformLocalTarget,
@@ -194,6 +198,26 @@ def _parse_public_options(
     return generate, model_args, task_args
 
 
+def _public_run_may_start(a: argparse.Namespace, entry: CatalogEntry) -> bool:
+    """The checks `run public` makes before any model or dataset loads:
+    `--epochs` is at least 1 when given, and, unless `--no-preflight`, the
+    entry's `requires` list is satisfied (see `preflight`). Prints every
+    problem to stderr, advisory notes prefixed "note:" and unmet blocking
+    requirements prefixed "unmet requirement:", and returns False when the
+    run must not start."""
+    if a.epochs is not None and a.epochs < 1:
+        print(f"--epochs must be at least 1, got {a.epochs}", file=sys.stderr)
+        return False
+    if a.no_preflight:
+        return True
+    blocking, advisory = preflight(entry, grader_model=a.grader_model)
+    for line in advisory:
+        print(f"note: {line}", file=sys.stderr)
+    for line in blocking:
+        print(f"unmet requirement: {line}", file=sys.stderr)
+    return not blocking
+
+
 def cmd_run_public(a: argparse.Namespace) -> int:
     """Run one catalog entry's public benchmark against `--model`, append a
     spend record to `--results`/ledger.jsonl, and write the summary to
@@ -219,12 +243,26 @@ def cmd_run_public(a: argparse.Namespace) -> int:
     so a calibration run's full metric set is visible without opening the
     summary file.
 
+    `--grader-model` names the model Inspect's grader role resolves to,
+    for tasks whose scorer is itself a model; `--epochs` overrides the
+    task's default repeat count (must be at least 1). Both reach
+    `run_public` unchanged.
+
+    Before anything is loaded, the entry's `requires` list is checked with
+    `preflight` (skipped with `--no-preflight`): each unmet blocking
+    requirement (Docker engine unreachable, a model-graded task with no
+    `--grader-model`, a gated dataset with no HF_TOKEN) prints one line to
+    stderr and the command returns 2; advisory requirements print a
+    "note:" line and the run proceeds.
+
     Returns 2 if `entry` is not in the catalog, if `--extra-body` is not
     valid JSON, if `--model-args` or `--task-args` is not a JSON object, if
-    the entry is not runnable through Inspect, if `--model` has no cost
-    data Inspect can use, or if the run exceeds `--budget-usd`/`--max-wall-s`;
-    the message goes to stderr in each case, with no traceback. Returns 0
-    on a completed run.
+    `--epochs` is below 1, if a preflight requirement is unmet, if the
+    entry is not runnable through Inspect, if `--model` has no cost data
+    Inspect can use, if Inspect reports a missing prerequisite while
+    loading the task (its message is printed without console markup), or
+    if the run exceeds `--budget-usd`/`--max-wall-s`; the message goes to
+    stderr in each case, with no traceback. Returns 0 on a completed run.
 
     An Inspect run that comes back with `result.meta["status"] != "success"`
     (e.g. a provider ran out of credits mid-run) is a record, not a
@@ -246,6 +284,8 @@ def cmd_run_public(a: argparse.Namespace) -> int:
     except _CliOptionError as e:
         print(str(e), file=sys.stderr)
         return 2
+    if not _public_run_may_start(a, entries[a.entry]):
+        return 2
     budget = Budget(max_usd=a.budget_usd, max_wall_s=a.max_wall_s)
     try:
         result = run_public(
@@ -259,9 +299,14 @@ def cmd_run_public(a: argparse.Namespace) -> int:
             full=a.full,
             generate=generate,
             model_args=model_args,
+            grader_model=a.grader_model,
+            epochs=a.epochs,
         )
-    except (BudgetExceeded, ValueError) as e:
-        print(str(e), file=sys.stderr)
+    except (BudgetExceeded, ValueError, PrerequisiteError) as e:
+        if isinstance(e, PrerequisiteError):
+            print(f"prerequisite missing: {prerequisite_message(e)}", file=sys.stderr)
+        else:
+            print(str(e), file=sys.stderr)
         return 2
     results_dir = Path(a.results)
     if result.meta.get("status") != "success":
@@ -879,6 +924,22 @@ def build_parser() -> argparse.ArgumentParser:
         "--task-args",
         help="JSON object of keyword arguments for the Inspect task function "
         "itself (e.g. with_sandbox_tasks for inspect_evals/agentdojo).",
+    )
+    pub.add_argument(
+        "--grader-model",
+        help="Inspect model id for the grader role, for tasks whose scorer is a model "
+        "(catalog entries that list api:judge under requires).",
+    )
+    pub.add_argument(
+        "--epochs",
+        type=int,
+        help="Override the task's default repeat count (GPQA Diamond and CyberSecEval 4 "
+        "default to 4).",
+    )
+    pub.add_argument(
+        "--no-preflight",
+        action="store_true",
+        help="Skip the check of the entry's requires list (docker, api:judge, hf-gated).",
     )
     pub.set_defaults(fn=cmd_run_public)
 

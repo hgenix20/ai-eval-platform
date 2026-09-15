@@ -723,3 +723,118 @@ def test_run_public_happy_path_with_mock_model(tmp_path: Path, monkeypatch, caps
     assert len(ledger) == 1
     assert json.loads(ledger[0])["suite"] == "public_ifeval"
     assert "public_ifeval on mockllm/model" in capsys.readouterr().out
+
+
+def _public_argv(entry: str, tmp_path: Path, *extra: str) -> list[str]:
+    return [
+        "run",
+        "public",
+        entry,
+        "--model",
+        "mockllm/model",
+        "--catalog",
+        str(ROOT / "catalog" / "entries"),
+        "--results",
+        str(tmp_path / "results"),
+        *extra,
+    ]
+
+
+def test_run_public_prerequisite_error_exits_2_with_plain_message(
+    tmp_path: Path, monkeypatch, capsys
+):
+    """Inspect's PrerequisiteError (a Docker engine that is down, a judge
+    with no key) used to escape `main` and end the process with exit 1 and
+    nothing printed; it now prints the message without console markup and
+    returns 2."""
+    from inspect_ai._util.error import PrerequisiteError  # noqa: PLC0415
+
+    def _raise(*_a, **_k):
+        raise PrerequisiteError("ERROR: Unable to initialise [bold]OpenAI[/bold] client")
+
+    monkeypatch.setattr(cli_mod, "run_public", _raise)
+    rc = main(_public_argv("ifeval", tmp_path))
+    assert rc == 2
+    err = capsys.readouterr().err
+    assert "prerequisite missing: Unable to initialise OpenAI client" in err
+    assert "[bold]" not in err and "Traceback" not in err
+
+
+def test_run_public_preflight_blocks_before_running(tmp_path: Path, monkeypatch, capsys):
+    """An unmet blocking requirement returns 2 and never calls run_public."""
+    monkeypatch.setattr(cli_mod, "preflight", lambda _e, **_k: (["docker: engine down"], []))
+    calls: list[int] = []
+    monkeypatch.setattr(cli_mod, "run_public", lambda *_a, **_k: calls.append(1))
+    rc = main(_public_argv("agentbench", tmp_path))
+    assert rc == 2 and calls == []
+    assert "unmet requirement: docker: engine down" in capsys.readouterr().err
+
+
+def test_run_public_advisory_notes_do_not_block(tmp_path: Path, monkeypatch, capsys):
+    monkeypatch.setattr(cli_mod, "preflight", lambda _e, **_k: ([], ["gpu: loads a model"]))
+
+    def fake_run_public(entry, **kwargs):
+        return eval_log_to_suite_result(
+            _mock_log(tmp_path), suite="public_ifeval", target=kwargs["model"]
+        )
+
+    monkeypatch.setattr(cli_mod, "run_public", fake_run_public)
+    rc = main(_public_argv("ifeval", tmp_path))
+    assert rc == 0
+    assert "note: gpu: loads a model" in capsys.readouterr().err
+
+
+def test_run_public_no_preflight_skips_the_check(tmp_path: Path, monkeypatch):
+    def _explode(*_a, **_k):
+        raise AssertionError("preflight must not run")
+
+    monkeypatch.setattr(cli_mod, "preflight", _explode)
+
+    def fake_run_public(entry, **kwargs):
+        return eval_log_to_suite_result(
+            _mock_log(tmp_path), suite="public_ifeval", target=kwargs["model"]
+        )
+
+    monkeypatch.setattr(cli_mod, "run_public", fake_run_public)
+    assert main(_public_argv("ifeval", tmp_path, "--no-preflight")) == 0
+
+
+def test_run_public_passes_grader_model_and_epochs(tmp_path: Path, monkeypatch):
+    received: dict = {}
+
+    def fake_run_public(entry, **kwargs):
+        received.update(kwargs)
+        return eval_log_to_suite_result(
+            _mock_log(tmp_path), suite="public_ifeval", target=kwargs["model"]
+        )
+
+    monkeypatch.setattr(cli_mod, "run_public", fake_run_public)
+    rc = main(_public_argv("ifeval", tmp_path, "--grader-model", "mockllm/grader", "--epochs", "1"))
+    assert rc == 0
+    assert received["grader_model"] == "mockllm/grader" and received["epochs"] == 1
+
+
+def test_run_public_rejects_epochs_below_one(tmp_path: Path, monkeypatch, capsys):
+    calls: list[int] = []
+    monkeypatch.setattr(cli_mod, "run_public", lambda *_a, **_k: calls.append(1))
+    rc = main(_public_argv("ifeval", tmp_path, "--epochs", "0"))
+    assert rc == 2 and calls == []
+    assert "--epochs must be at least 1" in capsys.readouterr().err
+
+
+def test_run_public_judge_entry_needs_grader_model(tmp_path: Path, monkeypatch, capsys):
+    """The real preflight on a catalog entry that lists api:judge: with no
+    --grader-model the command stops before run_public; with one it runs."""
+    calls: list[str | None] = []
+
+    def fake_run_public(entry, **kwargs):
+        calls.append(kwargs["grader_model"])
+        return eval_log_to_suite_result(
+            _mock_log(tmp_path), suite="public_simpleqa_verified", target=kwargs["model"]
+        )
+
+    monkeypatch.setattr(cli_mod, "run_public", fake_run_public)
+    assert main(_public_argv("simpleqa-verified", tmp_path)) == 2
+    assert "api:judge" in capsys.readouterr().err and calls == []
+    assert main(_public_argv("simpleqa-verified", tmp_path, "--grader-model", "mockllm/model")) == 0
+    assert calls == ["mockllm/model"]
