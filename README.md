@@ -271,6 +271,21 @@ each still exists in the installed registry. 40 are external, 4 have no runner,
 1 is built here. By license status: 54 verified, 15 unverified, 4 ambiguous, 4
 non-commercial. The non-commercial four are listed and never executed.
 
+Every Inspect-backed entry was constructed through `evalplat run public` on
+2026-09-15; the ones whose task loads a dataset and a scorer with nothing else
+ran to completion on Inspect's mock model. The rest declare what they need under
+`requires`, and the command checks that list before Inspect loads anything:
+`docker` (AgentBench, SWE-bench, and the other sandboxed tasks) needs a
+reachable Docker engine, `api:judge` (SimpleQA Verified, CyberSecEval 4, and
+the other model-graded tasks) needs `--grader-model`, which becomes Inspect's
+grader role, and `hf-gated` needs `HF_TOKEN`. An unmet requirement prints one
+line and exits 2; `gpu`, `live-web`, `api:user-sim`, and `vm` print a note and
+the run proceeds. `--epochs` overrides a task's own repeat count: GPQA Diamond
+and CyberSecEval 4 run four passes by default, so `--limit 50` there is 200
+generate calls unless `--epochs 1` is given. A prerequisite Inspect itself
+reports while loading the task (a judge with no key, an engine that is down)
+prints as one plain line and exits 2 as well.
+
 ## Results
 
 The published numbers, each with the command that reproduces it:

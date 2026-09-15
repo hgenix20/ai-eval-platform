@@ -15,8 +15,9 @@ runner:
 status: saturated
 cost_class: low
 requires: []
-verified: '2026-09-07'
+verified: '2026-09-15'
 sources:
 - https://huggingface.co/datasets/cais/mmlu
-notes: Saturated at roughly a 91 to 92 percent ceiling. Dropped from most 2026 model
-  cards.
+notes: 'Saturated: frontier models sit above 90 percent and MMLU-Pro or MMLU-Redux is the
+  usual replacement. The runner is the zero-shot task (mmlu_0_shot); mmlu_5_shot also exists
+  in inspect_evals. Constructed and run on mockllm 2026-09-15 through evalplat run public.'

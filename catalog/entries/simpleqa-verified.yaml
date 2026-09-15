@@ -16,7 +16,12 @@ status: current
 cost_class: low
 requires:
 - api:judge
-verified: '2026-09-07'
+verified: '2026-09-15'
 sources:
 - https://huggingface.co/datasets/google/simpleqa-verified
-notes: A de-duplicated successor to SimpleQA. License is unverified.
+notes: A de-duplicated successor to SimpleQA. License is unverified. The inspect_evals task
+  loads the codelion/SimpleQA-Verified mirror on Hugging Face at a pinned revision, not the
+  google/simpleqa-verified card this entry cites; the fields match. Scoring is a model grader
+  on Inspect's grader role, so a run needs --grader-model; the tool scorer is the default
+  and scorer=original (a task arg) reproduces the paper's string parse. Constructed and run
+  on mockllm 2026-09-15 through evalplat run public.

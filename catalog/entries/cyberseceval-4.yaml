@@ -16,10 +16,12 @@ status: current
 cost_class: medium
 requires:
 - api:judge
-verified: '2026-09-07'
+verified: '2026-09-15'
 sources:
 - https://github.com/meta-llama/PurpleLlama/blob/main/CybersecurityBenchmarks/README.md
-notes: License is unverified. The brief's original ref (cyse3_visual_prompt_injection)
-  is a CyberSecEval 3 task, not 4. The controller ruled this entry to inspect_evals/cyse4_multilingual_prompt_injection,
-  the CyberSecEval 4 prompt-injection sub-task confirmed present in the installed
-  inspect_evals 0.19.0 registry.
+notes: License is unverified. The brief's original ref (cyse3_visual_prompt_injection) is
+  a CyberSecEval 3 task, not 4. The controller ruled this entry to inspect_evals/cyse4_multilingual_prompt_injection,
+  the CyberSecEval 4 prompt-injection sub-task in the installed inspect_evals 0.19.0 registry.
+  Its scorer grades with Inspect's grader role and defaults to openai/gpt-4o-mini, so with
+  no --grader-model the task fails at load asking for an OpenAI key (verified 2026-09-15).
+  It runs 4 epochs by default; --epochs 1 is one pass.

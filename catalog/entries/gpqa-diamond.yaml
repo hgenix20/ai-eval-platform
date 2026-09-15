@@ -14,12 +14,14 @@ runner:
   ref: inspect_evals/gpqa_diamond
 status: approaching-saturation
 cost_class: low
-requires:
-- hf-gated
-verified: '2026-09-07'
+requires: []
+verified: '2026-09-15'
 sources:
 - https://github.com/idavidrein/gpqa
-notes: 'Near saturation at 91 to 94 percent against a 65 percent PhD baseline. Still
-  cited in every system card. License is ambiguous: code is MIT but the dataset card
-  cites CC-BY-4.0; research flags this as an unresolved conflict. Dataset is gated
-  on Hugging Face.'
+notes: 'Near saturation at 91 to 94 percent against a 65 percent PhD baseline. Still cited
+  in every system card. License is ambiguous: code is MIT but the dataset card cites CC-BY-4.0;
+  research flags this as an unresolved conflict. The canonical dataset is gated on Hugging
+  Face, but the inspect_evals task reads OpenAI''s simple-evals copy (gpqa_diamond.csv, SHA-256
+  pinned in the task source), so no token is needed to run it. The task runs 4 epochs by default;
+  pass --epochs 1 for one pass over the 198 questions. Constructed and run on mockllm 2026-09-15
+  through evalplat run public.'

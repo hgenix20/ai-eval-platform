@@ -3,7 +3,7 @@ name: AgentBench
 url: https://github.com/THUDM/AgentBench
 category: agent
 maintainer: THUDM
-size: 8 environments
+size: 'OS domain: 125 test tasks, 26 dev tasks (8 environments upstream)'
 license:
   code: Apache-2.0
   data: Apache-2.0
@@ -16,8 +16,12 @@ status: legacy
 cost_class: medium
 requires:
 - docker
-verified: '2026-09-07'
+verified: '2026-09-15'
 sources:
 - https://github.com/THUDM/AgentBench
-notes: Maintained but legacy. The runner here (agent_bench_os) covers only the 151-task
-  OS subset, not the full 8-environment suite.
+notes: 'Maintained but legacy. The runner here (agent_bench_os) covers only the OS domain:
+  125 test tasks plus 26 dev tasks with public answers, not the full 8-environment suite.
+  Every task runs inside a Docker sandbox the task builds from its own Dockerfile, so the
+  Docker engine has to be running; evalplat run public checks that first and exits 2 with
+  the reason when it is not (verified 2026-09-15: Inspect raises PrerequisiteError at task
+  load without it).'

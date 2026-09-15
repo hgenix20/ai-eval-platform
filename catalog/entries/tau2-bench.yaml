@@ -16,9 +16,12 @@ status: current
 cost_class: medium
 requires:
 - api:user-sim
-verified: '2026-09-07'
+verified: '2026-09-15'
 sources:
 - https://github.com/sierra-research/tau2-bench
-notes: The repo also ships tau3-bench v1.0.1 (telecom, banking_knowledge, full-duplex
-  voice). The runner here is the tau2_airline task in inspect_evals, which covers
-  only the airline domain, not the full tau2 or tau3 suite.
+notes: The repo also ships tau3-bench v1.0.1 (telecom, banking_knowledge, full-duplex voice).
+  The runner here is the tau2_airline task in inspect_evals, which covers only the airline
+  domain, not the full tau2 or tau3 suite; tau2_retail and tau2_telecom exist alongside it.
+  The simulated user is a second model on Inspect's user role, which falls back to --model
+  when nothing else is configured. Constructed and run on mockllm 2026-09-15 through evalplat
+  run public.
