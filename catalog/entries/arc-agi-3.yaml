@@ -1,0 +1,30 @@
+id: arc-agi-3
+name: ARC-AGI-3
+url: https://arcprize.org/arc-agi/3
+category: capability
+maintainer: ARC Prize
+size: A public game set; the number of public and held-out games is unverified
+license:
+  code: unknown
+  data: unknown
+  status: unverified
+scoring: state
+runner:
+  kind: external
+  ref: arc-agi toolkit (pip install arc-agi; arc.make, env.step, arc.get_scorecard)
+status: current
+cost_class: medium
+requires:
+- live-web
+verified: '2026-09-16'
+sources:
+- https://arcprize.org/arc-agi/3
+- https://docs.arcprize.org
+- https://github.com/arcprize/ARC-AGI-3-Agents
+notes: 'An interactive reasoning benchmark: agents explore novel game environments, acquire
+  goals on the fly, and are scored on skill-acquisition efficiency against human play, with
+  100 percent meaning every game beaten as efficiently as humans (arcprize.org, read 2026-09-16).
+  Agents connect through the ARC-AGI toolkit over an API key, so a run reaches ARC Prize''s
+  servers; there is no inspect_evals task and no local harness. Game counts, license, baselines,
+  and cost are all unverified: the site and docs state none of them. Listed so the catalog
+  names the successor to ARC-AGI-2; not runnable here until a harness exists.'

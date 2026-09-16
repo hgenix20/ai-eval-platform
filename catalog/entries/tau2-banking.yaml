@@ -1,0 +1,32 @@
+id: tau2-banking
+name: tau2-bench (banking knowledge)
+url: https://github.com/sierra-research/tau2-bench/tree/main/data/tau2/domains/banking_knowledge
+category: tool-use
+maintainer: Sierra
+license:
+  code: MIT
+  data: MIT
+  status: verified
+scoring: state
+status: current
+cost_class: medium
+requires:
+- api:user-sim
+verified: '2026-09-16'
+size: 97 tasks (tasks.json in the installed inspect_evals data)
+runner:
+  kind: inspect_evals
+  ref: inspect_evals/tau2_banking
+sources:
+- https://github.com/sierra-research/tau2-bench
+- https://github.com/sierra-research/tau2-bench/tree/main/data/tau2/domains/banking_knowledge
+notes: 'The banking_knowledge domain, the knowledge-retrieval customer-service domain the
+  upstream README lists under tau3-bench, run through inspect_evals'' tau2_banking task. Its
+  retrieval_config task arg selects how the agent reaches the knowledge base: grep (default,
+  an offline search tool), full_kb (the whole base inlined, about 215K tokens), or no_knowledge
+  (ablation). Task count read from the installed inspect_evals 0.19.0 data on 2026-09-16.
+  The simulated user is a second model on Inspect''s user role, which falls back to --model
+  when nothing else is configured. inspect_evals'' own README warns the airline domain used
+  about 60 million tokens on one small hosted model, so --limit and a message_limit task arg
+  are the way to sample it. Sibling entries: tau2-bench (airline), tau2-retail, tau2-telecom.
+  Constructed and run on mockllm 2026-09-16 through evalplat run public.'

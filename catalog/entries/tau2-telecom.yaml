@@ -1,0 +1,32 @@
+id: tau2-telecom
+name: tau2-bench (telecom)
+url: https://github.com/sierra-research/tau2-bench/tree/main/data/tau2/domains/telecom
+category: tool-use
+maintainer: Sierra
+license:
+  code: MIT
+  data: MIT
+  status: verified
+scoring: state
+status: current
+cost_class: medium
+requires:
+- api:user-sim
+verified: '2026-09-16'
+size: 20 tasks (tasks_small.json in the installed inspect_evals data; the upstream full set
+  is unverified)
+runner:
+  kind: inspect_evals
+  ref: inspect_evals/tau2_telecom
+sources:
+- https://github.com/sierra-research/tau2-bench
+- https://github.com/sierra-research/tau2-bench/tree/main/data/tau2/domains/telecom
+notes: 'The telecom domain of tau2-bench, run through inspect_evals'' tau2_telecom task, which
+  ships the domain''s tasks_small.json (20 tasks) rather than a full set; a tasks_file_override
+  task arg points it at another file. Counts read from the installed inspect_evals 0.19.0
+  data on 2026-09-16. The simulated user is a second model on Inspect''s user role, which
+  falls back to --model when nothing else is configured. inspect_evals'' own README warns
+  the airline domain used about 60 million tokens on one small hosted model, so --limit and
+  a message_limit task arg are the way to sample it. Sibling entries: tau2-bench (airline),
+  tau2-retail, tau2-banking. Constructed and run on mockllm 2026-09-16 through evalplat run
+  public.'

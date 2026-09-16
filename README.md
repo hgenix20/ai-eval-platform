@@ -33,7 +33,7 @@ Phase 2's five offline suites run against the agent platform in process for
 $0.00, all measured 2026-09-11: `offline_core` 12 of 12, `trajectory` 10 of 10
 at 0.75 mean step efficiency over its five scored paths, `faults` recovery 6 of
 the 8 cases meant to recover, `memory` 11 of 11, and `injection` attack success
-3 of 12 at utility 4 of 4. The catalog holds 77 entries. Rungs 1, 2, and 3 of
+3 of 12 at utility 4 of 4. The catalog holds 81 entries. Rungs 1, 2, and 3 of
 the ladder run in CI.
 
 The two unrecovered fault cases and the three landed attacks are findings
@@ -254,21 +254,21 @@ Context Protocol server, and Inspect's own model providers (`anthropic/`,
 
 ## Catalog
 
-77 entries, each carrying a `verified` date and at least one source URL.
+81 entries, each carrying a `verified` date and at least one source URL.
 `verified` is the date that entry was last checked against the sources it
 lists, and a headline score in its `notes` is what those sources reported on
 that date. Reproduce the counts with `evalplat catalog list`.
 
-By category: capability 14, coding 12, agent 11, safety 7, tool-use 7,
+By category: capability 15, coding 12, agent 11, tool-use 10, safety 7,
 hallucination 6, long-context 6, retrieval 6, injection 4, judge 4.
 
-By status: current 58, saturated 7, legacy 6, approaching-saturation 5,
+By status: current 62, saturated 7, legacy 6, approaching-saturation 5,
 held-out 1. Saturated and legacy entries stay in deliberately, so the catalog
 also records what is no longer worth running.
 
-By runner: 32 entries resolve to an `inspect_evals` task, and a test asserts
-each still exists in the installed registry. 40 are external, 4 have no runner,
-1 is built here. By license status: 54 verified, 15 unverified, 4 ambiguous, 4
+By runner: 35 entries resolve to an `inspect_evals` task, and a test asserts
+each still exists in the installed registry. 41 are external, 4 have no runner,
+1 is built here. By license status: 57 verified, 16 unverified, 4 ambiguous, 4
 non-commercial. The non-commercial four are listed and never executed.
 
 Every Inspect-backed entry was constructed through `evalplat run public` on

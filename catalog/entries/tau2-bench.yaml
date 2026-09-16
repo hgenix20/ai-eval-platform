@@ -1,9 +1,9 @@
 id: tau2-bench
-name: tau2-bench / tau3-bench
+name: tau2-bench (airline)
 url: https://github.com/sierra-research/tau2-bench
 category: tool-use
 maintainer: Sierra
-size: Per-domain size is unverified
+size: 50 tasks (tasks.json in the installed inspect_evals data)
 license:
   code: MIT
   data: MIT
@@ -16,12 +16,14 @@ status: current
 cost_class: medium
 requires:
 - api:user-sim
-verified: '2026-09-15'
+verified: '2026-09-16'
 sources:
 - https://github.com/sierra-research/tau2-bench
-notes: The repo also ships tau3-bench v1.0.1 (telecom, banking_knowledge, full-duplex voice).
-  The runner here is the tau2_airline task in inspect_evals, which covers only the airline
-  domain, not the full tau2 or tau3 suite; tau2_retail and tau2_telecom exist alongside it.
-  The simulated user is a second model on Inspect's user role, which falls back to --model
-  when nothing else is configured. Constructed and run on mockllm 2026-09-15 through evalplat
-  run public.
+notes: The airline domain of tau2-bench, run through inspect_evals' tau2_airline task; the
+  repo's other domains are the sibling entries tau2-retail, tau2-telecom, and tau2-banking,
+  and the repo also ships tau3-bench v1.0.1 (full-duplex voice), which has no Inspect task.
+  Task count read from the installed inspect_evals 0.19.0 data on 2026-09-16. The simulated
+  user is a second model on Inspect's user role, which falls back to --model when nothing
+  else is configured. inspect_evals' own README warns the airline domain used about 60 million
+  tokens on one small hosted model, so --limit and a message_limit task arg are the way to
+  sample it. Constructed and run on mockllm 2026-09-15 through evalplat run public.
