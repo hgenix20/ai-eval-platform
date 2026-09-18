@@ -126,8 +126,9 @@ a spend line to `results/ledger.jsonl`.
    evalplat run public mmlu-pro --model openrouter/qwen/qwen3-235b-a22b --limit 200 --budget-usd 5
    ```
 
-   `evalplat catalog list --runnable` prints every id that runs this way, 35
-   today. A benchmark that needs something else says so before loading:
+   `evalplat catalog list --runnable` prints every id that runs this way, 34
+   today (a 35th resolves to a task but carries a non-commercial license, so
+   the platform lists it and never runs it). A benchmark that needs something else says so before loading:
    `--grader-model` for model-graded tasks, a running Docker engine for
    sandboxed tasks, `HF_TOKEN` for gated datasets. `--epochs 1` turns off the
    repeat count some tasks default to (GPQA Diamond and CyberSecEval 4 run
