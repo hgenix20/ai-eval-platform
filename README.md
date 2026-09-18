@@ -95,6 +95,62 @@ imports while it builds; without it, `evalplat run public ifeval` fails at task
 construction. The `mcp` extra installs the Model Context Protocol package the
 `run mcp` target needs.
 
+### Score a model
+
+Three steps from a fresh clone to a number on a public benchmark. Every run
+writes one JSON file under `results/`, prints its headline metric, and appends
+a spend line to `results/ledger.jsonl`.
+
+1. Install with the extras you need. `dev` brings the toolchain, `mcp` the
+   `run mcp` target, `ifeval` the IFEval checker, `local` the packages that load
+   Hugging Face weights on your own GPU (install a CUDA torch first, see below).
+
+   ```
+   python -m pip install -e ".[dev,mcp,ifeval]"
+   ```
+
+2. Point it at a model. Any Inspect AI provider works: `anthropic/…`,
+   `openai/…`, `google/…`, `openrouter/…`, `together/…`, `ollama/…`,
+   `vllm/…`, `hf/…` for local weights, or an OpenAI-compatible endpoint.
+   Export the provider's key the way Inspect expects (`ANTHROPIC_API_KEY`,
+   `OPENAI_API_KEY`, and so on). `mockllm/model` runs any benchmark for free
+   with canned output, which is how to check a command before spending.
+
+3. Run a benchmark by its catalog id. `--limit` bounds samples and therefore
+   spend, `--budget-usd` is a hard cap, and both are recorded in the run file.
+
+   ```
+   evalplat run public ifeval --model anthropic/claude-sonnet-5 --limit 100 --budget-usd 5
+   evalplat run public gpqa-diamond --model anthropic/claude-sonnet-5 --limit 100 --epochs 1 --budget-usd 5
+   evalplat run public simpleqa-verified --model anthropic/claude-sonnet-5 --limit 100 --grader-model anthropic/claude-sonnet-5 --budget-usd 5
+   evalplat run public mmlu-pro --model openrouter/qwen/qwen3-235b-a22b --limit 200 --budget-usd 5
+   ```
+
+   `evalplat catalog list --runnable` prints every id that runs this way, 35
+   today. A benchmark that needs something else says so before loading:
+   `--grader-model` for model-graded tasks, a running Docker engine for
+   sandboxed tasks, `HF_TOKEN` for gated datasets. `--epochs 1` turns off the
+   repeat count some tasks default to (GPQA Diamond and CyberSecEval 4 run
+   four passes otherwise). Drop `--limit` to run the whole dataset.
+
+Then render what you have:
+
+```
+evalplat gate --markdown out/gate.md
+evalplat report --results results --out out/report.html --gate-markdown out/gate.md
+```
+
+`out/report.html` is one self-contained page with a table per suite and a
+cost-against-quality scatter. `results/<suite>/latest.json` holds the newest
+run of each benchmark; the timestamped files beside it are the history, one
+per run, named by time and model. Comparing several models on one benchmark
+means running the command once per model and reading those per-run files;
+a sweep-and-compare command is next on the roadmap.
+
+The platform's own suites (`suites/`) run the same way against an agent, for
+free, with `evalplat run offline`; the Bring-up block above is the smallest
+example, and the MCP section below runs them against any MCP server.
+
 ### MCP servers
 
 `run mcp` points an Inspect ReAct agent at one MCP server and runs a suite's
