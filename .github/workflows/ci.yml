@@ -60,13 +60,34 @@ jobs:
         run: evalplat gate --update-baseline
       - run: evalplat gate --junit out/junit.xml --markdown out/gate.md
       - run: evalplat report --results results --out out/report.html --gate-markdown out/gate.md
+      # Two pushes minutes apart start two runs, and the first to finish
+      # pushes its baseline commit onto a main that has moved, which git
+      # rejects. So the commit is rebased onto the current main first and
+      # the push is retried. On a baseline conflict the runner's own
+      # measurement wins (-X theirs names the commit being replayed, ours,
+      # in a rebase). [skip ci] keeps the commit from starting a run.
       - name: Commit the re-measured baseline
         if: github.ref == 'refs/heads/main'
         run: |
           git config user.name "ci"
           git config user.email "ci@users.noreply.github.com"
           git add baselines
-          git diff --cached --quiet || (git commit -m "Update baselines from CI run [skip ci]" && git push)
+          if git diff --cached --quiet; then
+            echo "baselines unchanged"
+            exit 0
+          fi
+          git commit -m "Update baselines from CI run [skip ci]"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            if git rebase -X theirs origin/main && git push origin HEAD:main; then
+              exit 0
+            fi
+            git rebase --abort 2>/dev/null || true
+            echo "push attempt $attempt failed, retrying"
+            sleep 10
+          done
+          echo "could not push the baseline commit after 5 attempts"
+          exit 1
       - uses: actions/upload-artifact@v4
         if: always()
         with:
