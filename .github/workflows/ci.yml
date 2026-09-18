@@ -11,7 +11,11 @@ jobs:
   toolchain:
     runs-on: ubuntu-latest
     steps:
+      # Full history: the baseline commit-back below rebases onto main, and
+      # a shallow clone has no merge base for that.
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -79,7 +83,10 @@ jobs:
           git commit -m "Update baselines from CI run [skip ci]"
           for attempt in 1 2 3 4 5; do
             git fetch origin main
-            if git rebase -X theirs origin/main && git push origin HEAD:main; then
+            # --autostash sets aside the results files the suite runs
+            # rewrote in the working tree and restores them afterwards, so
+            # the artifact upload still sees them.
+            if git rebase --autostash -X theirs origin/main && git push origin HEAD:main; then
               exit 0
             fi
             git rebase --abort 2>/dev/null || true
