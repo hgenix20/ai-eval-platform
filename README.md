@@ -264,7 +264,7 @@ A fifth target sits alongside the four in the Layout section: `run mcp` drives
 a suite's cases through one MCP server's tools, local on stdio or remote over
 HTTP. It reads the server's tool list once before the suite starts, so an
 unreachable server exits 2 instead of failing every case. A live listing
-against <https://mcp.signalnodus.ai/> returned 31 tools with nothing called.
+against the SignalNodus MCP server returned 31 tools with nothing called (2026-09; that service was retired 2026-09-29, and the committed fixture path below is the one that still runs).
 The first scored run through that target is the groundedness suite, against a
 local fixture server over committed EDGAR text; the same suite points at the
 live server with `--mcp-url` and `--mcp-authorization`.
